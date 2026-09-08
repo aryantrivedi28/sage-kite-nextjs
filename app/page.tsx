@@ -1,430 +1,71 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import {
-  ArrowDownRight,
-  ArrowLeft,
-  ArrowRight,
-  Bot,
-  Check,
-  Globe2,
-  LineChart,
-  Sparkles,
-  Users,
-  Workflow,
-} from "lucide-react";
-
-const proofSlides = [
-  {
-    eyebrow: "Organic search",
-    title: "Visibility that compounds",
-    description:
-      "Search systems built around the questions buyers actually ask, across SEO, AEO and emerging AI discovery.",
-    visual: "search",
-  },
-  {
-    eyebrow: "Global distribution",
-    title: "Growth beyond one market",
-    description:
-      "Positioning, campaigns and operating systems designed to travel across markets without losing clarity.",
-    visual: "global",
-  },
-  {
-    eyebrow: "Funnel recovery",
-    title: "Broken journeys, repaired",
-    description:
-      "We find the leaks between lead, conversation, booking and revenue, then rebuild the system around them.",
-    visual: "funnel",
-  },
-];
-
-const services = [
-  {
-    number: "01",
-    icon: Sparkles,
-    title: "AI growth consultancy",
-    description:
-      "We diagnose what is slowing growth, repair the underlying system, and build a practical strategy your team can actually execute.",
-    items: [
-      "Growth and funnel audits",
-      "Positioning and go-to-market strategy",
-      "Distribution system design",
-      "Execution and ongoing optimisation",
-    ],
-  },
-  {
-    number: "02",
-    icon: Workflow,
-    title: "Marketing automation services",
-    description:
-      "The connected infrastructure behind modern marketing, from first discovery to conversion and retention.",
-    items: [
-      "CRM and lifecycle automation",
-      "SEO, AEO and content systems",
-      "Paid ads and social media",
-      "n8n, workflows and integrations",
-    ],
-  },
-  {
-    number: "03",
-    icon: Users,
-    title: "Marketing staffing",
-    description:
-      "Flexible people who can operate inside the systems we build, without forcing you to create a large team too early.",
-    items: [
-      "CRM and automation VAs",
-      "Marketing and content VAs",
-      "General virtual assistants",
-      "Specialist and general hiring",
-    ],
-  },
-];
-
-const articles = [
-  {
-    category: "AI & distribution",
-    title: "Building became cheap. Distribution did not.",
-    excerpt:
-      "What changes when almost anyone can build a product, but very few can earn sustained attention?",
-    read: "8 min",
-  },
-  {
-    category: "Search",
-    title: "AEO is not SEO with a new acronym",
-    excerpt:
-      "A practical view of how discovery changes when answers are assembled instead of ranked.",
-    read: "11 min",
-  },
-  {
-    category: "Automation",
-    title: "Where n8n ends and your CRM begins",
-    excerpt:
-      "A clearer way to decide what belongs inside the CRM and what should live in an automation layer.",
-    read: "9 min",
-  },
-  {
-    category: "Growth systems",
-    title: "The hidden cost of a five-minute lead response",
-    excerpt:
-      "Speed-to-lead is not a notification problem. It is an operating-system problem.",
-    read: "6 min",
-  },
-  {
-    category: "Teams",
-    title: "Designing a marketing team around AI",
-    excerpt:
-      "Which roles become more valuable, which tasks disappear, and where human judgment still compounds.",
-    read: "10 min",
-  },
-  {
-    category: "Field notes",
-    title: "Why most funnels break after the form fill",
-    excerpt:
-      "The unglamorous handoffs between interest, conversation and sales that quietly destroy conversion.",
-    read: "7 min",
-  },
-];
-
-function SearchGrowthVisual() {
-  return (
-    <div className="proof-visual search-proof" aria-label="Illustrative organic search growth chart">
-      <div className="proof-toolbar">
-        <span>Search performance</span>
-        <span className="proof-live"><i /> Compounding</span>
-      </div>
-      <div className="search-scoreline">
-        <div><span>Visibility</span><strong>↑</strong></div>
-        <div><span>Qualified clicks</span><strong>↑</strong></div>
-        <div><span>AI citations</span><strong>↑</strong></div>
-      </div>
-      <div className="chart-shell">
-        <span className="chart-gridline one" />
-        <span className="chart-gridline two" />
-        <span className="chart-gridline three" />
-        <svg viewBox="0 0 560 190" role="img" aria-label="Rising search visibility curve">
-          <defs>
-            <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#4f82a3" stopOpacity=".3" />
-              <stop offset="1" stopColor="#4f82a3" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          <path className="chart-area" d="M0 176 C64 173 74 155 122 158 C174 161 188 130 234 135 C286 141 304 101 350 108 C406 116 421 58 470 71 C510 80 523 31 560 22 L560 190 L0 190 Z" />
-          <path className="chart-line" d="M0 176 C64 173 74 155 122 158 C174 161 188 130 234 135 C286 141 304 101 350 108 C406 116 421 58 470 71 C510 80 523 31 560 22" />
-          <circle cx="560" cy="22" r="6" />
-        </svg>
-      </div>
-    </div>
-  );
-}
-
-function GlobalGrowthVisual() {
-  return (
-    <div className="proof-visual global-proof" aria-label="Illustrative global growth system">
-      <div className="global-orbit">
-        <div className="orbit orbit-one" />
-        <div className="orbit orbit-two" />
-        <div className="globe-core"><Globe2 size={39} strokeWidth={1.4} /></div>
-        <span className="market-node node-one">US</span>
-        <span className="market-node node-two">EU</span>
-        <span className="market-node node-three">APAC</span>
-      </div>
-      <div className="global-copy">
-        <span>One growth system</span>
-        <strong>Multiple markets.<br />One clear position.</strong>
-        <div className="market-bars">
-          <i style={{ width: "92%" }} />
-          <i style={{ width: "76%" }} />
-          <i style={{ width: "61%" }} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FunnelRepairVisual() {
-  const steps = [
-    ["Lead captured", "working"],
-    ["Instant response", "fixed"],
-    ["Qualified", "fixed"],
-    ["Meeting booked", "working"],
-  ];
-  return (
-    <div className="proof-visual funnel-proof" aria-label="Illustrative repaired lead funnel">
-      <div className="funnel-header">
-        <span>Revenue journey</span>
-        <span><Bot size={15} /> Assisted by automation</span>
-      </div>
-      <div className="funnel-flow">
-        {steps.map(([label, status], index) => (
-          <div className="funnel-step" key={label}>
-            <span className="step-index">0{index + 1}</span>
-            <strong>{label}</strong>
-            <span className={status === "fixed" ? "status-fixed" : "status-working"}>
-              {status === "fixed" ? <Check size={13} /> : null}
-              {status === "fixed" ? "Leak fixed" : "Connected"}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ProofCarousel() {
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    const timer = window.setInterval(
-      () => setActive((current) => (current + 1) % proofSlides.length),
-      5200
-    );
-    return () => window.clearInterval(timer);
-  }, []);
-
-  const previous = () =>
-    setActive((current) =>
-      current === 0 ? proofSlides.length - 1 : current - 1
-    );
-
-  const next = () =>
-    setActive((current) => (current + 1) % proofSlides.length);
-
-  return (
-    <div className="evidence-folio">
-      <div className="folio-kicker">
-        <span>Selected outcomes</span>
-        <span>0{active + 1} / 0{proofSlides.length}</span>
-      </div>
-      <div
-        className="proof-carousel"
-        role="region"
-        aria-roledescription="carousel"
-        aria-label="Selected Sage Kite outcomes"
-        tabIndex={0}
-        onKeyDown={(event) => {
-          if (event.key === "ArrowLeft") previous();
-          if (event.key === "ArrowRight") next();
-        }}
-      >
-        <div className="proof-window">
-          <div
-            className="proof-track"
-            style={{ transform: `translateX(-${active * 100}%)` }}
-          >
-          {proofSlides.map((slide) => (
-            <div
-              className="proof-slide-wrap"
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${proofSlides.indexOf(slide) + 1} of ${proofSlides.length}`}
-              key={slide.title}
-            >
-              <article className={`proof-slide proof-slide-${slide.visual}`}>
-                <div className="proof-slide-copy">
-                  <span>{slide.eyebrow}</span>
-                  <h2>{slide.title}</h2>
-                  <p>{slide.description}</p>
-                </div>
-                {slide.visual === "search" ? <SearchGrowthVisual /> : null}
-                {slide.visual === "global" ? <GlobalGrowthVisual /> : null}
-                {slide.visual === "funnel" ? <FunnelRepairVisual /> : null}
-              </article>
-            </div>
-          ))}
-          </div>
-        </div>
-        <button className="carousel-arrow carousel-prev" type="button" onClick={previous} aria-label="Previous outcome">
-          <ArrowLeft size={16} />
-        </button>
-        <button className="carousel-arrow carousel-next" type="button" onClick={next} aria-label="Next outcome">
-          <ArrowRight size={16} />
-        </button>
-      </div>
-      <div className="folio-tabs" aria-label="Carousel position">
-        {proofSlides.map((slide, index) => (
-          <button
-            key={slide.title}
-            type="button"
-            className={index === active ? "active" : ""}
-            aria-label={`Show ${slide.title}`}
-            aria-current={index === active ? "true" : undefined}
-            onClick={() => setActive(index)}
-          >
-            <span />
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
+import Image from "next/image";
+import { ArrowRight, ArrowUpRight, Compass, Layers3, Users, Megaphone, Workflow, Check } from "lucide-react";
+import { HeroShowcase, MobileNav } from "./home-interactions";
+import { contactLink, crmGroups, services } from "./site-content";
+const icons = [Compass, Layers3, Users, Megaphone, Workflow];
 export default function Home() {
-  return (
-    <main>
-      <header className="site-header">
-        <a href="#top" className="brand" aria-label="Sage Kite home">
-          <img src="/sage-kite-logo.png" alt="Sage Kite" />
-        </a>
-        <nav aria-label="Main navigation">
-          <a href="#proof">Proof</a>
-          <a href="#services">Services</a>
-          <a href="#articles">Articles</a>
-        </nav>
-        <a className="header-cta" href="#services">How we help <ArrowDownRight size={16} /></a>
-      </header>
-
-      <section className="hero" id="top">
-        <div className="hero-copy">
-          <div className="hero-color-ribbon" aria-hidden="true"><i /><i /><i /></div>
-          <div className="eyebrow"><span /> Growth systems for the AI era</div>
-          <h1>We make selling in the world of <em>AI</em> easier.</h1>
-          <p>
-            Building scalable growth systems for businesses that actually want to grow.
-          </p>
-          <div className="hero-actions">
-            <a className="primary-button" href="#services">See how we work <ArrowRight size={17} /></a>
-            <a className="text-link" href="#articles">Read our thinking <span>↘</span></a>
-          </div>
-          <div className="hero-note">
-            <LineChart size={17} /> Strategy, systems and people connected to revenue.
-          </div>
-        </div>
-        <ProofCarousel />
+    return <>
+    <a className="skip-link" href="#main">Skip to content</a>
+    <header className="site-header"><div className="container header-inner">
+      <a href="#top" className="brand" aria-label="Sage Kite home"><Image src="/sage-kite-logo.png" alt="Sage Kite" width={180} height={45} priority/></a>
+      <nav className="desktop-nav" aria-label="Main navigation"><a href="#services">What we do</a><a href="#crm">CRM expertise</a><a href="#articles">Our thinking</a></nav>
+      <a className="button button-small header-contact" href={contactLink()}>Let’s talk <ArrowUpRight size={17} aria-hidden="true"/></a><MobileNav />
+    </div></header>
+    <main id="main">
+      <section className="container hero" id="top" aria-labelledby="hero-title">
+        <div className="hero-copy"><p className="eyebrow">Strategy. Systems. People.</p>
+          <h1 id="hero-title">We make selling in the world of <em>AI</em> easier.</h1>
+          <p className="hero-description">Building scalable systems for businesses that actually want to grow.</p>
+          <div className="hero-actions"><a className="button" href={contactLink()}>Build your growth system <ArrowUpRight size={19} aria-hidden="true"/></a><a className="text-link" href="#services">Explore our services <ArrowRight size={17} aria-hidden="true"/></a></div>
+          <p className="hero-footnote">From the first strategy conversation to the everyday execution.</p>
+        </div><HeroShowcase />
       </section>
-
-      <section className="proof-section" id="proof">
-        <div className="section-intro proof-intro">
-          <span className="section-number">02</span>
-          <div>
-            <p className="section-kicker">Proof before promises</p>
-            <h2>Built from operating experience, not theory.</h2>
-          </div>
-          <p className="section-aside">Final figures marked XX should be replaced with verified data before public launch.</p>
-        </div>
-
-        <div className="metrics-grid">
-          <article><strong>XX+</strong><span>Projects delivered</span></article>
-          <article><strong>4+</strong><span>Years across growth & operations</span></article>
-          <article><strong>XX%</strong><span>Client retention</span></article>
-          <article><strong>X+</strong><span>Countries served</span></article>
-        </div>
-
-        <div className="trusted-row">
-          <p>Experience behind Sage Kite includes work with</p>
-          <div className="trusted-brands" aria-label="Selected client brands">
-            <span>JENSON USA</span>
-            <span>260 SAMPLE SALE</span>
-            <span>SWEET BUSINESS IN A BOX</span>
-          </div>
+      <div className="capability-strip"><div className="container"><span>Clarity before activity.</span><span>Systems before scale.</span><span>People behind the progress.</span></div></div>
+      <section className="container section" id="services" aria-labelledby="services-title">
+        <div className="section-heading"><div><p className="eyebrow">01 / What we do</p><h2 id="services-title">A sharper strategy.<br />The team to make it happen.</h2></div><p>You don’t need everything at once. Start with what is holding you back, then build from there.</p></div>
+        <div className="service-grid">{services.map((service, i) => {
+            const Icon = icons[i];
+            return <article className={"service-card service-" + service.id} key={service.id} id={service.id}>
+          <div className="card-top"><Icon size={25} strokeWidth={1.6} aria-hidden="true"/><span>0{i + 1}</span></div><h3>{service.title}</h3><p>{service.description}</p>
+          <ul className="service-list">{service.items.map(item => <li key={item}><span aria-hidden="true">↗</span>{item}</li>)}</ul>
+          <a className="card-link" href={service.id === "crm-implementation" ? "#crm" : contactLink(service.title)}>{service.cta}<ArrowUpRight size={19} aria-hidden="true"/></a>
+        </article>;
+        })}</div>
+      </section>
+      <section className="crm-section" id="crm" aria-labelledby="crm-title"><div className="container section">
+        <div className="section-heading"><div><p className="eyebrow">02 / Connected, not complicated</p><h2 id="crm-title">Your CRM should work<br />like your business does.</h2></div><p>Choose, implement or improve the platform behind your sales and operations. Connect the tools. Clean up the handoffs. Make follow-up dependable.</p></div>
+        <div className="crm-deliverables">{["Setup & migration", "Workflows & integrations", "Reporting & team training"].map(item => <span key={item}><Check size={16} aria-hidden="true"/>{item}</span>)}</div>
+        <div className="crm-groups">{crmGroups.map(group => <div className="crm-group" key={group.title}><h3>{group.title}</h3><ul>{group.tools.map(tool => <li key={tool}>{tool}</li>)}</ul></div>)}</div>
+        <div className="custom-crm"><div><h3>Need something your off-the-shelf CRM can’t do?</h3><p>Custom CRM development, designed around your workflow.</p></div><a className="text-link" href={contactLink("Custom CRM development")}>Talk through your requirements <ArrowUpRight size={18} aria-hidden="true"/></a></div>
+        <p className="platform-note">Platform names identify service areas, not certifications or official partnerships. Scope and integrations are confirmed during discovery.</p>
+      </div></section>
+      <section className="container section talent-section" aria-labelledby="talent-title">
+        <div><p className="eyebrow">03 / More than another pair of hands</p><h2 id="talent-title">Good systems need<br />good people.</h2><p className="section-copy">Hire virtual assistants and specialists from India for the work your business needs every day. Define the role around the job to be done, not a generic list of tasks.</p><a className="button" href={contactLink("Recruitment and staffing")}>Find your next teammate <ArrowUpRight size={18} aria-hidden="true"/></a></div>
+        <div className="talent-board"><div className="board-caption"><span>Build your team around the work</span><Users size={20} aria-hidden="true"/></div>
+          {[{ name: "CRM & automation", detail: "Workflows, integrations and pipeline upkeep" }, { name: "Marketing & content", detail: "Campaigns, SEO, email and social media" }, { name: "Executive & admin support", detail: "Coordination, research and daily operations" }].map((role, i) => <div className="talent-row" key={role.name}><span className={"role-number role-" + i}>0{i + 1}</span><div><h3>{role.name}</h3><p>{role.detail}</p></div></div>)}
+          <p className="board-bottom">Role clarity → Candidate review → Onboarding</p>
         </div>
       </section>
-
-      <section className="services-section" id="services">
-        <div className="section-intro services-intro">
-          <span className="section-number">03</span>
-          <div>
-            <p className="section-kicker">What we build</p>
-            <h2>One growth partner.<br />Three ways to work together.</h2>
-          </div>
-          <p className="section-aside">Start with the bottleneck. Add capability only where the system needs it.</p>
-        </div>
-
-        <div className="service-list">
-          {services.map((service) => {
-            const Icon = service.icon;
-            return (
-              <article className="service-row" key={service.title}>
-                <div className="service-identity">
-                  <span>{service.number}</span>
-                  <Icon size={22} strokeWidth={1.5} />
-                </div>
-                <div className="service-copy">
-                  <h3>{service.title}</h3>
-                  <p>{service.description}</p>
-                </div>
-                <ul>
-                  {service.items.map((item) => <li key={item}>{item}</li>)}
-                </ul>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="articles-section" id="articles">
-        <div className="articles-heading">
-          <div>
-            <span className="section-number light">04</span>
-            <p className="section-kicker light">The Sage Kite library</p>
-          </div>
-          <h2>Ideas for selling<br />in a changed world.</h2>
-          <p>Essays, explanations and practical field notes on AI, marketing, automation and the systems connecting them.</p>
-        </div>
-
-        <div className="article-grid">
-          {articles.map((article, index) => (
-            <article className={index === 0 ? "article-card featured" : "article-card"} key={article.title}>
-              <div className="article-meta"><span>{article.category}</span><span>{article.read}</span></div>
-              <h3>{article.title}</h3>
-              <p>{article.excerpt}</p>
-              <span className="article-arrow" aria-hidden="true"><ArrowDownRight size={20} /></span>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <footer>
-        <div className="footer-mark">
-          <img src="/sage-kite-mark.png" alt="" />
-          <div><strong>Sage Kite</strong><span>Make selling easier.</span></div>
-        </div>
-        <div className="footer-links">
-          <a href="#top">Back to top</a>
-          <a href="#services">Services</a>
-          <a href="#articles">Articles</a>
-        </div>
-        <p>Strategy · Systems · People</p>
-      </footer>
+      <section className="journal-section" id="articles" aria-labelledby="journal-title"><div className="container section">
+        <div className="section-heading"><div><p className="eyebrow">04 / The Sage Kite journal</p><h2 id="journal-title">A little less noise.<br />A lot more thought.</h2></div><p>Writing on marketing, AI, automation and the changing work of selling. For people who would rather understand than chase the next hack.</p></div>
+        <article className="featured-essay"><div className="essay-art" aria-hidden="true"><span>FIELD NOTE / 001</span><p>Making is easier.<br /><strong>Selling is<br />still human.</strong></p><span>SAGE KITE / ON DISTRIBUTION</span></div>
+          <div className="essay-preview"><p className="eyebrow">AI & distribution · Essay</p><h3>AI made making easier.<br />It did not make selling easier.</h3><p>When everyone can produce, producing stops being an advantage. The opportunity is to become easier to discover, easier to trust and easier to buy from.</p>
+          <details className="essay-details"><summary>Read the essay <ArrowRight size={18} aria-hidden="true"/></summary><div className="essay-body">
+            <p>The internet is about to become far more crowded than it already is. Not because more people suddenly became creative, but because making things has become cheap.</p>
+            <p>A business can now create a website in an afternoon, write fifty social posts in an hour, and generate ad creatives before lunch. That is useful. But it also creates a problem.</p>
+            <p>When everyone can produce, producing stops being an advantage.</p>
+            <p>The difficult part was never simply building a website, running an ad, or writing content. It was understanding what people actually want, earning their trust, reaching them consistently, and building a system that does not drop opportunities once they arrive.</p>
+            <p>AI has made execution faster. It has not made attention easier to earn.</p>
+            <p>The businesses that win will not be the ones using the most AI tools. They will be the ones that become clearer about who they serve, more useful in public, faster in responding to demand, and better at turning interest into trust.</p>
+            <p>A good growth system connects the dots: positioning that makes sense, proof that people can believe, content that reaches the right audience, a website that explains the value clearly, a CRM that captures every enquiry, and follow-up that happens before the prospect loses interest.</p>
+            <p>None of these parts are glamorous on their own. Together, they make selling easier.</p>
+            <p>The opportunity is not replacing marketing with machines. It is automating repetitive work so people can spend more time understanding customers, creating trust and making better decisions.</p>
+          </div></details></div>
+        </article>
+        <div className="journal-topics"><span>What we write about</span><span>Marketing</span><span>AI & discovery</span><span>Automation</span><span>Distribution</span><span>Building teams</span></div>
+      </div></section>
+      <section className="container section contact-section" id="contact"><p className="eyebrow">Let’s start with the real problem.</p><h2>What’s getting in<br />the way of your growth?</h2><p>A strategy gap, a disconnected CRM, a campaign that isn’t working, or a team that needs support. Tell us where you are.</p><a className="button" href={contactLink()}>Talk to Sage Kite <ArrowUpRight size={20} aria-hidden="true"/></a><span className="contact-note">Start a conversation on WhatsApp.</span></section>
     </main>
-  );
+    <footer className="site-footer"><div className="container footer-inner"><a className="brand" href="#top" aria-label="Back to Sage Kite home"><Image src="/sage-kite-logo.png" alt="Sage Kite" width={180} height={45}/></a><p>Strategy, systems and people.<br />Built for a world changed by AI.</p><nav aria-label="Footer"><a href="#services">Services</a><a href="#articles">Journal</a><a href={contactLink()}>Contact</a></nav><span>© {new Date().getFullYear()} Sage Kite</span></div></footer>
+  </>;
 }
