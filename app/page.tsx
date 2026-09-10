@@ -7,7 +7,7 @@ export default function Home() {
     return <>
     <a className="skip-link" href="#main">Skip to content</a>
     <header className="site-header"><div className="container header-inner">
-      <a href="#top" className="brand" aria-label="Sage Kite home"><Image src="/sage-kite-logo.png" alt="Sage Kite" width={180} height={45} priority/></a>
+      <a href="#top" className="brand" aria-label="Sage Kite home"><Image src="/sage-kite-logo-transparent.png" alt="Sage Kite" width={2170} height={725} sizes="166px" priority/></a>
       <nav className="desktop-nav" aria-label="Main navigation"><a href="#services">What we do</a><a href="#crm">CRM expertise</a><a href="#articles">Our thinking</a></nav>
       <a className="button button-small header-contact" href={contactLink()}>Let’s talk <ArrowUpRight size={17} aria-hidden="true"/></a><MobileNav />
     </div></header>
@@ -35,7 +35,7 @@ export default function Home() {
       <section className="crm-section" id="crm" aria-labelledby="crm-title"><div className="container section">
         <div className="section-heading"><div><p className="eyebrow">02 / Connected, not complicated</p><h2 id="crm-title">Your CRM should work<br />like your business does.</h2></div><p>Choose, implement or improve the platform behind your sales and operations. Connect the tools. Clean up the handoffs. Make follow-up dependable.</p></div>
         <div className="crm-deliverables">{["Setup & migration", "Workflows & integrations", "Reporting & team training"].map(item => <span key={item}><Check size={16} aria-hidden="true"/>{item}</span>)}</div>
-        <div className="crm-groups">{crmGroups.map(group => <div className="crm-group" key={group.title}><h3>{group.title}</h3><ul>{group.tools.map(tool => <li key={tool}>{tool}</li>)}</ul></div>)}</div>
+        <div className="crm-groups">{crmGroups.map(group => <div className="crm-group" key={group.title}><h3>{group.title}</h3><p className="crm-group-description">{group.description}</p><ul>{group.tools.map(tool => <li key={tool}>{tool}</li>)}</ul></div>)}</div>
         <div className="custom-crm"><div><h3>Need something your off-the-shelf CRM can’t do?</h3><p>Custom CRM development, designed around your workflow.</p></div><a className="text-link" href={contactLink("Custom CRM development")}>Talk through your requirements <ArrowUpRight size={18} aria-hidden="true"/></a></div>
         <p className="platform-note">Platform names identify service areas, not certifications or official partnerships. Scope and integrations are confirmed during discovery.</p>
       </div></section>
@@ -66,6 +66,6 @@ export default function Home() {
       </div></section>
       <section className="container section contact-section" id="contact"><p className="eyebrow">Let’s start with the real problem.</p><h2>What’s getting in<br />the way of your growth?</h2><p>A strategy gap, a disconnected CRM, a campaign that isn’t working, or a team that needs support. Tell us where you are.</p><a className="button" href={contactLink()}>Talk to Sage Kite <ArrowUpRight size={20} aria-hidden="true"/></a><span className="contact-note">Start a conversation on WhatsApp.</span></section>
     </main>
-    <footer className="site-footer"><div className="container footer-inner"><a className="brand" href="#top" aria-label="Back to Sage Kite home"><Image src="/sage-kite-logo.png" alt="Sage Kite" width={180} height={45}/></a><p>Strategy, systems and people.<br />Built for a world changed by AI.</p><nav aria-label="Footer"><a href="#services">Services</a><a href="#articles">Journal</a><a href={contactLink()}>Contact</a></nav><span>© {new Date().getFullYear()} Sage Kite</span></div></footer>
+    <footer className="site-footer"><div className="container footer-inner"><a className="brand" href="#top" aria-label="Back to Sage Kite home"><Image src="/sage-kite-logo-transparent.png" alt="Sage Kite" width={2170} height={725} sizes="166px"/></a><p>Strategy, systems and people.<br />Built for a world changed by AI.</p><nav aria-label="Footer"><a href="#services">Services</a><a href="#articles">Journal</a><a href={contactLink()}>Contact</a></nav><span>© {new Date().getFullYear()} Sage Kite</span></div></footer>
   </>;
 }

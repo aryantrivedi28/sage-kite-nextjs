@@ -14,8 +14,12 @@ export const services = [
     { id: "white-label", title: "White-label delivery", description: "Your agency. Our delivery team. You own the client relationship. We support the work behind it as your backend execution partner.", items: ["CRM & automation delivery", "Marketing execution & specialist talent", "Agreed scope, handoffs & reporting"], cta: "Discuss a partnership" },
 ];
 export const crmGroups = [
-    { title: "Sales & marketing", tools: ["GoHighLevel", "Keap", "Kajabi", "Dubsado"] },
-    { title: "Real estate", tools: ["Follow Up Boss", "Lofty"] },
-    { title: "Home services & contracting", tools: ["ServiceTitan", "Housecall Pro", "Jobber", "JobNimbus", "AccuLynx"] },
-    { title: "Specialist businesses", tools: ["Boulevard", "Lawmatics", "Clio Grow", "Bloomerang"] },
+    { title: "Sales & marketing", description: "Connect lead capture, sales pipelines and follow-up across your business.", tools: ["GoHighLevel", "Keap"] },
+    { title: "Real estate", description: "Organise property enquiries, agent handoffs and long-term lead nurture.", tools: ["Follow Up Boss", "Lofty"] },
+    { title: "Home services", description: "Connect customer enquiries with scheduling, field teams and ongoing service.", tools: ["ServiceTitan", "Housecall Pro", "Jobber"] },
+    { title: "Creative & client services", description: "Bring proposals, contracts, onboarding and client communication together.", tools: ["Dubsado"] },
+    { title: "Coaching & courses", description: "Connect your audience, enrolments and digital learning experience.", tools: ["Kajabi"] },
+    { title: "Legal practices", description: "Build a consistent process for new enquiries, consultations and client intake.", tools: ["Clio Grow"] },
+    { title: "Fitness & wellness", description: "Support bookings, memberships and stronger client relationships.", tools: ["Mindbody"] },
+    { title: "Nonprofits & fundraising", description: "Organise donor relationships, giving history and supporter engagement.", tools: ["Bloomerang"] },
 ];
