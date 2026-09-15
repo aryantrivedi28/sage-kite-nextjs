@@ -271,7 +271,7 @@ export default function Home() {
             </ul>
             
             <div className="svc-footer mt-large" style={{borderTop: "1px solid var(--light-sage)"}}>
-              <div className="svc-kind" style={{paddingLeft: "0"}}>After handover</div>
+              <div className="svc-kind" style={{paddingLeft: "0", fontWeight: "600", fontSize: "1.4rem", color: "var(--dark-sage)"}}>After handover</div>
               <div className="svc-body" style={{gridColumn: "3 / 5"}}>
                 <p>Maintenance with a defined support scope, including clear ownership and boundaries for changes, so the system keeps working as the business changes.</p>
               </div>
