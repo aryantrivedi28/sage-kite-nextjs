@@ -1,4 +1,9 @@
+const fs = require('fs');
 
+// We will read the current app/page.tsx and systematically rewrite it.
+// To ensure 100% content preservation, we define all exact text strings from the current page.
+
+const content = `
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -7,7 +12,6 @@ import Link from "next/link";
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [openService, setOpenService] = useState<number | null>(0);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -19,7 +23,7 @@ export default function Home() {
   return (
     <>
       <a className="skip" href="#main">Skip to content</a>
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{__html: \`
         .header-scrolled {
           background: rgba(247, 245, 238, 0.95) !important;
           backdrop-filter: blur(12px);
@@ -56,34 +60,6 @@ export default function Home() {
         .timeline-node h3 { transition: color 0.3s ease; }
         .timeline-node:hover h3 { color: var(--hover-color); }
 
-        /* Accordion Refinements */
-        .svc h3 { font-size: clamp(1.25rem, 1.8vw, 1.55rem) !important; }
-        .svc-content-inner { max-width: 58ch; }
-        .svc-content-inner p { font-size: 0.95rem !important; line-height: 1.5 !important; margin-bottom: 10px !important; }
-        .svc-content-inner p.mt { margin-top: 10px !important; margin-bottom: 14px !important; }
-        .svc-content-inner .text-link.mt { margin-top: 0 !important; font-size: 0.95rem !important; }
-
-        
-        
-        @media (max-width: 900px) {
-          
-        .approach-header-grid { grid-template-columns: 1fr 1fr; }
-        @media (max-width: 900px) {
-          .approach-header-grid { grid-template-columns: 1fr; gap: 40px; }
-        }
-          .approach-cards-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-          .clean-card { transform: none !important; }
-        }
-
-        .eq-layout-grid { grid-template-columns: 0.85fr 1fr; }
-        @media (max-width: 900px) {
-          .eq-layout-grid { grid-template-columns: 1fr; }
-        }
-
-        .timeline-grid::-webkit-scrollbar { display: none; }
-        .timeline-grid { -ms-overflow-style: none; scrollbar-width: none; }
-
-
         .srv-row { display: grid; grid-template-columns: 240px 1fr; gap: 40px; padding: 48px 0; border-bottom: 1px solid var(--light-sage); position: relative; transition: all 0.4s ease; }
         @media (max-width: 768px) { .srv-row { grid-template-columns: 1fr; gap: 16px; } }
         .srv-rail-new { position: absolute; left: -16px; top: 48px; bottom: 48px; width: 3px; background: var(--rail-color); transform: scaleY(0); transform-origin: top; transition: transform 0.4s ease; }
@@ -111,22 +87,22 @@ export default function Home() {
         .lib-grid-new { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(40px, 8vw, 80px); }
         @media (max-width: 900px) { .lib-grid-new { grid-template-columns: 1fr; } .sme-checklist { grid-template-columns: 1fr; } }
         
-        .cta-section { position: relative; overflow: hidden; background: var(--ink); color: var(--warm-white); padding: clamp(100px, 15vw, 160px) 0; }
+        .cta-section { position: relative; overflow: hidden; background: #0E1719; color: var(--warm-white); padding: clamp(100px, 15vw, 160px) 0; }
         .cta-bg-text { position: absolute; font-size: 30vw; font-family: var(--serif); opacity: 0.02; top: 50%; left: 50%; transform: translate(-50%, -50%); white-space: nowrap; pointer-events: none; }
         .cta-section h2 { color: var(--warm-white); }
         .cta-section p { color: rgba(255,255,255,0.7); }
 
         .reveal-new { animation: fadeUp 0.8s forwards; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-      `}} />
+      \`}} />
 
-      <header className={`site-header ${menuOpen ? "open" : ""} ${scrolled ? "header-scrolled" : ""}`} style={{ background: "var(--warm-white)", position: "sticky", top: 0, zIndex: 100 }}>
+      <header className={\`site-header \${menuOpen ? "open" : ""} \${scrolled ? "header-scrolled" : ""}\`} style={{ background: "var(--warm-white)", position: "sticky", top: 0, zIndex: 100 }}>
         <div className="wrap header-inner">
           <a className="logo" href="/" aria-label="Sage Kite home">
             <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" />
           </a>
           
-          <nav className={`nav ${menuOpen ? "open" : ""}`} aria-label="Main navigation">
+          <nav className={\`nav \${menuOpen ? "open" : ""}\`} aria-label="Main navigation">
             <ul>
               <li><Link href="#services" onClick={() => setMenuOpen(false)}>Services</Link></li>
               <li><Link href="#platforms" onClick={() => setMenuOpen(false)}>Platforms</Link></li>
@@ -160,46 +136,41 @@ export default function Home() {
             </div>
 
             <div className="hero-img-wrapper">
-               <img src="/Team_meeting.jpeg" alt="Business strategy meeting" />
+               <img src="/photo-1.jpg" alt="Business strategy meeting" />
             </div>
           </div>
 
           <div className="wrap mt-large reveal-new">
-            <div className="eq-layout-grid" style={{ display: "grid", gap: "clamp(40px, 6vw, 80px)", alignItems: "center" }}>
-              <div style={{ width: "100%", position: "relative" }}>
-                 <img src="/sage-kite-growth-workflow.jpeg" alt="Sage Kite growth workflow" style={{ width: "100%", borderRadius: "14px", border: "1px solid var(--light-sage)", boxShadow: "0 16px 32px rgba(0,0,0,0.03)", objectFit: "cover", aspectRatio: "16/10" }} />
+            <figure className="equation" aria-label="What Sage Kite brings together" style={{ padding: "40px", background: "var(--warm-white)", border: "1px solid var(--light-sage)", borderRadius: "12px", display: "flex", flexWrap: "wrap", gap: "24px", alignItems: "center", justifyContent: "space-between" }}>
+              <h2 style={{ width: "100%", fontSize: "1.1rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--dark-sage)", marginBottom: "16px" }}>What Sage Kite brings together</h2>
+              
+              <div className="eq-part" style={{ borderLeft: '2px solid var(--sky)', paddingLeft: '16px', flex: 1, minWidth: "200px" }}>
+                <strong style={{ display: "block", fontSize: "1.2rem", marginBottom: "8px" }}>Systems</strong>
+                <span style={{ fontSize: "0.9rem", color: "var(--dark-sage)", lineHeight: 1.5 }}>CRM, automation, AI and the workflows between them</span>
               </div>
-
-              <figure className="equation" aria-label="What Sage Kite brings together" style={{ margin: 0, display: "flex", flexDirection: "column", alignItems: "flex-start", width: "100%", gap: "4px" }}>
-                <h2 style={{ fontSize: "1.15rem", textTransform: "uppercase", letterSpacing: "0.15em", color: "var(--ink)", marginBottom: "16px", fontFamily: "var(--serif)" }}>What Sage Kite brings together</h2>
-                
-                <div className="eq-part" style={{ width: "92%", background: "var(--warm-white)", border: "1px solid var(--light-sage)", borderLeft: '4px solid var(--sky)', padding: '16px 20px', borderRadius: "8px" }}>
-                  <strong style={{ display: "block", fontSize: "1.15rem", marginBottom: "4px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Systems</strong>
-                  <span style={{ fontSize: "0.95rem", color: "var(--dark-sage)", lineHeight: 1.4, display: "block" }}>CRM, automation, AI and the workflows between them</span>
-                </div>
-                
-                <div className="op" style={{ width: "92%", color: "var(--ink)", fontSize: "1.2rem", fontWeight: 600, textAlign: "center", margin: "4px 0" }}>+</div>
-                
-                <div className="eq-part" style={{ width: "92%", background: "var(--warm-white)", border: "1px solid var(--light-sage)", borderLeft: '4px solid var(--ink)', padding: '16px 20px', borderRadius: "8px" }}>
-                  <strong style={{ display: "block", fontSize: "1.15rem", marginBottom: "4px", fontFamily: "var(--serif)", color: "var(--ink)" }}>People</strong>
-                  <span style={{ fontSize: "0.95rem", color: "var(--dark-sage)", lineHeight: 1.4, display: "block" }}>Specialist VAs who operate and improve those systems</span>
-                </div>
-                
-                <div className="op" style={{ width: "92%", color: "var(--ink)", fontSize: "1.2rem", fontWeight: 600, textAlign: "center", margin: "4px 0" }}>+</div>
-                
-                <div className="eq-part" style={{ width: "92%", background: "var(--warm-white)", border: "1px solid var(--light-sage)", borderLeft: '4px solid var(--coral)', padding: '16px 20px', borderRadius: "8px" }}>
-                  <strong style={{ display: "block", fontSize: "1.15rem", marginBottom: "4px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Execution</strong>
-                  <span style={{ fontSize: "0.95rem", color: "var(--dark-sage)", lineHeight: 1.4, display: "block" }}>Consultancy, implementation and ongoing marketing</span>
-                </div>
-                
-                <div className="op" style={{ width: "92%", color: "var(--ink)", fontSize: "1.2rem", fontWeight: 600, textAlign: "center", margin: "4px 0" }}>=</div>
-                
-                <div className="eq-part" style={{ width: "92%", backgroundColor: 'var(--ink)', border: "1px solid var(--ink)", padding: "16px 20px", borderRadius: "8px" }}>
-                  <strong style={{ display: "block", fontSize: "1.15rem", marginBottom: "4px", color: 'var(--warm-white)', fontFamily: "var(--serif)" }}>Growth</strong>
-                  <span style={{ fontSize: "0.95rem", color: 'rgba(255,255,255,0.85)', lineHeight: 1.4, display: "block" }}>A growth operation that works as one</span>
-                </div>
-              </figure>
-            </div>
+              
+              <div className="op" style={{ color: "var(--light-sage)", fontSize: "1.5rem" }}>+</div>
+              
+              <div className="eq-part" style={{ borderLeft: '2px solid var(--ink)', paddingLeft: '16px', flex: 1, minWidth: "200px" }}>
+                <strong style={{ display: "block", fontSize: "1.2rem", marginBottom: "8px" }}>People</strong>
+                <span style={{ fontSize: "0.9rem", color: "var(--dark-sage)", lineHeight: 1.5 }}>Specialist VAs who operate and improve those systems</span>
+              </div>
+              
+              <div className="op" style={{ color: "var(--light-sage)", fontSize: "1.5rem" }}>+</div>
+              
+              <div className="eq-part" style={{ borderLeft: '2px solid var(--coral)', paddingLeft: '16px', flex: 1, minWidth: "200px" }}>
+                <strong style={{ display: "block", fontSize: "1.2rem", marginBottom: "8px" }}>Execution</strong>
+                <span style={{ fontSize: "0.9rem", color: "var(--dark-sage)", lineHeight: 1.5 }}>Consultancy, implementation and ongoing marketing</span>
+              </div>
+              
+              <div className="op" style={{ color: "var(--light-sage)", fontSize: "1.5rem" }}>=</div>
+              
+              <div className="eq-part" style={{ backgroundColor: 'var(--ink)', color: 'var(--warm-white)', padding: "24px", borderRadius: "8px", flex: 1, minWidth: "200px" }}>
+                <strong style={{ display: "block", fontSize: "1.2rem", marginBottom: "8px", color: 'var(--warm-white)' }}>Growth</strong>
+                <span style={{ fontSize: "0.9rem", color: 'rgba(255,255,255,0.8)', lineHeight: 1.5 }}>A growth operation that works as one</span>
+              </div>
+              <figcaption style={{ width: "100%", fontSize: "0.85rem", color: "var(--light-sage)", marginTop: "16px", fontStyle: "italic" }}>The Sage Kite model: systems, people and execution, working together.</figcaption>
+            </figure>
           </div>
         </section>
 
@@ -239,86 +210,63 @@ export default function Home() {
 
         {/* 4. PHOTO 2 - Transition */}
         <div className="wrap reveal-new" style={{ padding: "clamp(40px, 6vw, 80px) 0", display: "flex", justifyContent: "center" }}>
-           <img src="/people.jpeg" alt="Team collaboration" style={{ width: "100%", maxWidth: "1000px", borderRadius: "16px", border: "1px solid var(--light-sage)", boxShadow: "0 24px 48px rgba(0,0,0,0.05)", objectFit: "cover", aspectRatio: "16/7" }} />
+           <img src="/photo-2.jpg" alt="Team collaboration" style={{ width: "100%", maxWidth: "1000px", borderRadius: "16px", border: "1px solid var(--light-sage)", boxShadow: "0 24px 48px rgba(0,0,0,0.05)", objectFit: "cover", aspectRatio: "16/7" }} />
         </div>
 
         {/* 5. THE SAGE KITE APPROACH */}
-        <section className="tint reveal-new" id="approach" style={{ padding: "clamp(120px, 12vw, 160px) 0" }}>
-          
-          {/* Header Grid */}
-          <div className="wrap approach-header-grid" style={{ marginBottom: "120px", display: "grid", gap: "80px 40px", alignItems: "center" }}>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <span className="label" style={{ marginBottom: 0, border: "none" }}>The Sage Kite approach</span>
-            </div>
-            <div style={{ textAlign: "center", padding: "0 20px" }}>
-              <h2 style={{ fontSize: "clamp(2.5rem, 4vw, 3.2rem)", lineHeight: 1.05, fontFamily: "var(--serif)", color: "var(--ink)" }}>Business growth consulting that carries on past the advice</h2>
-            </div>
-            
-            <div style={{ textAlign: "center", padding: "0 40px" }}>
-              <p style={{ fontSize: "0.95rem", lineHeight: 1.6, color: "var(--dark-sage)", margin: 0 }}>Business growth consulting helps a business understand what is limiting its growth and decide what to change. Sage Kite also does the work that follows: we implement the systems, provide the people and carry out the execution, so the plan is proven in the business rather than left in a document.</p>
-            </div>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <div style={{ paddingLeft: "24px", borderLeft: "2px solid var(--butter)", maxWidth: "320px" }}>
-                <p style={{ fontSize: "1.1rem", fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--ink)", margin: 0, lineHeight: 1.5 }}>Plans are easier to come by than ever. The hard part is making one work inside a real business, with its real tools and real team.</p>
-              </div>
-            </div>
+        <section className="tint reveal-new" id="approach" style={{ padding: "clamp(80px, 10vw, 120px) 0" }}>
+          <div className="wrap approach-intro" style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto 80px" }}>
+            <span className="label" style={{ marginBottom: "24px", justifyContent: "center" }}>The Sage Kite approach</span>
+            <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", lineHeight: 1.1, marginBottom: "32px", fontFamily: "var(--serif)" }}>Business growth consulting that carries on past the advice</h2>
+            <p className="mt" style={{ fontSize: "1.1rem", lineHeight: 1.6, color: "var(--dark-sage)", marginBottom: "32px" }}>Business growth consulting helps a business understand what is limiting its growth and decide what to change. Sage Kite also does the work that follows: we implement the systems, provide the people and carry out the execution, so the plan is proven in the business rather than left in a document.</p>
+            <p className="pull" style={{ fontSize: "1.3rem", fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--ink)" }}>Plans are easier to come by than ever. The hard part is making one work inside a real business, with its real tools and real team.</p>
           </div>
           
-          {/* Cards Grid */}
           <div className="wrap">
-            <div className="approach-cards-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(24px, 3vw, 40px)" }}>
-              
-              <div className="clean-card" style={{ transform: "translateY(0)", background: "var(--warm-white)", borderRadius: "12px", padding: "40px 32px", border: "1px solid var(--light-sage)", boxShadow: "0 16px 40px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "24px" }}>
+              <div className="pillar-card" style={{ '--card-color': 'var(--sky)', transform: 'translateY(0)' } as React.CSSProperties}>
                 <div style={{ fontSize: "0.75rem", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--sky)", marginBottom: "16px" }}>How work moves</div>
                 <h3 style={{ fontSize: "2rem", fontFamily: "var(--serif)", marginBottom: "24px", color: "var(--ink)" }}>Systems</h3>
-                <p style={{ color: "var(--dark-sage)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "32px", flex: 1 }}>Systems are how work moves through a business: how enquiries are captured, where customer information lives, what happens automatically and what needs a person.</p>
-                <ul style={{ paddingLeft: "20px", marginBottom: "40px", color: "var(--dark-sage)", display: "flex", flexDirection: "column", gap: "16px", fontSize: "0.9rem", listStyleType: "disc" }}>
+                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, marginBottom: "24px", flex: 1 }}>Systems are how work moves through a business: how enquiries are captured, where customer information lives, what happens automatically and what needs a person.</p>
+                <ul style={{ paddingLeft: "20px", marginBottom: "32px", color: "var(--dark-sage)", display: "flex", flexDirection: "column", gap: "8px" }}>
                   <li>CRM setup, pipeline design and cleanup</li>
                   <li>Customer journeys and follow-up workflows</li>
                   <li>Marketing automation inside your CRM platform</li>
                   <li>AI consultancy on where AI can reduce repetitive work</li>
                   <li>Custom CRM development where a platform does not fit</li>
                 </ul>
-                <Link href="#what-we-do" className="text-link" style={{ fontWeight: 600, fontSize: "0.95rem" }}>Explore CRM implementation</Link>
+                <Link href="#what-we-do" className="text-link" style={{ fontWeight: 600 }}>Explore CRM implementation</Link>
               </div>
 
-              <div className="clean-card" style={{ transform: "translateY(48px)", background: "var(--warm-white)", borderRadius: "12px", padding: "40px 32px", border: "1px solid var(--light-sage)", boxShadow: "0 16px 40px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
-                <div style={{ fontSize: "0.75rem", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--sage)", marginBottom: "16px" }}>Who runs it</div>
+              <div className="pillar-card" style={{ '--card-color': 'var(--ink)', transform: 'translateY(24px)' } as React.CSSProperties}>
+                <div style={{ fontSize: "0.75rem", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink)", marginBottom: "16px" }}>Who runs it</div>
                 <h3 style={{ fontSize: "2rem", fontFamily: "var(--serif)", marginBottom: "24px", color: "var(--ink)" }}>People</h3>
-                <p style={{ color: "var(--dark-sage)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "32px", flex: 1 }}>People operate and improve the system every day. A well-built CRM still needs someone to keep records clean, run campaigns and follow up with leads.</p>
-                <ul style={{ paddingLeft: "20px", marginBottom: "40px", color: "var(--dark-sage)", display: "flex", flexDirection: "column", gap: "16px", fontSize: "0.9rem", listStyleType: "disc" }}>
+                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, marginBottom: "24px", flex: 1 }}>People operate and improve the system every day. A well-built CRM still needs someone to keep records clean, run campaigns and follow up with leads.</p>
+                <ul style={{ paddingLeft: "20px", marginBottom: "32px", color: "var(--dark-sage)", display: "flex", flexDirection: "column", gap: "8px" }}>
                   <li>CRM and automation VA</li>
                   <li>Marketing operations VA</li>
                   <li>Email marketing VA</li>
                   <li>Social media VA</li>
                   <li>Lead generation and sales support VA</li>
                 </ul>
-                <Link href="#what-we-do" className="text-link" style={{ fontWeight: 600, fontSize: "0.95rem" }}>Explore specialist staffing</Link>
+                <Link href="#what-we-do" className="text-link" style={{ fontWeight: 600 }}>Explore specialist staffing</Link>
               </div>
 
-              <div className="clean-card" style={{ transform: "translateY(96px)", background: "var(--warm-white)", borderRadius: "12px", padding: "40px 32px", border: "1px solid var(--light-sage)", boxShadow: "0 16px 40px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
+              <div className="pillar-card" style={{ '--card-color': 'var(--coral)', transform: 'translateY(48px)' } as React.CSSProperties}>
                 <div style={{ fontSize: "0.75rem", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--coral)", marginBottom: "16px" }}>What gets done</div>
                 <h3 style={{ fontSize: "2rem", fontFamily: "var(--serif)", marginBottom: "24px", color: "var(--ink)" }}>Execution</h3>
-                <p style={{ color: "var(--dark-sage)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "32px", flex: 1 }}>Execution turns a plan and a system into results over time: the consultancy, the implementation projects and the marketing that continues after launch.</p>
-                <ul style={{ paddingLeft: "20px", marginBottom: "40px", color: "var(--dark-sage)", display: "flex", flexDirection: "column", gap: "16px", fontSize: "0.9rem", listStyleType: "disc" }}>
+                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, marginBottom: "24px", flex: 1 }}>Execution turns a plan and a system into results over time: the consultancy, the implementation projects and the marketing that continues after launch.</p>
+                <ul style={{ paddingLeft: "20px", marginBottom: "32px", color: "var(--dark-sage)", display: "flex", flexDirection: "column", gap: "8px" }}>
                   <li>GTM consultancy and fractional CMO support</li>
                   <li>Fixed-price CRM implementation projects</li>
                   <li>SEO and AI SEO</li>
                   <li>Google Ads, Meta Ads and LinkedIn Ads</li>
                   <li>Email marketing, social media and maintenance</li>
                 </ul>
-                <Link href="#what-we-do" className="text-link" style={{ fontWeight: 600, fontSize: "0.95rem" }}>Explore marketing services</Link>
-              </div>
-
-            </div>
-            
-            {/* Footer Text */}
-            <div style={{ marginTop: "160px", display: "flex", justifyContent: "center" }}>
-              <div style={{ padding: "40px", borderTop: "1px solid var(--light-sage)", borderBottom: "1px solid var(--light-sage)", textAlign: "center", maxWidth: "800px", width: "100%" }}>
-                <p className="together" style={{ fontSize: "1rem", lineHeight: 1.6, color: "var(--ink)", margin: 0 }}>These are not three departments. A system without people falls out of use; people without a system repeat the same manual work; execution without either rarely lasts. Sage Kite scopes all three around the same commercial goal.</p>
+                <Link href="#what-we-do" className="text-link" style={{ fontWeight: 600 }}>Explore marketing services</Link>
               </div>
             </div>
-            
+            <p className="together" style={{ marginTop: "100px", padding: "40px", borderTop: "1px solid var(--light-sage)", borderBottom: "1px solid var(--light-sage)", textAlign: "center", fontSize: "1.1rem", lineHeight: 1.6, color: "var(--ink)", maxWidth: "800px", margin: "100px auto 0" }}>These are not three departments. A system without people falls out of use; people without a system repeat the same manual work; execution without either rarely lasts. Sage Kite scopes all three around the same commercial goal.</p>
           </div>
         </section>
 
@@ -372,126 +320,82 @@ export default function Home() {
         </section>
 
         {/* 7. SERVICES */}
-        <section className="rule-top reveal-new" id="what-we-do" style={{ padding: "clamp(80px, 10vw, 120px) 0" }}>
+        <section className="reveal-new" id="what-we-do" style={{ padding: "clamp(80px, 10vw, 120px) 0", borderTop: "1px solid var(--light-sage)" }}>
           <div className="wrap">
-            <div className="section-head" style={{maxWidth: "70ch"}}>
-              <span className="label">Services</span>
+            <div className="section-head" style={{ maxWidth: "70ch", marginBottom: "64px" }}>
+              <span className="label" style={{ marginBottom: "24px" }}>Services</span>
               <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", lineHeight: 1.1, marginBottom: "24px", fontFamily: "var(--serif)" }}>Five service areas, scoped around one growth operation</h2>
               <p className="lede mt" style={{ fontSize: "1.1rem", lineHeight: 1.6, color: "var(--dark-sage)" }}>A client may need one of these or several. Most engagements begin with a scoped, fixed-price project and continue into maintenance, staffing or marketing where it is useful, each with its own clearly stated terms.</p>
             </div>
             
-            <ul className="svc-list mt-large">
-              <li className="svc" onClick={() => setOpenService(openService === 0 ? null : 0)} style={{ cursor: "pointer" }}>
-                <div className="svc-rail" style={{backgroundColor: "var(--butter)"}}></div>
-                <div className="svc-kind">Direction</div>
-                <div>
-                  <h3>Consultancy</h3>
-                </div>
-                <div className="svc-body">
-                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <span style={{ fontSize: "1.5rem", color: "var(--ink)", lineHeight: 1 }}>{openService === 0 ? "−" : "+"}</span>
-                  </div>
-                  <div style={{ display: "grid", gridTemplateRows: openService === 0 ? "1fr" : "0fr", transition: "grid-template-rows 0.3s ease" }}>
-                    <div style={{ overflow: "hidden" }}>
-                      <div style={{ paddingTop: "12px", paddingBottom: "8px" }} className="svc-content-inner">
-                        <p>For businesses that need clarity before they spend more on tools, campaigns or hires. Recommended outputs include a growth diagnosis, priorities, an implementation roadmap and guidance on marketing decisions.</p>
-                        <p className="mt"><strong>Includes:</strong> GTM consultancy, AI consultancy and fractional CMO support.</p>
-                        <Link href="https://glasspane.pages.dev/services/consultancy" className="text-link mt" style={{display: "inline-block"}} onClick={e => e.stopPropagation()}>Explore business growth consulting</Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
+            <div style={{ display: "flex", flexDirection: "column" }}>
               
-              <li className="svc" onClick={() => setOpenService(openService === 1 ? null : 1)} style={{ cursor: "pointer" }}>
-                <div className="svc-rail" style={{backgroundColor: "var(--sky)"}}></div>
-                <div className="svc-kind">Systems</div>
+              <div className="srv-row" style={{ '--rail-color': 'var(--butter)' } as React.CSSProperties}>
+                <div className="srv-rail-new"></div>
                 <div>
-                  <h3>CRM implementation</h3>
+                  <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--dark-sage)", marginBottom: "12px" }}>Direction</div>
+                  <h3 className="srv-title" style={{ fontSize: "1.8rem", fontFamily: "var(--serif)" }}>Consultancy</h3>
                 </div>
-                <div className="svc-body">
-                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <span style={{ fontSize: "1.5rem", color: "var(--ink)", lineHeight: 1 }}>{openService === 1 ? "−" : "+"}</span>
-                  </div>
-                  <div style={{ display: "grid", gridTemplateRows: openService === 1 ? "1fr" : "0fr", transition: "grid-template-rows 0.3s ease" }}>
-                    <div style={{ overflow: "hidden" }}>
-                      <div style={{ paddingTop: "12px", paddingBottom: "8px" }} className="svc-content-inner">
-                        <p>For businesses whose CRM is missing, messy or no longer fits how they sell. Setup, pipeline design, cleanup, feasible migrations, platform-native workflows, testing, training and handover.</p>
-                        <p className="mt"><strong>Also:</strong> <Link href="https://glasspane.pages.dev/services/custom-crm-development" className="text-link" onClick={e => e.stopPropagation()}>custom CRM development</Link> built around your sales process and reporting needs.</p>
-                        <Link href="https://glasspane.pages.dev/services/crm-implementation" className="text-link mt" style={{display: "inline-block"}} onClick={e => e.stopPropagation()}>Explore CRM implementation services</Link>
-                      </div>
-                    </div>
-                  </div>
+                <div>
+                  <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, marginBottom: "16px" }}>For businesses that need clarity before they spend more on tools, campaigns or hires. Recommended outputs include a growth diagnosis, priorities, an implementation roadmap and guidance on marketing decisions.</p>
+                  <p className="mt" style={{ color: "var(--ink)", marginBottom: "24px" }}><strong>Includes:</strong> GTM consultancy, AI consultancy and fractional CMO support.</p>
+                  <Link href="https://glasspane.pages.dev/services/consultancy" className="text-link" style={{ fontWeight: 600 }}>Explore business growth consulting</Link>
                 </div>
-              </li>
+              </div>
               
-              <li className="svc" onClick={() => setOpenService(openService === 2 ? null : 2)} style={{ cursor: "pointer" }}>
-                <div className="svc-rail" style={{backgroundColor: "var(--coral)"}}></div>
-                <div className="svc-kind">Execution</div>
+              <div className="srv-row" style={{ '--rail-color': 'var(--sky)' } as React.CSSProperties}>
+                <div className="srv-rail-new"></div>
                 <div>
-                  <h3>Marketing</h3>
+                  <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--dark-sage)", marginBottom: "12px" }}>Systems</div>
+                  <h3 className="srv-title" style={{ fontSize: "1.8rem", fontFamily: "var(--serif)" }}>CRM implementation</h3>
                 </div>
-                <div className="svc-body">
-                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <span style={{ fontSize: "1.5rem", color: "var(--ink)", lineHeight: 1 }}>{openService === 2 ? "−" : "+"}</span>
-                  </div>
-                  <div style={{ display: "grid", gridTemplateRows: openService === 2 ? "1fr" : "0fr", transition: "grid-template-rows 0.3s ease" }}>
-                    <div style={{ overflow: "hidden" }}>
-                      <div style={{ paddingTop: "12px", paddingBottom: "8px" }} className="svc-content-inner">
-                        <p>An ongoing marketing plan built around your priorities and connected to the systems that show what each channel produced.</p>
-                        <p className="mt"><strong>Includes:</strong> <Link href="https://glasspane.pages.dev/services/marketing#seo" className="text-link" onClick={e => e.stopPropagation()}>SEO</Link>, <Link href="https://glasspane.pages.dev/services/marketing#ai-seo" className="text-link" onClick={e => e.stopPropagation()}>AI SEO</Link>, Google Ads, Meta Ads, LinkedIn Ads, social media management and email marketing.</p>
-                        <Link href="https://glasspane.pages.dev/services/marketing" className="text-link mt" style={{display: "inline-block"}} onClick={e => e.stopPropagation()}>Explore marketing services</Link>
-                      </div>
-                    </div>
-                  </div>
+                <div>
+                  <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, marginBottom: "16px" }}>For businesses whose CRM is missing, messy or no longer fits how they sell. Setup, pipeline design, cleanup, feasible migrations, platform-native workflows, testing, training and handover.</p>
+                  <p className="mt" style={{ color: "var(--ink)", marginBottom: "24px" }}><strong>Also:</strong> <Link href="https://glasspane.pages.dev/services/custom-crm-development" className="text-link">custom CRM development</Link> built around your sales process and reporting needs.</p>
+                  <Link href="https://glasspane.pages.dev/services/crm-implementation" className="text-link" style={{ fontWeight: 600 }}>Explore CRM implementation services</Link>
                 </div>
-              </li>
+              </div>
               
-              <li className="svc" onClick={() => setOpenService(openService === 3 ? null : 3)} style={{ cursor: "pointer" }}>
-                <div className="svc-rail" style={{backgroundColor: "var(--ink)"}}></div>
-                <div className="svc-kind">People</div>
+              <div className="srv-row" style={{ '--rail-color': 'var(--coral)' } as React.CSSProperties}>
+                <div className="srv-rail-new"></div>
                 <div>
-                  <h3>Recruitment and staffing</h3>
+                  <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--dark-sage)", marginBottom: "12px" }}>Execution</div>
+                  <h3 className="srv-title" style={{ fontSize: "1.8rem", fontFamily: "var(--serif)" }}>Marketing</h3>
                 </div>
-                <div className="svc-body">
-                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <span style={{ fontSize: "1.5rem", color: "var(--ink)", lineHeight: 1 }}>{openService === 3 ? "−" : "+"}</span>
-                  </div>
-                  <div style={{ display: "grid", gridTemplateRows: openService === 3 ? "1fr" : "0fr", transition: "grid-template-rows 0.3s ease" }}>
-                    <div style={{ overflow: "hidden" }}>
-                      <div style={{ paddingTop: "12px", paddingBottom: "8px" }} className="svc-content-inner">
-                        <p>Tier 1 virtual assistants for growth and automation work, so the systems a business invests in are used and maintained every day.</p>
-                        <p className="mt"><strong>Roles:</strong> CRM and automation, marketing operations, email marketing, social media, and lead generation and sales support.</p>
-                        <Link href="https://glasspane.pages.dev/services/recruitment-staffing" className="text-link mt" style={{display: "inline-block"}} onClick={e => e.stopPropagation()}>Explore recruitment and staffing</Link>
-                      </div>
-                    </div>
-                  </div>
+                <div>
+                  <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, marginBottom: "16px" }}>An ongoing marketing plan built around your priorities and connected to the systems that show what each channel produced.</p>
+                  <p className="mt" style={{ color: "var(--ink)", marginBottom: "24px" }}><strong>Includes:</strong> <Link href="https://glasspane.pages.dev/services/marketing#seo" className="text-link">SEO</Link>, <Link href="https://glasspane.pages.dev/services/marketing#ai-seo" className="text-link">AI SEO</Link>, Google Ads, Meta Ads, LinkedIn Ads, social media management and email marketing.</p>
+                  <Link href="https://glasspane.pages.dev/services/marketing" className="text-link" style={{ fontWeight: 600 }}>Explore marketing services</Link>
                 </div>
-              </li>
+              </div>
               
-              <li className="svc" onClick={() => setOpenService(openService === 4 ? null : 4)} style={{ cursor: "pointer" }}>
-                <div className="svc-rail" style={{backgroundColor: "var(--sage)"}}></div>
-                <div className="svc-kind">Agencies</div>
+              <div className="srv-row" style={{ '--rail-color': 'var(--ink)' } as React.CSSProperties}>
+                <div className="srv-rail-new"></div>
                 <div>
-                  <h3>White-label delivery</h3>
+                  <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--dark-sage)", marginBottom: "12px" }}>People</div>
+                  <h3 className="srv-title" style={{ fontSize: "1.8rem", fontFamily: "var(--serif)" }}>Recruitment and staffing</h3>
                 </div>
-                <div className="svc-body">
-                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <span style={{ fontSize: "1.5rem", color: "var(--ink)", lineHeight: 1 }}>{openService === 4 ? "−" : "+"}</span>
-                  </div>
-                  <div style={{ display: "grid", gridTemplateRows: openService === 4 ? "1fr" : "0fr", transition: "grid-template-rows 0.3s ease" }}>
-                    <div style={{ overflow: "hidden" }}>
-                      <div style={{ paddingTop: "12px", paddingBottom: "8px" }} className="svc-content-inner">
-                        <p>Agreed services fulfilled for marketing agencies under the agency's own brand, with scope, communication and handover defined for each engagement.</p>
-                        <Link href="https://glasspane.pages.dev/for-agencies" className="text-link mt" style={{display: "inline-block"}} onClick={e => e.stopPropagation()}>Explore white-label delivery</Link>
-                      </div>
-                    </div>
-                  </div>
+                <div>
+                  <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, marginBottom: "16px" }}>Tier 1 virtual assistants for growth and automation work, so the systems a business invests in are used and maintained every day.</p>
+                  <p className="mt" style={{ color: "var(--ink)", marginBottom: "24px" }}><strong>Roles:</strong> CRM and automation, marketing operations, email marketing, social media, and lead generation and sales support.</p>
+                  <Link href="https://glasspane.pages.dev/services/recruitment-staffing" className="text-link" style={{ fontWeight: 600 }}>Explore recruitment and staffing</Link>
                 </div>
-              </li>
-            </ul>
+              </div>
+              
+              <div className="srv-row" style={{ '--rail-color': 'var(--sage)' } as React.CSSProperties}>
+                <div className="srv-rail-new"></div>
+                <div>
+                  <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--dark-sage)", marginBottom: "12px" }}>Agencies</div>
+                  <h3 className="srv-title" style={{ fontSize: "1.8rem", fontFamily: "var(--serif)" }}>White-label delivery</h3>
+                </div>
+                <div>
+                  <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, marginBottom: "24px" }}>Agreed services fulfilled for marketing agencies under the agency's own brand, with scope, communication and handover defined for each engagement.</p>
+                  <Link href="https://glasspane.pages.dev/for-agencies" className="text-link" style={{ fontWeight: 600 }}>Explore white-label delivery</Link>
+                </div>
+              </div>
+            </div>
             
-            <div className="maint mt-large" style={{borderTop: "1px solid var(--light-sage)", paddingTop: "40px"}}>
+            <div className="maint mt-large" style={{borderTop: "1px solid var(--light-sage)", paddingTop: "40px", marginTop: "64px", display: "flex", gap: "32px", alignItems: "flex-start" }}>
               <b style={{ fontSize: "1.1rem" }}>After handover</b>
               <p style={{margin: 0, color: "var(--dark-sage)", lineHeight: 1.6, maxWidth: "65ch" }}>Maintenance with a defined support scope, including ownership and boundaries for changes, connects each project to ongoing support and execution.</p>
             </div>
@@ -500,29 +404,25 @@ export default function Home() {
 
         {/* 8/9. PHOTO 3 & SMEs */}
         <section className="tint reveal-new" id="who" style={{ padding: "clamp(80px, 10vw, 120px) 0" }}>
-          <div className="wrap" style={{ display: "flex", flexDirection: "column", gap: "clamp(48px, 6vw, 80px)" }}>
-            
-            <div style={{ maxWidth: "75ch" }}>
+          <div className="wrap" style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "clamp(40px, 6vw, 80px)", alignItems: "center" }}>
+            <div style={{ position: "relative" }}>
+               <img src="/photo-3.jpg" alt="Small business team" style={{ width: "100%", borderRadius: "16px", border: "1px solid var(--light-sage)", boxShadow: "0 24px 48px rgba(0,0,0,0.04)" }} />
+            </div>
+            <div>
               <span className="label" style={{ marginBottom: "24px" }}>Who Sage Kite helps</span>
-              <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", lineHeight: 1.1, marginBottom: "24px", fontFamily: "var(--serif)", color: "var(--ink)" }}>For SMEs whose growth has become harder to manage</h2>
-              <p className="mt" style={{ fontSize: "1.1rem", lineHeight: 1.6, color: "var(--dark-sage)", margin: 0 }}>Sage Kite works with small and medium-sized businesses in the United States, Canada, Europe, Australia and New Zealand that need to improve one part of their growth operation, or bring the whole function together.</p>
-            </div>
-            
-            <div style={{ width: "88%", marginLeft: "auto", position: "relative" }}>
-               <img src="/sme_section.jpeg" alt="Small business team" style={{ width: "100%", borderRadius: "12px", border: "1px solid var(--light-sage)", objectFit: "cover", aspectRatio: "21/9" }} />
-            </div>
-            
-            <div style={{ marginTop: "16px" }}>
-              <h3 style={{fontSize: "1.1rem", marginBottom: "32px", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--ink)"}}>It is usually a good fit when:</h3>
-              <ul className="sme-checklist" style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px 64px" }}>
-                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4, fontSize: "1.05rem" }}>Growth has become messy and hard to see clearly</span></li>
-                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4, fontSize: "1.05rem" }}>Your systems do not talk to each other</span></li>
-                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4, fontSize: "1.05rem" }}>The CRM is underused or distrusted</span></li>
-                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4, fontSize: "1.05rem" }}>Marketing is disconnected from sales</span></li>
-                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4, fontSize: "1.05rem" }}>Too much work is done by hand</span></li>
-                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4, fontSize: "1.05rem" }}>Tools were bought but never properly implemented</span></li>
-                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4, fontSize: "1.05rem" }}>The team lacks operational capacity</span></li>
-                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4, fontSize: "1.05rem" }}>The founder is carrying too much of the operation</span></li>
+              <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", lineHeight: 1.1, marginBottom: "24px", fontFamily: "var(--serif)" }}>For SMEs whose growth has become harder to manage</h2>
+              <p className="mt" style={{ fontSize: "1.1rem", lineHeight: 1.6, color: "var(--dark-sage)", marginBottom: "48px" }}>Sage Kite works with small and medium-sized businesses in the United States, Canada, Europe, Australia and New Zealand that need to improve one part of their growth operation, or bring the whole function together.</p>
+              
+              <h3 style={{fontSize: "1.1rem", marginBottom: "24px", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--ink)"}}>It is usually a good fit when:</h3>
+              <ul className="sme-checklist" style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4 }}>Growth has become messy and hard to see clearly</span></li>
+                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4 }}>Your systems do not talk to each other</span></li>
+                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4 }}>The CRM is underused or distrusted</span></li>
+                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4 }}>Marketing is disconnected from sales</span></li>
+                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4 }}>Too much work is done by hand</span></li>
+                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4 }}>Tools were bought but never properly implemented</span></li>
+                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4 }}>The team lacks operational capacity</span></li>
+                <li className="sme-item"><div style={{ color: "var(--sky)", fontSize: "1.2rem", lineHeight: 1 }}>✦</div><span style={{ color: "var(--dark-sage)", lineHeight: 1.4 }}>The founder is carrying too much of the operation</span></li>
               </ul>
             </div>
           </div>
@@ -614,61 +514,51 @@ export default function Home() {
         </section>
 
         {/* 11. PROCESS */}
-        <section className="reveal-new" id="process" style={{ padding: "clamp(80px, 10vw, 120px) 0", borderTop: "1px solid var(--light-sage)", overflow: "hidden" }}>
+        <section className="reveal-new" id="process" style={{ padding: "clamp(80px, 10vw, 120px) 0", borderTop: "1px solid var(--light-sage)" }}>
           <div className="wrap">
-            <h2 style={{ fontSize: "clamp(3rem, 5vw, 4.5rem)", lineHeight: 1.05, marginBottom: "80px", fontFamily: "var(--serif)", color: "var(--ink)", maxWidth: "15ch" }}>
-              From first<br />conversation to<br />ongoing work
-            </h2>
-            
-            <div style={{ position: "relative" }}>
-              {/* The continuous horizontal line */}
-              <div style={{ position: "absolute", top: "12px", left: 0, width: "100%", height: "1px", background: "var(--coral)", zIndex: 1 }}></div>
-
-              <ul className="timeline-grid" style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", gap: "24px", position: "relative", zIndex: 2, overflowX: "auto", scrollSnapType: "x mandatory", paddingBottom: "24px" }}>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>01</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Enquiry</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>A first conversation about where growth is getting stuck.</p>
-                </li>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>02</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Discovery</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>A look at the systems, the team and the work as it runs today.</p>
-                </li>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>03</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Proposal</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>Scope, sequence and cost, written against what discovery found.</p>
-                </li>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>04</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Implementation</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>The build and the delivery, done inside your tools.</p>
-                </li>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>05</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Handover</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>Documentation and training so the team can run it without us.</p>
-                </li>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>06</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Maintenance</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>Keeping what was built working as the business changes.</p>
-                </li>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>07</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Ongoing work</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>Continued delivery where it is useful, ended where it is not.</p>
-                </li>
-              </ul>
+            <div className="section-head" style={{ maxWidth: "70ch", marginBottom: "80px" }}>
+              <span className="label" style={{ marginBottom: "24px" }}>How we work</span>
+              <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", lineHeight: 1.1, marginBottom: "24px", fontFamily: "var(--serif)" }}>From first conversation to ongoing work</h2>
+              <p className="lede mt" style={{ fontSize: "1.1rem", lineHeight: 1.6, color: "var(--dark-sage)" }}>Clear scope before work starts, one accountable contact while it happens, and defined terms for whatever continues afterwards.</p>
             </div>
+            
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "40px" }}>
+              <li className="step-card">
+                <div className="step-num">01</div>
+                <h3 style={{ fontSize: "1.3rem", marginBottom: "12px", fontFamily: "var(--serif)" }}>Enquiry</h3>
+                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>Tell us about your business, your current platform and the problem you want to solve.</p>
+              </li>
+              <li className="step-card">
+                <div className="step-num">02</div>
+                <h3 style={{ fontSize: "1.3rem", marginBottom: "12px", fontFamily: "var(--serif)" }}>Discovery</h3>
+                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>We look at your current process, desired outcome, access, constraints and decision-maker, and confirm we are the right fit.</p>
+              </li>
+              <li className="step-card">
+                <div className="step-num">03</div>
+                <h3 style={{ fontSize: "1.3rem", marginBottom: "12px", fontFamily: "var(--serif)" }}>Proposal</h3>
+                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>Deliverables, exclusions, milestones, dependencies, acceptance criteria and a fixed project price.</p>
+              </li>
+              <li className="step-card">
+                <div className="step-num">04</div>
+                <h3 style={{ fontSize: "1.3rem", marginBottom: "12px", fontFamily: "var(--serif)" }}>Implementation</h3>
+                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>One accountable contact. We deliver the agreed scope and test it before it goes live.</p>
+              </li>
+              <li className="step-card">
+                <div className="step-num">05</div>
+                <h3 style={{ fontSize: "1.3rem", marginBottom: "12px", fontFamily: "var(--serif)" }}>Handover</h3>
+                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>Training so your team understands how the system works and who owns what.</p>
+              </li>
+              <li className="step-card">
+                <div className="step-num">06</div>
+                <h3 style={{ fontSize: "1.3rem", marginBottom: "12px", fontFamily: "var(--serif)" }}>Maintenance</h3>
+                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>A defined ongoing support scope, with clear ownership and boundaries for changes.</p>
+              </li>
+              <li className="step-card">
+                <div className="step-num">07</div>
+                <h3 style={{ fontSize: "1.3rem", marginBottom: "12px", fontFamily: "var(--serif)" }}>Ongoing work</h3>
+                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>Where it helps, an ongoing marketing plan or specialist staffing, built on what the project revealed.</p>
+              </li>
+            </ul>
           </div>
         </section>
 
@@ -914,3 +804,7 @@ export default function Home() {
     </>
   );
 }
+`;
+
+fs.writeFileSync('app/page.tsx', content);
+console.log('Homepage successfully rewritten with 100% exact content and updated editorial design.');
