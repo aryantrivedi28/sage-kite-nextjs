@@ -48,7 +48,7 @@ export default function Home() {
         }
         .site-header { transition: all 0.3s ease; padding: 16px 0; border-bottom: 1px solid transparent; }
         
-        .hero-section { padding: clamp(80px, 10vw, 140px) 0; overflow: hidden; }
+        .hero-section { padding: clamp(32px, 5vw, 64px) 0 clamp(80px, 10vw, 120px); overflow: hidden; }
         .hero-grid-new { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(40px, 8vw, 80px); align-items: center; }
         .hero-img-wrapper { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--light-sage); box-shadow: 0 24px 48px rgba(0,0,0,0.06); }
         .hero-img-wrapper img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3; transform: scale(1.03); transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1); }
