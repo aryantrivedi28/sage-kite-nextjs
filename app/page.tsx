@@ -84,7 +84,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rule-top" id="problem">
+        <section className="rule-top reveal" id="problem">
           <div className="wrap split">
             <div className="split-head">
               <span className="label">Why growth stalls</span>
@@ -117,7 +117,7 @@ export default function Home() {
           </div>
         </section>
 
-                <section className="tint" id="approach">
+                <section className="tint reveal" id="approach">
           <div className="wrap approach-intro">
             <div>
               <span className="label">The Sage Kite approach</span>
@@ -176,7 +176,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="operation">
+        <section className="reveal" id="operation">
           <div className="wrap split connect-grid">
             <div className="split-head">
               <span className="label">How it connects</span>
@@ -218,7 +218,7 @@ export default function Home() {
           </div>
         </section>
 
-<section className="rule-top" id="what-we-do">
+<section className="rule-top reveal" id="what-we-do">
           <div className="wrap">
             <div className="section-head" style={{maxWidth: "70ch"}}>
               <span className="label">Services</span>
@@ -299,7 +299,7 @@ export default function Home() {
           </div>
 </section>
 
-        <section className="tint" id="who">
+        <section className="tint reveal" id="who">
           <div className="wrap split">
             <div className="split-head">
               <span className="label">Who Sage Kite helps</span>
@@ -323,7 +323,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="platforms">
+        <section className="reveal" id="platforms">
           <div className="wrap">
             <div className="section-head" style={{maxWidth: "70ch"}}>
               <span className="label">Platforms and industries</span>
@@ -407,7 +407,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rule-top" id="process">
+        <section className="rule-top reveal" id="process">
           <div className="wrap">
             <div className="section-head" style={{maxWidth: "70ch"}}>
               <span className="label">How we work</span>
@@ -455,7 +455,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="tint" id="evidence">
+        <section className="tint reveal" id="evidence">
           <div className="wrap">
             <div className="section-head" style={{maxWidth: "70ch"}}>
               <span className="label">Work and experience</span>
@@ -543,7 +543,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="library" id="journal" style={{paddingTop: "clamp(64px, 8vw, 120px)", paddingBottom: "clamp(64px, 8vw, 120px)"}}>
+        <section className="library reveal" id="journal" style={{paddingTop: "clamp(64px, 8vw, 120px)", paddingBottom: "clamp(64px, 8vw, 120px)"}}>
           <div className="wrap">
             <div className="lib-head">
               <div>
@@ -602,7 +602,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="agencies" style={{paddingTop: "clamp(56px, 8vw, 80px)", paddingBottom: "clamp(56px, 8vw, 80px)"}}>
+        <section className="reveal" id="agencies" style={{paddingTop: "clamp(56px, 8vw, 80px)", paddingBottom: "clamp(56px, 8vw, 80px)"}}>
           <div className="wrap">
             <div className="agency-band" style={{backgroundColor: "var(--pale-sage)"}}>
               <h2 style={{fontFamily: "var(--serif)", margin: 0, color: "var(--ink)"}}>For marketing<br />agencies</h2>
@@ -612,7 +612,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rule-top" id="faq" style={{paddingTop: "clamp(56px, 8vw, 80px)", paddingBottom: "clamp(64px, 8vw, 96px)"}}>
+        <section className="rule-top reveal" id="faq" style={{paddingTop: "clamp(56px, 8vw, 80px)", paddingBottom: "clamp(64px, 8vw, 96px)"}}>
           <div className="wrap">
             <div style={{marginBottom: "48px"}}>
               <span className="label">In brief</span>
@@ -648,7 +648,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="tint" id="contact" style={{borderBottom: "4px solid var(--butter)", paddingTop: "clamp(64px, 8vw, 96px)", paddingBottom: "clamp(64px, 8vw, 96px)"}}>
+        <section className="tint reveal" id="contact" style={{borderBottom: "4px solid var(--butter)", paddingTop: "clamp(64px, 8vw, 96px)", paddingBottom: "clamp(64px, 8vw, 96px)"}}>
           <div className="wrap final-inner" style={{alignItems: "center"}}>
             <div className="final">
               <h2 style={{fontFamily: "var(--serif)", fontSize: "clamp(2.3rem, 4vw, 3.2rem)", marginBottom: "24px", color: "var(--ink)", lineHeight: "1.1"}}>Tell us where growth<br />is getting stuck.</h2>
