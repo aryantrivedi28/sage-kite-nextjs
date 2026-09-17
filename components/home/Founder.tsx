@@ -6,8 +6,12 @@ export function Founder() {
       <div className="wrap reveal">
         <div className="founder-grid">
           
-          <div className="founder-photo">
-            <span>Founder photograph</span>
+          <div className="founder-photo" style={{ padding: 0, border: 'none', overflow: 'hidden' }}>
+            <img 
+              src="/aryan_t.jpeg" 
+              alt="Aryan - Founder of Sage Kite" 
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+            />
           </div>
 
           <div>

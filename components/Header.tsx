@@ -31,7 +31,7 @@ export function Header() {
             <li><Link href="#industries" onClick={() => setOpen(false)}>Industries</Link></li>
             <li><Link href="#agencies" onClick={() => setOpen(false)}>For agencies</Link></li>
             <li><Link href="#insights" onClick={() => setOpen(false)}>Insights</Link></li>
-            <li><Link href="#about" onClick={() => setOpen(false)}>About</Link></li>
+            <li><Link href="about" onClick={() => setOpen(false)}>About</Link></li>
             <li><Link href="#book" className="btn btn-small" onClick={() => setOpen(false)}>Book a discovery call</Link></li>
           </ul>
         </nav>
