@@ -8,7 +8,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openService, setOpenService] = useState<number | null>(0);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(1);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -21,22 +21,63 @@ export default function Home() {
     <>
       <a className="skip" href="#main">Skip to content</a>
       <style dangerouslySetInnerHTML={{__html: `
+        
         /* FAQ Accordion */
         .faq-grid { display: grid; grid-template-columns: 0.6fr 1fr; gap: clamp(40px, 8vw, 80px); }
-        .faq-item { border-bottom: 1px solid var(--light-sage); cursor: pointer; transition: all 0.3s ease; padding: 24px 32px; border-radius: 8px; margin-bottom: 4px; }
+        .faq-item { border-bottom: 1px solid var(--light-sage); margin-bottom: 4px; }
         .faq-item:first-of-type { border-top: 1px solid var(--light-sage); }
-        .faq-item:hover { background: rgba(0,0,0,0.015); transform: translateX(4px); }
-        .faq-q { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
-        .faq-q h3 { font-size: 1.35rem; font-family: var(--serif); color: var(--ink); margin: 0; line-height: 1.4; transition: color 0.3s ease; }
-        .faq-icon { font-size: 1.5rem; color: var(--sage); transition: transform 0.3s ease; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; font-weight: 300; }
-        .faq-a-wrapper { display: grid; transition: grid-template-rows 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.35s ease; }
+        
+        .faq-btn {
+          width: 100%;
+          background: transparent;
+          border: none;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 24px;
+          padding: 24px 32px;
+          cursor: pointer;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+          color: var(--ink);
+          text-align: left;
+        }
+        .faq-btn:hover { background: rgba(0,0,0,0.015); transform: translateX(4px); }
+        .faq-btn:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; }
+        
+        .faq-btn h3 { font-size: 1.35rem; font-family: var(--serif); color: inherit; margin: 0; line-height: 1.4; pointer-events: none; }
+        .faq-icon { font-size: 1.5rem; color: var(--sage); display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; font-weight: 300; pointer-events: none; }
+        
+        .faq-a-wrapper { display: grid; transition: grid-template-rows 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.35s ease; padding: 0 32px; }
         .faq-a-inner { overflow: hidden; }
-        .faq-a-content { padding-top: 16px; padding-bottom: 8px; font-size: 1.05rem; line-height: 1.6; color: var(--dark-sage); }
+        .faq-a-content { padding-top: 8px; padding-bottom: 24px; font-size: 1.05rem; line-height: 1.6; color: var(--dark-sage); }
+        
+        .faq-sticky { position: sticky; top: 120px; align-self: start; }
         
         @media (max-width: 900px) {
           .faq-grid { grid-template-columns: 1fr; gap: 48px; }
-          .faq-item { padding: 20px 16px; }
+          .faq-btn { padding: 20px 16px; }
+          .faq-a-wrapper { padding: 0 16px; }
+          .faq-sticky { position: relative !important; top: 0 !important; }
         }
+        
+        @media (max-width: 768px) {
+          #faq {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+          }
+          #faq .wrap {
+            padding: 0 24px !important;
+            box-sizing: border-box;
+            width: 100%;
+          }
+          .faq-sticky h2 {
+            font-size: clamp(42px, 12vw, 50px) !important;
+            word-wrap: break-word;
+          }
+        }
+
 
         .header-scrolled {
           background: rgba(247, 245, 238, 0.95) !important;
@@ -50,7 +91,7 @@ export default function Home() {
         
         .hero-section { padding: clamp(32px, 5vw, 64px) 0 clamp(80px, 10vw, 120px); overflow: hidden; }
         .hero-grid-new { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(40px, 8vw, 80px); align-items: center; }
-        .hero-img-wrapper { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--light-sage); box-shadow: 0 24px 48px rgba(0,0,0,0.06); }
+        .hero-img-wrapper { position: relative; border-radius: 12px;  border: 1px solid var(--light-sage); box-shadow: 0 24px 48px rgba(0,0,0,0.06); }
         .hero-img-wrapper img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3; transform: scale(1.03); transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1); }
         .hero-img-wrapper:hover img { transform: scale(1); }
         
@@ -73,6 +114,462 @@ export default function Home() {
         .timeline-node:hover { border-left-color: var(--hover-color); }
         .timeline-node h3 { transition: color 0.3s ease; }
         .timeline-node:hover h3 { color: var(--hover-color); }
+        @media (min-width: 769px) and (max-width: 1100px) {
+          .process-section {
+            padding: clamp(80px, 10vw, 100px) 0 !important;
+          }
+          .process-section .wrap {
+            padding-left: clamp(40px, 6vw, 56px) !important;
+            padding-right: clamp(40px, 6vw, 56px) !important;
+            box-sizing: border-box;
+          }
+          .process-heading {
+            font-size: clamp(56px, 7vw, 72px) !important;
+            line-height: 1.0 !important;
+            max-width: 750px !important;
+            margin-bottom: 80px !important;
+            word-wrap: break-word;
+          }
+          .process-line {
+            display: none !important; /* Remove horizontal master line on tablet grid */
+          }
+          .process-timeline {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            column-gap: clamp(48px, 6vw, 64px) !important;
+            row-gap: clamp(56px, 8vw, 72px) !important;
+            overflow-x: visible !important;
+            padding-bottom: 0 !important;
+          }
+          .process-item {
+            min-width: 0 !important;
+            scroll-snap-align: none !important;
+            flex: none !important;
+            position: relative;
+          }
+          .process-item:last-child {
+            /* Make item 07 span both columns if it's visually better, or stay in column 1 */
+            /* Let's have it span both columns and center the content or just left align */
+            grid-column: 1 / -1;
+            max-width: calc(50% - (clamp(48px, 6vw, 64px) / 2)); /* Make it look like it's in the first column but doesn't break the grid */
+          }
+          .process-tick {
+            width: 11px !important;
+            height: 11px !important;
+            border-radius: 50% !important;
+            background: var(--warm-white) !important;
+            border: 2px solid var(--coral) !important;
+            margin-bottom: 24px !important;
+          }
+          .process-num {
+            font-size: 15px !important;
+            margin-bottom: 8px !important;
+            font-weight: 500;
+          }
+          .process-title {
+            font-size: clamp(22px, 3vw, 28px) !important;
+            margin-bottom: 12px !important;
+          }
+          .process-desc {
+            font-size: 17px !important;
+            line-height: 1.6 !important;
+          }
+        }
+
+        /* Why Growth Stalls Responsive */
+        .stall-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(40px, 8vw, 100px); }
+        .stall-sticky { position: sticky; top: 120px; align-self: start; }
+        .prob-num { display: none; } /* Hidden on desktop by default as per existing design */
+        .prob-title { font-size: 1.3rem; margin-bottom: 12px; color: var(--ink); font-family: var(--serif); line-height: 1.4; }
+        .prob-desc { color: var(--dark-sage); line-height: 1.6; margin: 0; }
+        
+        @media (max-width: 768px) {
+          .stall-section {
+            padding: clamp(60px, 8vw, 80px) 0 !important;
+            width: 100%;
+            box-sizing: border-box;
+          }
+          .stall-section .wrap {
+            padding: 0 24px !important;
+            width: 100%;
+            box-sizing: border-box;
+          }
+          .stall-grid {
+            grid-template-columns: 1fr;
+            gap: 48px; /* Introduction to Problem list */
+          }
+          .stall-sticky {
+            position: relative !important;
+            top: 0 !important;
+          }
+          .stall-heading {
+            font-size: clamp(44px, 12vw, 52px) !important;
+            line-height: 1.05 !important;
+            max-width: 100% !important;
+            margin-bottom: 24px !important;
+            word-wrap: break-word;
+          }
+          .stall-intro {
+            font-size: 17px !important;
+            line-height: 1.6 !important;
+            max-width: 100% !important;
+          }
+          .prob-item {
+            padding: 28px 0 !important;
+            border-left: none !important;
+            border-bottom: 1px solid var(--light-sage);
+            border-radius: 0 !important;
+            transform: none !important;
+            box-shadow: none !important;
+          }
+          .prob-item:first-of-type {
+            padding-top: 0 !important;
+          }
+          .prob-item::before {
+            display: none !important;
+          }
+          .prob-num {
+            display: block;
+            font-size: 14px;
+            color: var(--ink);
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: 0.05em;
+          }
+          .prob-title {
+            font-size: clamp(24px, 7vw, 30px) !important;
+            margin-bottom: 12px !important;
+          }
+          .prob-desc {
+            font-size: 16px !important;
+            line-height: 1.6 !important;
+          }
+        }
+
+        /* Process Section */
+        .process-container { position: relative; width: 100%; box-sizing: border-box; }
+        .process-line { position: absolute; top: 12px; left: 0; width: 100%; height: 1px; background: var(--coral); z-index: 1; }
+        .process-timeline { list-style: none; padding: 0; margin: 0; display: flex; gap: 24px; position: relative; z-index: 2; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 24px; }
+        .process-item { flex: 1 1 0; min-width: 140px; scroll-snap-align: start; }
+        .process-tick { width: 1px; height: 25px; background: var(--ink); margin-bottom: 16px; }
+        .process-num { font-size: 0.85rem; color: var(--ink); margin-bottom: 8px; }
+        .process-title { font-size: 1.1rem; margin-bottom: 12px; font-family: var(--serif); color: var(--ink); }
+        .process-desc { color: var(--dark-sage); font-size: 0.85rem; line-height: 1.5; margin: 0; }
+        
+        @media (max-width: 768px) {
+          .process-section {
+            padding: clamp(60px, 8vw, 80px) 0 !important;
+            box-sizing: border-box;
+            width: 100%;
+          }
+          .process-section .wrap {
+            padding: 0 24px !important;
+            box-sizing: border-box;
+          }
+          .process-heading {
+            font-size: clamp(42px, 12vw, 50px) !important;
+            word-wrap: break-word;
+            margin-bottom: 56px !important;
+            max-width: 100% !important;
+          }
+          .process-line {
+            top: 8px;
+            left: 5px;
+            width: 1px;
+            height: calc(100% - 24px);
+          }
+          .process-timeline {
+            flex-direction: column;
+            gap: 48px;
+            overflow-x: visible;
+            padding-bottom: 0;
+          }
+          .process-item {
+            min-width: 0;
+            padding-left: 32px;
+            position: relative;
+          }
+          .process-tick {
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--warm-white);
+            border: 2px solid var(--coral);
+            margin: 0;
+            z-index: 2;
+          }
+          .process-num {
+            font-size: 16px !important;
+            margin-bottom: 4px !important;
+            font-weight: 600;
+          }
+          .process-title {
+            font-size: 26px !important;
+            margin-bottom: 8px !important;
+          }
+          .process-desc {
+            font-size: 16px !important;
+            line-height: 1.6 !important;
+            max-width: 100%;
+          }
+        }
+
+        /* Footer Responsive */
+        .footer-grid {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr 1fr;
+          gap: 64px;
+        }
+        .footer-bottom {
+          display: flex;
+          justify-content: space-between;
+          color: var(--dark-sage);
+          font-size: 0.9rem;
+          border-top: 1px solid var(--light-sage);
+          margin-top: 80px;
+          padding-top: 32px;
+        }
+        
+        @media (max-width: 900px) {
+          .footer-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+          }
+        }
+        
+        @media (max-width: 768px) {
+          .site-footer {
+            padding: 64px 0 40px !important;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            
+          }
+          .site-footer .wrap {
+            padding: 0 24px !important;
+            width: 100%;
+            box-sizing: border-box;
+          }
+          .footer-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+          }
+          .footer-logo-col {
+            padding-right: 0 !important;
+            margin-bottom: 8px; /* Extra space before services */
+          }
+          .footer-logo-col img {
+            max-width: 140px !important;
+          }
+          .footer-logo-col p {
+            font-size: 16px !important;
+            margin-top: 24px !important;
+            max-width: 100% !important;
+          }
+          
+          .footer-grid h2 {
+            font-size: 18px !important;
+            margin-bottom: 24px !important;
+          }
+          .footer-grid ul {
+            gap: 16px !important;
+          }
+          .footer-grid ul li a {
+            font-size: 16px !important;
+            display: inline-block;
+            word-wrap: break-word;
+            white-space: normal;
+          }
+          
+          .footer-bottom {
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 48px;
+            padding-top: 24px;
+          }
+        }
+
+        /* Platforms and Industries Section */
+        .plat-ind-container { width: 100%; max-width: 100%; box-sizing: border-box; }
+        .plat-ind-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 8vw, 80px); }
+        .plat-row { display: grid; grid-template-columns: 140px 1fr; gap: 16px; }
+        .ind-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .ind-card {
+          display: flex;
+          flex-direction: column;
+          padding: 24px 28px;
+          background: var(--warm-white);
+          border: 1px solid var(--light-sage);
+          border-radius: 8px;
+          text-decoration: none;
+          transition: all 0.3s ease;
+        }
+        .ind-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.04); border-color: var(--sage); }
+        
+        @media (max-width: 768px) {
+          #platforms {
+            padding: clamp(60px, 8vw, 80px) 0 !important;
+            box-sizing: border-box;
+            width: 100%;
+          }
+          #platforms .wrap {
+            padding: 0 24px !important;
+            box-sizing: border-box;
+            width: 100%;
+          }
+          .plat-ind-grid {
+            grid-template-columns: 1fr;
+            gap: 72px; /* Platforms -> Industries: 64-80px */
+          }
+          
+          /* Typography for mobile */
+          .plat-ind-header h2 {
+            font-size: clamp(42px, 11vw, 48px) !important;
+            line-height: 1.05 !important;
+            text-align: left;
+            margin-bottom: 28px !important;
+          }
+          .plat-ind-header p {
+            font-size: 18px !important;
+            line-height: 1.6 !important;
+            text-align: left;
+          }
+          .plat-ind-header {
+            margin-bottom: 56px !important; /* Intro -> Platforms: 48-64px */
+          }
+          
+          /* Platforms Section */
+          .plat-col h3 {
+            font-size: clamp(32px, 8vw, 38px) !important;
+            margin-bottom: 24px !important;
+          }
+          .plat-col > p {
+            font-size: 17px !important;
+          }
+          .plat-list {
+            gap: 32px !important;
+          }
+          .plat-row {
+            grid-template-columns: 38% 1fr;
+            gap: 16px;
+          }
+          .plat-row dt {
+            font-size: 15px !important;
+          }
+          .plat-row dd {
+            font-size: 15px !important;
+            word-wrap: break-word;
+          }
+          
+          /* Industries Section */
+          .ind-col h3 {
+            font-size: clamp(32px, 8vw, 38px) !important;
+            margin-bottom: 24px !important;
+          }
+          .ind-col > p {
+            font-size: 17px !important;
+          }
+          .ind-cards-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+          }
+          .ind-card {
+            padding: 24px !important;
+          }
+          .ind-card strong {
+            font-size: 24px !important;
+            margin-bottom: 8px;
+          }
+          .ind-card span {
+            font-size: 17px !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          #operation {
+            
+            width: 100%;
+            box-sizing: border-box;
+          }
+          #operation .wrap {
+            padding: 0 20px !important;
+            width: 100%;
+            box-sizing: border-box;
+            
+          }
+        }
+
+        .timeline-container { padding: 24px 0 24px 24px; box-sizing: border-box; width: 100%; }
+        @media (max-width: 768px) {
+          .timeline-container { padding: 24px 0 24px 12px; }
+        }
+
+        .timeline-layout-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: clamp(40px, 8vw, 100px);
+        }
+        
+        .result-node {
+          background: var(--dark-sage);
+          padding: 24px 32px 24px 48px !important;
+          border-radius: 8px;
+          border-left-color: transparent !important;
+        }
+        .result-node::before { left: -6px !important; background: var(--warm-white) !important; border-color: var(--warm-white) !important; }
+
+        @media (max-width: 768px) {
+          .timeline-layout-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+          }
+          
+          #operation .wrap {
+            padding: 0 24px;
+            box-sizing: border-box;
+            max-width: 100%;
+          }
+          
+          #operation h2 {
+            font-size: clamp(44px, 12vw, 52px) !important;
+            line-height: 1.0 !important;
+            word-wrap: break-word;
+          }
+          
+          #operation p.mt {
+            font-size: 18px !important;
+            margin-bottom: 48px !important;
+          }
+          
+          #operation .split-head {
+            position: relative !important;
+            top: 0 !important;
+          }
+          
+          #operation .def-block {
+            width: 100% !important;
+            box-sizing: border-box;
+            margin-bottom: 40px;
+          }
+          
+          .timeline-node {
+            padding-bottom: 40px;
+          }
+          
+          .result-node {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 24px !important;
+            padding-left: 48px !important;
+          }
+          .result-node::before {
+            left: -6px !important;
+          }
+        }
+
 
         /* Accordion Refinements */
         .svc h3 { font-size: clamp(1.25rem, 1.8vw, 1.55rem) !important; }
@@ -121,7 +618,7 @@ export default function Home() {
         .step-num { font-family: var(--serif); font-size: 3rem; color: var(--light-sage); line-height: 1; margin-bottom: 16px; transition: color 0.4s ease; }
         .step-card:hover .step-num { color: var(--ink); }
         
-        .proof-new { padding: 40px; background: var(--warm-white); border: 1px solid var(--light-sage); border-radius: 8px; transition: all 0.5s ease; position: relative; overflow: hidden; height: 100%; display: flex; flex-direction: column; }
+        .proof-new { padding: 40px; background: var(--warm-white); border: 1px solid var(--light-sage); border-radius: 8px; transition: all 0.5s ease; position: relative;  height: 100%; display: flex; flex-direction: column; }
         .proof-new::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--edge-color); transform: scaleX(0); transform-origin: left; transition: transform 0.5s ease; }
         .proof-new:hover { transform: translateY(-12px); box-shadow: 0 24px 48px rgba(0,0,0,0.06); border-color: transparent; }
         .proof-new:hover::before { transform: scaleX(1); }
@@ -222,34 +719,39 @@ export default function Home() {
         </section>
 
         {/* 3. WHY GROWTH STALLS */}
-        <section className="reveal-new" id="problem" style={{ padding: "clamp(80px, 10vw, 120px) 0", borderTop: "1px solid var(--light-sage)" }}>
-          <div className="wrap" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "clamp(40px, 8vw, 100px)" }}>
-            <div className="split-head" style={{ position: "sticky", top: "120px", alignSelf: "start" }}>
+        <section className="reveal-new stall-section" id="problem" style={{ padding: "clamp(80px, 10vw, 120px) 0", borderTop: "1px solid var(--light-sage)" }}>
+          <div className="wrap stall-grid">
+            <div className="stall-sticky">
               <span className="label" style={{ marginBottom: "24px" }}>Why growth stalls</span>
-              <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", lineHeight: 1.1, marginBottom: "32px", fontFamily: "var(--serif)" }}>Growth rarely stalls for one reason. It stalls in the gaps between things.</h2>
-              <p className="mt" style={{ fontSize: "1.1rem", lineHeight: 1.6, color: "var(--dark-sage)" }}>Marketing, sales tools, processes and people are usually bought, hired or started at different times. Each part may work on its own. The trouble is that nothing connects them, so leads, information and effort leak out between them.</p>
+              <h2 className="stall-heading" style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", lineHeight: 1.1, marginBottom: "32px", fontFamily: "var(--serif)" }}>Growth rarely stalls for one reason. It stalls in the gaps between things.</h2>
+              <p className="mt stall-intro" style={{ fontSize: "1.1rem", lineHeight: 1.6, color: "var(--dark-sage)" }}>Marketing, sales tools, processes and people are usually bought, hired or started at different times. Each part may work on its own. The trouble is that nothing connects them, so leads, information and effort leak out between them.</p>
             </div>
             
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column" }}>
+            <ul className="stall-list" style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column" }}>
               <li className="prob-item">
-                <h3 style={{ fontSize: "1.3rem", marginBottom: "12px", color: "var(--ink)" }}>The tools are there, but underused</h3>
-                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>A CRM was bought and never properly set up. Features that would save hours sit untouched, and the team works around the system instead of through it.</p>
+                <div className="prob-num">01</div>
+                <h3 className="prob-title">The tools are there, but underused</h3>
+                <p className="prob-desc">A CRM was bought and never properly set up. Features that would save hours sit untouched, and the team works around the system instead of through it.</p>
               </li>
               <li className="prob-item">
-                <h3 style={{ fontSize: "1.3rem", marginBottom: "12px", color: "var(--ink)" }}>Marketing and sales do not talk to each other</h3>
-                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>Campaigns bring in enquiries that nobody follows up consistently, so it becomes impossible to tell which spend is producing customers.</p>
+                <div className="prob-num">02</div>
+                <h3 className="prob-title">Marketing and sales do not talk to each other</h3>
+                <p className="prob-desc">Campaigns bring in enquiries that nobody follows up consistently, so it becomes impossible to tell which spend is producing customers.</p>
               </li>
               <li className="prob-item">
-                <h3 style={{ fontSize: "1.3rem", marginBottom: "12px", color: "var(--ink)" }}>Too much of the work is manual</h3>
-                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>Follow-ups, updates and reports depend on someone remembering. Repetitive work crowds out the work that actually grows the business.</p>
+                <div className="prob-num">03</div>
+                <h3 className="prob-title">Too much of the work is manual</h3>
+                <p className="prob-desc">Follow-ups, updates and reports depend on someone remembering. Repetitive work crowds out the work that actually grows the business.</p>
               </li>
               <li className="prob-item">
-                <h3 style={{ fontSize: "1.3rem", marginBottom: "12px", color: "var(--ink)" }}>The strategy is clear, the execution is not</h3>
-                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>The business knows what it should be doing. Nobody has the time or specialist skill to do it consistently.</p>
+                <div className="prob-num">04</div>
+                <h3 className="prob-title">The strategy is clear, the execution is not</h3>
+                <p className="prob-desc">The business knows what it should be doing. Nobody has the time or specialist skill to do it consistently.</p>
               </li>
-              <li className="prob-item">
-                <h3 style={{ fontSize: "1.3rem", marginBottom: "12px", color: "var(--ink)" }}>The founder is carrying the operation</h3>
-                <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>Decisions, fixes and follow-ups route through one or two people, and growth slows to the pace they can manage.</p>
+              <li className="prob-item" style={{ borderBottom: "none" }}>
+                <div className="prob-num">05</div>
+                <h3 className="prob-title">The founder is carrying the operation</h3>
+                <p className="prob-desc">Decisions, fixes and follow-ups route through one or two people, and growth slows to the pace they can manage.</p>
               </li>
             </ul>
           </div>
@@ -342,7 +844,7 @@ export default function Home() {
 
         {/* 6. HOW IT CONNECTS (TIMELINE) */}
         <section className="reveal-new" id="operation" style={{ padding: "clamp(80px, 10vw, 120px) 0" }}>
-          <div className="wrap" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(40px, 8vw, 100px)" }}>
+          <div className="wrap timeline-layout-grid">
             <div className="split-head" style={{ position: "sticky", top: "120px", alignSelf: "start" }}>
               <span className="label" style={{ marginBottom: "24px" }}>How it connects</span>
               <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", lineHeight: 1.1, marginBottom: "32px", fontFamily: "var(--serif)" }}>How CRM, marketing, AI and automation work together</h2>
@@ -354,7 +856,7 @@ export default function Home() {
               </div>
             </div>
             
-            <div style={{ padding: "24px 0 24px 24px" }}>
+            <div className="timeline-container">
               <div className="timeline-node" style={{ '--hover-color': 'var(--butter)' } as React.CSSProperties}>
                 <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--dark-sage)", marginBottom: "8px" }}>Direction</div>
                 <h3 style={{ fontSize: "1.5rem", marginBottom: "12px" }}>Consultancy</h3>
@@ -380,10 +882,10 @@ export default function Home() {
                 <h3 style={{ fontSize: "1.5rem", marginBottom: "12px" }}>People</h3>
                 <p style={{ color: "var(--dark-sage)", lineHeight: 1.6, margin: 0 }}>Specialists operate the system day to day and improve it as the business learns.</p>
               </div>
-              <div className="timeline-node" style={{ '--hover-color': 'var(--ink)' } as React.CSSProperties}>
-                <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--dark-sage)", marginBottom: "8px" }}>The outcome</div>
-                <h3 style={{ fontSize: "1.8rem", marginBottom: "12px", fontFamily: "var(--serif)" }}>Growth</h3>
-                <p style={{ color: "var(--ink)", lineHeight: 1.6, margin: 0, fontWeight: 500 }}>Enquiries followed up, marketing that can be measured, less manual work and a business that is easier to sell from.</p>
+              <div className="timeline-node result-node" style={{ '--hover-color': 'var(--warm-white)' } as React.CSSProperties}>
+                <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,0.7)", marginBottom: "8px" }}>The outcome</div>
+                <h3 style={{ fontSize: "1.8rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--warm-white)" }}>Growth</h3>
+                <p style={{ color: "var(--warm-white)", lineHeight: 1.6, margin: 0, fontWeight: 500 }}>Enquiries followed up, marketing that can be measured, less manual work and a business that is easier to sell from.</p>
               </div>
             </div>
           </div>
@@ -547,59 +1049,61 @@ export default function Home() {
         </section>
 
         {/* 10. PLATFORMS & INDUSTRIES */}
-        <section className="reveal-new" id="platforms" style={{ padding: "clamp(80px, 10vw, 120px) 0" }}>
+        <section className="reveal-new plat-ind-container" id="platforms" style={{ padding: "clamp(80px, 10vw, 120px) 0" }}>
           <div className="wrap">
-            <div className="section-head" style={{ maxWidth: "70ch", marginBottom: "80px", textAlign: "center", margin: "0 auto 80px" }}>
-              <span className="label" style={{ marginBottom: "24px", justifyContent: "center" }}>Platforms and industries</span>
-              <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", lineHeight: 1.1, marginBottom: "24px", fontFamily: "var(--serif)" }}>Start from your platform or your industry</h2>
+            
+            <div className="plat-ind-header" style={{ marginBottom: "64px" }}>
+              <span className="label" style={{ marginBottom: "16px", display: "block" }}>Platforms and industries</span>
+              <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", lineHeight: 1.1, marginBottom: "24px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Start from your platform or your industry</h2>
               <p className="mt" style={{ fontSize: "1.1rem", lineHeight: 1.6, color: "var(--dark-sage)" }}>Many businesses first come to Sage Kite with a specific tool or a problem particular to their sector. Those pages go deeper. The same approach to systems, people and execution sits behind each one.</p>
             </div>
             
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(40px, 8vw, 80px)" }}>
-              <div>
+            <div className="plat-ind-grid">
+              
+              <div className="plat-col">
                 <h3 style={{ fontSize: "1.5rem", marginBottom: "16px", fontFamily: "var(--serif)" }}>Platforms we implement and improve</h3>
                 <p style={{ fontSize: "1rem", lineHeight: "1.6", color: "var(--dark-sage)", marginBottom: "32px" }}>We work in established CRMs and industry systems. Every engagement starts by confirming what is feasible on your account.</p>
-                <dl style={{ display: "flex", flexDirection: "column", gap: "24px", borderTop: "1px solid var(--light-sage)", paddingTop: "24px" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: "16px" }}>
+                <dl className="plat-list" style={{ display: "flex", flexDirection: "column", gap: "24px", borderTop: "1px solid var(--light-sage)", paddingTop: "24px", margin: 0 }}>
+                  <div className="plat-row">
                     <dt style={{ fontWeight: 600, color: "var(--ink)" }}>Cross-industry</dt>
                     <dd style={{ color: "var(--dark-sage)", margin: 0 }}>GoHighLevel, Keap, custom CRM development</dd>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: "16px" }}>
+                  <div className="plat-row">
                     <dt style={{ fontWeight: 600, color: "var(--ink)" }}>Real estate</dt>
                     <dd style={{ color: "var(--dark-sage)", margin: 0 }}>Follow Up Boss, Lofty</dd>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: "16px" }}>
+                  <div className="plat-row">
                     <dt style={{ fontWeight: 600, color: "var(--ink)" }}>Home services</dt>
                     <dd style={{ color: "var(--dark-sage)", margin: 0 }}>ServiceTitan, Housecall Pro, Jobber</dd>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: "16px" }}>
+                  <div className="plat-row">
                     <dt style={{ fontWeight: 600, color: "var(--ink)" }}>Coaching and courses</dt>
                     <dd style={{ color: "var(--dark-sage)", margin: 0 }}>Kajabi</dd>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: "16px" }}>
+                  <div className="plat-row">
                     <dt style={{ fontWeight: 600, color: "var(--ink)" }}>Law firms</dt>
                     <dd style={{ color: "var(--dark-sage)", margin: 0 }}>Clio Grow</dd>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: "16px" }}>
+                  <div className="plat-row">
                     <dt style={{ fontWeight: 600, color: "var(--ink)" }}>Service businesses</dt>
                     <dd style={{ color: "var(--dark-sage)", margin: 0 }}>Dubsado</dd>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: "16px" }}>
+                  <div className="plat-row">
                     <dt style={{ fontWeight: 600, color: "var(--ink)" }}>Fitness and wellness</dt>
                     <dd style={{ color: "var(--dark-sage)", margin: 0 }}>Mindbody</dd>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: "16px" }}>
+                  <div className="plat-row">
                     <dt style={{ fontWeight: 600, color: "var(--ink)" }}>Nonprofits</dt>
                     <dd style={{ color: "var(--dark-sage)", margin: 0 }}>Bloomerang</dd>
                   </div>
                 </dl>
-                <p className="route-foot" style={{ fontSize: "0.85rem", color: "var(--dark-sage)", marginTop: "32px", padding: "16px", background: "rgba(0,0,0,0.02)", borderRadius: "8px" }}>Groupings reflect common use, not a limit on who each platform serves. GoHighLevel implementation is delivered with GHL Scale Up. <Link href="https://glasspane.pages.dev/platforms" className="text-link" style={{ marginLeft: "8px" }}>Browse supported platforms</Link></p>
+                <p className="route-foot" style={{ fontSize: "0.85rem", color: "var(--dark-sage)", marginTop: "32px", padding: "16px", background: "rgba(0,0,0,0.02)", borderRadius: "8px", boxSizing: "border-box" }}>Groupings reflect common use, not a limit on who each platform serves. GoHighLevel implementation is delivered with GHL Scale Up. <Link href="https://glasspane.pages.dev/platforms" className="text-link" style={{ marginLeft: "8px" }}>Browse supported platforms</Link></p>
               </div>
               
-              <div>
+              <div className="ind-col">
                 <h3 style={{ fontSize: "1.5rem", marginBottom: "16px", fontFamily: "var(--serif)" }}>Industries we focus on</h3>
                 <p style={{ fontSize: "1rem", lineHeight: "1.6", color: "var(--dark-sage)", marginBottom: "32px" }}>Each industry page explains the customer journey in that market and the services that support it.</p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <div className="ind-cards-grid">
                   <Link href="https://glasspane.pages.dev/industries/real-estate" className="ind-card">
                     <strong style={{ fontSize: "1.1rem" }}>Real estate</strong>
                     <span style={{ fontSize: "0.9rem", color: "var(--dark-sage)", lineHeight: 1.4 }}>Lead ownership, agent follow-up and pipeline visibility</span>
@@ -612,81 +1116,83 @@ export default function Home() {
                     <strong style={{ fontSize: "1.1rem" }}>Coaches and course businesses</strong>
                     <span style={{ fontSize: "0.9rem", color: "var(--dark-sage)", lineHeight: 1.4 }}>Enquiries, enrolment and audience nurturing</span>
                   </Link>
-                  <Link href="https://glasspane.pages.dev/industries/law-firms" className="ind-card">
-                    <strong style={{ fontSize: "1.1rem" }}>Law firms</strong>
-                    <span style={{ fontSize: "0.9rem", color: "var(--dark-sage)", lineHeight: 1.4 }}>Client intake and consultation follow-up</span>
+                  <Link href="https://glasspane.pages.dev/industries/agencies" className="ind-card">
+                    <strong style={{ fontSize: "1.1rem" }}>Marketing agencies</strong>
+                    <span style={{ fontSize: "0.9rem", color: "var(--dark-sage)", lineHeight: 1.4 }}>White-label CRM implementation, automation and VA delivery</span>
                   </Link>
-                  <Link href="https://glasspane.pages.dev/industries/fitness-wellness" className="ind-card">
-                    <strong style={{ fontSize: "1.1rem" }}>Fitness and wellness</strong>
-                    <span style={{ fontSize: "0.9rem", color: "var(--dark-sage)", lineHeight: 1.4 }}>Trial enquiries, membership conversion and retention</span>
+                  <Link href="https://glasspane.pages.dev/industries/service" className="ind-card">
+                    <strong style={{ fontSize: "1.1rem" }}>Service businesses</strong>
+                    <span style={{ fontSize: "0.9rem", color: "var(--dark-sage)", lineHeight: 1.4 }}>Standardised lead capture, quoting and client onboarding</span>
                   </Link>
-                  <Link href="https://glasspane.pages.dev/industries/nonprofits" className="ind-card">
-                    <strong style={{ fontSize: "1.1rem" }}>Nonprofits</strong>
-                    <span style={{ fontSize: "0.9rem", color: "var(--dark-sage)", lineHeight: 1.4 }}>Donor records, segmentation and follow-up</span>
+                  <Link href="https://glasspane.pages.dev/industries/custom" className="ind-card">
+                    <strong style={{ fontSize: "1.1rem" }}>Custom operations</strong>
+                    <span style={{ fontSize: "0.9rem", color: "var(--dark-sage)", lineHeight: 1.4 }}>Connecting disparate tools or building bespoke CRM architecture</span>
                   </Link>
                 </div>
-                <Link href="https://glasspane.pages.dev/industries" className="text-link" style={{display: "inline-block", fontSize: "1rem", fontWeight: 600, marginTop: "32px"}}>See all industries</Link>
               </div>
+              
             </div>
+            
           </div>
         </section>
 
         {/* 11. PROCESS */}
-        <section className="reveal-new" id="process" style={{ padding: "clamp(80px, 10vw, 120px) 0", borderTop: "1px solid var(--light-sage)", overflow: "hidden" }}>
+        <section className="reveal-new process-section" id="process" style={{ padding: "clamp(80px, 10vw, 120px) 0", borderTop: "1px solid var(--light-sage)" }}>
           <div className="wrap">
-            <h2 style={{ fontSize: "clamp(3rem, 5vw, 4.5rem)", lineHeight: 1.05, marginBottom: "80px", fontFamily: "var(--serif)", color: "var(--ink)", maxWidth: "15ch" }}>
+            <h2 className="process-heading" style={{ fontSize: "clamp(3rem, 5vw, 4.5rem)", lineHeight: 1.05, marginBottom: "80px", fontFamily: "var(--serif)", color: "var(--ink)", maxWidth: "15ch" }}>
               From first<br />conversation to<br />ongoing work
             </h2>
             
-            <div style={{ position: "relative" }}>
-              {/* The continuous horizontal line */}
-              <div style={{ position: "absolute", top: "12px", left: 0, width: "100%", height: "1px", background: "var(--coral)", zIndex: 1 }}></div>
+            <div className="process-container">
+              {/* The continuous line */}
+              <div className="process-line"></div>
 
-              <ul className="timeline-grid" style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", gap: "24px", position: "relative", zIndex: 2, overflowX: "auto", scrollSnapType: "x mandatory", paddingBottom: "24px" }}>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>01</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Enquiry</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>A first conversation about where growth is getting stuck.</p>
+              <ul className="process-timeline">
+                <li className="process-item">
+                  <div className="process-tick"></div>
+                  <div className="process-num">01</div>
+                  <h3 className="process-title">Enquiry</h3>
+                  <p className="process-desc">A first conversation about where growth is getting stuck.</p>
                 </li>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>02</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Discovery</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>A look at the systems, the team and the work as it runs today.</p>
+                <li className="process-item">
+                  <div className="process-tick"></div>
+                  <div className="process-num">02</div>
+                  <h3 className="process-title">Discovery</h3>
+                  <p className="process-desc">A look at the systems, the team and the work as it runs today.</p>
                 </li>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>03</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Proposal</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>Scope, sequence and cost, written against what discovery found.</p>
+                <li className="process-item">
+                  <div className="process-tick"></div>
+                  <div className="process-num">03</div>
+                  <h3 className="process-title">Proposal</h3>
+                  <p className="process-desc">Scope, sequence and cost, written against what discovery found.</p>
                 </li>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>04</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Implementation</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>The build and the delivery, done inside your tools.</p>
+                <li className="process-item">
+                  <div className="process-tick"></div>
+                  <div className="process-num">04</div>
+                  <h3 className="process-title">Implementation</h3>
+                  <p className="process-desc">The build and the delivery, done inside your tools.</p>
                 </li>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>05</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Handover</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>Documentation and training so the team can run it without us.</p>
+                <li className="process-item">
+                  <div className="process-tick"></div>
+                  <div className="process-num">05</div>
+                  <h3 className="process-title">Handover</h3>
+                  <p className="process-desc">Documentation and training so the team can run it without us.</p>
                 </li>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>06</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Maintenance</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>Keeping what was built working as the business changes.</p>
+                <li className="process-item">
+                  <div className="process-tick"></div>
+                  <div className="process-num">06</div>
+                  <h3 className="process-title">Maintenance</h3>
+                  <p className="process-desc">Keeping what was built working as the business changes.</p>
                 </li>
-                <li style={{ flex: "1 1 0", minWidth: "140px", scrollSnapAlign: "start" }}>
-                  <div style={{ width: "1px", height: "25px", background: "var(--ink)", marginBottom: "16px" }}></div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "8px" }}>07</div>
-                  <h3 style={{ fontSize: "1.1rem", marginBottom: "12px", fontFamily: "var(--serif)", color: "var(--ink)" }}>Ongoing work</h3>
-                  <p style={{ color: "var(--dark-sage)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>Continued delivery where it is useful, ended where it is not.</p>
+                <li className="process-item">
+                  <div className="process-tick"></div>
+                  <div className="process-num">07</div>
+                  <h3 className="process-title">Ongoing work</h3>
+                  <p className="process-desc">Continued delivery where it is useful, ended where it is not.</p>
                 </li>
               </ul>
             </div>
+            
           </div>
         </section>
 
@@ -831,9 +1337,9 @@ export default function Home() {
           <div className="wrap faq-grid">
             
             {/* Left Column - Intro & Visual */}
-            <div style={{ position: "sticky", top: "120px", alignSelf: "start" }}>
+            <div className="faq-sticky">
               <span className="label" style={{ marginBottom: "20px", display: "block" }}>In brief</span>
-              <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(2.5rem, 4vw, 3.2rem)", color: "var(--ink)", lineHeight: 1.1, marginBottom: "40px", maxWidth: "100%" }}>Sage Kite, explained plainly</h2>
+              <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(2.5rem, 4vw, 3.2rem)", color: "var(--ink)", lineHeight: 1.1, marginBottom: "40px" }}>Sage Kite,<br/>explained plainly</h2>
               
               {/* Subtle visual element: Abstract System Workflow */}
               <div style={{ display: "flex", alignItems: "center", gap: "12px", opacity: 0.8 }}>
@@ -849,12 +1355,17 @@ export default function Home() {
             <div style={{ display: "flex", flexDirection: "column" }}>
               
               {/* Item 1 */}
-              <div className="faq-item" onClick={() => setOpenFaq(openFaq === 1 ? null : 1)}>
-                <div className="faq-q">
+              <div className="faq-item">
+                <button 
+                  className="faq-btn" 
+                  onClick={() => setOpenFaq(openFaq === 1 ? null : 1)}
+                  aria-expanded={openFaq === 1}
+                  aria-controls="faq-content-1"
+                >
                   <h3>What is Sage Kite?</h3>
-                  <div className="faq-icon" style={{ transform: openFaq === 1 ? "rotate(180deg)" : "rotate(0deg)" }}>{openFaq === 1 ? "−" : "+"}</div>
-                </div>
-                <div className="faq-a-wrapper" style={{ gridTemplateRows: openFaq === 1 ? "1fr" : "0fr", opacity: openFaq === 1 ? 1 : 0.5 }}>
+                  <div className="faq-icon">{openFaq === 1 ? "−" : "+"}</div>
+                </button>
+                <div id="faq-content-1" className="faq-a-wrapper" style={{ gridTemplateRows: openFaq === 1 ? "1fr" : "0fr", opacity: openFaq === 1 ? 1 : 0 }}>
                   <div className="faq-a-inner">
                     <div className="faq-a-content">
                       <p style={{ margin: 0 }}>Sage Kite is a business growth consultancy for small and medium-sized businesses. It improves the systems, people and execution behind growth.</p>
@@ -864,12 +1375,17 @@ export default function Home() {
               </div>
 
               {/* Item 2 */}
-              <div className="faq-item" onClick={() => setOpenFaq(openFaq === 2 ? null : 2)}>
-                <div className="faq-q">
+              <div className="faq-item">
+                <button 
+                  className="faq-btn" 
+                  onClick={() => setOpenFaq(openFaq === 2 ? null : 2)}
+                  aria-expanded={openFaq === 2}
+                  aria-controls="faq-content-2"
+                >
                   <h3>What does Sage Kite do?</h3>
-                  <div className="faq-icon" style={{ transform: openFaq === 2 ? "rotate(180deg)" : "rotate(0deg)" }}>{openFaq === 2 ? "−" : "+"}</div>
-                </div>
-                <div className="faq-a-wrapper" style={{ gridTemplateRows: openFaq === 2 ? "1fr" : "0fr", opacity: openFaq === 2 ? 1 : 0.5 }}>
+                  <div className="faq-icon">{openFaq === 2 ? "−" : "+"}</div>
+                </button>
+                <div id="faq-content-2" className="faq-a-wrapper" style={{ gridTemplateRows: openFaq === 2 ? "1fr" : "0fr", opacity: openFaq === 2 ? 1 : 0 }}>
                   <div className="faq-a-inner">
                     <div className="faq-a-content">
                       <p style={{ margin: 0 }}>It advises on growth through GTM consultancy, AI consultancy and fractional CMO support; implements CRM systems and automation; runs marketing; and provides specialist virtual assistants to operate those systems.</p>
@@ -879,12 +1395,17 @@ export default function Home() {
               </div>
 
               {/* Item 3 */}
-              <div className="faq-item" onClick={() => setOpenFaq(openFaq === 3 ? null : 3)}>
-                <div className="faq-q">
+              <div className="faq-item">
+                <button 
+                  className="faq-btn" 
+                  onClick={() => setOpenFaq(openFaq === 3 ? null : 3)}
+                  aria-expanded={openFaq === 3}
+                  aria-controls="faq-content-3"
+                >
                   <h3>Does Sage Kite implement as well as advise?</h3>
-                  <div className="faq-icon" style={{ transform: openFaq === 3 ? "rotate(180deg)" : "rotate(0deg)" }}>{openFaq === 3 ? "−" : "+"}</div>
-                </div>
-                <div className="faq-a-wrapper" style={{ gridTemplateRows: openFaq === 3 ? "1fr" : "0fr", opacity: openFaq === 3 ? 1 : 0.5 }}>
+                  <div className="faq-icon">{openFaq === 3 ? "−" : "+"}</div>
+                </button>
+                <div id="faq-content-3" className="faq-a-wrapper" style={{ gridTemplateRows: openFaq === 3 ? "1fr" : "0fr", opacity: openFaq === 3 ? 1 : 0 }}>
                   <div className="faq-a-inner">
                     <div className="faq-a-content">
                       <p style={{ margin: 0 }}>Yes. Implementation projects are scoped after discovery and delivered at a fixed price, followed by handover and optional maintenance.</p>
@@ -894,12 +1415,17 @@ export default function Home() {
               </div>
 
               {/* Item 4 */}
-              <div className="faq-item" onClick={() => setOpenFaq(openFaq === 4 ? null : 4)}>
-                <div className="faq-q">
+              <div className="faq-item">
+                <button 
+                  className="faq-btn" 
+                  onClick={() => setOpenFaq(openFaq === 4 ? null : 4)}
+                  aria-expanded={openFaq === 4}
+                  aria-controls="faq-content-4"
+                >
                   <h3>Is Sage Kite a CRM company or a marketing agency?</h3>
-                  <div className="faq-icon" style={{ transform: openFaq === 4 ? "rotate(180deg)" : "rotate(0deg)" }}>{openFaq === 4 ? "−" : "+"}</div>
-                </div>
-                <div className="faq-a-wrapper" style={{ gridTemplateRows: openFaq === 4 ? "1fr" : "0fr", opacity: openFaq === 4 ? 1 : 0.5 }}>
+                  <div className="faq-icon">{openFaq === 4 ? "−" : "+"}</div>
+                </button>
+                <div id="faq-content-4" className="faq-a-wrapper" style={{ gridTemplateRows: openFaq === 4 ? "1fr" : "0fr", opacity: openFaq === 4 ? 1 : 0 }}>
                   <div className="faq-a-inner">
                     <div className="faq-a-content">
                       <p style={{ margin: 0 }}>Neither. CRM and marketing are two of the capabilities Sage Kite uses, alongside consultancy, automation and specialist people, to make growth work as one system.</p>
@@ -909,12 +1435,17 @@ export default function Home() {
               </div>
 
               {/* Item 5 */}
-              <div className="faq-item" onClick={() => setOpenFaq(openFaq === 5 ? null : 5)}>
-                <div className="faq-q">
+              <div className="faq-item">
+                <button 
+                  className="faq-btn" 
+                  onClick={() => setOpenFaq(openFaq === 5 ? null : 5)}
+                  aria-expanded={openFaq === 5}
+                  aria-controls="faq-content-5"
+                >
                   <h3>Who does Sage Kite work with?</h3>
-                  <div className="faq-icon" style={{ transform: openFaq === 5 ? "rotate(180deg)" : "rotate(0deg)" }}>{openFaq === 5 ? "−" : "+"}</div>
-                </div>
-                <div className="faq-a-wrapper" style={{ gridTemplateRows: openFaq === 5 ? "1fr" : "0fr", opacity: openFaq === 5 ? 1 : 0.5 }}>
+                  <div className="faq-icon">{openFaq === 5 ? "−" : "+"}</div>
+                </button>
+                <div id="faq-content-5" className="faq-a-wrapper" style={{ gridTemplateRows: openFaq === 5 ? "1fr" : "0fr", opacity: openFaq === 5 ? 1 : 0 }}>
                   <div className="faq-a-inner">
                     <div className="faq-a-content">
                       <p style={{ margin: 0 }}>SMEs in the United States, Canada, Europe, Australia and New Zealand, and marketing agencies that need a white-label delivery partner.</p>
@@ -924,12 +1455,17 @@ export default function Home() {
               </div>
 
               {/* Item 6 */}
-              <div className="faq-item" style={{ borderBottom: "none" }} onClick={() => setOpenFaq(openFaq === 6 ? null : 6)}>
-                <div className="faq-q">
+              <div className="faq-item" style={{ borderBottom: "none" }}>
+                <button 
+                  className="faq-btn" 
+                  onClick={() => setOpenFaq(openFaq === 6 ? null : 6)}
+                  aria-expanded={openFaq === 6}
+                  aria-controls="faq-content-6"
+                >
                   <h3>How do I start?</h3>
-                  <div className="faq-icon" style={{ transform: openFaq === 6 ? "rotate(180deg)" : "rotate(0deg)" }}>{openFaq === 6 ? "−" : "+"}</div>
-                </div>
-                <div className="faq-a-wrapper" style={{ gridTemplateRows: openFaq === 6 ? "1fr" : "0fr", opacity: openFaq === 6 ? 1 : 0.5 }}>
+                  <div className="faq-icon">{openFaq === 6 ? "−" : "+"}</div>
+                </button>
+                <div id="faq-content-6" className="faq-a-wrapper" style={{ gridTemplateRows: openFaq === 6 ? "1fr" : "0fr", opacity: openFaq === 6 ? 1 : 0 }}>
                   <div className="faq-a-inner">
                     <div className="faq-a-content">
                       <p style={{ margin: 0 }}>Book a discovery call. It covers your current process, the outcome you want and whether Sage Kite is the right fit.</p>
@@ -957,9 +1493,9 @@ export default function Home() {
       </main>
 
       <footer className="site-footer" style={{ padding: "100px 0 40px", background: "var(--warm-white)" }}>
-        <div className="wrap" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: "64px" }}>
+        <div className="wrap footer-grid">
           
-          <div style={{ paddingRight: "clamp(20px, 4vw, 60px)" }}>
+          <div className="footer-logo-col" style={{ paddingRight: "clamp(20px, 4vw, 60px)" }}>
             <Link className="logo" href="/" aria-label="Sage Kite home">
               <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" style={{ maxWidth: "160px" }} />
             </Link>
@@ -1002,7 +1538,7 @@ export default function Home() {
         </div>
         
         <div className="wrap">
-          <div style={{ borderTop: "1px solid var(--light-sage)", marginTop: "80px", paddingTop: "32px", display: "flex", justifyContent: "space-between", color: "var(--dark-sage)", fontSize: "0.9rem" }}>
+          <div className="footer-bottom">
             <p style={{ margin: 0 }}>© [Year] Sage Kite. [Registered legal entity and details]</p>
             <p style={{ margin: 0 }}>Streamlined systems for growth.</p>
           </div>
