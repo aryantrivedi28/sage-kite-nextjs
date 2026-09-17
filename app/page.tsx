@@ -3,6 +3,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import PlatformList from "./components/PlatformList";
+import CRMMarquee from "./components/CRMMarquee";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -763,7 +765,7 @@ export default function Home() {
         </div>
 
         {/* 5. THE SAGE KITE APPROACH */}
-        <section className="tint reveal-new" id="approach" style={{ padding: "clamp(120px, 12vw, 160px) 0" }}>
+        <section className="tint reveal-new" id="approach" style={{ paddingTop: "clamp(120px, 12vw, 160px)", paddingBottom: "clamp(60px, 6vw, 80px)" }}>
           
           {/* Header Grid */}
           <div className="wrap approach-header-grid" style={{ marginBottom: "120px", display: "grid", gap: "80px 40px", alignItems: "center" }}>
@@ -791,8 +793,8 @@ export default function Home() {
               <div className="clean-card" style={{ transform: "translateY(0)", background: "var(--warm-white)", borderRadius: "12px", padding: "40px 32px", border: "1px solid var(--light-sage)", boxShadow: "0 16px 40px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
                 <div style={{ fontSize: "0.75rem", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--sky)", marginBottom: "16px" }}>How work moves</div>
                 <h3 style={{ fontSize: "2rem", fontFamily: "var(--serif)", marginBottom: "24px", color: "var(--ink)" }}>Systems</h3>
-                <p style={{ color: "var(--dark-sage)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "32px", flex: 1 }}>Systems are how work moves through a business: how enquiries are captured, where customer information lives, what happens automatically and what needs a person.</p>
-                <ul style={{ paddingLeft: "20px", marginBottom: "40px", color: "var(--dark-sage)", display: "flex", flexDirection: "column", gap: "16px", fontSize: "0.9rem", listStyleType: "disc" }}>
+                <p style={{ color: "var(--dark-sage)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "32px" }}>Systems are how work moves through a business: how enquiries are captured, where customer information lives, what happens automatically and what needs a person.</p>
+                <ul style={{ paddingLeft: "20px", marginBottom: "40px", color: "var(--dark-sage)", display: "flex", flexDirection: "column", gap: "16px", fontSize: "0.9rem", listStyleType: "disc", flex: 1 }}>
                   <li>CRM setup, pipeline design and cleanup</li>
                   <li>Customer journeys and follow-up workflows</li>
                   <li>Marketing automation inside your CRM platform</li>
@@ -802,11 +804,11 @@ export default function Home() {
                 <Link href="#what-we-do" className="text-link" style={{ fontWeight: 600, fontSize: "0.95rem" }}>Explore CRM implementation</Link>
               </div>
 
-              <div className="clean-card" style={{ transform: "translateY(48px)", background: "var(--warm-white)", borderRadius: "12px", padding: "40px 32px", border: "1px solid var(--light-sage)", boxShadow: "0 16px 40px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
+              <div className="clean-card" style={{ transform: "translateY(0)", background: "var(--warm-white)", borderRadius: "12px", padding: "40px 32px", border: "1px solid var(--light-sage)", boxShadow: "0 16px 40px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
                 <div style={{ fontSize: "0.75rem", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--sage)", marginBottom: "16px" }}>Who runs it</div>
                 <h3 style={{ fontSize: "2rem", fontFamily: "var(--serif)", marginBottom: "24px", color: "var(--ink)" }}>People</h3>
-                <p style={{ color: "var(--dark-sage)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "32px", flex: 1 }}>People operate and improve the system every day. A well-built CRM still needs someone to keep records clean, run campaigns and follow up with leads.</p>
-                <ul style={{ paddingLeft: "20px", marginBottom: "40px", color: "var(--dark-sage)", display: "flex", flexDirection: "column", gap: "16px", fontSize: "0.9rem", listStyleType: "disc" }}>
+                <p style={{ color: "var(--dark-sage)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "32px" }}>People operate and improve the system every day. A well-built CRM still needs someone to keep records clean, run campaigns and follow up with leads.</p>
+                <ul style={{ paddingLeft: "20px", marginBottom: "40px", color: "var(--dark-sage)", display: "flex", flexDirection: "column", gap: "16px", fontSize: "0.9rem", listStyleType: "disc", flex: 1 }}>
                   <li>CRM and automation VA</li>
                   <li>Marketing operations VA</li>
                   <li>Email marketing VA</li>
@@ -816,11 +818,11 @@ export default function Home() {
                 <Link href="#what-we-do" className="text-link" style={{ fontWeight: 600, fontSize: "0.95rem" }}>Explore specialist staffing</Link>
               </div>
 
-              <div className="clean-card" style={{ transform: "translateY(96px)", background: "var(--warm-white)", borderRadius: "12px", padding: "40px 32px", border: "1px solid var(--light-sage)", boxShadow: "0 16px 40px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
+              <div className="clean-card" style={{ transform: "translateY(0)", background: "var(--warm-white)", borderRadius: "12px", padding: "40px 32px", border: "1px solid var(--light-sage)", boxShadow: "0 16px 40px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
                 <div style={{ fontSize: "0.75rem", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--coral)", marginBottom: "16px" }}>What gets done</div>
                 <h3 style={{ fontSize: "2rem", fontFamily: "var(--serif)", marginBottom: "24px", color: "var(--ink)" }}>Execution</h3>
-                <p style={{ color: "var(--dark-sage)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "32px", flex: 1 }}>Execution turns a plan and a system into results over time: the consultancy, the implementation projects and the marketing that continues after launch.</p>
-                <ul style={{ paddingLeft: "20px", marginBottom: "40px", color: "var(--dark-sage)", display: "flex", flexDirection: "column", gap: "16px", fontSize: "0.9rem", listStyleType: "disc" }}>
+                <p style={{ color: "var(--dark-sage)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "32px" }}>Execution turns a plan and a system into results over time: the consultancy, the implementation projects and the marketing that continues after launch.</p>
+                <ul style={{ paddingLeft: "20px", marginBottom: "40px", color: "var(--dark-sage)", display: "flex", flexDirection: "column", gap: "16px", fontSize: "0.9rem", listStyleType: "disc", flex: 1 }}>
                   <li>GTM consultancy and fractional CMO support</li>
                   <li>Fixed-price CRM implementation projects</li>
                   <li>SEO and AI SEO</li>
@@ -833,10 +835,20 @@ export default function Home() {
             </div>
             
             {/* Footer Text */}
-            <div style={{ marginTop: "160px", display: "flex", justifyContent: "center" }}>
+            <div style={{ marginTop: "80px", display: "flex", justifyContent: "center" }}>
               <div style={{ padding: "40px", borderTop: "1px solid var(--light-sage)", borderBottom: "1px solid var(--light-sage)", textAlign: "center", maxWidth: "800px", width: "100%" }}>
                 <p className="together" style={{ fontSize: "1rem", lineHeight: 1.6, color: "var(--ink)", margin: 0 }}>These are not three departments. A system without people falls out of use; people without a system repeat the same manual work; execution without either rarely lasts. Sage Kite scopes all three around the same commercial goal.</p>
               </div>
+            </div>
+
+            {/* CRM Platforms Marquee — full bleed */}
+            <div style={{ marginTop: "80px" }}>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: "40px" }}>
+                <span className="label" style={{ marginBottom: 0 }}>Platforms we work with</span>
+              </div>
+            </div>
+            <div style={{ width: "100vw", position: "relative", left: "50%", transform: "translateX(-50%)" }}>
+              <CRMMarquee />
             </div>
             
           </div>
@@ -1066,15 +1078,15 @@ export default function Home() {
                 <dl className="plat-list" style={{ display: "flex", flexDirection: "column", gap: "24px", borderTop: "1px solid var(--light-sage)", paddingTop: "24px", margin: 0 }}>
                   <div className="plat-row">
                     <dt style={{ fontWeight: 600, color: "var(--ink)" }}>Cross-industry</dt>
-                    <dd style={{ color: "var(--dark-sage)", margin: 0 }}>GoHighLevel, Keap, custom CRM development</dd>
+                    <dd style={{ color: "var(--dark-sage)", margin: 0 }}>GoHighLevel Keap custom CRM development</dd>
                   </div>
                   <div className="plat-row">
                     <dt style={{ fontWeight: 600, color: "var(--ink)" }}>Real estate</dt>
-                    <dd style={{ color: "var(--dark-sage)", margin: 0 }}>Follow Up Boss, Lofty</dd>
+                    <dd style={{ color: "var(--dark-sage)", margin: 0 }}>Follow Up Boss Lofty</dd>
                   </div>
                   <div className="plat-row">
                     <dt style={{ fontWeight: 600, color: "var(--ink)" }}>Home services</dt>
-                    <dd style={{ color: "var(--dark-sage)", margin: 0 }}>ServiceTitan, Housecall Pro, Jobber</dd>
+                    <dd style={{ color: "var(--dark-sage)", margin: 0 }}>ServiceTitan Housecall Pro Jobber</dd>
                   </div>
                   <div className="plat-row">
                     <dt style={{ fontWeight: 600, color: "var(--ink)" }}>Coaching and courses</dt>
@@ -1193,71 +1205,6 @@ export default function Home() {
               </ul>
             </div>
             
-          </div>
-        </section>
-
-        {/* 12. EVIDENCE */}
-        <section className="tint reveal-new" id="evidence" style={{ padding: "clamp(80px, 10vw, 120px) 0" }}>
-          <div className="wrap">
-            <div className="section-head" style={{ maxWidth: "70ch", marginBottom: "80px", textAlign: "center", margin: "0 auto 80px" }}>
-              <span className="label" style={{ marginBottom: "24px", justifyContent: "center" }}>Work and experience</span>
-              <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", lineHeight: 1.1, marginBottom: "24px", fontFamily: "var(--serif)" }}>Evidence, shown with its context</h2>
-              <p className="lede mt" style={{ fontSize: "1.1rem", lineHeight: 1.6, color: "var(--dark-sage)" }}>Each example will state its origin, what the specialist did, the delivery period and the basis for any result. Sample builds will be labelled as demonstrations. Numbers that cannot be supported will not appear here.</p>
-            </div>
-            
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "32px" }}>
-              {/* Card 1 */}
-              <div className="proof-new" style={{ '--edge-color': 'var(--sky)', transform: 'translateY(0)' } as React.CSSProperties}>
-                <span style={{ padding: "6px 12px", background: "rgba(138, 182, 214, 0.15)", color: "var(--sky)", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, borderRadius: "4px", alignSelf: "flex-start", marginBottom: "24px" }}>Systems</span>
-                <h3 style={{ fontSize: "1.5rem", marginBottom: "24px", fontFamily: "var(--serif)", lineHeight: 1.3 }}>[Verified example to be added]</h3>
-                <dl style={{ display: "flex", flexDirection: "column", gap: "16px", flex: 1, margin: 0 }}>
-                  <div>
-                    <dt style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--dark-sage)", marginBottom: "4px" }}>Starting situation</dt>
-                    <dd style={{ margin: 0, color: "var(--ink)", fontWeight: 500 }}>[Business type and problem]</dd>
-                  </div>
-                  <div>
-                    <dt style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--dark-sage)", marginBottom: "4px" }}>Specialist's role</dt>
-                    <dd style={{ margin: 0, color: "var(--ink)", fontWeight: 500 }}>[Contribution and work completed]</dd>
-                  </div>
-                </dl>
-              </div>
-
-              {/* Card 2 */}
-              <div className="proof-new" style={{ '--edge-color': 'var(--coral)', transform: 'translateY(24px)' } as React.CSSProperties}>
-                <span style={{ padding: "6px 12px", background: "rgba(224, 122, 95, 0.15)", color: "var(--coral)", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, borderRadius: "4px", alignSelf: "flex-start", marginBottom: "24px" }}>Execution</span>
-                <h3 style={{ fontSize: "1.5rem", marginBottom: "24px", fontFamily: "var(--serif)", lineHeight: 1.3 }}>[Verified example to be added]</h3>
-                <dl style={{ display: "flex", flexDirection: "column", gap: "16px", flex: 1, margin: 0 }}>
-                  <div>
-                    <dt style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--dark-sage)", marginBottom: "4px" }}>Starting situation</dt>
-                    <dd style={{ margin: 0, color: "var(--ink)", fontWeight: 500 }}>[Business type and problem]</dd>
-                  </div>
-                  <div>
-                    <dt style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--dark-sage)", marginBottom: "4px" }}>Specialist's role</dt>
-                    <dd style={{ margin: 0, color: "var(--ink)", fontWeight: 500 }}>[Contribution and work completed]</dd>
-                  </div>
-                </dl>
-              </div>
-
-              {/* Card 3 */}
-              <div className="proof-new" style={{ '--edge-color': 'var(--butter)', transform: 'translateY(48px)' } as React.CSSProperties}>
-                <span style={{ padding: "6px 12px", background: "rgba(242, 204, 143, 0.25)", color: "var(--ink)", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, borderRadius: "4px", alignSelf: "flex-start", marginBottom: "24px" }}>People</span>
-                <h3 style={{ fontSize: "1.5rem", marginBottom: "24px", fontFamily: "var(--serif)", lineHeight: 1.3 }}>[Verified example to be added]</h3>
-                <dl style={{ display: "flex", flexDirection: "column", gap: "16px", flex: 1, margin: 0 }}>
-                  <div>
-                    <dt style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--dark-sage)", marginBottom: "4px" }}>Starting situation</dt>
-                    <dd style={{ margin: 0, color: "var(--ink)", fontWeight: 500 }}>[Business type and problem]</dd>
-                  </div>
-                  <div>
-                    <dt style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--dark-sage)", marginBottom: "4px" }}>Specialist's role</dt>
-                    <dd style={{ margin: 0, color: "var(--ink)", fontWeight: 500 }}>[Contribution and work completed]</dd>
-                  </div>
-                </dl>
-              </div>
-            </div>
-            
-            <div style={{ textAlign: "center", marginTop: "100px" }}>
-              <Link href="https://glasspane.pages.dev/work" className="text-link" style={{ fontWeight: 600, fontSize: "1rem" }}>See work and specialist experience</Link>
-            </div>
           </div>
         </section>
 
