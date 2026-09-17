@@ -260,7 +260,7 @@ section{padding:clamp(80px,11vw,140px) 0}
 
 /* Footer */
 .site-footer{padding:64px 0 32px;border-top:4px solid var(--butter)}
-.foot-grid{display:grid;grid-template-columns:minmax(0,4fr) repeat(3,minmax(0,2fr));gap:36px}
+.foot-grid{display:grid;grid-template-columns:minmax(0,4fr) auto auto auto;gap:clamp(36px, 6vw, 96px)}
 .foot-brand p{font-size:.9rem;max-width:40ch;margin-top:14px}
 .foot-grid h2{font-family:var(--sans);font-size:.875rem;font-weight:600;color:var(--sage);letter-spacing:0;margin-bottom:10px}
 .foot-grid a{display:inline-block;padding:5px 0;text-decoration:none;font-size:.9rem}
@@ -302,7 +302,7 @@ section{padding:clamp(80px,11vw,140px) 0}
   .brief-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .faq-group{grid-template-columns:1fr;gap:8px}
   .faq-group .label{margin:0}
-  .foot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .foot-grid{grid-template-columns:auto auto auto; justify-content: space-between}
   .foot-brand{grid-column:1/-1}
 }
 @media (max-width:680px){
@@ -337,6 +337,7 @@ section{padding:clamp(80px,11vw,140px) 0}
   .founder-photo{max-width:220px}
   .final .btn{width:100%}
   .foot-grid{grid-template-columns:1fr 1fr}
+  .foot-grid > div:nth-child(2) { grid-column: 1 / -1; }
 }
 
 /* FAQ Accordion Mobile */
