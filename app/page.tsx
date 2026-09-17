@@ -648,7 +648,7 @@ export default function Home() {
               <li><Link href="#industries" onClick={() => setMenuOpen(false)}>Industries</Link></li>
               <li><Link href="#agencies" onClick={() => setMenuOpen(false)}>For agencies</Link></li>
               <li><Link href="#insights" onClick={() => setMenuOpen(false)}>Insights</Link></li>
-              <li><Link href="#about" onClick={() => setMenuOpen(false)}>About</Link></li>
+              <li><Link href="/about" onClick={() => setMenuOpen(false)}>About</Link></li>
               <li><a className="btn btn-small" href="https://wa.me/message/C22YQ52VUDLCA1" onClick={() => setMenuOpen(false)}>Book a discovery call</a></li>
             </ul>
           </nav>
