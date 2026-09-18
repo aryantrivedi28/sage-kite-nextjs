@@ -150,41 +150,41 @@ export default function About() {
             
             <div style={{ display: 'flex', alignItems: 'stretch', width: '100%', padding: '20px 0', overflowX: "auto" }}>
               {/* Left Inputs */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', flex: 1, position: 'relative', minWidth: "160px" }}>
-                <div className="reveal" style={{ position: 'relative', paddingRight: '24px', animationDelay: '0ms' }}>
-                  <div style={{ fontSize: '0.85rem', fontWeight: '600', letterSpacing: '0.06em', color: 'var(--ink)' }}>CONSULTANCY</div>
-                  <div style={{ fontSize: '1rem', color: 'var(--sage)' }}>Recommendations</div>
-                  <div style={{ position: 'absolute', top: '50%', right: '0', width: '24px', height: '1px', background: 'var(--light-sage)' }}></div>
-                </div>
-                <div className="reveal" style={{ position: 'relative', paddingRight: '24px', animationDelay: '100ms' }}>
-                  <div style={{ fontSize: '0.85rem', fontWeight: '600', letterSpacing: '0.06em', color: 'var(--ink)' }}>AGENCY</div>
-                  <div style={{ fontSize: '1rem', color: 'var(--sage)' }}>Marketing channels</div>
-                  <div style={{ position: 'absolute', top: '50%', right: '0', width: '24px', height: '1px', background: 'var(--light-sage)' }}></div>
-                </div>
-                <div className="reveal" style={{ position: 'relative', paddingRight: '24px', animationDelay: '200ms' }}>
-                  <div style={{ fontSize: '0.85rem', fontWeight: '600', letterSpacing: '0.06em', color: 'var(--ink)' }}>TECHNOLOGY</div>
-                  <div style={{ fontSize: '1rem', color: 'var(--sage)' }}>Implementation</div>
-                  <div style={{ position: 'absolute', top: '50%', right: '0', width: '24px', height: '1px', background: 'var(--light-sage)' }}></div>
-                </div>
-                <div className="reveal" style={{ position: 'relative', paddingRight: '24px', animationDelay: '300ms' }}>
-                  <div style={{ fontSize: '0.85rem', fontWeight: '600', letterSpacing: '0.06em', color: 'var(--ink)' }}>STAFFING</div>
-                  <div style={{ fontSize: '1rem', color: 'var(--sage)' }}>People</div>
-                  <div style={{ position: 'absolute', top: '50%', right: '0', width: '24px', height: '1px', background: 'var(--light-sage)' }}></div>
-                </div>
-                
-                {/* Vertical Spine */}
-                <div className="reveal" style={{ position: 'absolute', top: '24px', bottom: '24px', right: '0', width: '1px', background: 'var(--light-sage)', animationDelay: '400ms' }}></div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', flex: '0 0 auto', position: 'relative', minWidth: "160px" }}>
+                {[
+                  { label: "CONSULTANCY", desc: "Recommendations" },
+                  { label: "AGENCY", desc: "Marketing channels" },
+                  { label: "TECHNOLOGY", desc: "Implementation" },
+                  { label: "STAFFING", desc: "People" }
+                ].map((item, i) => (
+                  <div key={item.label} className="reveal" style={{ height: '60px', display: 'flex', flexDirection: 'column', justifyContent: 'center', animationDelay: (i * 100) + 'ms' }}>
+                    <div style={{ fontSize: '0.85rem', fontWeight: '600', letterSpacing: '0.06em', color: 'var(--ink)', marginBottom: '4px' }}>{item.label}</div>
+                    <div style={{ fontSize: '1rem', color: 'var(--sage)' }}>{item.desc}</div>
+                  </div>
+                ))}
               </div>
 
-              {/* Middle Connector */}
-              <div className="reveal" style={{ width: '40px', position: 'relative', animationDelay: '500ms' }}>
-                <div style={{ position: 'absolute', top: '50%', left: '0', width: '100%', height: '1px', background: 'var(--light-sage)' }}></div>
-                <div style={{ position: 'absolute', top: '50%', right: '-4px', transform: 'translateY(-50%)', color: 'var(--light-sage)' }}>→</div>
+              {/* Middle SVG Connector */}
+              <div className="reveal" style={{ flex: 1, minWidth: '80px', maxWidth: '440px', position: 'relative', animationDelay: '400ms', margin: '0 24px' }}>
+                <svg viewBox="0 0 100 312" preserveAspectRatio="none" style={{ width: "100%", height: "100%", position: "absolute", top: 0, left: 0, overflow: "visible" }}>
+                  {[30, 114, 198, 282].map((y, i) => (
+                    <path 
+                      key={i}
+                      d={`M 0,${y} C 50,${y} 50,156 100,156`}
+                      fill="none"
+                      stroke="var(--sage)"
+                      strokeWidth="1.5"
+                      opacity="0.3"
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  ))}
+                </svg>
+                <div style={{ position: "absolute", right: 0, top: "156px", transform: "translate(50%, -50%)", width: "8px", height: "8px", borderRadius: "50%", background: "var(--coral)" }}></div>
               </div>
 
               {/* Destination */}
-              <div className="reveal" style={{ flex: 1.2, display: 'flex', alignItems: 'center', paddingLeft: '16px', animationDelay: '600ms', minWidth: "220px" }}>
-                <div style={{ background: 'var(--warm-white)', borderTop: '4px solid var(--coral)', borderLeft: '1px solid var(--light-sage)', borderRight: '1px solid var(--light-sage)', borderBottom: '1px solid var(--light-sage)', padding: '32px', width: '100%' }}>
+              <div className="reveal" style={{ flex: '0 1 340px', display: 'flex', alignItems: 'center', animationDelay: '500ms', minWidth: "260px" }}>
+                <div style={{ background: 'var(--warm-white)', borderTop: '4px solid var(--coral)', borderLeft: '1px solid var(--light-sage)', borderRight: '1px solid var(--light-sage)', borderBottom: '1px solid var(--light-sage)', borderRadius: 'var(--radius)', padding: '32px', width: '100%', boxShadow: '0 8px 24px rgba(36, 55, 70, 0.04)' }}>
                   <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.8rem', letterSpacing: '0.02em', marginBottom: '24px', color: 'var(--ink)' }}>SAGE KITE</h3>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', fontSize: '1.05rem', color: 'var(--dark-sage)', fontWeight: '500' }}>
                     <div><span style={{color: "var(--coral)", marginRight: "8px"}}>+</span>Strategy</div>
@@ -212,7 +212,7 @@ export default function About() {
         {/* 4. Our Philosophy */}
         <section className="rule-top reveal" id="philosophy" style={{padding: "clamp(56px, 8vw, 88px) 0"}}>
           <div className="wrap split">
-            <div className="split-head">
+            <div className="split-head" style={{marginBottom: "clamp(48px, 6vw, 72px)"}}>
               <span className="label">What We Believe</span>
               <h2>Technology changes quickly. Good business principles don't.</h2>
             </div>
@@ -266,7 +266,7 @@ export default function About() {
           <div className="wrap">
             <div className="section-head" style={{maxWidth: "70ch", marginBottom: "48px"}}>
               <span className="label">Our Perspective</span>
-              <h2>The future of business is not less human. It is better connected.</h2>
+              <h2 style={{ textWrap: "wrap" }}>The future of business is not less human.<br/>It is better connected.</h2>
             </div>
             
             <style dangerouslySetInnerHTML={{__html: `
@@ -315,7 +315,7 @@ export default function About() {
                 
                 {/* Tech Column */}
                 <div className="p-col">
-                  <div style={{height: "100px"}}>
+                  <div style={{height: "140px"}}>
                     <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--sky)", marginBottom: "12px"}}>TECHNOLOGY</div>
                     <div style={{fontFamily: "var(--serif)", fontSize: "clamp(1.8rem, 3vw, 2.2rem)", color: "var(--ink)", fontStyle: "italic", lineHeight: 1.1}}>Creates leverage</div>
                   </div>
@@ -327,7 +327,7 @@ export default function About() {
                           onMouseEnter={() => setPerspectiveHover('tech-'+i)} 
                           onMouseLeave={() => setPerspectiveHover(null)}
                           style={{
-                            height: "24px", 
+                            height: "32px", 
                             display: "flex", 
                             alignItems: "center",
                             fontSize: "1.1rem", 
@@ -340,7 +340,7 @@ export default function About() {
                           {item}
                         </div>
                         {i < arr.length - 1 && (
-                          <div style={{height: "16px", display: "flex", alignItems: "center", color: "var(--light-sage)", fontSize: "0.8rem"}}>•</div>
+                          <div style={{height: "24px", display: "flex", alignItems: "center", color: "var(--light-sage)", fontSize: "0.8rem"}}>•</div>
                         )}
                       </React.Fragment>
                     ))}
@@ -352,16 +352,16 @@ export default function About() {
                 </div>
 
                 {/* Desktop Convergence Connection */}
-                <div className="p-conn-desktop" style={{ height: "184px" }}>
-                  <svg viewBox="0 0 100 184" preserveAspectRatio="none" style={{ width: "100%", height: "100%", overflow: "visible", position: "absolute", top: 0, left: 0 }}>
+                <div className="p-conn-desktop" style={{ height: "256px" }}>
+                  <svg viewBox="0 0 100 256" preserveAspectRatio="none" style={{ width: "100%", height: "100%", overflow: "visible", position: "absolute", top: 0, left: 0 }}>
                     {/* Tech paths */}
-                    {[12, 52, 92, 132, 172].map((y, i) => {
+                    {[16, 72, 128, 184, 240].map((y, i) => {
                       const isHovered = perspectiveHover === 'tech-'+i;
                       const isDimmed = perspectiveHover && !isHovered;
                       return (
                         <path 
                           key={'tl-'+i} 
-                          d={`M 0,${y} C 40,${y} 40,92 50,92`} 
+                          d={`M 0,${y} C 40,${y} 40,128 50,128`} 
                           fill="none" 
                           stroke={isHovered ? "var(--sky)" : "var(--light-sage)"} 
                           strokeWidth={isHovered ? "1.5" : "1"} 
@@ -371,15 +371,15 @@ export default function About() {
                         />
                       );
                     })}
-                    
+
                     {/* People paths */}
-                    {[32, 72, 112, 152].map((y, i) => {
+                    {[44, 100, 156, 212].map((y, i) => {
                       const isHovered = perspectiveHover === 'people-'+i;
                       const isDimmed = perspectiveHover && !isHovered;
                       return (
                         <path 
                           key={'pl-'+i} 
-                          d={`M 100,${y} C 60,${y} 60,92 50,92`} 
+                          d={`M 100,${y} C 60,${y} 60,128 50,128`} 
                           fill="none" 
                           stroke={isHovered ? "var(--coral)" : "var(--light-sage)"} 
                           strokeWidth={isHovered ? "1.5" : "1"} 
@@ -392,7 +392,7 @@ export default function About() {
                   </svg>
 
                   {/* Center Node and Text */}
-                  <div style={{ position: "absolute", top: "92px", left: "0", right: "0", display: "flex", flexDirection: "column", alignItems: "center", transform: "translateY(-5px)", pointerEvents: "none" }}>
+                  <div style={{ position: "absolute", top: "128px", left: "0", right: "0", display: "flex", flexDirection: "column", alignItems: "center", transform: "translateY(-5px)", pointerEvents: "none" }}>
                     <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "var(--ink)", marginBottom: "8px", position: "relative", zIndex: 2 }}></div>
                     <div style={{ width: "1px", height: "24px", background: "var(--light-sage)", marginBottom: "12px", position: "relative", zIndex: 1 }}></div>
                     <div style={{ background: "var(--warm-white)", padding: "0 12px", position: "relative", zIndex: 2 }}>
@@ -403,19 +403,19 @@ export default function About() {
 
                 {/* People Column */}
                 <div className="p-col">
-                  <div style={{height: "100px"}}>
+                  <div style={{height: "140px"}}>
                     <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--coral)", marginBottom: "12px"}}>PEOPLE</div>
                     <div style={{fontFamily: "var(--serif)", fontSize: "clamp(1.8rem, 3vw, 2.2rem)", color: "var(--ink)", fontStyle: "italic", lineHeight: 1.1}}>Create meaning</div>
                   </div>
                   
-                  <div style={{display: "flex", flexDirection: "column", position: "relative", paddingTop: "20px"}}>
+                  <div style={{display: "flex", flexDirection: "column", position: "relative", paddingTop: "28px"}}>
                     {['Decisions', 'Relationships', 'Customers', 'Responsibility'].map((item, i, arr) => (
                       <React.Fragment key={item}>
                         <div 
                           onMouseEnter={() => setPerspectiveHover('people-'+i)} 
                           onMouseLeave={() => setPerspectiveHover(null)}
                           style={{
-                            height: "24px", 
+                            height: "32px", 
                             display: "flex", 
                             alignItems: "center",
                             fontSize: "1.1rem", 
@@ -428,7 +428,7 @@ export default function About() {
                           {item}
                         </div>
                         {i < arr.length - 1 && (
-                          <div style={{height: "16px", display: "flex", alignItems: "center", color: "var(--light-sage)", fontSize: "0.8rem"}}>•</div>
+                          <div style={{height: "24px", display: "flex", alignItems: "center", color: "var(--light-sage)", fontSize: "0.8rem"}}>•</div>
                         )}
                       </React.Fragment>
                     ))}
@@ -464,7 +464,7 @@ export default function About() {
                 <span className="label">The Reality</span>
                 <p style={{fontFamily: "var(--serif)", fontSize: "clamp(1.4rem, 2vw, 1.8rem)", color: "var(--ink)", fontStyle: "italic", margin: 0, lineHeight: 1.3}}>AI and automation are changing what businesses can accomplish with small teams. But technology alone does not create a good business.</p>
               </div>
-              <div style={{fontSize: "1.15rem", lineHeight: 1.65, display: "flex", flexDirection: "column", gap: "24px"}}>
+              <div style={{fontSize: "1.15rem", lineHeight: 1.65, display: "flex", flexDirection: "column", gap: "24px", marginTop: "24px"}}>
                 <p style={{margin: 0, color: "var(--dark-sage)"}}>The opportunity is to use technology to remove unnecessary work and give people more time to do the work that actually requires them.</p>
                 <p style={{margin: 0, color: "var(--dark-sage)"}}>This is an important part of how Sage Kite thinks about AI.</p>
               </div>
@@ -499,8 +499,319 @@ export default function About() {
           </div>
         </section>
 
+        {/* — Meet the Team — */}
+        <section className="tint reveal" id="team" style={{padding: "clamp(56px, 8vw, 88px) 0 0 0"}}>
+          <style dangerouslySetInnerHTML={{__html: `
+            .team-grid {
+              display: grid;
+              grid-template-columns: repeat(4, 1fr);
+              gap: clamp(20px, 3vw, 32px);
+              margin-top: 48px;
+            }
+            .team-card {
+              background: var(--warm-white);
+              border: 1px solid var(--light-sage);
+              border-radius: var(--radius);
+              overflow: hidden;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              text-align: center;
+              transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease);
+            }
+            .team-card:hover {
+              transform: translateY(-3px);
+              box-shadow: 0 8px 24px rgba(36, 55, 70, 0.06);
+            }
+            .team-card-img-wrap {
+              width: 100%;
+              overflow: hidden;
+            }
+            .team-card-img-wrap img {
+              width: 100%;
+              aspect-ratio: 4 / 5;
+              object-fit: cover;
+              display: block;
+              transition: transform 0.4s var(--ease);
+            }
+            .team-card:hover .team-card-img-wrap img {
+              transform: scale(1.03);
+            }
+            .team-card-body {
+              padding: clamp(24px, 3vw, 32px) clamp(20px, 2.5vw, 28px);
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 8px;
+              flex: 1;
+            }
+            .team-card-name {
+              font-family: var(--serif);
+              font-size: clamp(1.25rem, 2vw, 1.5rem);
+              font-weight: 500;
+              color: var(--ink);
+              margin: 0;
+              line-height: 1.2;
+            }
+            .team-card-role {
+              font-size: 0.95rem;
+              font-weight: 600;
+              color: var(--sky);
+              letter-spacing: 0.02em;
+            }
+            .team-card-desc {
+              font-size: 0.95rem;
+              line-height: 1.6;
+              color: var(--dark-sage);
+              margin-top: 8px;
+            }
+            .team-social-link {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              width: 40px;
+              height: 40px;
+              border: 1px solid var(--light-sage);
+              border-radius: var(--radius);
+              color: var(--sage);
+              text-decoration: none;
+              margin-top: 12px;
+              transition: color var(--t) var(--ease), border-color var(--t) var(--ease), transform var(--t) var(--ease);
+            }
+            .team-social-link:hover {
+              color: var(--sky);
+              border-color: var(--sky);
+              transform: translateY(-2px);
+            }
+
+            /* Founder Feature */
+            .founder-feature {
+              margin-top: clamp(56px, 8vw, 80px);
+              padding-top: clamp(48px, 6vw, 72px);
+              border-top: 1px solid var(--light-sage);
+            }
+            .founder-feature-grid {
+              display: grid;
+              grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+              gap: clamp(32px, 5vw, 64px);
+              align-items: center;
+              margin-top: 40px;
+              background: var(--warm-white);
+              border: 1px solid var(--light-sage);
+              border-top: 4px solid var(--butter);
+              border-radius: var(--radius);
+              padding: clamp(28px, 4vw, 48px);
+            }
+            .founder-feature-img-wrap {
+              width: 100%;
+              overflow: hidden;
+              border-radius: var(--radius);
+            }
+            .founder-feature-img-wrap img {
+              width: 100%;
+              aspect-ratio: 4 / 5;
+              object-fit: cover;
+              display: block;
+              transition: transform 0.4s var(--ease);
+            }
+            .founder-feature-img-wrap:hover img {
+              transform: scale(1.03);
+            }
+            .founder-feature-info {
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+            }
+            .founder-feature-name {
+              font-family: var(--serif);
+              font-size: clamp(1.8rem, 3vw, 2.4rem);
+              font-weight: 500;
+              color: var(--ink);
+              margin: 0;
+              line-height: 1.1;
+            }
+            .founder-feature-role {
+              font-size: 1.05rem;
+              font-weight: 600;
+              color: var(--sky);
+            }
+            .founder-feature-location {
+              font-size: 0.9rem;
+              color: var(--sage);
+              font-weight: 500;
+            }
+            .founder-feature-desc {
+              font-size: 1.05rem;
+              line-height: 1.65;
+              color: var(--dark-sage);
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+            }
+            .founder-feature-desc p {
+              margin: 0;
+            }
+            .founder-feature-links {
+              display: flex;
+              gap: 12px;
+              margin-top: 8px;
+              flex-wrap: wrap;
+            }
+            .founder-feature-link {
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              padding: 8px 16px;
+              border: 1px solid var(--light-sage);
+              border-radius: var(--radius);
+              font-size: 0.9rem;
+              font-weight: 600;
+              color: var(--ink);
+              text-decoration: none;
+              transition: border-color var(--t) var(--ease), color var(--t) var(--ease), transform var(--t) var(--ease);
+            }
+            .founder-feature-link:hover {
+              border-color: var(--sky);
+              color: var(--sky);
+              transform: translateY(-2px);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+              .team-card, .team-card:hover,
+              .team-card-img-wrap img, .team-card:hover .team-card-img-wrap img,
+              .team-social-link, .team-social-link:hover,
+              .founder-feature-img-wrap img, .founder-feature-img-wrap:hover img,
+              .founder-feature-link, .founder-feature-link:hover {
+                transform: none !important;
+                transition: none !important;
+              }
+            }
+
+            @media (max-width: 1040px) {
+              .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+              }
+              .founder-feature-grid {
+                grid-template-columns: 1fr;
+              }
+              .founder-feature-img-wrap {
+                max-width: 360px;
+              }
+            }
+            @media (max-width: 680px) {
+              .team-grid {
+                grid-template-columns: 1fr;
+                max-width: 420px;
+                margin-left: auto;
+                margin-right: auto;
+              }
+              .founder-feature-img-wrap {
+                max-width: 300px;
+              }
+            }
+          `}} />
+
+          <div className="wrap">
+            {/* Founder Feature */}
+            <div style={{textAlign: "center", maxWidth: "600px", margin: "0 auto"}}>
+              <span className="label">Leadership</span>
+              <h2 style={{fontSize: "clamp(2.2rem, 4vw, 3.2rem)", marginBottom: "0"}}>Meet the Founder</h2>
+            </div>
+
+            <div className="founder-feature-grid" style={{marginTop: "40px"}}>
+              <div className="founder-feature-img-wrap">
+                <img
+                  src="/aryan_t.jpeg"
+                  alt="Aryan Trivedi, Founder of Sage Kite"
+                  loading="lazy"
+                />
+              </div>
+              <div className="founder-feature-info">
+                <div>
+                  <h3 className="founder-feature-name">Aryan Trivedi</h3>
+                  <div className="founder-feature-role" style={{marginTop: "8px"}}>Founder, Sage Kite</div>
+                  <div className="founder-feature-location" style={{marginTop: "4px"}}>Gurugram, India</div>
+                </div>
+                <div className="founder-feature-desc">
+                  <p>Aryan is a product strategist and entrepreneur who built Sage Kite from the ground up. What started as a freelancer network helping startups execute projects has evolved into a business growth consultancy that brings together strategy, CRM implementation, marketing, specialist staffing, and white-label delivery for agencies.</p>
+                  <p>After personally overseeing 200+ projects across real estate, home services, SaaS, energy, and marketing agencies in 6 countries, Aryan launched Sage Kite to solve a recurring problem: businesses invest in tools and technology but often struggle to build the right systems and processes around the way they actually sell.</p>
+                  <p>His approach is simple: understand how the business works, then build the systems that make growth faster, more efficient, and more sustainable. No generic templates. No overengineered setups. Just practical systems designed around how the business operates and built to support its next stage of growth.</p>
+                  <p>Aryan leads the growth and direction of Sage Kite alongside a team of CRM specialists, automation engineers, marketing strategists, and specialist staff who work with businesses and agencies on consultancy, CRM implementation, marketing, and white-label delivery.</p>
+                </div>
+                <div className="founder-feature-links">
+                  <a className="founder-feature-link" href="https://www.linkedin.com/in/aryantrivedi" target="_blank" rel="noopener noreferrer" aria-label="Aryan Trivedi on LinkedIn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    LinkedIn
+                  </a>
+                  <a className="founder-feature-link" href="mailto:aryan@ghlscaleup.com" aria-label="Email Aryan Trivedi">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    aryan@ghlscaleup.com
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Team Members */}
+            <div style={{marginTop: "clamp(56px, 8vw, 80px)", paddingTop: "clamp(48px, 6vw, 72px)", borderTop: "1px solid var(--light-sage)"}}>
+              <div style={{textAlign: "center", maxWidth: "600px", margin: "0 auto"}}>
+                <span className="label">The Team</span>
+                <h2 style={{fontSize: "clamp(2.2rem, 4vw, 3.2rem)", marginBottom: "16px"}}>Meet the Team</h2>
+                <p style={{fontSize: "1.15rem", lineHeight: 1.55, color: "var(--dark-sage)", margin: 0}}>The people behind the systems, strategy, and execution.</p>
+              </div>
+
+              <div className="team-grid">
+                {([
+                  {
+                    name: "Rishabh Shukla",
+                    role: "Project Manager",
+                    image: "/rishabh.jpg",
+                    description: "Rishabh is part of the Founder\u2019s Office and Project Management team at Sage Kite, where he manages communication between clients and the execution team. He ensures smooth coordination, keeps clients informed with timely project updates, tracks ongoing deliverables, and helps ensure projects stay aligned with client expectations, timelines, and requirements.",
+                    linkedin: "https://www.linkedin.com/in/rishabhshukla18",
+                  },
+                  {
+                    name: "Radhika",
+                    role: "VP Growth",
+                    image: "/radhika.jpg",
+                    description: "Drives client acquisition, partnerships, and brand growth for Sage Kite. Radhika connects the dots between what clients need and what we deliver, handling outreach, onboarding coordination, and making sure every project starts with clear goals and ends with measurable outcomes. She is the first person most clients speak with.",
+                    linkedin: "https://www.linkedin.com/in/radhika-agrawal-22238a201",
+                  },
+                  {
+                    name: "Kunal Sharma",
+                    role: "Tech Specialist",
+                    image: "/kunal.png",
+                    description: "Kunal is the technical brain behind Sage Kite. He owns the architecture decisions, internal tooling, system design, and engineering standards across the organization. He does not work on client projects directly; instead, he builds the frameworks, templates, and processes that every client project is built on top of.",
+                    linkedin: null,
+                  },
+                  {
+                    name: "Bipul",
+                    role: "Web Developer",
+                    image: "/Bipul.jpg",
+                    description: "Bipul translates complex business requirements into robust web architectures and seamless digital experiences at Sage Kite. With a strong focus on performance and scalable code, he ensures our technical implementations are as robust under the hood as they are engaging for the end user.",
+                    linkedin: null,
+                  },
+                ] as const).map((member) => (
+                  <article key={member.name} className="team-card">
+                    <div className="team-card-img-wrap">
+                      <img
+                        src={member.image}
+                        alt={`${member.name}, ${member.role} at Sage Kite`}
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="team-card-body">
+                      <h3 className="team-card-name">{member.name}</h3>
+                      <div className="team-card-role">{member.role}</div>
+                      <p className="team-card-desc">{member.description}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* 7. Founder Perspective */}
-        <section className="tint reveal" id="founder" style={{padding: "clamp(56px, 8vw, 88px) 0"}}>
+        <section className="tint reveal" id="founder" style={{padding: "0 0 clamp(56px, 8vw, 88px) 0"}}>
           <div className="wrap">
             <div className="feature" style={{borderTopColor: "var(--butter)", maxWidth: "800px", margin: "0 auto", padding: "clamp(40px, 6vw, 64px)"}}>
               <span className="label" style={{alignSelf: "flex-start", marginBottom: "32px"}}>From the Founder</span>
@@ -574,10 +885,10 @@ export default function About() {
           <div className="wrap final-inner" style={{alignItems: "center"}}>
             <div className="final">
               <h2 style={{fontFamily: "var(--serif)", fontSize: "clamp(2.5rem, 5vw, 4rem)", marginBottom: "24px", color: "var(--ink)", lineHeight: "1.1"}}>Better systems.<br/>Better supported people.<br/>Better businesses.</h2>
-              <p className="lede" style={{color: "var(--ink)"}}>That is what Sage Kite is here to build.</p>
-            </div>
-            <div className="cta-col" style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "24px"}}>
-              <Link className="btn" href="https://glasspane.pages.dev/contact" style={{backgroundColor: "var(--coral)", color: "var(--ink)", borderColor: "var(--coral)"}}>Start a conversation</Link>
+              <p className="lede" style={{color: "var(--ink)", marginBottom: "32px"}}>That is what Sage Kite is here to build.</p>
+              <div className="cta-row">
+                <Link className="btn" href="https://glasspane.pages.dev/contact" style={{backgroundColor: "var(--coral)", color: "var(--ink)", borderColor: "var(--coral)"}}>Start a conversation</Link>
+              </div>
             </div>
           </div>
         </section>

@@ -22,13 +22,13 @@ h2{font-size:clamp(2.1rem,4vw,3.3rem);line-height:1.05}
 h3{font-size:1.35rem;line-height:1.2}
 .wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--gutter)}
 section{padding:clamp(80px,11vw,140px) 0}
-.label{font-weight:600;font-size:.875rem;color:var(--sage);margin-bottom:14px}
+.label{display:block;font-weight:600;font-size:.875rem;color:var(--sage);margin-bottom:14px}
 .sub{font-size:clamp(1.1rem,1.4vw,1.25rem);line-height:1.55;max-width:48ch;margin-top:20px}
 .head{max-width:760px}
 .head.center{margin:0 auto;text-align:center}
 .head.center .sub{margin-left:auto;margin-right:auto}
 .pale{background:var(--pale-sage)}
-.rule{border-top:1px solid var(--light-sage)}
+.rule, .rule-top{border-top:1px solid var(--light-sage)}
 .note{font-size:.8125rem;color:var(--sage)}
 .ph{color:var(--sage);border-bottom:1px dashed var(--sage)}
 .skip{position:absolute;left:12px;top:-60px;background:var(--ink);color:var(--warm-white);padding:10px 16px;border-radius:var(--r);z-index:100;text-decoration:none;font-weight:600}
