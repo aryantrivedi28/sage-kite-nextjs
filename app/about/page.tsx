@@ -733,19 +733,19 @@ export default function About() {
                   <div className="founder-feature-location" style={{marginTop: "4px"}}>Gurugram, India</div>
                 </div>
                 <div className="founder-feature-desc">
-                  <p>Aryan is a product strategist and entrepreneur who built Sage Kite from the ground up. What started as a freelancer network helping startups execute projects has evolved into a business growth consultancy that brings together strategy, CRM implementation, marketing, specialist staffing, and white-label delivery for agencies.</p>
-                  <p>After personally overseeing 200+ projects across real estate, home services, SaaS, energy, and marketing agencies in 6 countries, Aryan launched Sage Kite to solve a recurring problem: businesses invest in tools and technology but often struggle to build the right systems and processes around the way they actually sell.</p>
-                  <p>His approach is simple: understand how the business works, then build the systems that make growth faster, more efficient, and more sustainable. No generic templates. No overengineered setups. Just practical systems designed around how the business operates and built to support its next stage of growth.</p>
-                  <p>Aryan leads the growth and direction of Sage Kite alongside a team of CRM specialists, automation engineers, marketing strategists, and specialist staff who work with businesses and agencies on consultancy, CRM implementation, marketing, and white-label delivery.</p>
+                  <p>Aryan Trivedi is an entrepreneur, AI marketing enthusiast and founder of Sage Kite. A graduate of BITS Pilani, one of India&apos;s leading universities, and a semi-professional footballer, he is interested in how AI will reshape marketing, business operations and the future of work.</p>
+                  <p>His focus is on understanding how AI systems will evolve, how businesses will use them and what those changes mean for jobs, skills and the way teams work. Through Sage Kite, he brings that thinking into practical work across marketing, automation, CRM implementation and specialist staffing.</p>
+                  <p>Aryan is also scaling GHL Scale Up, a CRM implementation brand that helps businesses and agencies build and improve their GoHighLevel systems. His experience includes personally overseeing 200+ projects across real estate, home services, SaaS, energy and marketing agencies in six countries.</p>
+                  <p>Across both businesses, his approach starts with understanding how a company operates, then bringing together the people, processes and technology needed to help it grow.</p>
                 </div>
                 <div className="founder-feature-links">
                   <a className="founder-feature-link" href="https://www.linkedin.com/in/aryantrivedi" target="_blank" rel="noopener noreferrer" aria-label="Aryan Trivedi on LinkedIn">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                     LinkedIn
                   </a>
-                  <a className="founder-feature-link" href="mailto:aryan@ghlscaleup.com" aria-label="Email Aryan Trivedi">
+                  <a className="founder-feature-link" href="mailto:aryan@sagekite.com" aria-label="Email Aryan Trivedi">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                    aryan@ghlscaleup.com
+                    aryan@sagekite.com
                   </a>
                 </div>
               </div>
@@ -932,8 +932,8 @@ export default function About() {
             <ul style={{display: "flex", flexDirection: "column", gap: "10px", listStyle: "none", padding: 0, margin: 0}}>
               <li><Link href="/about" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>About</Link></li>
               <li><Link href="https://glasspane.pages.dev/contact" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Contact</Link></li>
-              <li><Link href="https://glasspane.pages.dev/privacy" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>[Privacy policy]</Link></li>
-              <li><Link href="https://glasspane.pages.dev/terms" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>[Terms]</Link></li>
+              <li><Link href="/privacy-policy" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Privacy Policy</Link></li>
+              <li><Link href="/terms-of-service" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Terms of Service</Link></li>
             </ul>
           </div>
 
