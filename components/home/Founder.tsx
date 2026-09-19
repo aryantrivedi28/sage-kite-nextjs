@@ -28,7 +28,7 @@ export function Founder() {
             
             <div className="founder-latest">
               <span style={{ fontSize: '0.8125rem', color: 'var(--sage)', marginRight: '12px', fontWeight: 600 }}>Latest essay</span>
-              <Link href="#essay-1" style={{ fontFamily: 'var(--serif)', fontSize: '1.1rem', color: 'var(--ink)', textDecoration: 'underline', textDecorationStyle: 'dashed', textDecorationColor: 'var(--sage)', textUnderlineOffset: '4px' }}>
+              <Link href="#essay-1" style={{ fontFamily: 'var(--sans)', fontSize: '1.1rem', color: 'var(--ink)', textDecoration: 'underline', textDecorationStyle: 'dashed', textDecorationColor: 'var(--sage)', textUnderlineOffset: '4px' }}>
                 [First published essay title]
               </Link>
             </div>

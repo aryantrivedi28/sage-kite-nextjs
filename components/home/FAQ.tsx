@@ -22,7 +22,7 @@ export function FAQ() {
   return (
     <section className="brief" style={{ borderTop: '1px solid var(--light-sage)' }}>
       <div className="wrap reveal">
-        <h2 style={{ fontFamily: 'var(--serif)', fontSize: '2rem', marginBottom: '48px', color: 'var(--ink)' }}>
+        <h2 style={{ fontFamily: 'var(--sans)', fontSize: '2rem', marginBottom: '48px', color: 'var(--ink)' }}>
           Sage Kite in brief
         </h2>
 

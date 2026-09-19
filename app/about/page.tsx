@@ -41,7 +41,7 @@ export default function About() {
           <div className="wrap hero-grid">
             <div className="hero-copy">
               <div className="label">About Sage Kite</div>
-              <h1 style={{fontSize: "clamp(2.5rem, 5vw, 4rem)", lineHeight: 1.15, marginBottom: "24px", color: "var(--ink)", fontFamily: "var(--serif)"}}>We believe good businesses deserve better systems behind them.</h1>
+              <h1 style={{fontSize: "clamp(2.5rem, 5vw, 4rem)", lineHeight: 1.15, marginBottom: "24px", color: "var(--ink)", fontFamily: "var(--sans)"}}>We believe good businesses deserve better systems behind them.</h1>
               <p className="lede">Sage Kite exists to help growing businesses make sense of the increasingly complicated world around them — technology, marketing, automation, AI and people.</p>
               <p className="lede">We work with businesses that have already started growing but have reached the point where the way they operate needs to catch up.</p>
               
@@ -65,7 +65,7 @@ export default function About() {
                      style={{paddingLeft: "32px", opacity: osHover !== 'none' && osHover !== 'systems' ? 0.3 : 1, transition: "opacity 0.4s ease"}}
                   >
                      <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--sky)", marginBottom: "16px"}}>SYSTEMS</div>
-                     <div style={{display: "flex", flexWrap: "wrap", gap: "8px 16px", fontSize: "0.95rem", color: osHover === 'systems' ? "var(--ink)" : "var(--sage)", transition: "color 0.4s ease", fontWeight: "500"}}>
+                     <div style={{display: "flex", flexWrap: "wrap", gap: "8px 16px", fontSize: "0.95rem", color: osHover === 'systems' ? "var(--ink)" : "var(--sage)", transition: "color 0.4s ease", fontWeight: "700"}}>
                         <span>CRM</span><span>AUTOMATION</span><span>DATA</span><span>AI</span>
                      </div>
                   </div>
@@ -85,7 +85,7 @@ export default function About() {
                      style={{paddingLeft: "32px", opacity: osHover !== 'none' && osHover !== 'people' ? 0.3 : 1, transition: "opacity 0.4s ease"}}
                   >
                      <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--ink)", marginBottom: "16px"}}>PEOPLE</div>
-                     <div style={{display: "flex", flexWrap: "wrap", gap: "8px 16px", fontSize: "0.95rem", color: osHover === 'people' ? "var(--ink)" : "var(--sage)", transition: "color 0.4s ease", fontWeight: "500"}}>
+                     <div style={{display: "flex", flexWrap: "wrap", gap: "8px 16px", fontSize: "0.95rem", color: osHover === 'people' ? "var(--ink)" : "var(--sage)", transition: "color 0.4s ease", fontWeight: "700"}}>
                         <span>MARKETING</span><span>SALES</span><span>OPERATIONS</span>
                      </div>
                   </div>
@@ -103,7 +103,7 @@ export default function About() {
                      style={{paddingLeft: "32px", opacity: osHover !== 'none' && osHover !== 'execution' ? 0.3 : 1, transition: "opacity 0.4s ease"}}
                   >
                      <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--coral)", marginBottom: "16px"}}>EXECUTION</div>
-                     <div style={{display: "flex", flexWrap: "wrap", gap: "8px 16px", fontSize: "0.95rem", color: osHover === 'execution' ? "var(--ink)" : "var(--sage)", transition: "color 0.4s ease", fontWeight: "500"}}>
+                     <div style={{display: "flex", flexWrap: "wrap", gap: "8px 16px", fontSize: "0.95rem", color: osHover === 'execution' ? "var(--ink)" : "var(--sage)", transition: "color 0.4s ease", fontWeight: "700"}}>
                         <span>STRATEGY</span><span>IMPLEMENTATION</span><span>IMPROVEMENT</span>
                      </div>
                   </div>
@@ -122,7 +122,7 @@ export default function About() {
             <div>
               <p className="lede" style={{marginTop: 0, marginBottom: "40px"}}>As businesses grow, complexity grows with them.</p>
               
-              <div style={{display: "flex", flexDirection: "column", gap: "8px", fontFamily: "var(--serif)", fontSize: "clamp(1.6rem, 3vw, 2.5rem)", fontStyle: "italic", color: "var(--ink)", marginBottom: "48px"}}>
+              <div style={{display: "flex", flexDirection: "column", gap: "8px", fontFamily: "var(--sans)", fontSize: "clamp(1.6rem, 3vw, 2.5rem)", fontStyle: "normal", color: "var(--ink)", marginBottom: "48px"}}>
                 <div className="reveal" style={{marginLeft: "0%", animationDelay: "0ms"}}>Customers <span style={{color: "var(--sage)", fontSize: "1.2rem", fontStyle: "normal"}}>↓</span></div>
                 <div className="reveal" style={{marginLeft: "8%", animationDelay: "100ms"}}>Conversations <span style={{color: "var(--sage)", fontSize: "1.2rem", fontStyle: "normal"}}>↓</span></div>
                 <div className="reveal" style={{marginLeft: "16%", animationDelay: "200ms"}}>Systems <span style={{color: "var(--sage)", fontSize: "1.2rem", fontStyle: "normal"}}>↓</span></div>
@@ -185,8 +185,8 @@ export default function About() {
               {/* Destination */}
               <div className="reveal" style={{ flex: '0 1 340px', display: 'flex', alignItems: 'center', animationDelay: '500ms', minWidth: "260px" }}>
                 <div style={{ background: 'var(--warm-white)', borderTop: '4px solid var(--coral)', borderLeft: '1px solid var(--light-sage)', borderRight: '1px solid var(--light-sage)', borderBottom: '1px solid var(--light-sage)', borderRadius: 'var(--radius)', padding: '32px', width: '100%', boxShadow: '0 8px 24px rgba(36, 55, 70, 0.04)' }}>
-                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.8rem', letterSpacing: '0.02em', marginBottom: '24px', color: 'var(--ink)' }}>SAGE KITE</h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', fontSize: '1.05rem', color: 'var(--dark-sage)', fontWeight: '500' }}>
+                  <h3 style={{ fontFamily: "var(--sans)", fontSize: '1.8rem', letterSpacing: '0.02em', marginBottom: '24px', color: 'var(--ink)' }}>SAGE KITE</h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', fontSize: '1.05rem', color: 'var(--dark-sage)', fontWeight: "700" }}>
                     <div><span style={{color: "var(--coral)", marginRight: "8px"}}>+</span>Strategy</div>
                     <div><span style={{color: "var(--coral)", marginRight: "8px"}}>+</span>Systems</div>
                     <div><span style={{color: "var(--coral)", marginRight: "8px"}}>+</span>People</div>
@@ -199,7 +199,7 @@ export default function About() {
           
           <div className="wrap" style={{marginTop: "80px"}}>
             <div style={{maxWidth: "80ch", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px"}}>
-              <p style={{fontFamily: "var(--serif)", fontSize: "clamp(1.5rem, 2.5vw, 2rem)", fontStyle: "italic", lineHeight: 1.3, color: "var(--ink)", margin: 0, textAlign: "center"}}>
+              <p style={{fontFamily: "var(--sans)", fontSize: "clamp(1.5rem, 2.5vw, 2rem)", fontStyle: "normal", lineHeight: 1.3, color: "var(--ink)", margin: 0, textAlign: "center"}}>
                 Sage Kite was created around the belief that these things should not have to exist in isolation.
               </p>
               <p style={{fontSize: "1.15rem", lineHeight: 1.65, color: "var(--dark-sage)", margin: 0, textAlign: "center"}}>
@@ -219,7 +219,7 @@ export default function About() {
             
             <div style={{display: "flex", flexDirection: "column", gap: "56px"}}>
               <div style={{display: "grid", gridTemplateColumns: "64px 1fr", gap: "24px", alignItems: "start"}}>
-                <div style={{fontFamily: "var(--serif)", fontSize: "3.5rem", lineHeight: 0.9, color: "var(--sky)"}}>01</div>
+                <div style={{fontFamily: "var(--sans)", fontSize: "3.5rem", lineHeight: 0.9, color: "var(--sky)"}}>01</div>
                 <div>
                   <h3 style={{fontSize: "1.6rem", marginBottom: "12px"}}>Keep things useful</h3>
                   <p style={{fontSize: "1.1rem", lineHeight: "1.6", margin: 0}}>We are not interested in technology for technology's sake. A system is valuable when it makes someone's work easier, gives a business better visibility or helps something happen that otherwise would not.</p>
@@ -227,7 +227,7 @@ export default function About() {
               </div>
 
               <div style={{display: "grid", gridTemplateColumns: "64px 1fr", gap: "24px", alignItems: "start"}}>
-                <div style={{fontFamily: "var(--serif)", fontSize: "3.5rem", lineHeight: 0.9, color: "var(--coral)"}}>02</div>
+                <div style={{fontFamily: "var(--sans)", fontSize: "3.5rem", lineHeight: 0.9, color: "var(--coral)"}}>02</div>
                 <div>
                   <h3 style={{fontSize: "1.6rem", marginBottom: "12px"}}>Start with the business</h3>
                   <p style={{fontSize: "1.1rem", lineHeight: "1.6", margin: 0}}>We don't start with a favourite tool and try to fit the business around it. We start with the way the business actually works and then determine what should change.</p>
@@ -235,7 +235,7 @@ export default function About() {
               </div>
 
               <div style={{display: "grid", gridTemplateColumns: "64px 1fr", gap: "24px", alignItems: "start"}}>
-                <div style={{fontFamily: "var(--serif)", fontSize: "3.5rem", lineHeight: 0.9, color: "var(--butter)"}}>03</div>
+                <div style={{fontFamily: "var(--sans)", fontSize: "3.5rem", lineHeight: 0.9, color: "var(--butter)"}}>03</div>
                 <div>
                   <h3 style={{fontSize: "1.6rem", marginBottom: "12px"}}>Make complexity understandable</h3>
                   <p style={{fontSize: "1.1rem", lineHeight: "1.6", margin: 0}}>Business technology can become unnecessarily complicated. Our job is partly to remove that complexity and give people a clear understanding of what is happening and why.</p>
@@ -243,7 +243,7 @@ export default function About() {
               </div>
 
               <div style={{display: "grid", gridTemplateColumns: "64px 1fr", gap: "24px", alignItems: "start"}}>
-                <div style={{fontFamily: "var(--serif)", fontSize: "3.5rem", lineHeight: 0.9, color: "var(--sage)"}}>04</div>
+                <div style={{fontFamily: "var(--sans)", fontSize: "3.5rem", lineHeight: 0.9, color: "var(--sage)"}}>04</div>
                 <div>
                   <h3 style={{fontSize: "1.6rem", marginBottom: "12px"}}>Build for real people</h3>
                   <p style={{fontSize: "1.1rem", lineHeight: "1.6", margin: 0}}>A perfect process on paper is useless if nobody follows it. Systems need to work for the people using them every day.</p>
@@ -251,7 +251,7 @@ export default function About() {
               </div>
               
               <div style={{display: "grid", gridTemplateColumns: "64px 1fr", gap: "24px", alignItems: "start"}}>
-                <div style={{fontFamily: "var(--serif)", fontSize: "3.5rem", lineHeight: 0.9, color: "var(--ink)"}}>05</div>
+                <div style={{fontFamily: "var(--sans)", fontSize: "3.5rem", lineHeight: 0.9, color: "var(--ink)"}}>05</div>
                 <div>
                   <h3 style={{fontSize: "1.6rem", marginBottom: "12px"}}>Leave things better than we found them</h3>
                   <p style={{fontSize: "1.1rem", lineHeight: "1.6", margin: 0}}>Every engagement should leave the business with greater clarity, better systems, stronger processes or more operational capability.</p>
@@ -317,7 +317,7 @@ export default function About() {
                 <div className="p-col">
                   <div style={{height: "140px"}}>
                     <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--sky)", marginBottom: "12px"}}>TECHNOLOGY</div>
-                    <div style={{fontFamily: "var(--serif)", fontSize: "clamp(1.8rem, 3vw, 2.2rem)", color: "var(--ink)", fontStyle: "italic", lineHeight: 1.1}}>Creates leverage</div>
+                    <div style={{fontFamily: "var(--sans)", fontSize: "clamp(1.8rem, 3vw, 2.2rem)", color: "var(--ink)", fontStyle: "normal", lineHeight: 1.1}}>Creates leverage</div>
                   </div>
                   
                   <div style={{display: "flex", flexDirection: "column", position: "relative"}}>
@@ -332,7 +332,7 @@ export default function About() {
                             alignItems: "center",
                             fontSize: "1.1rem", 
                             color: perspectiveHover === 'tech-'+i ? "var(--sky)" : "var(--ink)", 
-                            fontWeight: "500",
+                            fontWeight: "700",
                             transition: "color 0.3s ease",
                             cursor: "default"
                           }}
@@ -405,7 +405,7 @@ export default function About() {
                 <div className="p-col">
                   <div style={{height: "140px"}}>
                     <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--coral)", marginBottom: "12px"}}>PEOPLE</div>
-                    <div style={{fontFamily: "var(--serif)", fontSize: "clamp(1.8rem, 3vw, 2.2rem)", color: "var(--ink)", fontStyle: "italic", lineHeight: 1.1}}>Create meaning</div>
+                    <div style={{fontFamily: "var(--sans)", fontSize: "clamp(1.8rem, 3vw, 2.2rem)", color: "var(--ink)", fontStyle: "normal", lineHeight: 1.1}}>Create meaning</div>
                   </div>
                   
                   <div style={{display: "flex", flexDirection: "column", position: "relative", paddingTop: "28px"}}>
@@ -420,7 +420,7 @@ export default function About() {
                             alignItems: "center",
                             fontSize: "1.1rem", 
                             color: perspectiveHover === 'people-'+i ? "var(--coral)" : "var(--ink)", 
-                            fontWeight: "500",
+                            fontWeight: "700",
                             transition: "color 0.3s ease",
                             cursor: "default"
                           }}
@@ -462,7 +462,7 @@ export default function About() {
             <div className="wrap split" style={{marginTop: "0", padding: "0"}}>
               <div className="split-head" style={{paddingRight: "24px"}}>
                 <span className="label">The Reality</span>
-                <p style={{fontFamily: "var(--serif)", fontSize: "clamp(1.4rem, 2vw, 1.8rem)", color: "var(--ink)", fontStyle: "italic", margin: 0, lineHeight: 1.3}}>AI and automation are changing what businesses can accomplish with small teams. But technology alone does not create a good business.</p>
+                <p style={{fontFamily: "var(--sans)", fontSize: "clamp(1.4rem, 2vw, 1.8rem)", color: "var(--ink)", fontStyle: "normal", margin: 0, lineHeight: 1.3}}>AI and automation are changing what businesses can accomplish with small teams. But technology alone does not create a good business.</p>
               </div>
               <div style={{fontSize: "1.15rem", lineHeight: 1.65, display: "flex", flexDirection: "column", gap: "24px", marginTop: "24px"}}>
                 <p style={{margin: 0, color: "var(--dark-sage)"}}>The opportunity is to use technology to remove unnecessary work and give people more time to do the work that actually requires them.</p>
@@ -493,7 +493,7 @@ export default function About() {
               </div>
             </div>
             
-            <p style={{margin: 0, padding: "32px 0", borderTop: "1px solid var(--light-sage)", fontSize: "1.35rem", color: "var(--ink)", fontFamily: "var(--serif)", lineHeight: 1.5, maxWidth: "70ch"}}>
+            <p style={{margin: 0, padding: "32px 0", borderTop: "1px solid var(--light-sage)", fontSize: "1.35rem", color: "var(--ink)", fontFamily: "var(--sans)", lineHeight: 1.5, maxWidth: "70ch"}}>
               The common thread is not a particular service. It is helping the business move from <strong>"we know something needs to change"</strong> to <strong>"this is now working."</strong>
             </p>
           </div>
@@ -546,7 +546,7 @@ export default function About() {
               flex: 1;
             }
             .team-card-name {
-              font-family: var(--serif);
+              font-family: var(--sans);
               font-size: clamp(1.25rem, 2vw, 1.5rem);
               font-weight: 500;
               color: var(--ink);
@@ -623,7 +623,7 @@ export default function About() {
               gap: 16px;
             }
             .founder-feature-name {
-              font-family: var(--serif);
+              font-family: var(--sans);
               font-size: clamp(1.8rem, 3vw, 2.4rem);
               font-weight: 500;
               color: var(--ink);
@@ -816,13 +816,13 @@ export default function About() {
             <div className="feature" style={{borderTopColor: "var(--butter)", maxWidth: "800px", margin: "0 auto", padding: "clamp(40px, 6vw, 64px)"}}>
               <span className="label" style={{alignSelf: "flex-start", marginBottom: "32px"}}>From the Founder</span>
               <div style={{display: "flex", flexDirection: "column", gap: "24px", color: "var(--ink)"}}>
-                <p style={{fontFamily: "var(--serif)", fontSize: "clamp(1.4rem, 3vw, 2rem)", lineHeight: "1.4", margin: 0, color: "var(--sage)"}}>
+                <p style={{fontFamily: "var(--sans)", fontSize: "clamp(1.4rem, 3vw, 2rem)", lineHeight: "1.4", margin: 0, color: "var(--sage)"}}>
                   "Businesses are surrounded by more technology, more channels and more possibilities than ever before. That should make growth easier. Sometimes it does the opposite."
                 </p>
                 <p style={{fontSize: "1.1rem", lineHeight: "1.65", margin: 0}}>
                   The real challenge is not finding another tool or another tactic, but understanding how everything fits together.
                 </p>
-                <p style={{fontFamily: "var(--serif)", fontSize: "clamp(1.2rem, 2.5vw, 1.6rem)", lineHeight: "1.4", margin: 0, fontStyle: "italic", fontWeight: "500"}}>
+                <p style={{fontFamily: "var(--sans)", fontSize: "clamp(1.2rem, 2.5vw, 1.6rem)", lineHeight: "1.4", margin: 0, fontStyle: "normal", fontWeight: "700"}}>
                   The hard part is making a plan work inside a real business, with its real tools and real team.
                 </p>
               </div>
@@ -861,7 +861,7 @@ export default function About() {
                     
                     {/* Content */}
                     <div style={{display: "flex", flexDirection: "column", gap: "4px"}}>
-                      <span style={{fontFamily: "var(--serif)", fontSize: "0.95rem", color: "var(--sage)", letterSpacing: "0.05em", fontWeight: "600"}}>0{i+1}</span>
+                      <span style={{fontFamily: "var(--sans)", fontSize: "0.95rem", color: "var(--sage)", letterSpacing: "0.05em", fontWeight: "600"}}>0{i+1}</span>
                       <span style={{fontSize: "1.25rem", color: "var(--ink)", lineHeight: 1.4}}>{text}</span>
                     </div>
                   </div>
@@ -884,7 +884,7 @@ export default function About() {
         <section className="tint reveal" id="contact" style={{borderBottom: "4px solid var(--butter)", padding: "clamp(64px, 8vw, 96px) 0"}}>
           <div className="wrap final-inner" style={{alignItems: "center"}}>
             <div className="final">
-              <h2 style={{fontFamily: "var(--serif)", fontSize: "clamp(2.5rem, 5vw, 4rem)", marginBottom: "24px", color: "var(--ink)", lineHeight: "1.1"}}>Better systems.<br/>Better supported people.<br/>Better businesses.</h2>
+              <h2 style={{fontFamily: "var(--sans)", fontSize: "clamp(2.5rem, 5vw, 4rem)", marginBottom: "24px", color: "var(--ink)", lineHeight: "1.1"}}>Better systems.<br/>Better supported people.<br/>Better businesses.</h2>
               <p className="lede" style={{color: "var(--ink)", marginBottom: "32px"}}>That is what Sage Kite is here to build.</p>
               <div className="cta-row">
                 <Link className="btn" href="https://glasspane.pages.dev/contact" style={{backgroundColor: "var(--coral)", color: "var(--ink)", borderColor: "var(--coral)"}}>Start a conversation</Link>

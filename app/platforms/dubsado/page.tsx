@@ -57,7 +57,7 @@ export default function DubsadoPage() {
 
           .fit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:clamp(36px,4vw,52px)}
           .fit{border:1px solid var(--light-sage);border-left:5px solid var(--c);border-radius:var(--r);padding:20px 22px;background:var(--warm-white)}
-          .fit strong{display:block;font-family:var(--serif);font-weight:500;font-size:1.2rem;color:var(--ink);line-height:1.25;margin-bottom:4px}
+          .fit strong{display:block;font-family:var(--sans);font-weight:700;letter-spacing:-.01em;font-size:1.2rem;color:var(--ink);line-height:1.25;margin-bottom:4px}
           .fit p{font-size:.9rem;line-height:1.45}
 
           .symptoms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:clamp(36px,4vw,52px);border-top:1px solid var(--light-sage);border-left:1px solid var(--light-sage);list-style:none;padding:0;}
@@ -71,7 +71,7 @@ export default function DubsadoPage() {
           .track .d{display:block;width:12px;height:12px;border-radius:50%;background:var(--warm-white);border:1px solid var(--sage);margin:9px auto 12px}
           .track li.auto .d{background:var(--sky-soft);border-color:var(--sky)}
           .track li.human .d{background:var(--butter-soft);border-color:var(--butter)}
-          .track strong{display:block;font-family:var(--serif);font-weight:500;font-size:1.05rem;color:var(--ink);line-height:1.2}
+          .track strong{display:block;font-family:var(--sans);font-weight:700;letter-spacing:-.01em;font-size:1.05rem;color:var(--ink);line-height:1.2}
           .track small{display:block;font-size:.75rem;color:var(--sage);margin-top:3px}
           .key{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:26px;padding-top:18px;border-top:1px dashed var(--light-sage);font-size:.85rem}
           .key span{display:inline-flex;align-items:center;gap:8px}
@@ -92,7 +92,7 @@ export default function DubsadoPage() {
           .why-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,5vw,72px);align-items:start}
           .why-list{list-style:none;padding:0;margin:0;}
           .why-list li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;padding:16px 0;border-top:1px solid var(--light-sage);font-size:.975rem;line-height:1.5}
-          .why-list b{font-family:var(--serif);font-weight:500;font-size:1.15rem;color:var(--sage)}
+          .why-list b{font-family:var(--sans);font-weight:700;font-size:1.15rem;color:var(--sage)}
           .why-list strong{color:var(--ink);font-weight:600}
 
           .partner{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,4fr);gap:clamp(28px,5vw,64px);align-items:center;border:1px solid var(--light-sage);border-left:6px solid var(--sage);border-radius:var(--r);padding:clamp(28px,4vw,48px)}
@@ -118,8 +118,8 @@ export default function DubsadoPage() {
           .run-step{display:flex;flex-direction:column}
           .run-bar{height:4px;background:var(--light-sage);margin-bottom:20px;display:flex}
           .run-bar::before{content:"";width:35%;height:100%;background:var(--c)}
-          .run-step .num{font-family:var(--serif);font-size:2.4rem;color:var(--sage);line-height:1;margin-bottom:12px}
-          .run-step h3{font-family:var(--serif);font-size:1.35rem;color:var(--ink);margin-bottom:10px;font-weight:500}
+          .run-step .num{font-family:var(--sans);font-size:2.4rem;color:var(--sage);line-height:1;margin-bottom:12px;font-weight:700;letter-spacing:-.02em}
+          .run-step h3{font-family:var(--sans);font-size:1.35rem;color:var(--ink);margin-bottom:10px;font-weight:700;letter-spacing:-.01em}
           .run-step p{font-size:.925rem;line-height:1.45}
 
           .faq-stack{display:flex;flex-direction:column}
