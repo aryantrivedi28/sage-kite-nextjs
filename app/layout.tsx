@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Business growth consulting for SMEs | Sage Kite",
   description: "Sage Kite is a business growth consultancy. We fix the systems, people and execution behind growth, from CRM and automation to marketing and specialist staff.",
+  verification: {
+    google: "rcp-8TeiDDdPmsD3kJcZebnt5MW9ZdU15yDNx7YlYOw",
+  },
   alternates: {
     canonical: "https://www.sagekite.example/",
   },
