@@ -12,6 +12,10 @@ export const metadata: Metadata = {
     google: "rcp-8TeiDDdPmsD3kJcZebnt5MW9ZdU15yDNx7YlYOw",
   },
 
+  icons: {
+    icon: "/sage-kite-mark.png",
+  },
+
   alternates: {
     canonical: "https://www.sagekite.com/",
   },
