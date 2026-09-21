@@ -37,7 +37,7 @@ export default function About() {
 
       <main id="main">
         {/* 1. Hero */}
-        <section className="hero" style={{padding: "clamp(56px, 8vw, 88px) 0"}}>
+        <section className="hero">
           <div className="wrap hero-grid">
             <div className="hero-copy">
               <div className="label">About Sage Kite</div>
