@@ -41,11 +41,11 @@ export default function About() {
           <div className="wrap hero-grid">
             <div className="hero-copy">
               <div className="label">About Sage Kite</div>
-              <h1 style={{fontSize: "clamp(2.5rem, 5vw, 4rem)", lineHeight: 1.15, marginBottom: "24px", color: "var(--ink)", fontFamily: "var(--sans)"}}>We believe good businesses deserve better systems behind them.</h1>
-              <p className="lede">Sage Kite exists to help growing businesses make sense of the increasingly complicated world around them — technology, marketing, automation, AI and people.</p>
-              <p className="lede">We work with businesses that have already started growing but have reached the point where the way they operate needs to catch up.</p>
+              <h1 style={{fontSize: "clamp(2.2rem, 4.5vw, 3.4rem)", lineHeight: 1.1, marginBottom: "16px", color: "var(--ink)", fontFamily: "var(--sans)", maxWidth: "100%"}}>We believe good businesses deserve better systems behind them.</h1>
+              <p className="lede" style={{marginBottom: "12px"}}>Sage Kite exists to help growing businesses make sense of the increasingly complicated world around them — technology, marketing, automation, AI and people.</p>
+              <p className="lede" style={{marginBottom: "0"}}>We work with businesses that have already started growing but have reached the point where the way they operate needs to catch up.</p>
               
-              <div className="cta-row" style={{marginTop: "40px"}}>
+              <div className="cta-row" style={{marginTop: "24px"}}>
                 <a className="btn" href="#our-story">Meet Sage Kite</a>
                 <Link className="text-link" href="https://glasspane.pages.dev/contact">Start a conversation</Link>
               </div>
@@ -54,7 +54,7 @@ export default function About() {
             {/* Business OS Typographic Diagram */}
             <div style={{position: "relative", padding: "16px 0", maxWidth: "420px", width: "100%"}}>
                {/* SYSTEMS */}
-               <div className="reveal" style={{position: "relative", zIndex: 2, paddingBottom: "40px", animationDelay: "0ms"}}>
+               <div className="reveal" style={{position: "relative", zIndex: 2, paddingBottom: "24px", animationDelay: "0ms"}}>
                   {/* Node Dot */}
                   <div style={{position: "absolute", left: "0", top: "6px", width: "10px", height: "10px", borderRadius: "50%", background: "var(--sky)", zIndex: 2}}></div>
                   {/* Vertical Drop Line */}
@@ -64,7 +64,7 @@ export default function About() {
                      onMouseEnter={() => setOsHover('systems')} onMouseLeave={() => setOsHover('none')}
                      style={{paddingLeft: "32px", opacity: osHover !== 'none' && osHover !== 'systems' ? 0.3 : 1, transition: "opacity 0.4s ease"}}
                   >
-                     <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--sky)", marginBottom: "16px"}}>SYSTEMS</div>
+                     <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--sky)", marginBottom: "8px"}}>SYSTEMS</div>
                      <div style={{display: "flex", flexWrap: "wrap", gap: "8px 16px", fontSize: "0.95rem", color: osHover === 'systems' ? "var(--ink)" : "var(--sage)", transition: "color 0.4s ease", fontWeight: "700"}}>
                         <span>CRM</span><span>AUTOMATION</span><span>DATA</span><span>AI</span>
                      </div>
@@ -72,7 +72,7 @@ export default function About() {
                </div>
 
                {/* PEOPLE */}
-               <div className="reveal" style={{position: "relative", zIndex: 2, paddingBottom: "40px", marginLeft: "40px", animationDelay: "150ms"}}>
+               <div className="reveal" style={{position: "relative", zIndex: 2, paddingBottom: "24px", marginLeft: "40px", animationDelay: "150ms"}}>
                   {/* Horizontal connecting line from previous spine */}
                   <div style={{position: "absolute", left: "-36px", top: "10px", width: "40px", height: "2px", background: "var(--light-sage)", zIndex: 1}}></div>
                   {/* Node Dot */}
@@ -84,7 +84,7 @@ export default function About() {
                      onMouseEnter={() => setOsHover('people')} onMouseLeave={() => setOsHover('none')}
                      style={{paddingLeft: "32px", opacity: osHover !== 'none' && osHover !== 'people' ? 0.3 : 1, transition: "opacity 0.4s ease"}}
                   >
-                     <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--ink)", marginBottom: "16px"}}>PEOPLE</div>
+                     <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--ink)", marginBottom: "8px"}}>PEOPLE</div>
                      <div style={{display: "flex", flexWrap: "wrap", gap: "8px 16px", fontSize: "0.95rem", color: osHover === 'people' ? "var(--ink)" : "var(--sage)", transition: "color 0.4s ease", fontWeight: "700"}}>
                         <span>MARKETING</span><span>SALES</span><span>OPERATIONS</span>
                      </div>
@@ -102,7 +102,7 @@ export default function About() {
                      onMouseEnter={() => setOsHover('execution')} onMouseLeave={() => setOsHover('none')}
                      style={{paddingLeft: "32px", opacity: osHover !== 'none' && osHover !== 'execution' ? 0.3 : 1, transition: "opacity 0.4s ease"}}
                   >
-                     <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--coral)", marginBottom: "16px"}}>EXECUTION</div>
+                     <div style={{fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.1em", color: "var(--coral)", marginBottom: "8px"}}>EXECUTION</div>
                      <div style={{display: "flex", flexWrap: "wrap", gap: "8px 16px", fontSize: "0.95rem", color: osHover === 'execution' ? "var(--ink)" : "var(--sage)", transition: "color 0.4s ease", fontWeight: "700"}}>
                         <span>STRATEGY</span><span>IMPLEMENTATION</span><span>IMPROVEMENT</span>
                      </div>
