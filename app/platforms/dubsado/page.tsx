@@ -40,11 +40,11 @@ export default function DubsadoPage() {
           .crumbs li:not(:last-child)::after{content:"/";margin-left:8px;color:var(--light-sage)}
           .crumbs [aria-current]{color:var(--ink);font-weight:600}
 
-          .plat-hero{padding:clamp(40px,5vw,72px) 0 clamp(72px,9vw,112px)}
+          .plat-hero{padding:clamp(16px,3vw,32px) 0 clamp(72px,9vw,112px)}
           .plat-hero h1{font-size:clamp(2.5rem,5vw,4.1rem);line-height:1.02;letter-spacing:-.025em;max-width:15ch}
           .plat-hero .sub{margin:24px 0 34px;max-width:52ch}
 
-          .checklist{background:var(--pale-sage);border-radius:var(--r);padding:clamp(24px,3vw,34px);clip-path:polygon(0 0,calc(100% - 48px) 0,100% 48px,100% 100%,0 100%)}
+          .checklist{background:var(--pale-sage);border-radius:var(--r);padding:clamp(24px,3vw,34px);clip-path:polygon(0 0,calc(100% - 48px) 0,100% 48px,100% 100%,0 100%);align-self:start}
           .checklist .ui{box-shadow:8px 8px 0 var(--light-sage); background:var(--warm-white); border:1px solid var(--light-sage); border-radius:var(--r); padding:18px 20px;}
           .ui-title{display:flex;justify-content:space-between;align-items:baseline;font-size:.8125rem;font-weight:600;color:var(--sage);margin-bottom:12px}
           .ui-title b{font-weight:600;color:var(--ink);font-size:.95rem}
