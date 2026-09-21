@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Business growth consulting for SMEs | Sage Kite",
+  title: "Sage Kite",
 
   description:
     "Sage Kite is a business growth consultancy. We fix the systems, people and execution behind growth, from CRM and automation to marketing and specialist staff.",
