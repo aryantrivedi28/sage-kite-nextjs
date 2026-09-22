@@ -26,13 +26,13 @@ export function Header() {
 
         <nav className={`nav ${open ? 'open' : ''}`}>
           <ul>
-            <li><Link href="#services" onClick={() => setOpen(false)}>Services</Link></li>
-            <li><Link href="#platforms" onClick={() => setOpen(false)}>Platforms</Link></li>
-            <li><Link href="#industries" onClick={() => setOpen(false)}>Industries</Link></li>
-            <li><Link href="#agencies" onClick={() => setOpen(false)}>For agencies</Link></li>
-            <li><Link href="#insights" onClick={() => setOpen(false)}>Insights</Link></li>
-            <li><Link href="about" onClick={() => setOpen(false)}>About</Link></li>
-            <li><Link href="#book" className="btn btn-small" onClick={() => setOpen(false)}>Book a discovery call</Link></li>
+                                    <li><Link href="/#services" onClick={() => setOpen(false)}>Services</Link></li>
+            <li><Link href="/#platforms" onClick={() => setOpen(false)}>Platforms</Link></li>
+            <li><Link href="/#industries" onClick={() => setOpen(false)}>Industries</Link></li>
+            <li><Link href="/#blogs" onClick={() => setOpen(false)}>Blogs</Link></li>
+            <li><Link href="/#case-studies" onClick={() => setOpen(false)}>Case studies</Link></li>
+            <li><Link href="/about" onClick={() => setOpen(false)}>About us</Link></li>
+            <li><Link href="/contact" className="btn btn-small" onClick={() => setOpen(false)}>Book a discovery call</Link></li>
           </ul>
         </nav>
       </div>
