@@ -30,11 +30,14 @@ export function Header() {
             <li><Link href="/#platforms" onClick={() => setOpen(false)}>Platforms</Link></li>
             <li><Link href="/#industries" onClick={() => setOpen(false)}>Industries</Link></li>
             <li><Link href="/#blogs" onClick={() => setOpen(false)}>Blogs</Link></li>
-            <li><Link href="/#case-studies" onClick={() => setOpen(false)}>Case studies</Link></li>
             <li><Link href="/about" onClick={() => setOpen(false)}>About us</Link></li>
-            <li><Link href="/contact" className="btn btn-small" onClick={() => setOpen(false)}>Book a discovery call</Link></li>
+            <li className="mobile-only-btn"><Link href="/contact" className="btn btn-small" onClick={() => setOpen(false)}>Book a discovery call</Link></li>
           </ul>
         </nav>
+        
+        <div className="header-cta">
+          <Link href="/contact" className="btn btn-small">Book a discovery call</Link>
+        </div>
       </div>
     </header>
   );

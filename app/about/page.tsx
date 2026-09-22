@@ -17,21 +17,24 @@ export default function About() {
           <Link className="logo" href="/" aria-label="Sage Kite home">
             <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" />
           </Link>
-          
+          <button className="menu-toggle" type="button" aria-expanded={menuOpen} aria-label="Toggle menu" onClick={() => setMenuOpen(!menuOpen)}>
+            Menu
+          </button>
+
           <nav className={`nav ${menuOpen ? "open" : ""}`} aria-label="Main navigation">
             <ul>
               <li><Link href="/#services" onClick={() => setMenuOpen(false)}>Services</Link></li>
               <li><Link href="/#platforms" onClick={() => setMenuOpen(false)}>Platforms</Link></li>
               <li><Link href="/#industries" onClick={() => setMenuOpen(false)}>Industries</Link></li>
-              <li><Link href="/#agencies" onClick={() => setMenuOpen(false)}>For agencies</Link></li>
-              <li><Link href="/#insights" onClick={() => setMenuOpen(false)}>Insights</Link></li>
-              <li><Link href="/about" onClick={() => setMenuOpen(false)}>About</Link></li>
-              <li><a className="btn btn-small" href="https://wa.me/message/C22YQ52VUDLCA1" onClick={() => setMenuOpen(false)}>Book a discovery call</a></li>
+              <li><Link href="/#blogs" onClick={() => setMenuOpen(false)}>Blogs</Link></li>
+              <li><Link href="/about" onClick={() => setMenuOpen(false)}>About us</Link></li>
+              <li className="mobile-only-btn"><Link href="/contact" className="btn btn-small" onClick={() => setMenuOpen(false)}>Book a discovery call</Link></li>
             </ul>
           </nav>
-          <button className="menu-toggle" type="button" aria-expanded={menuOpen} aria-label="Toggle menu" onClick={() => setMenuOpen(!menuOpen)}>
-            Menu
-          </button>
+          
+          <div className="header-cta">
+            <Link href="/contact" className="btn btn-small">Book a discovery call</Link>
+          </div>
         </div>
       </header>
 
