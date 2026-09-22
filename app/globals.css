@@ -806,8 +806,14 @@ html {
       2 on tablet, 1 on mobile, and no lonely empty column with few posts ── */
 .blog-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(24px, 2.4vw, 32px);
+}
+@media (max-width: 980px) {
+  .blog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .blog-grid { grid-template-columns: 1fr; }
 }
 .blog-card {
   display: flex;
@@ -1073,4 +1079,93 @@ html {
   .article-content th,
   .article-content td { padding: 10px 12px; }
   .blog-grid-head { flex-direction: column; gap: 4px; }
+}
+
+/* ── Blog Guide Sidebar Layout ── */
+.article-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: clamp(40px, 6vw, 80px);
+  max-width: 1140px;
+  margin: 0 auto;
+  align-items: start;
+}
+.article-content {
+  max-width: 100%;
+  margin: 0;
+}
+.article-tags {
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+.article-sidebar {
+  position: sticky;
+  top: 120px;
+}
+.article-content h2, .article-content h3 {
+  scroll-margin-top: 130px;
+}
+
+/* ── Blog Guide Component ── */
+.blog-guide-card {
+  background: var(--pale-sage);
+  border: 1px solid var(--light-sage);
+  border-radius: var(--r);
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+.blog-guide-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 16px 0;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+}
+.blog-guide-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.blog-guide-item {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.blog-guide-link {
+  display: block;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--dark-sage);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color var(--t) var(--ease), color var(--t) var(--ease);
+  position: relative;
+}
+.blog-guide-link:hover {
+  background-color: var(--light-sage);
+}
+.blog-guide-link.active {
+  background-color: var(--ink);
+  color: #fff;
+  font-weight: 600;
+}
+.blog-guide-active-dot {
+  margin-right: 8px;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 1040px) {
+  .article-layout {
+    grid-template-columns: 1fr;
+  }
+  .article-sidebar {
+    position: static;
+    margin-bottom: 40px;
+    order: -1; /* Puts guide above content on mobile */
+  }
 }

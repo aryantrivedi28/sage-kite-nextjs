@@ -8,6 +8,7 @@ import { Footer } from '@/components/Footer';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { formatDate } from '@/components/blog/formatDate';
 import { getPublishedPosts, getPostBySlug } from '@/content/blog';
+import { BlogGuide } from '@/components/blog/BlogGuide';
 
 const SITE_URL = 'https://www.sagekite.com';
 
@@ -171,8 +172,16 @@ export default async function BlogPostPage({ params }: { params: Params }) {
               />
             </figure>
 
-            <div className="article-content">
-              <post.content />
+            <div className="article-layout">
+              <div className="article-content">
+                <post.content />
+              </div>
+
+              <aside className="article-sidebar">
+                {post.guide && post.guide.length > 0 && (
+                  <BlogGuide items={post.guide} />
+                )}
+              </aside>
             </div>
 
             {post.tags && post.tags.length > 0 && (

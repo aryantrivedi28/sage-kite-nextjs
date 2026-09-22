@@ -27,6 +27,11 @@ import React from 'react';
  * ─────────────────────────────────────────────────────────────────────────
  */
 
+export interface BlogGuideItem {
+  id: string;
+  title: string;
+}
+
 export interface BlogPost {
   /** URL segment: /blog/<slug> */
   slug: string;
@@ -49,6 +54,7 @@ export interface BlogPost {
   /** Alt text for the featured image. */
   imageAlt?: string;
   tags?: string[];
+  guide: BlogGuideItem[];
   /** Headline the listing. Only one post should set this. */
   featured?: boolean;
   /** Hidden from the live site when true. */
@@ -94,7 +100,16 @@ export const posts: BlogPost[] = [
       'Abstract diagram of connected records forming the foundation of a CRM system',
     tags: ['CRM', 'Systems', 'Data', 'Revenue operations'],
     featured: true,
-    content: () => (
+      guide: [
+    { id: "from-activity-to-a-system-of-record", title: "From activity to a system of record" },
+    { id: "the-four-decisions-that-make-a-crm-a-foundation", title: "The four decisions that make a CRM a foundation" },
+    { id: "1-define-your-lifecycle-stages-before-anything-else", title: "1. Define your lifecycle stages before anything else" },
+    { id: "2-keep-the-pipeline-a-picture-of-live-deals", title: "2. Keep the pipeline a picture of live deals" },
+    { id: "3-protect-data-quality-at-the-point-of-entry", title: "3. Protect data quality at the point of entry" },
+    { id: "4-connect-the-tools-that-feed-it", title: "4. Connect the tools that feed it" },
+    { id: "why-this-compounds-over-time", title: "Why this compounds over time" }
+  ],
+  content: () => (
       <>
         <p>
           Most growing businesses adopt a CRM at the point where spreadsheets and inboxes
@@ -112,7 +127,7 @@ export const posts: BlogPost[] = [
           simply busy.
         </p>
 
-        <h2>From activity to a system of record</h2>
+        <h2 id="from-activity-to-a-system-of-record">From activity to a system of record</h2>
         <p>
           Early-stage growth runs on individual effort. A founder remembers the context of
           each deal; a salesperson keeps their own notes; marketing measures what it can.
@@ -149,13 +164,13 @@ export const posts: BlogPost[] = [
           </tbody>
         </table>
 
-        <h2>The four decisions that make a CRM a foundation</h2>
+        <h2 id="the-four-decisions-that-make-a-crm-a-foundation">The four decisions that make a CRM a foundation</h2>
         <p>
           A CRM only becomes a foundation when a handful of decisions are made
           deliberately and then held to. In our work these are the ones that matter most.
         </p>
 
-        <h3>1. Define your lifecycle stages before anything else</h3>
+        <h3 id="1-define-your-lifecycle-stages-before-anything-else">1. Define your lifecycle stages before anything else</h3>
         <p>
           Map how a stranger becomes a customer and agree, in plain language, what moves
           someone from one stage to the next. If the team cannot say what makes a lead
@@ -163,7 +178,7 @@ export const posts: BlogPost[] = [
           Definitions come first; fields and automation come after.
         </p>
 
-        <h3>2. Keep the pipeline a picture of live deals</h3>
+        <h3 id="2-keep-the-pipeline-a-picture-of-live-deals">2. Keep the pipeline a picture of live deals</h3>
         <p>
           A pipeline is not a filing cabinet for everything that ever happened. Each stage
           should represent a distinct, observable step — a call booked, a proposal sent — so
@@ -171,7 +186,7 @@ export const posts: BlogPost[] = [
           nurture list rather than sitting in the forecast.
         </p>
 
-        <h3>3. Protect data quality at the point of entry</h3>
+        <h3 id="3-protect-data-quality-at-the-point-of-entry">3. Protect data quality at the point of entry</h3>
         <p>
           Clean reporting is a consequence of clean input. Favour structured fields —
           dropdowns, checkboxes — over free text wherever a value will later be reported on.
@@ -185,7 +200,7 @@ export const posts: BlogPost[] = [
           decision made on top of it inherits the crack.
         </blockquote>
 
-        <h3>4. Connect the tools that feed it</h3>
+        <h3 id="4-connect-the-tools-that-feed-it">4. Connect the tools that feed it</h3>
         <p>
           The CRM should be the hub, not another island. Forms, scheduling, email and
           billing all belong connected to it, so that a record updates itself as the
@@ -193,7 +208,7 @@ export const posts: BlogPost[] = [
           drifts.
         </p>
 
-        <h2>Why this compounds over time</h2>
+        <h2 id="why-this-compounds-over-time">Why this compounds over time</h2>
         <p>
           A well-structured CRM pays back slowly and then all at once. In the first months
           it mostly removes friction. Over a year, it becomes the thing that lets you
@@ -213,248 +228,504 @@ export const posts: BlogPost[] = [
     ),
   },
 
-  /* ───────────────────────────── Post 2 ──────────────────────────────── */
+  /* ───────────────────────────── Post 4 ──────────────────────────────── */
   {
-    slug: 'why-growing-businesses-struggle-with-operational-bottlenecks',
-    title: 'Why Growing Businesses Struggle With Operational Bottlenecks',
+    slug: 'what-is-dubsado',
+    title: 'What Is Dubsado? A Detailed Guide to the Client Management Platform',
     excerpt:
-      'Bottlenecks rarely appear because a team is doing something wrong. They appear because the way a business operates has not caught up with how much it has grown. Here is how to find them and ease them.',
-    category: 'Operations',
+      'Learn what Dubsado is, how its projects, forms, contracts, invoices, scheduling, client portals, and automation fit together, and who it is designed to help.',
+    category: 'CRM',
     author: AUTHOR,
     authorImage: AUTHOR_IMAGE,
-    publishedAt: '2026-09-09',
-    updatedAt: '2026-09-09',
-    readingTime: '6 min read',
-    featuredImage: '/images/blog/ops-bottlenecks.png',
-    imageAlt:
-      'Illustration of a workflow narrowing at a single point to represent a bottleneck',
-    tags: ['Operations', 'Process', 'Scaling', 'Systems'],
+    publishedAt: '2026-09-22',
+    updatedAt: '2026-09-22',
+    readingTime: '28 min read',
+    featuredImage: '/images/blog/dubsado.svg',
+    imageAlt: 'Sage Kite article illustration for What Is Dubsado?',
+    tags: ['CRM', 'Client management', 'Automation', 'Software'],
+    guide: [
+      { id: "what-is-dubsado", title: "What Is Dubsado?" },
+      { id: "dubsado-in-simple-terms", title: "Dubsado in simple terms" },
+      { id: "what-kind-of-software-is-dubsado", title: "What kind of software is Dubsado?" },
+      { id: "how-dubsado-organizes-client-work", title: "How Dubsado organizes client work" },
+      { id: "what-can-dubsado-do", title: "What can Dubsado do?" },
+      { id: "client-and-project-management", title: "Client and project management" },
+      { id: "forms-questionnaires-and-information-collection", title: "Forms, questionnaires, and information collection" },
+      { id: "contracts-and-electronic-signatures", title: "Contracts and electronic signatures" },
+      { id: "proposals-and-lead-capture", title: "Proposals and lead capture" },
+      { id: "invoicing-and-payments", title: "Invoicing and payments" },
+      { id: "scheduling-and-appointments", title: "Scheduling and appointments" },
+      { id: "client-portals", title: "Client portals" },
+      { id: "automated-workflows-and-flows", title: "Automated workflows and Flows" },
+      { id: "how-these-dubsado-features-fit-together", title: "How these Dubsado features fit together" },
+      { id: "who-is-dubsado-designed-for", title: "Who is Dubsado designed for?" },
+      { id: "what-are-the-main-benefits-of-using-dubsado", title: "What are the main benefits of using Dubsado?" },
+      { id: "what-should-you-consider-before-using-dubsado", title: "What should you consider before using Dubsado?" },
+      { id: "how-much-does-dubsado-cost", title: "How much does Dubsado cost?" },
+      { id: "is-dubsado-a-crm", title: "Is Dubsado a CRM?" },
+      { id: "dubsado-as-part-of-a-broader-business-process", title: "Dubsado as part of a broader business process" },
+      { id: "frequently-asked-questions", title: "Frequently asked questions" },
+      { id: "what-is-dubsado-used-for", title: "What is Dubsado used for?" },
+      { id: "is-dubsado-a-crm-or-project-management-tool", title: "Is Dubsado a CRM or project management tool?" },
+      { id: "does-dubsado-have-automation", title: "Does Dubsado have automation?" },
+      { id: "does-dubsado-handle-invoices-and-payments", title: "Does Dubsado handle invoices and payments?" },
+      { id: "does-dubsado-have-a-client-portal", title: "Does Dubsado have a client portal?" },
+      { id: "who-typically-uses-dubsado", title: "Who typically uses Dubsado?" },
+      { id: "final-takeaway", title: "Final takeaway" }
+    ],
     content: () => (
       <>
+        <h2 id="what-is-dubsado">What Is Dubsado?</h2>
         <p>
-          Every growing business hits a point where things start to feel harder than they
-          should. Work that used to flow now waits. A few people become the answer to every
-          question. Good weeks are followed by ones where nothing seems to move. It is easy
-          to read this as a people problem or a motivation problem. Far more often, it is a
-          <strong> structural</strong> one: the business has grown faster than the way it
-          operates.
+          Dubsado is a business management platform designed to help service-based
+          businesses organize client work in one place. Instead of treating lead
+          capture, client communication, forms, contracts, scheduling, invoicing,
+          payments, and follow-up as completely separate activities, Dubsado connects
+          many of those activities around a central project record.
         </p>
         <p>
-          Operational bottlenecks are simply the places where more is arriving than can pass
-          through. They are worth understanding because they set the real ceiling on growth
-          — you can add leads, headcount and ambition, but output is still capped by the
-          narrowest point in the system.
+          That distinction is important when trying to understand what Dubsado
+          actually is. It is often described as a CRM, but the platform is broader
+          than a conventional contact database. Its current product structure
+          combines client information and communication with operational tools such
+          as forms, contracts, invoices, payment plans, scheduling, client portals,
+          and automated processes. Dubsado itself describes its plans around helping
+          businesses communicate, schedule, organize, manage the business, and get
+          paid.
         </p>
-
-        <h2>Why bottlenecks form as you grow</h2>
         <p>
-          The habits that carry an early business are usually the ones that later constrain
-          it. What worked at ten customers quietly stops working at a hundred.
-        </p>
-        <ol>
-          <li>
-            <strong>Knowledge stays in people, not systems.</strong> When only one person
-            knows how something is done, that person becomes a queue.
-          </li>
-          <li>
-            <strong>Approvals concentrate at the top.</strong> Sign-off that made sense
-            when the founder saw everything becomes a daily blockage at scale.
-          </li>
-          <li>
-            <strong>Handovers multiply.</strong> More people means more points where work
-            is passed on — and every handover is a chance for it to stall.
-          </li>
-          <li>
-            <strong>Tools stop talking to each other.</strong> Manual re-entry between
-            systems turns into hours of invisible, low-value work.
-          </li>
-        </ol>
-
-        <h2>How to find the real bottleneck</h2>
-        <p>
-          The bottleneck is rarely where the noise is loudest. The team feeling the most
-          pressure is often downstream of the actual constraint. To locate it, follow the
-          work rather than the complaints.
-        </p>
-        <h3>Look for where work waits</h3>
-        <p>
-          Pick one important process — say, turning a signed client into a delivered
-          project — and trace a real example end to end. Note every point where it sat idle
-          waiting for someone or something. The longest waits, not the busiest desks, point
-          to the constraint.
-        </p>
-        <h3>Watch what queues up</h3>
-        <p>
-          Bottlenecks announce themselves as backlogs: proposals waiting for review,
-          tickets waiting for a specialist, invoices waiting for approval. A growing queue
-          in front of one step is the clearest signal you have.
+          The simplest way to think about Dubsado is not as one isolated tool, but as
+          a system for managing the stages of a client relationship. A potential
+          client can enter through a lead capture form, become associated with a
+          project, receive information or forms, sign an agreement, pay an invoice,
+          schedule appointments, and continue communicating through the same project
+          record. Depending on the plan and setup, some of those steps can also be
+          automated.
         </p>
 
-        <blockquote>
-          You cannot fix a bottleneck by asking the rest of the system to try harder.
-          Speeding up everything upstream of a constraint just makes the queue in front of
-          it longer.
-        </blockquote>
-
-        <h2>Easing a constraint without breaking the rest</h2>
+        <h2 id="dubsado-in-simple-terms">Dubsado in simple terms</h2>
         <p>
-          Once you have found the real constraint, there are usually three ways to ease it —
-          best applied in order.
+          Dubsado helps a service business turn its client process into a structured
+          digital system. The platform gives the business places to store client and
+          project information, communicate with clients, collect information, send
+          agreements, manage billing, schedule appointments, and automate repeatable
+          steps.
         </p>
-        <ul>
-          <li>
-            <strong>Remove work from it.</strong> Ask what is reaching this step that
-            should not. Filtering, qualifying or batching upstream often relieves a
-            bottleneck without touching the step itself.
-          </li>
-          <li>
-            <strong>Systematise it.</strong> Turn what lives in one person&apos;s head into
-            a documented, shared process so more than one person can carry it.
-          </li>
-          <li>
-            <strong>Automate the repetitive parts.</strong> Where a step is mechanical and
-            rule-based, let a system handle it so people spend their time on judgement.
-          </li>
-        </ul>
         <p>
-          Notice that adding headcount is not the first move. Putting more people around an
-          undefined process usually adds handovers and supervision — new bottlenecks — rather
-          than removing the original one.
+          This matters because service businesses often do not have a single
+          transaction. A client relationship can involve an inquiry, qualification,
+          proposal, contract, payment, appointment, delivery, follow-up, and
+          additional communication. If every stage is handled in a different
+          application or through manually maintained documents and email threads, it
+          can become difficult to see what has happened and what still needs to
+          happen.
+        </p>
+        <p>
+          Dubsado brings many of these pieces into a common workspace. It does not
+          eliminate the need to design the business&apos;s process, write its
+          client-facing content, or make decisions about how work should be
+          delivered. Instead, it provides the structure and tools through which that
+          process can be managed.
         </p>
 
-        <h2>Bottlenecks are a sign of progress</h2>
+        <h2 id="what-kind-of-software-is-dubsado">What kind of software is Dubsado?</h2>
         <p>
-          It helps to reframe the problem. A bottleneck means demand has outgrown a way of
-          working — which is what growth looks like from the inside. The businesses that keep
-          scaling are not the ones that never hit constraints; they are the ones that get
-          good at finding and easing them before they harden into a ceiling. Treated that
-          way, each bottleneck you resolve raises the level the whole business can operate
-          at.
-        </p>
-      </>
-    ),
-  },
-
-  /* ───────────────────────────── Post 3 ──────────────────────────────── */
-  {
-    slug: 'when-should-a-business-automate-its-sales-and-marketing-processes',
-    title: 'When Should a Business Automate Its Sales and Marketing Processes?',
-    excerpt:
-      'Automation is powerful when it sits on top of a process that already works — and expensive when it does not. Here is a practical way to judge when your sales and marketing are ready to automate.',
-    category: 'Automation',
-    author: AUTHOR,
-    authorImage: AUTHOR_IMAGE,
-    publishedAt: '2026-09-02',
-    updatedAt: '2026-09-02',
-    readingTime: '6 min read',
-    featuredImage: '/images/blog/sales-automation.png',
-    imageAlt:
-      'Diagram of a decision point leading into an automated workflow',
-    tags: ['Automation', 'Marketing', 'Sales', 'AI'],
-    content: () => (
-      <>
-        <p>
-          Automation has an obvious appeal: do the same work with less manual effort, fewer
-          dropped balls and more consistency. But the order of operations matters. Automating
-          a process that is not yet clear does not remove the mess — it runs the mess faster.
-          The question is therefore less <em>whether</em> to automate and more <em>when</em>.
+          Dubsado sits across several familiar software categories. It has CRM-like
+          capabilities because it stores client information and keeps client
+          communications and project records organized. It also functions as a
+          broader client-management and business-management platform because it
+          handles activities that go beyond maintaining contact records.
         </p>
         <p>
-          The short answer: automate a process once it is <strong>defined, repeatable and
-          worth repeating</strong>. Everything below is a way of checking whether you are
-          actually there.
+          Calling Dubsado only a CRM can therefore create the wrong mental model. A
+          traditional CRM is often centered primarily on contacts, leads, sales
+          opportunities, and relationship history. Dubsado&apos;s model is more
+          directly connected to the delivery and administration of client services.
+          Projects can contain emails, invoices, forms, scheduling information,
+          tasks, notes, and other project details, making the project record a
+          central organizing unit.
+        </p>
+        <p>
+          This is also why Dubsado can be relevant to businesses that need more than
+          lead tracking. The platform is designed around what happens before,
+          during, and after a client books a service&mdash;not simply around keeping
+          a list of prospects.
         </p>
 
-        <h2>Three conditions worth meeting first</h2>
+        <h2 id="how-dubsado-organizes-client-work">How Dubsado organizes client work</h2>
         <p>
-          Before automating a sales or marketing process, it helps to be honest about three
-          things.
+          One of the most useful concepts for understanding Dubsado is the project.
+          Dubsado&apos;s current help documentation describes the platform as being
+          organized around projects, with each project associated with an individual
+          client. A project can contain the information and actions connected to
+          that piece of client work.
+        </p>
+        <p>
+          Within a project, businesses can manage areas such as messages, invoicing,
+          tasks, events, forms, flows, and notes. Project information can include the
+          client, status, dates, tags, portal access, location, referral source, and
+          other mapped fields. This gives the business a structured place to
+          understand what is happening with a particular client engagement rather
+          than reconstructing the history from separate systems.
+        </p>
+        <p>
+          The project concept also explains how many of Dubsado&apos;s features
+          relate to one another. A form can collect information for a project. A
+          contract can be attached to that project. An invoice can be created for
+          the same project. An appointment can be associated with it. A flow can use
+          project events or actions as triggers for automated steps. These are not
+          unrelated features; they are different parts of the same client-work
+          record.
         </p>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Condition</th>
-              <th>The question to ask</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>It is defined</td>
-              <td>Could you write down the steps so someone new could follow them?</td>
-            </tr>
-            <tr>
-              <td>It is repeatable</td>
-              <td>Does it happen the same way often enough to be worth encoding?</td>
-            </tr>
-            <tr>
-              <td>It is worth it</td>
-              <td>Is the manual version consuming real time or causing real errors?</td>
-            </tr>
-          </tbody>
-        </table>
-
+        <h2 id="what-can-dubsado-do">What can Dubsado do?</h2>
         <p>
-          If a process fails the first test, the work is to <strong>define</strong> it, not
-          automate it. If it fails the second, automation will be brittle and need constant
-          fixing. If it fails the third, you may be automating for its own sake.
+          Dubsado&apos;s feature set covers several parts of the client lifecycle.
+          The exact capabilities available to a business depend on the plan, but the
+          major areas are easier to understand when viewed by function rather than
+          as a long feature list.
         </p>
 
-        <h2>Good early candidates</h2>
+        <h3 id="client-and-project-management">Client and project management</h3>
         <p>
-          Some tasks are almost always ready, because they are mechanical, high-volume and
-          rule-based. These are where automation earns its keep quickly:
+          Dubsado provides a structured place to manage clients and the projects
+          associated with them. Projects can hold communication, forms, invoices,
+          tasks, events, notes, and other information relevant to the engagement.
+          This makes the platform useful for businesses that need to track not only
+          who a client is, but also what work is being performed for that client.
         </p>
-        <ul>
-          <li>Routing and assigning new leads to the right owner</li>
-          <li>Sending timely follow-ups so nothing is forgotten</li>
-          <li>Moving data between tools so records stay in sync</li>
-          <li>Reminders, confirmations and scheduling around meetings</li>
-          <li>Standard reporting that is assembled the same way each week</li>
-        </ul>
         <p>
-          Lead routing is a useful example, because the logic is simple and the payoff is
-          immediate. A rule as plain as this removes a daily manual decision:
-        </p>
-        <pre><code>{`WHEN a new lead is created
-  IF lead score >= 70 AND region = "Priority"
-    THEN assign to senior rep and notify within 5 minutes
-  ELSE
-    THEN add to nurture sequence and review weekly`}</code></pre>
-        <p>
-          The point is not the syntax — it is that the decision was clear enough to write
-          down. That clarity is the real prerequisite for automating anything.
+          The project record is particularly important because it gives context to
+          other features. Rather than treating an invoice, contract, email, and
+          appointment as independent objects, Dubsado connects them to the
+          underlying client project.
         </p>
 
-        <h2>What to keep human, for now</h2>
+        <h3 id="forms-questionnaires-and-information-collection">Forms, questionnaires, and information collection</h3>
         <p>
-          Not everything should be automated, and knowing where to stop is part of doing it
-          well. Judgement-heavy, relationship-defining and genuinely varied work is usually
-          better kept human — automation can prepare it, but should rarely replace it.
+          Forms are one of Dubsado&apos;s major client-facing components. Current
+          Dubsado documentation identifies several form types, including contracts,
+          sub-agreements, questionnaires, proposals, lead capture forms, and
+          read-only PDFs. These forms serve different purposes across the client
+          lifecycle.
         </p>
-        <blockquote>
-          The goal of automation is not to remove people from the process. It is to remove
-          the repetitive work <em>around</em> the process so people can spend their time
-          where judgement actually matters.
-        </blockquote>
-
-        <h2>Where AI changes the line</h2>
         <p>
-          The boundary of what can be automated has moved. Tasks that used to need a person —
-          reading a messy enquiry, summarising a call, drafting a first-pass reply — can now
-          be handled well enough to sit inside an automated flow, with a person reviewing
-          rather than starting from scratch. That does not change the underlying rule: the
-          process still has to be understood before it is handed to a machine. It simply
-          means more of your processes now clear the bar.
+          Questionnaires can collect structured client information, while lead
+          capture forms can collect information from prospective clients and create
+          projects. Proposals can allow clients to select packages and, depending on
+          the setup, connect that selection with a contract and invoice. Contracts
+          and sub-agreements support electronic signatures. The important point is
+          that Dubsado&apos;s forms are not simply generic web forms; they are
+          connected to different stages and functions within client management.
         </p>
 
-        <h2>A simple test</h2>
+        <h3 id="contracts-and-electronic-signatures">Contracts and electronic signatures</h3>
         <p>
-          When you are unsure, ask one question: <strong>if I described this process to a
-          new hire, could they do it consistently from the description alone?</strong> If
-          yes, it is a strong automation candidate. If no, the next step is to make it that
-          clear — and you will likely find the act of clarifying removes half the pain you
-          were hoping automation would fix.
+          Dubsado can be used to present agreements to clients for electronic
+          signing. Contracts and sub-agreements are form types with signature and
+          initials fields. Dubsado&apos;s current documentation notes that each
+          project can have one contract, while additional signed documents can be
+          handled through sub-agreements.
+        </p>
+        <p>
+          This makes contracts part of the same project-centered process as other
+          client records. The agreement is not simply stored as a separate document;
+          it can be associated with the project that contains the rest of the
+          client&apos;s service information.
+        </p>
+
+        <h3 id="proposals-and-lead-capture">Proposals and lead capture</h3>
+        <p>
+          Dubsado also supports activities that happen before a client is fully
+          onboarded. Lead capture forms can be embedded on a website or shared as a
+          link, and a submission can automatically create a project. Public
+          proposals can also create projects when completed and can be configured
+          with packages, contracts, and invoices.
+        </p>
+        <p>
+          These capabilities help explain where Dubsado fits in the client journey:
+          the system can begin with the first structured interaction with a
+          prospective client and continue into the actual service engagement.
+        </p>
+
+        <h3 id="invoicing-and-payments">Invoicing and payments</h3>
+        <p>
+          Dubsado includes invoicing and payment-plan functionality. The current
+          product documentation describes invoicing and payment plans as core
+          capabilities, with payment plans allowing an invoice total to be divided
+          into installments with due dates. Dubsado also supports payment-related
+          reminders and payment tracking within projects.
+        </p>
+        <p>
+          The significance of this feature is that billing can remain connected to
+          the same client project rather than being treated as a completely separate
+          administrative process. Businesses can therefore keep financial actions
+          alongside the communication and service information associated with the
+          engagement.
+        </p>
+
+        <h3 id="scheduling-and-appointments">Scheduling and appointments</h3>
+        <p>
+          Dubsado includes scheduling capabilities on its Premier plan. Scheduling
+          connects appointments to client projects, allowing businesses to manage
+          appointment-related activity alongside the rest of the engagement.
+        </p>
+        <p>
+          This can be useful for service businesses whose work includes
+          consultations, meetings, sessions, or other scheduled interactions. The
+          scheduling function is therefore another part of the client process
+          rather than a standalone calendar disconnected from the client record.
+        </p>
+
+        <h3 id="client-portals">Client portals</h3>
+        <p>
+          Dubsado provides client portals where clients can access information
+          related to their projects. A portal can give clients a more structured
+          place to interact with the business than relying entirely on email
+          attachments and scattered links.
+        </p>
+        <p>
+          The value of a client portal is mainly organizational and experiential:
+          clients have a defined place to access relevant project materials, while
+          the business can keep client-facing information associated with the
+          project.
+        </p>
+
+        <h3 id="automated-workflows-and-flows">Automated workflows and Flows</h3>
+        <p>
+          Automation is one of the clearest ways Dubsado can move beyond basic
+          client record keeping. Dubsado&apos;s current documentation uses Flows to
+          automate client processes through triggers and actions. Actions can
+          include sending emails, forms, contracts, and invoices, creating tasks,
+          and updating project statuses.
+        </p>
+        <p>
+          The important concept is that automation is based on a process rather than
+          on isolated reminders. A business can define what should happen after a
+          relevant event and let Dubsado perform or prompt the next step.
+          Dubsado&apos;s documentation also recommends understanding and mapping the
+          client process before building a Flow, which reinforces that automation
+          works best when the underlying process is already clear.
+        </p>
+        <p>
+          Flows are therefore not the same thing as simply scheduling emails. They
+          can connect different kinds of actions to events in the client journey,
+          allowing repeated administrative sequences to be handled more
+          consistently.
+        </p>
+
+        <h2 id="how-these-dubsado-features-fit-together">How these Dubsado features fit together</h2>
+        <p>
+          The individual features make more sense when viewed as parts of one
+          client-management system. Imagine a service business receiving a new
+          inquiry. A lead capture form can collect initial information and create a
+          project. That project becomes the place where the business continues
+          communication and manages the engagement. A proposal or questionnaire can
+          gather additional information, a contract can formalize the agreement, and
+          an invoice can handle payment. Scheduling can manage appointments, while
+          the client portal provides a client-facing space for the project.
+        </p>
+        <p>
+          If the business uses automation, Flows can connect selected events to
+          subsequent actions. For example, a completed form could be one of the
+          conditions that causes another action to occur. The exact process depends
+          on how the business has configured Dubsado; the important concept is that
+          the platform can connect the stages rather than forcing each stage to be
+          managed independently.
+        </p>
+        <p>
+          This is the core mental model to take away: Dubsado is not primarily a
+          collection of unrelated features. Its features are designed to operate
+          around client projects and the processes that move those projects
+          forward.
+        </p>
+
+        <h2 id="who-is-dubsado-designed-for">Who is Dubsado designed for?</h2>
+        <p>
+          Dubsado is primarily positioned for businesses that provide services and
+          manage ongoing client relationships. It can be relevant to freelancers,
+          consultants, creative professionals, coaches, studios, agencies, and other
+          service providers whose work involves recurring administrative steps
+          between inquiry and delivery.
+        </p>
+        <p>
+          The strongest fit is generally not determined by industry name alone. What
+          matters is the structure of the business&apos;s client process. A business
+          is more likely to find the platform relevant when it regularly needs to
+          collect client information, communicate with clients, send forms or
+          agreements, manage payments, schedule appointments, maintain project
+          records, or repeat a recognizable onboarding or service process.
+        </p>
+        <p>
+          This distinction is useful because two businesses in very different
+          industries can have similar operational needs. Conversely, two businesses
+          in the same industry may use Dubsado very differently depending on how
+          they sell and deliver their services.
+        </p>
+
+        <h2 id="what-are-the-main-benefits-of-using-dubsado">What are the main benefits of using Dubsado?</h2>
+        <p>
+          The potential benefits of Dubsado come largely from consolidation and
+          process structure. Keeping multiple parts of a client engagement in a
+          connected system can reduce the need to reconstruct information across
+          disconnected tools. A project can provide context for communications,
+          forms, billing, appointments, tasks, and notes.
+        </p>
+        <p>
+          Another potential benefit is consistency. When a business repeatedly
+          performs similar administrative steps, templates and automation can help
+          make those steps more repeatable. Instead of recreating the same forms or
+          manually remembering every follow-up, the business can build reusable
+          components and, where appropriate, automate parts of the process.
+        </p>
+        <p>
+          There is also a visibility benefit. A structured project record can make
+          it easier to see a client&apos;s status and the work associated with the
+          engagement. That does not automatically make a process well-designed; the
+          business still needs to define its own stages, responsibilities,
+          communication, and service delivery. Dubsado provides the system in which
+          those decisions can be implemented.
+        </p>
+
+        <h2 id="what-should-you-consider-before-using-dubsado">What should you consider before using Dubsado?</h2>
+        <p>
+          Dubsado is a business-management system, so getting value from it
+          involves more than creating an account and turning on features. The
+          platform is most useful when a business has enough structure in its
+          client process to know what it wants to manage and, where relevant,
+          automate.
+        </p>
+        <p>
+          There can also be a learning curve when a business moves from informal
+          processes to a more structured system. Forms, templates, project statuses,
+          billing, scheduling, and automation all need to reflect the actual way the
+          business operates. If those underlying processes are unclear, adding
+          software can reproduce that complexity rather than solve it.
+        </p>
+        <p>
+          Plan differences are another practical consideration. Dubsado currently
+          offers Starter and Premier plans. Both include core capabilities such as
+          unlimited projects and clients, invoicing and payment plans, form and
+          email templates, client portals, and calendar connection. Premier adds
+          capabilities including scheduling, Flows, public proposals, multiple
+          active lead captures, Zapier integration, and additional
+          business-management integrations and reporting capabilities. Businesses
+          should therefore evaluate the plan against the specific functions they
+          need rather than assuming every feature is included in every tier.
+        </p>
+
+        <h2 id="how-much-does-dubsado-cost">How much does Dubsado cost?</h2>
+        <p>
+          Dubsado&apos;s current pricing page lists two paid plans. The monthly
+          prices shown are $35 per month for Starter and $55 per month for Premier.
+          Annual pricing is listed at $335 per year for Starter and $525 per year
+          for Premier. Dubsado also offers a 21-day free trial that provides access
+          to Premier features during the trial.
+        </p>
+        <p>
+          Because software pricing and plan features can change, these figures
+          should be treated as a current snapshot rather than permanent pricing. For
+          a purchasing decision, the official Dubsado pricing page should be checked
+          directly for the latest prices, inclusions, limits, and billing terms.
+        </p>
+
+        <h2 id="is-dubsado-a-crm">Is Dubsado a CRM?</h2>
+        <p>
+          Dubsado has CRM-like functionality, but describing it simply as a CRM can
+          be incomplete. It stores client information, organizes client projects,
+          and keeps communication and relationship information connected to those
+          projects. However, its product scope also includes forms, contracts,
+          proposals, invoices, payments, scheduling, client portals, and process
+          automation.
+        </p>
+        <p>
+          A more useful description is that Dubsado is a client and business
+          management platform with CRM functionality. That wording reflects the
+          fact that the system is designed not only to remember who a client is,
+          but also to help manage what happens throughout the client engagement.
+        </p>
+
+        <h2 id="dubsado-as-part-of-a-broader-business-process">Dubsado as part of a broader business process</h2>
+        <p>
+          The most important thing to understand about Dubsado is the relationship
+          between software and process. Dubsado can provide the tools for capturing
+          leads, organizing projects, communicating with clients, collecting
+          information, formalizing agreements, getting paid, scheduling work, and
+          automating repeatable actions. But the platform does not decide what a
+          business&apos;s ideal client journey should be.
+        </p>
+        <p>
+          A business still needs to determine what information it collects, when it
+          sends a proposal, what its agreement requires, how payment is structured,
+          which appointments need scheduling, which communications should be
+          automated, and where human judgment is necessary. Dubsado provides
+          mechanisms for implementing those decisions.
+        </p>
+        <p>
+          That is why understanding the platform at a conceptual level is more
+          useful than memorizing a feature list. The platform&apos;s value depends
+          on how well its capabilities are mapped to the real client process.
+        </p>
+
+        <h2 id="frequently-asked-questions">Frequently asked questions</h2>
+
+        <h3 id="what-is-dubsado-used-for">What is Dubsado used for?</h3>
+        <p>
+          Dubsado is used to manage client relationships and service projects,
+          including client communication, forms, contracts, invoicing, payments,
+          scheduling, client portals, tasks, and&mdash;on the appropriate
+          plan&mdash;process automation.
+        </p>
+
+        <h3 id="is-dubsado-a-crm-or-project-management-tool">Is Dubsado a CRM or project management tool?</h3>
+        <p>
+          It includes CRM-like client management and project-management functions,
+          but it is broader than either category alone. Its central project record
+          connects client information with operational activities such as forms,
+          communication, billing, scheduling, and automation.
+        </p>
+
+        <h3 id="does-dubsado-have-automation">Does Dubsado have automation?</h3>
+        <p>
+          Yes. Dubsado&apos;s Premier plan includes Flows, which can automate
+          client-process actions such as sending emails, forms, contracts, and
+          invoices, creating tasks, and updating project statuses.
+        </p>
+
+        <h3 id="does-dubsado-handle-invoices-and-payments">Does Dubsado handle invoices and payments?</h3>
+        <p>
+          Yes. Dubsado includes invoicing and payment plans, and its project
+          records can be used to manage invoices and payments associated with
+          client work.
+        </p>
+
+        <h3 id="does-dubsado-have-a-client-portal">Does Dubsado have a client portal?</h3>
+        <p>
+          Yes. Dubsado includes client portals, which provide clients with a
+          dedicated place to access information related to their project.
+        </p>
+
+        <h3 id="who-typically-uses-dubsado">Who typically uses Dubsado?</h3>
+        <p>
+          Dubsado is designed for service-based businesses that manage structured
+          client relationships. Its relevance depends more on the complexity and
+          repeatability of the client process than on a particular industry.
+        </p>
+
+        <h2 id="final-takeaway">Final takeaway</h2>
+        <p>
+          Dubsado is best understood as a client and business management platform
+          built around projects. It brings together client communication, forms,
+          agreements, billing, scheduling, portals, tasks, and process automation so
+          that multiple stages of a service engagement can be managed within a
+          connected system.
+        </p>
+        <p>
+          Its CRM functionality is therefore only one part of the picture. The
+          platform is designed to help businesses manage the operational journey
+          around a client&mdash;not simply store contact information. Understanding
+          that project-centered model makes the rest of Dubsado&apos;s feature set
+          much easier to understand and evaluate.
         </p>
       </>
     ),
