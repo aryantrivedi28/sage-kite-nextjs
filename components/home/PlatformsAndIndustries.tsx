@@ -12,7 +12,7 @@ export function PlatformsAndIndustries() {
             <h2 style={{ maxWidth: '12em' }}>The systems we build in.</h2>
             
             <ul className="plat-grid">
-              {['GoHighLevel', 'Keap', 'Follow Up Boss', 'Lofty', 'ServiceTitan', 'Housecall Pro', 'Jobber', 'Kajabi', 'Clio Grow', 'Dubsado', 'Mindbody', 'Bloomerang', 'HoneyBook'].map((plat, i) => (
+              {['GoHighLevel', 'Keap', 'Follow Up Boss', 'Lofty', 'ServiceTitan', 'Housecall Pro', 'Jobber', 'Kajabi', 'Clio Grow', 'Dubsado', 'Mindbody', 'Bloomerang', 'HoneyBook', 'HubSpot', 'ActiveCampaign'].map((plat, i) => (
                 <li key={i}>{plat}</li>
               ))}
             </ul>
