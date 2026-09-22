@@ -1,9 +1,10 @@
 import type { MetadataRoute } from 'next'
+import { getPublishedPosts } from '@/content/blog'
 
 const BASE_URL = 'https://www.sagekite.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+  const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
       lastModified: new Date(),
@@ -23,6 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${BASE_URL}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
       url: `${BASE_URL}/terms-of-service`,
       lastModified: new Date(),
       changeFrequency: 'yearly',
@@ -35,4 +42,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
   ]
+
+  const blogRoutes: MetadataRoute.Sitemap = getPublishedPosts().map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedAt ?? post.publishedAt),
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }))
+
+  return [...staticRoutes, ...blogRoutes]
 }

@@ -1,0 +1,41 @@
+import React from 'react';
+import Link from 'next/link';
+
+/**
+ * Category filter rendered entirely with links + server-side active state —
+ * no client component, no client JS. Selecting a category navigates to
+ * /blog?category=<name>, which the listing reads from searchParams.
+ */
+export function BlogCategoryFilter({
+  categories,
+  active,
+}: {
+  categories: string[];
+  active?: string;
+}) {
+  const isAll = !active;
+  return (
+    <nav className="blog-filter" aria-label="Filter articles by category">
+      <Link
+        href="/blog"
+        className={`blog-filter-chip${isAll ? ' is-active' : ''}`}
+        aria-current={isAll ? 'true' : undefined}
+      >
+        All
+      </Link>
+      {categories.map((cat) => {
+        const isActive = active === cat;
+        return (
+          <Link
+            key={cat}
+            href={`/blog?category=${encodeURIComponent(cat)}`}
+            className={`blog-filter-chip${isActive ? ' is-active' : ''}`}
+            aria-current={isActive ? 'true' : undefined}
+          >
+            {cat}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}

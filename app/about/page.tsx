@@ -26,7 +26,7 @@ export default function About() {
               <li><Link href="/#services" onClick={() => setMenuOpen(false)}>Services</Link></li>
               <li><Link href="/#platforms" onClick={() => setMenuOpen(false)}>Platforms</Link></li>
               <li><Link href="/#industries" onClick={() => setMenuOpen(false)}>Industries</Link></li>
-              <li><Link href="/#blogs" onClick={() => setMenuOpen(false)}>Blogs</Link></li>
+              <li><Link href="/blog" onClick={() => setMenuOpen(false)}>Blogs</Link></li>
               <li><Link href="/about" onClick={() => setMenuOpen(false)}>About us</Link></li>
               <li className="mobile-only-btn"><Link href="/contact" className="btn btn-small" onClick={() => setMenuOpen(false)}>Book a discovery call</Link></li>
             </ul>
