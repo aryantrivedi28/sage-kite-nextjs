@@ -1114,6 +1114,9 @@ html {
   border-radius: var(--r);
   padding: 24px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 140px);
 }
 .blog-guide-title {
   font-size: 0.875rem;
@@ -1129,6 +1132,18 @@ html {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+.blog-guide-list::-webkit-scrollbar {
+  width: 4px;
+}
+.blog-guide-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.blog-guide-list::-webkit-scrollbar-thumb {
+  background: var(--light-sage);
+  border-radius: 4px;
 }
 .blog-guide-item {
   list-style: none;
@@ -1167,5 +1182,8 @@ html {
     position: static;
     margin-bottom: 40px;
     order: -1; /* Puts guide above content on mobile */
+  }
+  .blog-guide-card {
+    max-height: none;
   }
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { BlogGuideItem } from '@/content/blog';
 
 interface BlogGuideProps {
@@ -9,17 +9,19 @@ interface BlogGuideProps {
 
 export function BlogGuide({ items }: BlogGuideProps) {
   const [activeId, setActiveId] = useState<string>('');
+  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
 
   useEffect(() => {
     if (!items || items.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Find all intersecting entries
-        const visibleEntries = entries.filter(entry => entry.isIntersecting);
+        const visibleEntries = entries.filter((entry) => entry.isIntersecting);
         if (visibleEntries.length > 0) {
-          // If multiple are visible, pick the one closest to the top of the viewport
-          // However, typical behavior is just to pick the first one.
+          // If multiple are visible, prefer the one closest to the top
+          visibleEntries.sort((a, b) => {
+            return a.boundingClientRect.top - b.boundingClientRect.top;
+          });
           setActiveId(visibleEntries[0].target.id);
         }
       },
@@ -36,6 +38,16 @@ export function BlogGuide({ items }: BlogGuideProps) {
     return () => observer.disconnect();
   }, [items]);
 
+  // Scroll active item into view within the guide
+  useEffect(() => {
+    if (activeId && linkRefs.current[activeId]) {
+      linkRefs.current[activeId]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
+    }
+  }, [activeId]);
+
   if (!items || items.length === 0) return null;
 
   return (
@@ -51,13 +63,15 @@ export function BlogGuide({ items }: BlogGuideProps) {
             return (
               <li key={item.id} className="blog-guide-item">
                 <a
+                  ref={(el) => {
+                    linkRefs.current[item.id] = el;
+                  }}
                   href={`#${item.id}`}
                   className={`blog-guide-link ${isActive ? 'active' : ''}`}
                   onClick={(e) => {
                     e.preventDefault();
                     const target = document.getElementById(item.id);
                     if (target) {
-                      // Adjust scroll for sticky header
                       const headerOffset = 120;
                       const elementPosition = target.getBoundingClientRect().top;
                       const offsetPosition = elementPosition + window.scrollY - headerOffset;
