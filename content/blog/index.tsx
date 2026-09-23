@@ -83,7 +83,7 @@ const AUTHOR = 'Aryan Trivedi';
 const AUTHOR_IMAGE = '/aryan_t.jpeg';
 
 export const posts: BlogPost[] = [
-  /* ───────────────────────── Post 1 (featured) ───────────────────────── */
+  /* ───────────────────────── Post 1 ───────────────────────── */
   {
     slug: 'how-crm-systems-create-a-foundation-for-sustainable-growth',
     title: 'How CRM Systems Create a Foundation for Sustainable Growth',
@@ -95,11 +95,11 @@ export const posts: BlogPost[] = [
     publishedAt: '2026-09-16',
     updatedAt: '2026-09-16',
     readingTime: '7 min read',
-    featuredImage: '/images/blog/crm-foundation.png',
+    featuredImage: '/images/blog/laptop-dashboard.jpg',
     imageAlt:
-      'Abstract diagram of connected records forming the foundation of a CRM system',
+      'Laptop showing a business analytics dashboard with charts',
     tags: ['CRM', 'Systems', 'Data', 'Revenue operations'],
-    featured: true,
+    draft: true,
       guide: [
     { id: "from-activity-to-a-system-of-record", title: "From activity to a system of record" },
     { id: "the-four-decisions-that-make-a-crm-a-foundation", title: "The four decisions that make a CRM a foundation" },
@@ -240,9 +240,10 @@ export const posts: BlogPost[] = [
     publishedAt: '2026-09-22',
     updatedAt: '2026-09-22',
     readingTime: '28 min read',
-    featuredImage: '/images/blog/dubsado.svg',
-    imageAlt: 'Sage Kite article illustration for What Is Dubsado?',
+    featuredImage: '/images/blog/marketing-planning.jpg',
+    imageAlt: 'Top-down view of a desk with app wireframe sketches, a smartphone and highlighters',
     tags: ['CRM', 'Client management', 'Automation', 'Software'],
+    featured: true,
     guide: [
       { id: "what-is-dubsado", title: "What Is Dubsado?" },
       { id: "dubsado-in-simple-terms", title: "Dubsado in simple terms" },
