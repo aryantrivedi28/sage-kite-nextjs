@@ -179,6 +179,13 @@ export default function DubsadoPage() {
       {
         "@type": "FAQPage",
         "@id": "https://www.sagekite.com/platforms/dubsado/#faq",
+        "isPartOf": {
+          "@id": "https://www.sagekite.com/#website"
+        },
+        "about": {
+          "@id": "https://www.sagekite.com/platforms/dubsado/#service"
+        },
+        "inLanguage": "en",
         "mainEntity": [
           {
             "@type": "Question",
