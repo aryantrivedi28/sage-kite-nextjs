@@ -17,12 +17,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
-    {
-      url: `${BASE_URL}/platforms/dubsado`,
+    ...['dubsado', 'honeybook', 'hubspot', 'activecampaign'].map((platform) => ({
+      url: `${BASE_URL}/platforms/${platform}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
+      changeFrequency: 'weekly' as const,
       priority: 0.9,
-    },
+    })),
     {
       url: `${BASE_URL}/blog`,
       lastModified: new Date(),

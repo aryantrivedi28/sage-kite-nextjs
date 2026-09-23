@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   title: "HoneyBook Setup & Implementation Services | Sage Kite",
   description: "HoneyBook setup services from Sage Kite: we map your clientflow, then configure lead capture, Smart Files, contracts, payments, scheduling and automations, tested and handed over.",
   alternates: {
-    canonical: "https://www.sagekite.example/platforms/honeybook/",
+    canonical: "https://www.sagekite.com/platforms/honeybook",
   },
   openGraph: {
     type: "website",
     siteName: "Sage Kite",
-    url: "https://www.sagekite.example/platforms/honeybook/",
+    url: "https://www.sagekite.com/platforms/honeybook",
     title: "HoneyBook setup and implementation services | Sage Kite",
     description: "Sage Kite maps your clientflow, then configures HoneyBook around it: Smart Files, contracts, payments, scheduling and automations.",
   },
@@ -39,42 +39,42 @@ export default function HoneyBookPage() {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.sagekite.example/#organization",
+      "@id": "https://www.sagekite.com/#organization",
       "name": "Sage Kite",
-      "url": "https://www.sagekite.example/"
+      "url": "https://www.sagekite.com/"
     },
     {
       "@type": "WebPage",
-      "@id": "https://www.sagekite.example/platforms/honeybook/#webpage",
-      "url": "https://www.sagekite.example/platforms/honeybook/",
+      "@id": "https://www.sagekite.com/platforms/honeybook/#webpage",
+      "url": "https://www.sagekite.com/platforms/honeybook",
       "name": "HoneyBook setup and implementation services | Sage Kite",
       "description": "Sage Kite configures HoneyBook around your client process: lead capture, Smart Files, contracts, payments, scheduling and automated workflows, tested and handed over.",
       "isPartOf": {
-        "@id": "https://www.sagekite.example/#website"
+        "@id": "https://www.sagekite.com/#website"
       },
       "about": {
-        "@id": "https://www.sagekite.example/platforms/honeybook/#service"
+        "@id": "https://www.sagekite.com/platforms/honeybook/#service"
       },
       "breadcrumb": {
-        "@id": "https://www.sagekite.example/platforms/honeybook/#breadcrumb"
+        "@id": "https://www.sagekite.com/platforms/honeybook/#breadcrumb"
       },
       "inLanguage": "en"
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://www.sagekite.example/platforms/honeybook/#breadcrumb",
+      "@id": "https://www.sagekite.com/platforms/honeybook/#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://www.sagekite.example/"
+          "item": "https://www.sagekite.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "Platforms",
-          "item": "https://www.sagekite.example/platforms"
+          "item": "https://www.sagekite.com/platforms"
         },
         {
           "@type": "ListItem",
@@ -85,12 +85,12 @@ export default function HoneyBookPage() {
     },
     {
       "@type": "Service",
-      "@id": "https://www.sagekite.example/platforms/honeybook/#service",
+      "@id": "https://www.sagekite.com/platforms/honeybook/#service",
       "name": "HoneyBook setup and implementation services",
       "serviceType": "HoneyBook setup and implementation",
       "description": "Clientflow mapping, HoneyBook account configuration, lead capture forms, Smart Files, proposals and contracts, invoicing and payments, scheduling, questionnaires and templates, workflow automation, testing, team training and handover.",
       "provider": {
-        "@id": "https://www.sagekite.example/#organization"
+        "@id": "https://www.sagekite.com/#organization"
       },
       "areaServed": [
         {
@@ -182,12 +182,12 @@ export default function HoneyBookPage() {
     },
     {
       "@type": "FAQPage",
-      "@id": "https://www.sagekite.example/platforms/honeybook/#faq",
+      "@id": "https://www.sagekite.com/platforms/honeybook/#faq",
       "isPartOf": {
-        "@id": "https://www.sagekite.example/#website"
+        "@id": "https://www.sagekite.com/#website"
       },
       "about": {
-        "@id": "https://www.sagekite.example/platforms/honeybook/#service"
+        "@id": "https://www.sagekite.com/platforms/honeybook/#service"
       },
       "inLanguage": "en",
       "mainEntity": [

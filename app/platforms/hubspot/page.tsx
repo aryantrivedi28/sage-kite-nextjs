@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   title: "HubSpot Implementation & Consulting Services | Sage Kite",
   description: "HubSpot implementation and consulting from Sage Kite: we map your sales and marketing process, then build the CRM, pipelines, workflows, reporting and integrations around it.",
   alternates: {
-    canonical: "https://www.sagekite.com/platforms/hubspot/",
+    canonical: "https://www.sagekite.com/platforms/hubspot",
   },
   openGraph: {
     type: "website",
     siteName: "Sage Kite",
-    url: "https://www.sagekite.com/platforms/hubspot/",
+    url: "https://www.sagekite.com/platforms/hubspot",
     title: "HubSpot implementation and consulting services | Sage Kite",
     description: "Sage Kite implements HubSpot around your sales and marketing process: CRM architecture, pipelines, workflows, reporting, migration and integrations.",
   },
@@ -32,7 +32,7 @@ export default function HubspotPage() {
       {
         "@type": "WebPage",
         "@id": "https://www.sagekite.com/platforms/hubspot/#webpage",
-        "url": "https://www.sagekite.com/platforms/hubspot/",
+        "url": "https://www.sagekite.com/platforms/hubspot",
         "name": "HubSpot implementation and consulting services | Sage Kite",
         "description": "Sage Kite implements HubSpot around your sales and marketing process: CRM architecture, pipelines, lifecycle stages, workflows, reporting, migration and integrations, tested and handed over.",
         "isPartOf": {

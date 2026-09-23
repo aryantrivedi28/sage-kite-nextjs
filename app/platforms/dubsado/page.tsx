@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   title: "Dubsado Setup & Implementation Services | Sage Kite",
   description: "Dubsado setup services from Sage Kite: we map your client process, then configure lead capture, proposals, contracts, payments, scheduling and workflows, tested and handed over.",
   alternates: {
-    canonical: "https://www.sagekite.example/platforms/dubsado/",
+    canonical: "https://www.sagekite.com/platforms/dubsado",
   },
   openGraph: {
     type: "website",
     siteName: "Sage Kite",
-    url: "https://www.sagekite.example/platforms/dubsado/",
+    url: "https://www.sagekite.com/platforms/dubsado",
     title: "Dubsado setup and implementation services | Sage Kite",
     description: "Process mapped first, then Dubsado built around it: forms, proposals, contracts, payments, scheduling and workflows, tested before launch.",
   },

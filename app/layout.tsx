@@ -3,6 +3,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.sagekite.com"),
+
   title: "Sage Kite",
 
   description:
@@ -14,10 +16,6 @@ export const metadata: Metadata = {
 
   icons: {
     icon: "/sage-kite-mark.png",
-  },
-
-  alternates: {
-    canonical: "https://www.sagekite.com/",
   },
 
   openGraph: {

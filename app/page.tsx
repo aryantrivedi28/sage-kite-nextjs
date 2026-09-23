@@ -15,6 +15,11 @@ import { Library } from '../components/home/Library';
 import { Agency } from '../components/home/Agency';
 import { FAQ } from '../components/home/FAQ';
 import { FinalCTA } from '../components/home/FinalCTA';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+};
 
 export default function Home() {
   return (
