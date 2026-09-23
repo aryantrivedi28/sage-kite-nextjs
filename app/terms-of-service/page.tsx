@@ -41,8 +41,8 @@ export default function TermsOfService() {
               <li><Link href="/#services" onClick={() => setMenuOpen(false)}>Services</Link></li>
               <li><Link href="/#platforms" onClick={() => setMenuOpen(false)}>Platforms</Link></li>
               <li><Link href="/#industries" onClick={() => setMenuOpen(false)}>Industries</Link></li>
-              <li><Link href="/#agencies" onClick={() => setMenuOpen(false)}>For agencies</Link></li>
-              <li><Link href="/#insights" onClick={() => setMenuOpen(false)}>Insights</Link></li>
+              <li><Link href="/#white-label" onClick={() => setMenuOpen(false)}>For agencies</Link></li>
+              <li><Link href="/blog" onClick={() => setMenuOpen(false)}>Insights</Link></li>
               <li><Link href="/about" onClick={() => setMenuOpen(false)}>About</Link></li>
               <li><a className="btn btn-small" href="https://wa.me/message/C22YQ52VUDLCA1" onClick={() => setMenuOpen(false)}>Book a discovery call</a></li>
             </ul>
@@ -239,23 +239,23 @@ export default function TermsOfService() {
           <div>
             <h2 style={{color: "var(--sage)", marginBottom: "24px", fontWeight: "600", fontSize: "1.1rem"}}>Services</h2>
             <ul style={{display: "flex", flexDirection: "column", gap: "10px", listStyle: "none", padding: 0, margin: 0}}>
-              <li><Link href="https://glasspane.pages.dev/services/consultancy" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Business growth consulting</Link></li>
-              <li><Link href="https://glasspane.pages.dev/services/crm-implementation" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>CRM implementation</Link></li>
-              <li><Link href="https://glasspane.pages.dev/services/custom-crm-development" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Custom CRM development</Link></li>
-              <li><Link href="https://glasspane.pages.dev/services/marketing" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Marketing</Link></li>
-              <li><Link href="https://glasspane.pages.dev/services/recruitment-staffing" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Recruitment and staffing</Link></li>
-              <li><Link href="https://glasspane.pages.dev/for-agencies" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>White-label delivery</Link></li>
+              <li><Link href="/#services" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Business growth consulting</Link></li>
+              <li><Link href="/#services" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>CRM implementation</Link></li>
+              <li><Link href="/#services" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Custom CRM development</Link></li>
+              <li><Link href="/#services" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Marketing</Link></li>
+              <li><Link href="/#services" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Recruitment and staffing</Link></li>
+              <li><Link href="/#white-label" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>White-label delivery</Link></li>
             </ul>
           </div>
 
           <div>
             <h2 style={{color: "var(--sage)", marginBottom: "24px", fontWeight: "600", fontSize: "1.1rem"}}>Explore</h2>
             <ul style={{display: "flex", flexDirection: "column", gap: "10px", listStyle: "none", padding: 0, margin: 0}}>
-              <li><Link href="https://glasspane.pages.dev/platforms" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Platforms</Link></li>
-              <li><Link href="https://glasspane.pages.dev/industries" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Industries</Link></li>
-              <li><Link href="https://glasspane.pages.dev/work" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Work</Link></li>
-              <li><Link href="https://glasspane.pages.dev/insights" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Insights</Link></li>
-              <li><Link href="https://glasspane.pages.dev/insights/founders-thoughts" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Founder&apos;s Thoughts</Link></li>
+              <li><Link href="/#platforms" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Platforms</Link></li>
+              <li><Link href="/#industries" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Industries</Link></li>
+              <li><Link href="/#library" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Work</Link></li>
+              <li><Link href="/blog" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Insights</Link></li>
+              <li><Link href="/#founders-thoughts" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Founder&apos;s Thoughts</Link></li>
             </ul>
           </div>
 
@@ -263,7 +263,7 @@ export default function TermsOfService() {
             <h2 style={{color: "var(--sage)", marginBottom: "24px", fontWeight: "600", fontSize: "1.1rem"}}>Company</h2>
             <ul style={{display: "flex", flexDirection: "column", gap: "10px", listStyle: "none", padding: 0, margin: 0}}>
               <li><Link href="/about" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>About</Link></li>
-              <li><Link href="https://glasspane.pages.dev/contact" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Contact</Link></li>
+              <li><Link href="/contact" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Contact</Link></li>
               <li><Link href="/privacy-policy" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Privacy Policy</Link></li>
               <li><Link href="/terms-of-service" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Terms of Service</Link></li>
             </ul>

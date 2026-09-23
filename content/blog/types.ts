@@ -14,6 +14,11 @@ export interface BlogPost {
   /** URL segment: /blog/<slug> */
   slug: string;
   title: string;
+  /**
+   * Optional shorter title for Google results and the browser tab, when
+   * `title` is long. Keep it under ~48 characters; " | Sage Kite" is added.
+   */
+  seoTitle?: string;
   /** 1–2 sentence summary used on cards and in metadata. */
   excerpt: string;
   /** One of CATEGORIES. */

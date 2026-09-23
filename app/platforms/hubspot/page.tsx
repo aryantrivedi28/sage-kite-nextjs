@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: "HubSpot Implementation & Consulting Services | Sage Kite",
-  description: "HubSpot implementation and consulting from Sage Kite: we map your sales and marketing process, then build the CRM, pipelines, workflows, reporting and integrations around it.",
+  description: "HubSpot implementation from Sage Kite: we map your sales and marketing process, then build the CRM, pipelines, workflows, reporting and integrations.",
   alternates: {
     canonical: "https://www.sagekite.com/platforms/hubspot",
   },

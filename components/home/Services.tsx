@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export function Services() {
   return (
-    <section style={{ padding: 'clamp(72px,10vw,120px) 0' }}>
+    <section id="services" style={{ padding: 'clamp(72px,10vw,120px) 0' }}>
       <div className="wrap reveal">
         <div style={{ marginBottom: 'clamp(40px, 6vw, 64px)' }}>
         <p className="label">What Sage Kite does</p>

@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export function Founder() {
   return (
-    <section className="founder" style={{ borderTop: '1px solid var(--light-sage)' }}>
+    <section id="founders-thoughts" className="founder" style={{ borderTop: '1px solid var(--light-sage)' }}>
       <div className="wrap reveal">
         <div className="founder-grid">
           

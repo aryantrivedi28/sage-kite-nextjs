@@ -9,6 +9,7 @@ import { AUTHOR, AUTHOR_IMAGE } from '../authors';
 const post: BlogPost = {
   slug: 'your-post-url',
   title: 'Your Post Title',
+  // seoTitle: 'Shorter title for Google', // optional, only if title is long
   excerpt: 'One or two sentences used on cards, in search results and social shares.',
   category: 'CRM',
   author: AUTHOR,

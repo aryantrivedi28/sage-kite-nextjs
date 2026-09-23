@@ -21,7 +21,6 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Sage Kite",
-    url: "https://www.sagekite.com/",
     title: "Sage Kite: business growth through systems, people and execution",
     description:
       "A business growth consultancy that advises, implements and executes: consultancy, CRM, marketing automation, marketing and specialist VA support, working as one system.",
@@ -90,22 +89,6 @@ export default function RootLayout({
         url: "https://www.sagekite.com/",
         name: "Sage Kite",
         publisher: {
-          "@id": "https://www.sagekite.com/#organization",
-        },
-        inLanguage: "en",
-      },
-
-      {
-        "@type": "WebPage",
-        "@id": "https://www.sagekite.com/#webpage",
-        url: "https://www.sagekite.com/",
-        name: "Business growth consulting for SMEs | Sage Kite",
-        description:
-          "Sage Kite is a business growth consultancy that improves the systems, people and execution behind growth.",
-        isPartOf: {
-          "@id": "https://www.sagekite.com/#website",
-        },
-        about: {
           "@id": "https://www.sagekite.com/#organization",
         },
         inLanguage: "en",

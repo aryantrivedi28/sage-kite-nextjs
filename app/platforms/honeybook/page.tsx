@@ -8,7 +8,7 @@ import styles from './honeybook.module.css';
 
 export const metadata: Metadata = {
   title: "HoneyBook Setup & Implementation Services | Sage Kite",
-  description: "HoneyBook setup services from Sage Kite: we map your clientflow, then configure lead capture, Smart Files, contracts, payments, scheduling and automations, tested and handed over.",
+  description: "HoneyBook setup from Sage Kite: we map your clientflow, then configure lead capture, Smart Files, contracts, payments, scheduling and automations.",
   alternates: {
     canonical: "https://www.sagekite.com/platforms/honeybook",
   },

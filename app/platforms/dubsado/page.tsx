@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: "Dubsado Setup & Implementation Services | Sage Kite",
-  description: "Dubsado setup services from Sage Kite: we map your client process, then configure lead capture, proposals, contracts, payments, scheduling and workflows, tested and handed over.",
+  description: "Dubsado setup from Sage Kite: we map your client process, then configure lead capture, proposals, contracts, payments, scheduling and workflows.",
   alternates: {
     canonical: "https://www.sagekite.com/platforms/dubsado",
   },

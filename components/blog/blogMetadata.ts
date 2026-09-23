@@ -9,7 +9,7 @@ export function buildBlogMetadata(post: BlogPost): Metadata {
   const image = `${SITE_URL}${post.featuredImage}`;
 
   return {
-    title: `${post.title} | Sage Kite`,
+    title: `${post.seoTitle ?? post.title} | Sage Kite`,
     description: post.excerpt,
     authors: [{ name: post.author }],
     keywords: post.tags,

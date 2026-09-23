@@ -4,6 +4,7 @@ import { AUTHOR, AUTHOR_IMAGE } from '../authors';
 const post: BlogPost = {
   slug: 'what-is-dubsado',
   title: 'What Is Dubsado? A Detailed Guide to the Client Management Platform',
+  seoTitle: 'What Is Dubsado? A Complete Guide',
   excerpt:
     'Learn what Dubsado is, how its projects, forms, contracts, invoices, scheduling, client portals, and automation fit together, and who it is designed to help.',
   category: 'CRM',

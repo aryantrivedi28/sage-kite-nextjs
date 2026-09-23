@@ -5,8 +5,8 @@ import { Footer } from "@/components/Footer";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "ActiveCampaign Implementation & Automation Services | Sage Kite",
-  description: "ActiveCampaign implementation from Sage Kite: we map your customer journey, then build the contacts, segments, email, automations, sales CRM and deliverability around it.",
+  title: "ActiveCampaign Implementation Services | Sage Kite",
+  description: "ActiveCampaign implementation from Sage Kite: we map your customer journey, then build contacts, segments, email, automations and sales CRM around it.",
   alternates: {
     canonical: "https://www.sagekite.com/platforms/activecampaign",
   },
@@ -15,12 +15,12 @@ export const metadata: Metadata = {
     siteName: "Sage Kite",
     url: "https://www.sagekite.com/platforms/activecampaign",
     title: "ActiveCampaign Implementation & Automation Services | Sage Kite",
-    description: "ActiveCampaign implementation from Sage Kite: we map your customer journey, then build the contacts, segments, email, automations, sales CRM and deliverability around it.",
+    description: "ActiveCampaign implementation from Sage Kite: we map your customer journey, then build contacts, segments, email, automations and sales CRM around it.",
   },
   twitter: {
     card: "summary",
     title: "ActiveCampaign Implementation & Automation Services | Sage Kite",
-    description: "ActiveCampaign implementation from Sage Kite: we map your customer journey, then build the contacts, segments, email, automations, sales CRM and deliverability around it.",
+    description: "ActiveCampaign implementation from Sage Kite: we map your customer journey, then build contacts, segments, email, automations and sales CRM around it.",
   },
 };
 

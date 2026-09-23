@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export function Library() {
   return (
-    <section className="library" style={{ padding: 'clamp(72px,10vw,120px) 0' }}>
+    <section id="library" className="library" style={{ padding: 'clamp(72px,10vw,120px) 0' }}>
       <div className="wrap reveal">
         <div className="lib-top">
           <div>

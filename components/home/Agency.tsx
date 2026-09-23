@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export function Agency() {
   return (
-    <section className="agency">
+    <section id="white-label" className="agency">
       <div className="wrap reveal">
         <div className="agency-card">
           <div>

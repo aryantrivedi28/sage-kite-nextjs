@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export function PlatformsAndIndustries() {
   return (
-    <section className="tint">
+    <section id="platforms" className="tint">
       <div className="wrap reveal">
         <div className="two">
           
@@ -23,7 +23,7 @@ export function PlatformsAndIndustries() {
           </div>
 
           {/* Industries */}
-          <div>
+          <div id="industries">
             <p className="label">Who we work with</p>
             <h2 style={{ maxWidth: '14em' }}>SMEs in the US, Canada, Europe, Australia and New Zealand.</h2>
             

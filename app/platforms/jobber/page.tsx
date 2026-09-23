@@ -5,22 +5,22 @@ import { Footer } from "@/components/Footer";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Jobber CRM Services &amp; Setup | Sage Kite",
-  description: "Jobber CRM services from Sage Kite: we map how your home-service business works, then set up requests, quoting, scheduling, jobs, invoicing, payments and recurring work in Jobber.",
+  title: "Jobber CRM Services & Setup | Sage Kite",
+  description: "Jobber setup from Sage Kite: we map how your home-service business works, then set up requests, quotes, scheduling, jobs, invoicing and recurring work.",
   alternates: {
-    canonical: "https://www.sagekite.com/platforms/jobber/",
+    canonical: "https://www.sagekite.com/platforms/jobber",
   },
   openGraph: {
     type: "website",
     siteName: "Sage Kite",
-    url: "https://www.sagekite.com/platforms/jobber/",
-    title: "Jobber CRM Services &amp; Setup | Sage Kite",
-    description: "Jobber CRM services from Sage Kite: we map how your home-service business works, then set up requests, quoting, scheduling, jobs, invoicing, payments and recurring work in Jobber.",
+    url: "https://www.sagekite.com/platforms/jobber",
+    title: "Jobber CRM Services & Setup | Sage Kite",
+    description: "Jobber setup from Sage Kite: we map how your home-service business works, then set up requests, quotes, scheduling, jobs, invoicing and recurring work.",
   },
   twitter: {
     card: "summary",
-    title: "Jobber CRM Services &amp; Setup | Sage Kite",
-    description: "Jobber CRM services from Sage Kite: we map how your home-service business works, then set up requests, quoting, scheduling, jobs, invoicing, payments and recurring work in Jobber.",
+    title: "Jobber CRM Services & Setup | Sage Kite",
+    description: "Jobber setup from Sage Kite: we map how your home-service business works, then set up requests, quotes, scheduling, jobs, invoicing and recurring work.",
   },
 };
 
@@ -37,7 +37,7 @@ export default function JobberPage() {
     {
       "@type": "WebPage",
       "@id": "https://www.sagekite.com/platforms/jobber/#webpage",
-      "url": "https://www.sagekite.com/platforms/jobber/",
+      "url": "https://www.sagekite.com/platforms/jobber",
       "name": "Jobber CRM services and setup | Sage Kite",
       "description": "Sage Kite implements Jobber around how home-service businesses actually work: requests, quoting, scheduling and dispatch, jobs, client communication, invoicing, payments and recurring work.",
       "isPartOf": {
