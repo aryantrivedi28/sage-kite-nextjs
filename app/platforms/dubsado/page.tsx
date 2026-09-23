@@ -26,6 +26,285 @@ export const metadata: Metadata = {
 };
 
 export default function DubsadoPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.sagekite.com/#organization",
+        "name": "Sage Kite",
+        "url": "https://www.sagekite.com/"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.sagekite.com/platforms/dubsado/#webpage",
+        "url": "https://www.sagekite.com/platforms/dubsado",
+        "name": "Dubsado setup and implementation services | Sage Kite",
+        "description": "Sage Kite maps your client process, then configures Dubsado around it: lead capture, proposals, contracts, payments, scheduling and workflows, tested and handed over.",
+        "isPartOf": {
+          "@id": "https://www.sagekite.com/#website"
+        },
+        "about": {
+          "@id": "https://www.sagekite.com/platforms/dubsado/#service"
+        },
+        "breadcrumb": {
+          "@id": "https://www.sagekite.com/platforms/dubsado/#breadcrumb"
+        },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://www.sagekite.com/platforms/dubsado/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.sagekite.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Platforms",
+            "item": "https://www.sagekite.com/platforms"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Dubsado"
+          }
+        ]
+      },
+      {
+        "@type": "Service",
+        "@id": "https://www.sagekite.com/platforms/dubsado/#service",
+        "name": "Dubsado setup and implementation services",
+        "serviceType": "Dubsado setup, configuration and implementation",
+        "description": "Client process mapping, Dubsado account setup, lead capture forms, packages and proposals, contracts with electronic signature, invoicing and payment schedules, schedulers, questionnaires and canned emails, workflow automation, testing, team training and handover for service-based businesses.",
+        "provider": {
+          "@id": "https://www.sagekite.com/#organization"
+        },
+        "areaServed": [
+          {
+            "@type": "Country",
+            "name": "United States"
+          },
+          {
+            "@type": "Country",
+            "name": "Canada"
+          },
+          {
+            "@type": "Place",
+            "name": "Europe"
+          },
+          {
+            "@type": "Country",
+            "name": "Australia"
+          },
+          {
+            "@type": "Country",
+            "name": "New Zealand"
+          }
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "What we implement in Dubsado",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Account setup"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Lead capture"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Proposals"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Contracts"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Invoicing and payments"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Scheduling"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Forms and templates"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Workflows and automation"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Testing and handover"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://www.sagekite.com/platforms/dubsado/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What are Dubsado setup services?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Dubsado setup services configure Dubsado around your client process: account settings and branding, lead capture forms, packages and proposals, contracts, invoices and payment schedules, schedulers, questionnaires, canned emails and automated workflows. Sage Kite maps the process first, then builds and tests the system before handover."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What does a Dubsado specialist do?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A Dubsado specialist designs the client process, configures the account to match it and builds the workflows that automate the repetitive steps. The work is as much process design as platform configuration, which is why two accounts with the same features can perform very differently."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can Sage Kite set up Dubsado from scratch?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. A new setup starts with mapping your journey from enquiry to completion, then building the templates and content that process needs, then the workflows, then testing before anything goes live."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can you fix or improve an existing Dubsado account?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. We review the templates, forms and workflows in use, find where the setup and the real process have drifted apart, remove duplicates, correct workflow triggers and rebuild the parts causing problems."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can Sage Kite build Dubsado workflows?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Workflows are sequences of automated actions such as sending a form or email, creating a task or changing a project status, triggered by events like a lead capture form being completed, a contract being signed, an appointment happening or a payment being made. We build them around the mapped process rather than a template."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can you configure proposals and contracts?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Proposals can present your packages so a client selects what they want and moves straight into the contract and invoice. Contracts use Dubsado's electronic signature and connect to the rest of the booking sequence."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can you configure payments and scheduling?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. That covers invoice templates, payment schedules and reminders with your payment processor connected, plus schedulers and appointment types linked to your calendar with confirmations and reminders."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which parts stay manual?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Whatever genuinely needs judgement. Consultations, delivery and difficult conversations stay with your team. Automation is used for the predictable steps around them: acknowledgements, reminders, status changes and standard onboarding."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can Sage Kite help migrate from another CRM?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sometimes. Migrations depend on what the current system can export and what Dubsado can accept, so feasibility is confirmed in discovery before anything is scoped or promised."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does a Dubsado implementation work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Seven stages: discovery, process mapping, build, automation, testing, handover, and ongoing support where it is wanted. Scope, exclusions, acceptance criteria and a fixed project price are agreed in the proposal before the build starts."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Who should hire a Dubsado expert?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Businesses that have chosen Dubsado but do not have the time to learn it properly, teams whose setup no longer matches how they work, and businesses that want one consistent client experience rather than a process that varies by whoever is handling it."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does Sage Kite test Dubsado workflows?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "By running representative client journeys through the account before launch: submitting the lead capture form, moving through proposal, contract and payment, and checking that each workflow action fires at the right point. Issues are corrected before real clients see anything."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will my team receive training?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Handover includes training for the people who will run the account day to day, plus documentation of what was built and how to change it."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What happens after implementation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You own the account and can run it. Where it helps, Sage Kite offers maintenance with a defined support scope, further implementation as your services change, and specialists who can operate the system alongside your team."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Sage Kite only a Dubsado agency?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Sage Kite is a business growth consultancy. Dubsado is one of the platforms we implement, alongside consultancy, marketing, automation and specialist staffing, so the platform work can connect to the rest of how the business grows."
+            }
+          }
+        ]
+      }
+    ]
+  };
+
   return (
     <>
       <Header />
@@ -667,6 +946,10 @@ export default function DubsadoPage() {
         
       </main>
       
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Footer />
     </>
   );
