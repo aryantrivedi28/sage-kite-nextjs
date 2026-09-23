@@ -54,7 +54,7 @@ export default function RootLayout({
         "@id": "https://www.sagekite.com/#organization",
         name: "Sage Kite",
         url: "https://www.sagekite.com/",
-        logo: "https://www.sagekite.com/assets/sage-kite-logo.png",
+        logo: "https://www.sagekite.com/sage-kite-logo.png",
         slogan: "Streamlined systems for growth.",
         description:
           "Sage Kite is a business growth consultancy for small and medium-sized businesses. It improves the systems, people and execution behind growth through growth consultancy (GTM consultancy, AI consultancy and fractional CMO support), CRM implementation, marketing, and Tier 1 virtual assistant staffing, and provides white-label delivery for marketing agencies.",

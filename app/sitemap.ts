@@ -17,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
-    ...['dubsado', 'honeybook', 'hubspot', 'activecampaign'].map((platform) => ({
+    ...['dubsado', 'honeybook', 'hubspot', 'activecampaign', 'jobber'].map((platform) => ({
       url: `${BASE_URL}/platforms/${platform}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
