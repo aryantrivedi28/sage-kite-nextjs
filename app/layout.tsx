@@ -11,6 +11,22 @@ export const metadata: Metadata = {
   description:
     "Sage Kite is a business growth consultancy. We fix the systems, people and execution behind growth, from CRM and automation to marketing and specialist staff.",
 
+  // Site-wide defaults. Blog posts override `authors` with the post author.
+  authors: [{ name: "Sage Kite", url: "https://www.sagekite.com" }],
+  creator: "Sage Kite",
+  publisher: "Sage Kite",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+
   verification: {
     google: "rcp-8TeiDDdPmsD3kJcZebnt5MW9ZdU15yDNx7YlYOw",
   },

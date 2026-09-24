@@ -118,6 +118,10 @@ Rules:
   trailing slash.
 - Titles and descriptions must be unique across the site.
 - Write `&`, never `&amp;`, inside metadata strings. Next.js escapes it.
+- `authors`, `creator`, `publisher` and `robots` (index, follow) are set once
+  in `app/layout.tsx` and apply to every page. Do not repeat them per page.
+  Blog posts override `authors` with the post author. Do not add a `keywords`
+  meta tag: Google ignores it.
 - Next.js merges `openGraph` shallowly: a page that sets `openGraph` must set
   every field it needs (`type`, `siteName`, `url`, `title`, `description`).
 - Pages in `about/`, `privacy-policy/`, `terms-of-service/` keep metadata in
