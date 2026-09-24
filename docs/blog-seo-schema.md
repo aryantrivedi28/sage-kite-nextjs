@@ -18,12 +18,16 @@ schema by hand. The shared template builds all of that from the post file.
 
 1. **Image.** Save the featured image as `public/images/blog/<name>.jpg`
    (16:9, ~1200×675).
-2. **Post file.** Copy `content/blog/posts/_template.tsx` to
-   `content/blog/posts/<slug>.tsx`. The file name must equal `slug`.
-3. **Fill in the fields** (see 1.2) and write the article inside `content`.
+2. **Post folder.** Copy the folder `app/blog/_template/` to
+   `app/blog/<slug>/`. The folder name must equal `slug`. It contains:
+   - `post.tsx`: the post data and article. This is the file you edit.
+   - `page.tsx`: three lines, the same in every folder. Do not edit it.
+3. **Fill in the fields** in `post.tsx` (see 1.2) and write the article
+   inside `content`. A very long article can go in its own file next to
+   `post.tsx` (see `app/blog/what-is-dubsado/article.tsx`).
 4. **Register it** in `content/blog/index.tsx`:
    ```tsx
-   import myNewPost from './posts/<slug>';
+   import myNewPost from '@/app/blog/<slug>/post';
    export const posts: BlogPost[] = [crmFoundation, whatIsDubsado, myNewPost];
    ```
 5. **Verify** (see section 6).
@@ -32,7 +36,7 @@ schema by hand. The shared template builds all of that from the post file.
 
 | Field | Required | Rules |
 |---|---|---|
-| `slug` | yes | Lowercase, hyphens. Becomes `/blog/<slug>`. Must equal the file name. Never change it after publishing. |
+| `slug` | yes | Lowercase, hyphens. Becomes `/blog/<slug>`. Must equal the folder name. Never change it after publishing. |
 | `title` | yes | Shown as the H1 and in schema `headline`. |
 | `seoTitle` | no | Shorter title for Google and the browser tab. Use when `title` is over ~48 characters (` \| Sage Kite` is appended automatically). |
 | `excerpt` | yes | 1–2 sentences, **under 160 characters**. Used as meta description, card text and schema `description`. |
@@ -49,7 +53,7 @@ schema by hand. The shared template builds all of that from the post file.
 | `relatedPlatform` | no | `'dubsado' \| 'honeybook' \| 'hubspot' \| 'activecampaign' \| 'jobber'`. Links the article to that platform page's Service schema. Only set it if the post is mainly about that platform. |
 | `featured` | no | Puts the post at the top of `/blog`. **Only one post** may have it; remove it from the old one. |
 | `draft` | no | `true` hides the post from the site, listing and sitemap. The template starts as a draft; delete the line to publish. |
-| `content` | yes* | The article body. *Leave it out only for a custom-layout post (1.4). |
+| `content` | yes | The article body. |
 
 ### 1.3 Writing `content`
 
@@ -62,19 +66,12 @@ schema by hand. The shared template builds all of that from the post file.
 - Internal links: relative paths (`/platforms/hubspot`, `/blog/<slug>`). Never
   link to `glasspane.pages.dev`.
 
-### 1.4 Custom-layout post (only when a post needs its own UI)
+### 1.4 Changing the layout of every post
 
-Use this only when the shared layout cannot do what the post needs.
-
-1. Create the post file as in 1.1 but **omit `content`**. The `[slug]` template
-   skips posts without `content`.
-2. Create `app/blog/<slug>/page.tsx` by copying
-   `app/blog/what-is-dubsado/page.tsx`. Change `SLUG`, the component names and
-   the `./client` import.
-3. Create `app/blog/<slug>/client.tsx` with `'use client'` and the article body.
-
-Metadata and schema still come from the post file. Do not add schema or
-metadata by hand in these files.
+All post pages render through `components/blog/BlogPostPage.tsx` and
+`components/blog/BlogArticleLayout.tsx`. Change those, never an individual
+`page.tsx`. Metadata and schema always come from `post.tsx`; do not add them
+by hand in a post folder.
 
 ### 1.5 What is generated automatically
 
@@ -82,6 +79,7 @@ metadata by hand in these files.
 |---|---|
 | Page metadata (title, description, canonical, Open Graph, Twitter) | `components/blog/blogMetadata.ts` |
 | Article + BreadcrumbList + FAQPage JSON-LD | `components/blog/blogJsonLd.ts` |
+| Page (draft handling, metadata, layout) | `components/blog/BlogPostPage.tsx` |
 | Page shell (hero, guide sidebar, tags, related posts, CTA) | `components/blog/BlogArticleLayout.tsx` |
 | `/blog` listing and category filter | `app/blog/page.tsx` |
 | Sitemap entry | `app/sitemap.ts` |
@@ -154,6 +152,8 @@ Rules:
 
   | Page | Entity | `@id` |
   |---|---|---|
+  | Homepage | WebPage | `https://www.sagekite.com/#webpage` |
+  | | FAQPage | `https://www.sagekite.com/#faq` (built from `components/home/faqData.ts`) |
   | Platform page | WebPage | `https://www.sagekite.com/platforms/<name>/#webpage` |
   | | BreadcrumbList | `https://www.sagekite.com/platforms/<name>/#breadcrumb` |
   | | Service | `https://www.sagekite.com/platforms/<name>/#service` |
@@ -174,7 +174,7 @@ Rules:
 ## 4. Article schema (blog posts)
 
 **Do not write Article schema by hand.** `components/blog/blogJsonLd.ts`
-generates it from the post file for every post, including custom-layout posts.
+generates it from each post's `post.tsx`.
 
 Field mapping:
 

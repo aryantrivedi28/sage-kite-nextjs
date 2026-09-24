@@ -1,5 +1,5 @@
-import type { BlogPost } from '../types';
-import { AUTHOR, AUTHOR_IMAGE } from '../authors';
+import type { BlogPost } from '@/content/blog/types';
+import { AUTHOR, AUTHOR_IMAGE } from '@/content/blog/authors';
 
 const post: BlogPost = {
   slug: 'how-crm-systems-create-a-foundation-for-sustainable-growth',

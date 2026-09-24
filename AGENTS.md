@@ -39,20 +39,19 @@ app/
                         One service page per CRM platform (dubsado, honeybook, hubspot,
                         activecampaign, jobber). Metadata + Service JSON-LD + content.
   blog/page.tsx         Blog listing.
-  blog/[slug]/page.tsx  Shared template for normal blog posts.
-  blog/<slug>/          Optional: a post with its own page.tsx + client.tsx
-                        (example: blog/what-is-dubsado).
+  blog/<slug>/          One folder per blog post: post.tsx (data + article)
+                        and a 3-line page.tsx. blog/_template/ is the starter.
   sitemap.ts, robots.ts, not-found.tsx
 components/
   Header.tsx, Footer.tsx  Shared header/footer.
   home/                   Homepage sections.
-  blog/                   Blog UI + BlogArticleLayout (page shell),
-                          blogMetadata.ts (metadata), blogJsonLd.ts (schema).
+  blog/                   Blog UI + BlogPostPage (used by every post's page.tsx),
+                          BlogArticleLayout (page shell), blogMetadata.ts
+                          (metadata), blogJsonLd.ts (schema).
 content/blog/
-  index.tsx               List of posts + selectors. Read its header comment.
+  index.tsx               Registry of posts + selectors. Read its header comment.
   types.ts                BlogPost type + CATEGORIES.
   authors.ts              Author name/avatar.
-  posts/<slug>.tsx        One file per post. posts/_template.tsx is the starter.
 public/                   Static files. Blog images go in public/images/blog/.
 ```
 
@@ -64,7 +63,8 @@ blog recipe, the metadata template, and the Article and Service schema rules.
 
 The essentials:
 
-- Blog posts are data in `content/blog/posts/<slug>.tsx`, registered in
+- Each blog post is a folder `app/blog/<slug>/` (copy `app/blog/_template/`),
+  with its data in `post.tsx`, registered in
   `content/blog/index.tsx`. Metadata, Article schema and sitemap are generated.
   Never hand-write them for a post.
 - Platform pages (`app/platforms/<name>/page.tsx`) hand-write their metadata and
@@ -81,6 +81,8 @@ The essentials:
 - Use uppercase in folder names. `/Platforms` and `/platforms` are different
   URLs on the Linux server even though macOS treats them the same.
 - Set `featured: true` on more than one blog post.
+- Edit a post's `page.tsx`. It is identical in every post folder; change
+  `components/blog/BlogPostPage.tsx` instead.
 - Use a blog `guide` id that does not match an `id` on a heading in the article.
 - Change a heading or FAQ answer without updating `guide` / `faqs` to match.
 - Add Tailwind, CSS frameworks or component libraries.

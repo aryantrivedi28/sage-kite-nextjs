@@ -1,10 +1,11 @@
 /*
- * Starter for a new blog post. Copy this file to posts/<your-slug>.tsx,
- * fill it in, then import it in content/blog/index.tsx and add it to `posts`.
- * This template itself is not imported anywhere, so it never goes live.
+ * Starter for a new blog post. Copy this whole _template folder to
+ * app/blog/<your-slug>/ (folder name = slug), fill in this file, then import
+ * it in content/blog/index.tsx and add it to `posts`. page.tsx needs no edits.
+ * Folders starting with _ are not routes, so this template never goes live.
  */
-import type { BlogPost } from '../types';
-import { AUTHOR, AUTHOR_IMAGE } from '../authors';
+import type { BlogPost } from '@/content/blog/types';
+import { AUTHOR, AUTHOR_IMAGE } from '@/content/blog/authors';
 
 const post: BlogPost = {
   slug: 'your-post-url',

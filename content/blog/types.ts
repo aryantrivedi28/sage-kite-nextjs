@@ -53,12 +53,8 @@ export interface BlogPost {
   featured?: boolean;
   /** Hidden from the live site when true. */
   draft?: boolean;
-  /**
-   * The article body, rendered inside .article-content by the shared
-   * /blog/[slug] template. Leave it out when the post has its own folder
-   * at app/blog/<slug>/ (page.tsx + client.tsx).
-   */
-  content?: () => React.JSX.Element;
+  /** The article body, rendered inside .article-content. */
+  content: () => React.JSX.Element;
 }
 
 /**

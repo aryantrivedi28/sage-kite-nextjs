@@ -4,17 +4,25 @@
  * ─────────────────────────────────────────────────────────────────────────
  *  How to add a new blog post
  *  --------------------------
- *  1. Copy posts/_template.tsx to posts/<your-slug>.tsx and fill it in:
- *     slug, title, excerpt, category, dates, readingTime, image, tags, guide.
- *  2. Import it below and add it to the `posts` array.
- *  3. Add a featured image to `/public/images/blog/` (16:9, ~1200x675 works
+ *  Each post has its own folder: app/blog/<slug>/ with
+ *    post.tsx  – the post data (title, dates, guide, FAQs…) and article body
+ *    page.tsx  – three lines, identical in every folder; never edit it
+ *
+ *  1. Copy app/blog/_template/ to app/blog/<your-slug>/. The folder name
+ *     must equal `slug` and be lowercase with hyphens.
+ *  2. Fill in post.tsx: slug, title, excerpt, category, dates, readingTime,
+ *     image, tags, guide. Remove `draft: true` to publish.
+ *  3. Import it below and add it to the `posts` array.
+ *  4. Add a featured image to `/public/images/blog/` (16:9, ~1200x675 works
  *     well) and reference it in `featuredImage`. Give it meaningful `imageAlt`.
- *  4. Write the article inside `content` using standard HTML tags:
+ *  5. Write the article inside `content` using standard HTML tags:
  *     <h2>, <h3>, <p>, <ul>/<ol> + <li>, <blockquote>, <strong>, <em>,
  *     <a>, <table>, <pre><code>. The .article-content styles handle the rest.
  *     Every `guide` id must match an id on a heading in the article.
- *  5. Pick a `category` from CATEGORIES (types.ts) so the filter stays in sync.
- *  6. Article schema is generated automatically. If the post has an FAQ
+ *     A very long article can live in its own file next to post.tsx
+ *     (see app/blog/what-is-dubsado/article.tsx).
+ *  6. Pick a `category` from CATEGORIES (types.ts) so the filter stays in sync.
+ *  7. Article schema is generated automatically. If the post has an FAQ
  *     section, also fill `faqs` (same text as on the page). If it is about a
  *     platform we implement, set `relatedPlatform` (e.g. 'dubsado').
  *
@@ -24,10 +32,6 @@
  *    If none is marked, the most recent post is used automatically.
  *  • Set `draft: true` to keep a post out of the live site, sitemap and
  *    static params while you work on it.
- *  • A post that needs its own layout can live in app/blog/<slug>/ with a
- *    page.tsx + client.tsx instead (see app/blog/what-is-dubsado). Keep its
- *    post file without `content` so the listing, sitemap and schema still
- *    pick it up.
  *  • The listing, category filter, individual pages, metadata, JSON-LD and
  *    sitemap all read from `posts` — you never touch the pages to publish.
  * ─────────────────────────────────────────────────────────────────────────
@@ -35,9 +39,9 @@
 
 import { CATEGORIES, type BlogPost } from './types';
 
-/* Posts – one file per post in ./posts. Import it here and add it to `posts`. */
-import crmFoundation from './posts/how-crm-systems-create-a-foundation-for-sustainable-growth';
-import whatIsDubsado from './posts/what-is-dubsado';
+/* Posts – one folder per post in app/blog/<slug>/. Import its post.tsx here and add it to `posts`. */
+import crmFoundation from '@/app/blog/how-crm-systems-create-a-foundation-for-sustainable-growth/post';
+import whatIsDubsado from '@/app/blog/what-is-dubsado/post';
 
 export * from './types';
 

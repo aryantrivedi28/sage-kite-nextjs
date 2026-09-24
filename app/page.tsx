@@ -14,6 +14,7 @@ import { Founder } from '../components/home/Founder';
 import { Library } from '../components/home/Library';
 import { Agency } from '../components/home/Agency';
 import { FAQ } from '../components/home/FAQ';
+import { HOME_FAQ_GROUPS } from '../components/home/faqData';
 import { FinalCTA } from '../components/home/FinalCTA';
 import type { Metadata } from 'next';
 
@@ -32,15 +33,31 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  '@id': 'https://www.sagekite.com/#webpage',
-  url: 'https://www.sagekite.com/',
-  name: 'Business growth consulting for SMEs | Sage Kite',
-  description:
-    'Sage Kite is a business growth consultancy that improves the systems, people and execution behind growth.',
-  isPartOf: { '@id': 'https://www.sagekite.com/#website' },
-  about: { '@id': 'https://www.sagekite.com/#organization' },
-  inLanguage: 'en',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': 'https://www.sagekite.com/#webpage',
+      url: 'https://www.sagekite.com/',
+      name: 'Business growth consulting for SMEs | Sage Kite',
+      description:
+        'Sage Kite is a business growth consultancy that improves the systems, people and execution behind growth.',
+      isPartOf: { '@id': 'https://www.sagekite.com/#website' },
+      about: { '@id': 'https://www.sagekite.com/#organization' },
+      inLanguage: 'en',
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://www.sagekite.com/#faq',
+      isPartOf: { '@id': 'https://www.sagekite.com/#website' },
+      about: { '@id': 'https://www.sagekite.com/#organization' },
+      inLanguage: 'en',
+      mainEntity: HOME_FAQ_GROUPS.flatMap((group) => group.items).map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: { '@type': 'Answer', text: item.a },
+      })),
+    },
+  ],
 };
 
 export default function Home() {

@@ -1,10 +1,8 @@
-'use client';
-
 /**
- * Article body for /blog/what-is-dubsado.
- * Listing data (title, excerpt, dates, guide, FAQs) lives in content/blog.
+ * Article body for /blog/what-is-dubsado. Kept in its own file because it is
+ * long; post.tsx points `content` at it.
  */
-export default function WhatIsDubsadoClient() {
+export default function WhatIsDubsadoArticle() {
   return (
     <>
       <h2 id="what-is-dubsado">What Is Dubsado?</h2>

@@ -1,5 +1,6 @@
-import type { BlogPost } from '../types';
-import { AUTHOR, AUTHOR_IMAGE } from '../authors';
+import type { BlogPost } from '@/content/blog/types';
+import { AUTHOR, AUTHOR_IMAGE } from '@/content/blog/authors';
+import WhatIsDubsadoArticle from './article';
 
 const post: BlogPost = {
   slug: 'what-is-dubsado',
@@ -74,6 +75,7 @@ const post: BlogPost = {
     { id: "who-typically-uses-dubsado", title: "Who typically uses Dubsado?" },
     { id: "final-takeaway", title: "Final takeaway" }
   ],
+  content: () => <WhatIsDubsadoArticle />,
 };
 
 export default post;
