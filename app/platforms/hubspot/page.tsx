@@ -202,7 +202,6 @@ export default function HubspotPage() {
       <Header />
       <main id="main">
         <style dangerouslySetInnerHTML={{ __html: `
-          @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..700&display=swap');
           /* HubSpot page additions */
           .crumbs{padding:18px 0 0;font-size:.85rem}
           .crumbs ol{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--sage)}
@@ -212,7 +211,7 @@ export default function HubspotPage() {
           .crumbs [aria-current]{color:var(--ink);font-weight:600}
 
           .plat-hero{padding:clamp(16px,3vw,32px) 0 clamp(72px,9vw,112px)}
-          .plat-hero h1{font-family:'Newsreader', serif; font-weight:500; font-size:clamp(2.5rem,5vw,4.1rem);line-height:1.02;letter-spacing:-.025em;max-width:15ch}
+          .plat-hero h1{font-size:clamp(2.5rem,5vw,4.1rem);line-height:1.02;letter-spacing:-.025em;max-width:15ch}
           .plat-hero .sub{margin:24px 0 34px;max-width:52ch}
 
           .checklist{background:var(--pale-sage);border-radius:var(--r);padding:clamp(24px,3vw,34px);clip-path:polygon(0 0,calc(100% - 48px) 0,100% 48px,100% 100%,0 100%);align-self:start}
@@ -241,7 +240,7 @@ export default function HubspotPage() {
           .track .d{display:block;width:12px;height:12px;border-radius:50%;background:var(--warm-white);border:1px solid var(--sage);margin:9px auto 12px}
           .track li.auto .d{background:var(--sky-soft);border-color:var(--sky)}
           .track li.human .d{background:var(--butter-soft);border-color:var(--butter)}
-          .track strong{display:block;font-family:'Newsreader', serif;font-weight:600;letter-spacing:-.01em;font-size:1.15rem;color:var(--ink);line-height:1.2}
+          .track strong{display:block;font-family:var(--sans);font-weight:700;letter-spacing:-.01em;font-size:1.15rem;color:var(--ink);line-height:1.2}
           .track small{display:block;font-size:.75rem;color:var(--sage);margin-top:3px}
           .key{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:26px;padding-top:18px;border-top:1px dashed var(--light-sage);font-size:.85rem}
           .key span{display:inline-flex;align-items:center;gap:8px}
@@ -249,12 +248,12 @@ export default function HubspotPage() {
           .impl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:clamp(36px,4vw,52px)}
           .impl{border:1px solid var(--light-sage);border-top:5px solid var(--c);border-radius:var(--r);padding:22px 22px 24px;background:var(--warm-white);transition:transform var(--t) var(--ease)}
           .impl:hover{transform:translateY(-3px)}
-          .impl h3{font-family:'Newsreader', serif;font-weight:500;font-size:1.45rem;letter-spacing:-.01em;margin-bottom:8px;color:var(--ink)}
+          .impl h3{font-size:1.45rem;margin-bottom:8px;color:var(--ink)}
           .impl p{font-size:.9rem;line-height:1.5}
 
           .paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:clamp(36px,4vw,52px)}
           .path-card{border:1px solid var(--light-sage);border-radius:var(--r);padding:28px 28px 30px;background:var(--warm-white)}
-          .path-card h3{font-family:'Newsreader', serif;font-weight:500;font-size:1.75rem;letter-spacing:-.01em;margin-bottom:12px;color:var(--ink)}
+          .path-card h3{font-size:1.75rem;margin-bottom:12px;color:var(--ink)}
           .path-card ul{margin-top:14px;list-style:none;padding:0;}
           .path-card li{padding:8px 0 8px 20px;position:relative;font-size:.925rem;line-height:1.45;border-top:1px solid var(--light-sage)}
           .path-card li::before{content:"";position:absolute;left:0;top:18px;width:10px;height:2px;background:var(--c)}
@@ -362,7 +361,7 @@ export default function HubspotPage() {
         <section className="wrap" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
           <div className="head">
             <div className="label">Who it's for</div>
-            <h2 style={{ fontFamily: "'Newsreader', serif", fontWeight: 500, letterSpacing: '-0.02em', fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '22ch', lineHeight: 1.05, marginBottom: '24px' }}>HubSpot suits businesses with a sales and marketing process to run.</h2>
+            <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '22ch', lineHeight: 1.05, marginBottom: '24px' }}>HubSpot suits businesses with a sales and marketing process to run.</h2>
             <p className="sub" style={{ maxWidth: '54ch', fontSize: '1.05rem', lineHeight: 1.5, color: 'var(--ink)' }}>
               We implement HubSpot CRM for B2B and professional-services firms, agencies, SaaS and technology businesses, and consultancies — built around how each one wins, converts and keeps customers.
             </p>
@@ -403,7 +402,7 @@ export default function HubspotPage() {
           <div className="wrap">
             <div className="head">
               <div className="label">The problem</div>
-              <h2 style={{ fontFamily: "'Newsreader', serif", fontWeight: 500, letterSpacing: '-0.02em', fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '24ch', lineHeight: 1.05, marginBottom: '32px' }}>When the portal was switched on but never built around the business.</h2>
+              <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '24ch', lineHeight: 1.05, marginBottom: '32px' }}>When the portal was switched on but never built around the business.</h2>
             </div>
             <ul className="symptoms">
                <li>HubSpot was set up quickly and never structured around a real process.</li>
@@ -423,7 +422,7 @@ export default function HubspotPage() {
         <section className="wrap" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
            <div className="head">
               <div className="label">Our approach</div>
-              <h2 style={{ fontFamily: "'Newsreader', serif", fontWeight: 500, letterSpacing: '-0.02em', fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '24ch', lineHeight: 1.05, marginBottom: '24px' }}>We build the system around the business, not the other way around.</h2>
+              <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '24ch', lineHeight: 1.05, marginBottom: '24px' }}>We build the system around the business, not the other way around.</h2>
               <p className="sub" style={{ maxWidth: '54ch', fontSize: '1.05rem', lineHeight: 1.5, color: 'var(--ink)' }}>
                 HubSpot's own onboarding gets an account started. Implementation is the part that decides whether it works: we map how a lead becomes a customer — and stays one — then structure the CRM, automation and reporting to fit that, rather than reshaping the business around default settings.
               </p>
@@ -463,7 +462,7 @@ export default function HubspotPage() {
         <section className="wrap" id="included" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
            <div className="head">
              <div className="label">What we implement</div>
-             <h2 style={{ fontFamily: "'Newsreader', serif", fontWeight: 500, letterSpacing: '-0.02em', fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '18ch', lineHeight: 1.05 }}>What HubSpot implementation services cover.</h2>
+             <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '18ch', lineHeight: 1.05 }}>What HubSpot implementation services cover.</h2>
            </div>
            <div className="impl-grid">
              <div className="impl" style={{ '--c': 'var(--sage)' } as React.CSSProperties}>
@@ -516,7 +515,7 @@ export default function HubspotPage() {
            <div className="wrap">
              <div className="head">
                <div className="label">Two starting points</div>
-               <h2 style={{ fontFamily: "'Newsreader', serif", fontWeight: 500, letterSpacing: '-0.02em', fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '24ch', lineHeight: 1.05 }}>A new HubSpot build, or fixing an existing portal.</h2>
+               <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '24ch', lineHeight: 1.05 }}>A new HubSpot build, or fixing an existing portal.</h2>
              </div>
              
              <div className="paths">
@@ -550,7 +549,7 @@ export default function HubspotPage() {
            <div className="why-grid">
              <div className="why-copy">
                <div className="label">Doing it yourself, or not</div>
-               <h2 style={{ fontFamily: "'Newsreader', serif", fontWeight: 500, letterSpacing: '-0.02em', fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '12ch', lineHeight: 1.05 }}>Why hire a HubSpot specialist?</h2>
+               <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '12ch', lineHeight: 1.05 }}>Why hire a HubSpot specialist?</h2>
                <p style={{ marginTop: '24px', fontSize: '1.05rem', lineHeight: 1.6, maxWidth: '38ch', color: 'var(--ink)' }}>
                  HubSpot is usable out of the box, and many teams start themselves. The cost is usually a portal shaped by default settings, the manual work that follows, and the rebuild once the structure no longer matches how the business runs.
                </p>
@@ -676,7 +675,7 @@ export default function HubspotPage() {
            <div className="wrap">
              <div className="head">
                <div className="label">Where HubSpot sits</div>
-               <h2 style={{ fontFamily: "'Newsreader', serif", fontWeight: 500, letterSpacing: '-0.02em', fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '18ch', lineHeight: 1.05 }}>The platform is one part of the growth system.</h2>
+               <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '18ch', lineHeight: 1.05 }}>The platform is one part of the growth system.</h2>
              </div>
              
              <ul className="stack">
@@ -706,7 +705,7 @@ export default function HubspotPage() {
         {/* FAQ */}
         <section className="wrap brief">
            <div className="head" style={{ marginBottom: 0 }}>
-             <h2 style={{ fontFamily: "'Newsreader', serif", fontWeight: 500, letterSpacing: '-0.02em', fontSize: 'clamp(2.5rem, 4vw, 3rem)' }}>Frequently asked questions</h2>
+             <h2 style={{ fontSize: 'clamp(2.5rem, 4vw, 3rem)' }}>Frequently asked questions</h2>
            </div>
            
            <div className="faq-group" style={{ marginTop: '32px' }}>
