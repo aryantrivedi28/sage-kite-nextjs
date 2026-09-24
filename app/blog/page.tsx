@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   title: 'Blog | Sage Kite',
   description:
     'Insights for smarter business growth — practical thinking on CRM, marketing, automation, operations, people and the systems behind sustainable growth.',
+  keywords: ["business growth insights", "CRM blog", "marketing automation guides", "growth operations", "Sage Kite blog"],
   alternates: {
     canonical: `${SITE_URL}/blog`,
   },

@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: "About | Sage Kite",
   description:
     "Meet Sage Kite, a business growth consultancy helping growing businesses make sense of technology, marketing, automation, AI and people through better systems.",
+  keywords: ["about Sage Kite", "business growth consultancy", "CRM and automation consultancy", "growth systems", "SME consulting"],
   alternates: { canonical: "/about" },
   openGraph: {
     type: "website",

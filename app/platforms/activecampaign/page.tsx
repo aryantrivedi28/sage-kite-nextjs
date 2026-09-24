@@ -7,6 +7,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: "ActiveCampaign Implementation Services | Sage Kite",
   description: "ActiveCampaign implementation from Sage Kite: we map your customer journey, then build contacts, segments, email, automations and sales CRM around it.",
+  keywords: ["ActiveCampaign setup", "ActiveCampaign implementation", "ActiveCampaign automation", "ActiveCampaign consultant", "email marketing automation"],
   alternates: {
     canonical: "https://www.sagekite.com/platforms/activecampaign",
   },

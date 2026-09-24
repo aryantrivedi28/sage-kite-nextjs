@@ -7,6 +7,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: "Jobber CRM Services & Setup | Sage Kite",
   description: "Jobber setup from Sage Kite: we map how your home-service business works, then set up requests, quotes, scheduling, jobs, invoicing and recurring work.",
+  keywords: ["Jobber setup", "Jobber implementation", "Jobber automation", "field service software", "Jobber specialist"],
   alternates: {
     canonical: "https://www.sagekite.com/platforms/jobber",
   },

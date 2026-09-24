@@ -10,6 +10,7 @@ const PAGE_URL = "https://www.sagekite.com/platforms/lofty";
 export const metadata: Metadata = {
   title: "Lofty CRM Services for Real Estate | Sage Kite",
   description: "Lofty CRM services from Sage Kite: we implement Lofty (formerly Chime) for real-estate agents, teams and brokerages, from routing to Smart Plans and AI.",
+  keywords: ["Lofty CRM", "Lofty CRM services", "Lofty setup", "Chime CRM", "real estate CRM", "Lofty Smart Plans"],
   alternates: {
     canonical: PAGE_URL,
   },

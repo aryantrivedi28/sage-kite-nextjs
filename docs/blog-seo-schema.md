@@ -120,8 +120,10 @@ Rules:
 - Write `&`, never `&amp;`, inside metadata strings. Next.js escapes it.
 - `authors`, `creator`, `publisher` and `robots` (index, follow) are set once
   in `app/layout.tsx` and apply to every page. Do not repeat them per page.
-  Blog posts override `authors` with the post author. Do not add a `keywords`
-  meta tag: Google ignores it.
+  Blog posts override `authors` with the post author.
+- Every page sets `keywords`: 3–6 phrases specific to that page (not
+  repeated across pages). Blog posts get them from `tags` automatically.
+  Search engines give this tag little or no weight; it is kept for audit tools.
 - Next.js merges `openGraph` shallowly: a page that sets `openGraph` must set
   every field it needs (`type`, `siteName`, `url`, `title`, `description`).
 - Pages in `about/`, `privacy-policy/`, `terms-of-service/` keep metadata in

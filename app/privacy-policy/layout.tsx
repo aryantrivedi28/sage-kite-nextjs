@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy | Sage Kite",
   description:
     "How Sage Kite collects, uses and protects your personal information when you use our website and services, and the choices and rights you have over your data.",
+  keywords: ["Sage Kite privacy policy", "data protection", "personal data"],
   alternates: { canonical: "/privacy-policy" },
   openGraph: {
     type: "website",

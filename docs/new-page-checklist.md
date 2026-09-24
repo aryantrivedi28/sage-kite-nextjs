@@ -10,6 +10,7 @@ Site URL: `https://www.sagekite.com`, no trailing slash anywhere.
 
 - [ ] **Meta title**: under ~60 characters including ` | Sage Kite`, and no
       other page uses it. [§2]
+- [ ] **Keywords**: `keywords` set to 3–6 phrases specific to this page. [§2]
 - [ ] **Meta description**: 70–160 characters, and no other page uses it.
       Write `&`, not `&amp;`. [§2]
 - [ ] **Canonical**: `alternates.canonical` set to the full URL, with no

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Sage Kite is a business growth consultancy. We fix the systems, people and execution behind growth, from CRM and automation to marketing and specialist staff.",
 
   // Site-wide defaults. Blog posts override `authors` with the post author.
-  authors: [{ name: "Sage Kite", url: "https://www.sagekite.com" }],
+  authors: [{ name: "Sage Kite" }],
   creator: "Sage Kite",
   publisher: "Sage Kite",
   robots: {

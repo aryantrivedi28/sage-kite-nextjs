@@ -20,6 +20,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Business Growth Consulting for SMEs | Sage Kite',
+  keywords: ["business growth consultancy", "business growth consulting", "CRM implementation", "marketing automation", "growth operations", "SME growth consulting"],
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
