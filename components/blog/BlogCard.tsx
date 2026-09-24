@@ -30,7 +30,7 @@ export function BlogCard({ post }: { post: BlogPost }) {
       <div className="blog-card-media">
         <Image
           src={post.featuredImage}
-          alt={post.imageAlt ?? post.title}
+          alt={post.imageAlt ?? post.title} title={post.imageAlt ?? post.title}
           fill
           sizes="(max-width: 680px) 100vw, (max-width: 1040px) 50vw, 33vw"
           className="blog-card-img"

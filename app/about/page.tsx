@@ -15,7 +15,7 @@ export default function About() {
       <header className="site-header" style={{background: "var(--warm-white)", zIndex: 100, backdropFilter: "none", WebkitBackdropFilter: "none"}}>
         <div className="wrap header-inner">
           <Link className="logo" href="/" aria-label="Sage Kite home">
-            <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" />
+            <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" title="Sage Kite logo" />
           </Link>
           <button className="menu-toggle" type="button" aria-expanded={menuOpen} aria-label="Toggle menu" onClick={() => setMenuOpen(!menuOpen)}>
             Menu
@@ -725,7 +725,7 @@ export default function About() {
               <div className="founder-feature-img-wrap">
                 <img
                   src="/aryan_t.jpeg"
-                  alt="Aryan Trivedi, Founder of Sage Kite"
+                  alt="Aryan Trivedi, Founder of Sage Kite" title="Aryan Trivedi, Founder of Sage Kite"
                   loading="lazy"
                 />
               </div>
@@ -797,7 +797,7 @@ export default function About() {
                     <div className="team-card-img-wrap">
                       <img
                         src={member.image}
-                        alt={`${member.name}, ${member.role} at Sage Kite`}
+                        alt={`${member.name}, ${member.role} at Sage Kite`} title={`${member.name}, ${member.role} at Sage Kite`}
                         loading="lazy"
                       />
                     </div>
@@ -902,7 +902,7 @@ export default function About() {
           
           <div className="foot-brand" style={{paddingRight: "clamp(40px, 8vw, 120px)"}}>
             <Link className="logo" href="/" aria-label="Sage Kite home">
-              <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" style={{maxWidth: "180px"}} />
+              <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" title="Sage Kite logo" style={{maxWidth: "180px"}} />
             </Link>
             <p style={{color: "var(--ink)", fontSize: "0.95rem", lineHeight: "1.6", marginTop: "24px"}}>Sage Kite is a business growth consultancy. We improve the systems, people and execution behind growth for SMEs, and deliver white-label work for agencies.</p>
           </div>

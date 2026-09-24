@@ -61,7 +61,7 @@ export function BlogArticleLayout({
               {post.authorImage && (
                 <Image
                   src={post.authorImage}
-                  alt={post.author}
+                  alt={post.author} title={post.author}
                   width={44}
                   height={44}
                   className="article-avatar"
@@ -82,7 +82,7 @@ export function BlogArticleLayout({
             <figure className="article-hero-img">
               <Image
                 src={post.featuredImage}
-                alt={post.imageAlt ?? post.title}
+                alt={post.imageAlt ?? post.title} title={post.imageAlt ?? post.title}
                 fill
                 sizes="(max-width: 1040px) 100vw, 1000px"
                 priority

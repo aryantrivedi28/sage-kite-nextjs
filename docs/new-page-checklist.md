@@ -25,6 +25,7 @@ Site URL: `https://www.sagekite.com`, no trailing slash anywhere.
       the question and answer text matches the page word for word. [§3, §5]
 - [ ] Folder name is lowercase.
 - [ ] Exactly one `<h1>` on the page.
+- [ ] Every `<img>` / `<Image>` has `alt` and a matching `title`.
 
 ## 2. Blog posts (also do section 1)
 

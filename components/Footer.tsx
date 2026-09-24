@@ -8,7 +8,7 @@ export function Footer() {
           
           <div className="foot-brand">
             <Link href="/" className="logo" style={{ '--w': '160px' } as React.CSSProperties}>
-              <img src="/sage-kite-logo-transparent.png" alt="Sage Kite" />
+              <img src="/sage-kite-logo-transparent.png" alt="Sage Kite" title="Sage Kite" />
             </Link>
             <p>
               Sage Kite is a business growth consultancy building growth operations and systems that scale, for SMEs and agencies.

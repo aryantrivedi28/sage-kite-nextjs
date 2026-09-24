@@ -11,7 +11,7 @@ export function Header() {
     <header className="site-header">
       <div className="wrap header-inner">
         <Link href="/" className="logo">
-          <img src="/sage-kite-logo-transparent.png" alt="Sage Kite" />
+          <img src="/sage-kite-logo-transparent.png" alt="Sage Kite" title="Sage Kite" />
         </Link>
         
         <button 

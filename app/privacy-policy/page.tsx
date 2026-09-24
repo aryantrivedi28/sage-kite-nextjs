@@ -33,7 +33,7 @@ export default function PrivacyPolicy() {
       <header className="site-header" style={{background: "var(--warm-white)", zIndex: 100, backdropFilter: "none", WebkitBackdropFilter: "none"}}>
         <div className="wrap header-inner">
           <Link className="logo" href="/" aria-label="Sage Kite home">
-            <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" />
+            <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" title="Sage Kite logo" />
           </Link>
           
           <nav className={`nav ${menuOpen ? "open" : ""}`} aria-label="Main navigation">
@@ -242,7 +242,7 @@ export default function PrivacyPolicy() {
         <div className="wrap" style={{display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1fr", gap: "clamp(32px, 5vw, 56px)", alignItems: "start"}}>
           <div className="foot-brand" style={{paddingRight: "clamp(40px, 8vw, 120px)"}}>
             <Link className="logo" href="/" aria-label="Sage Kite home">
-              <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" style={{maxWidth: "180px"}} />
+              <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" title="Sage Kite logo" style={{maxWidth: "180px"}} />
             </Link>
             <p style={{color: "var(--ink)", fontSize: "0.95rem", lineHeight: "1.6", marginTop: "24px"}}>Sage Kite is a business growth consultancy. We improve the systems, people and execution behind growth for SMEs, and deliver white-label work for agencies.</p>
           </div>

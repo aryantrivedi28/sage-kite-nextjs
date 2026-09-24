@@ -14,7 +14,7 @@ export function FeaturedBlog({ post }: { post: BlogPost }) {
       <div className="featured-blog-media">
         <Image
           src={post.featuredImage}
-          alt={post.imageAlt ?? post.title}
+          alt={post.imageAlt ?? post.title} title={post.imageAlt ?? post.title}
           fill
           sizes="(max-width: 1040px) 100vw, 58vw"
           className="featured-blog-img"
