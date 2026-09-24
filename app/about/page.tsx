@@ -944,7 +944,7 @@ export default function About() {
         
         <div className="wrap">
           <div className="legal" style={{borderTop: "1px solid var(--light-sage)", marginTop: "44px", paddingTop: "24px", display: "flex", justifyContent: "space-between", color: "var(--ink)", fontSize: "0.85rem"}}>
-            <p style={{margin: 0}}>© [Year] Sage Kite. [Registered legal entity and details]</p>
+            <p style={{margin: 0}}>© 2026 Sage Kite. All rights reserved.</p>
             <p style={{margin: 0}}>Streamlined systems for growth.</p>
           </div>
         </div>

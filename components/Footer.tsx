@@ -45,7 +45,7 @@ export function Footer() {
         </div>
 
         <div className="legal">
-          <div>© {new Date().getFullYear()} Sage Kite. [Registered in/entity]</div>
+          <div>© {new Date().getFullYear()} Sage Kite. All rights reserved.</div>
           <div>Streamlined systems for growth</div>
         </div>
       </div>
