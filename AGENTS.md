@@ -41,7 +41,7 @@ app/
                         page.tsx = content; layout.tsx = that page's metadata.
   platforms/<name>/page.tsx
                         One service page per CRM platform (dubsado, honeybook, hubspot,
-                        activecampaign, jobber). Metadata + Service JSON-LD + content.
+                        activecampaign, jobber, lofty). Metadata + Service JSON-LD + content.
   blog/page.tsx         Blog listing.
   blog/<slug>/          One folder per blog post: post.tsx (data + article)
                         and a 3-line page.tsx. blog/_template/ is the starter.
