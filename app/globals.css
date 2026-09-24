@@ -1,13 +1,4 @@
-
-:root{
-  --warm-white:#F7F5EE; --sage:#596B57; --dark-sage:#344033; --ink:#243746;
-  --coral:#D96F4F; --sky:#4F82A3; --butter:#EFC75E; --pale-sage:#E9EEE7;
-  --coral-soft:#F5D6CA; --sky-soft:#C9E0EB; --butter-soft:#F7E6A8; --light-sage:#D5DDD2;
-  --serif:"Manrope", Arial, Helvetica, sans-serif;
-  --sans:"Manrope", Arial, Helvetica, sans-serif;
-  --wrap:1200px; --gutter:clamp(20px,5vw,56px);
-  --radius:6px; --r:6px; --ease:cubic-bezier(.2,.7,.2,1); --t:200ms;
-}
+/* Brand tokens (colours, font, spacing) live in app/brand.css. See docs/brand.md. */
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{margin:0;background:var(--warm-white);color:var(--dark-sage);font-family:var(--sans);font-size:1.0625rem;line-height:1.65}

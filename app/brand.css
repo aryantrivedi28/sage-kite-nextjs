@@ -1,0 +1,52 @@
+/*
+ * ─────────────────────────────────────────────────────────────────────────
+ *  SAGE KITE — BRAND TOKENS
+ * ─────────────────────────────────────────────────────────────────────────
+ *  The single source for brand colours, fonts and spacing. Imported once in
+ *  app/layout.tsx, so every page can use these variables.
+ *
+ *  On any page or component:
+ *    • Use var(--name). Never type a hex colour or a font name directly.
+ *    • Never redefine these variables in a page's own <style> block.
+ *    • To change a brand value, change it here only.
+ *
+ *  Usage guide (which colour for what, font weights, type sizes):
+ *  docs/brand.md
+ * ─────────────────────────────────────────────────────────────────────────
+ */
+
+:root {
+  /* ── Colours: base ─────────────────────────────────────────────────── */
+  --warm-white: #F7F5EE;  /* page background; text on dark sections */
+  --ink:        #243746;  /* headings, strong text, button text */
+  --dark-sage:  #344033;  /* body text; background of .dark sections */
+  --sage:       #596B57;  /* labels, captions, secondary text, logo */
+  --light-sage: #D5DDD2;  /* borders and dividers */
+  --pale-sage:  #E9EEE7;  /* tinted section / card backgrounds (.pale, .tint) */
+
+  /* ── Colours: accents (use sparingly) ──────────────────────────────── */
+  --coral:  #D96F4F;      /* primary buttons (.btn), key highlights */
+  --butter: #EFC75E;      /* link underlines, focus ring on dark, small accents */
+  --sky:    #4F82A3;      /* secondary accent: diagrams, icons, data */
+
+  /* Soft tints of the accents, for large backgrounds behind accent content */
+  --coral-soft:  #F5D6CA;
+  --butter-soft: #F7E6A8;
+  --sky-soft:    #C9E0EB;
+
+  /* ── Typography ─────────────────────────────────────────────────────── */
+  /* One font family for the whole site, loaded in app/layout.tsx. */
+  --sans: "Manrope", Arial, Helvetica, sans-serif;
+  /* Legacy alias kept so old rules still render Manrope. Do not use. */
+  --serif: var(--sans);
+
+  /* ── Layout ─────────────────────────────────────────────────────────── */
+  --wrap:   1200px;                  /* max content width (.wrap) */
+  --gutter: clamp(20px, 5vw, 56px);  /* side padding of .wrap */
+
+  /* ── Shape and motion ───────────────────────────────────────────────── */
+  --r:      6px;                     /* border radius for buttons, cards */
+  --radius: var(--r);                /* alias of --r */
+  --ease:   cubic-bezier(.2, .7, .2, 1);
+  --t:      200ms;                   /* default transition duration */
+}

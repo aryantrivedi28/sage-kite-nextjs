@@ -12,7 +12,9 @@ Live at `https://www.sagekite.com`.
 - Next.js 16 (App Router), React 19, TypeScript. No database, no API routes,
   no auth, no environment variables.
 - Every page is statically generated at build time.
-- Styling is plain CSS: design tokens and shared classes in `app/globals.css`.
+- Styling is plain CSS. Brand colours, font and spacing tokens are in
+  `app/brand.css`; shared classes are in `app/globals.css`.
+  **Read [docs/brand.md](docs/brand.md) before building a page or section.**
   There is **no Tailwind**. Do not add Tailwind classes or a new styling system.
 - Icons: `lucide-react`. No other UI libraries.
 
@@ -31,6 +33,8 @@ and the changed page has been opened in the browser.
 
 ```
 app/
+  brand.css             Brand tokens: colours, font, spacing. The single source.
+  globals.css           Global element styles and shared classes.
   layout.tsx            Root layout. Site-wide metadata + Organization/WebSite JSON-LD.
   page.tsx              Homepage (sections from components/home/*) + homepage WebPage JSON-LD.
   about/, privacy-policy/, terms-of-service/
@@ -76,6 +80,8 @@ The essentials:
 
 ## Do not
 
+- Type a hex colour or font name in a page. Use `var(--…)` from `app/brand.css`.
+- Load another font, or redefine `:root` or `h1, h2, h3` in a page's `<style>` block.
 - Write HTML entities like `&amp;` inside metadata strings. Write `&`.
 - Link to `glasspane.pages.dev`. It is an old staging domain.
 - Use uppercase in folder names. `/Platforms` and `/platforms` are different
