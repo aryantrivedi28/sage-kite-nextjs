@@ -65,6 +65,10 @@ public/                   Static files. Blog images go in public/images/blog/.
 post, changing page metadata, or touching any JSON-LD.** It has the step-by-step
 blog recipe, the metadata template, and the Article and Service schema rules.
 
+**Before opening a PR for any new page, work through
+[docs/new-page-checklist.md](docs/new-page-checklist.md)** (meta title,
+description, canonical, sitemap, robots, Article / Service / FAQ schema).
+
 The essentials:
 
 - Each blog post is a folder `app/blog/<slug>/` (copy `app/blog/_template/`),
