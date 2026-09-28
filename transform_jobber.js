@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 let html = fs.readFileSync('jobber-source.html', 'utf8');
 

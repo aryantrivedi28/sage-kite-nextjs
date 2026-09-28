@@ -41,7 +41,7 @@ app/
                         page.tsx = content; layout.tsx = that page's metadata.
   platforms/<name>/page.tsx
                         One service page per CRM platform (dubsado, honeybook, hubspot,
-                        activecampaign, jobber, lofty). Metadata + Service JSON-LD + content.
+                        activecampaign, jobber, lofty, kajabi, bloomerang). Metadata + Service JSON-LD + content.
   blog/page.tsx         Blog listing.
   blog/<slug>/          One folder per blog post: post.tsx (data + article)
                         and a 3-line page.tsx. blog/_template/ is the starter.
@@ -56,6 +56,8 @@ content/blog/
   index.tsx               Registry of posts + selectors. Read its header comment.
   types.ts                BlogPost type + CATEGORIES.
   authors.ts              Author name/avatar.
+content/platforms.ts      Platform list: homepage "Platforms" grid + sitemap. A platform
+                          with a `slug` links to /platforms/<slug> and is in the sitemap.
 public/                   Static files. Blog images go in public/images/blog/.
 ```
 
@@ -76,7 +78,8 @@ The essentials:
   `content/blog/index.tsx`. Metadata, Article schema and sitemap are generated.
   Never hand-write them for a post.
 - Platform pages (`app/platforms/<name>/page.tsx`) hand-write their metadata and
-  Service JSON-LD. A new platform must also be added to `app/sitemap.ts`.
+  Service JSON-LD. When a new platform page is published, set its `slug` in
+  `content/platforms.ts`: that links it from the homepage and adds it to the sitemap.
 - Canonical, `og:url` and sitemap URLs match exactly, with no trailing slash.
 - JSON-LD is rendered server-side only and references
   `https://www.sagekite.com/#organization` / `#website` by `@id`.
@@ -91,6 +94,8 @@ The essentials:
 - Use uppercase in folder names. `/Platforms` and `/platforms` are different
   URLs on the Linux server even though macOS treats them the same.
 - Set `featured: true` on more than one blog post.
+- Set a `slug` in `content/platforms.ts` before `app/platforms/<slug>/page.tsx`
+  exists. The homepage would link to a 404 and the sitemap would list it.
 - Edit a post's `page.tsx`. It is identical in every post folder; change
   `components/blog/BlogPostPage.tsx` instead.
 - Use a blog `guide` id that does not match an `id` on a heading in the article.
@@ -118,3 +123,13 @@ The essentials:
 
 When you change how something works, update this file in the same commit.
 When an AI assistant makes a mistake, add a one-line rule under "Do not".
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

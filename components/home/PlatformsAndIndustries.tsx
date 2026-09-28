@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { PLATFORMS } from '@/content/platforms';
 
 export function PlatformsAndIndustries() {
   return (
@@ -12,8 +13,10 @@ export function PlatformsAndIndustries() {
             <h2 style={{ maxWidth: '12em' }}>The systems we build in.</h2>
             
             <ul className="plat-grid">
-              {['GoHighLevel', 'Keap', 'Follow Up Boss', 'Lofty', 'ServiceTitan', 'Housecall Pro', 'Jobber', 'Kajabi', 'Clio Grow', 'Dubsado', 'Mindbody', 'Bloomerang', 'HoneyBook', 'HubSpot', 'ActiveCampaign'].map((plat, i) => (
-                <li key={i}>{plat}</li>
+              {PLATFORMS.map((plat) => (
+                <li key={plat.name} className={plat.slug ? 'has-page' : undefined}>
+                  {plat.slug ? <Link href={`/platforms/${plat.slug}`}>{plat.name}</Link> : plat.name}
+                </li>
               ))}
             </ul>
             

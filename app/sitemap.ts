@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { getPublishedPosts } from '@/content/blog'
+import { PLATFORM_PAGE_SLUGS } from '@/content/platforms'
 
 const BASE_URL = 'https://www.sagekite.com'
 
@@ -17,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
-    ...['dubsado', 'honeybook', 'hubspot', 'activecampaign', 'jobber', 'lofty'].map((platform) => ({
+    ...PLATFORM_PAGE_SLUGS.map((platform) => ({
       url: `${BASE_URL}/platforms/${platform}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,

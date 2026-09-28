@@ -1,816 +1,625 @@
-import React from 'react';
-import Link from 'next/link';
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: "HubSpot Implementation & Consulting Services | Sage Kite",
-  description: "HubSpot implementation from Sage Kite: we map your sales and marketing process, then build the CRM, pipelines, workflows, reporting and integrations.",
-  keywords: ["HubSpot setup", "HubSpot implementation", "HubSpot onboarding", "HubSpot consultant", "HubSpot CRM"],
-  alternates: {
-    canonical: "https://www.sagekite.com/platforms/hubspot",
-  },
+  title: 'HubSpot Implementation & Consulting Services | Sage Kite',
+  description:
+    'HubSpot implementation from Sage Kite: we map your sales and marketing process, then build the CRM, pipelines, workflows, reporting and migrations.',
+  keywords: [
+    'HubSpot implementation services',
+    'HubSpot consultant',
+    'HubSpot CRM setup',
+    'HubSpot migration',
+    'HubSpot portal audit',
+    'HubSpot onboarding',
+  ],
+  alternates: { canonical: 'https://www.sagekite.com/platforms/hubspot' },
   openGraph: {
-    type: "website",
-    siteName: "Sage Kite",
-    url: "https://www.sagekite.com/platforms/hubspot",
-    title: "HubSpot implementation and consulting services | Sage Kite",
-    description: "Sage Kite implements HubSpot around your sales and marketing process: CRM architecture, pipelines, workflows, reporting, migration and integrations.",
+    type: 'website',
+    siteName: 'Sage Kite',
+    url: 'https://www.sagekite.com/platforms/hubspot',
+    title: 'HubSpot implementation and consulting services | Sage Kite',
+    description:
+      'Sage Kite implements HubSpot around your sales and marketing process: CRM architecture, pipelines, workflows, reporting, migration and integrations.',
   },
   twitter: {
-    card: "summary",
-    title: "HubSpot implementation and consulting services | Sage Kite",
-    description: "Process-first HubSpot implementation: CRM architecture, pipelines, workflows, reporting, migration and integrations, tested and handed over.",
+    card: 'summary',
+    title: 'HubSpot implementation and consulting services | Sage Kite',
+    description:
+      'Process-first HubSpot implementation: CRM architecture, pipelines, workflows, reporting, migration and integrations, tested and handed over.',
   },
 };
 
-export default function HubspotPage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": "https://www.sagekite.com/platforms/hubspot/#webpage",
-        "url": "https://www.sagekite.com/platforms/hubspot",
-        "name": "HubSpot implementation and consulting services | Sage Kite",
-        "description": "Sage Kite implements HubSpot around your sales and marketing process: CRM architecture, pipelines, lifecycle stages, workflows, reporting, migration and integrations, tested and handed over.",
-        "isPartOf": {
-          "@id": "https://www.sagekite.com/#website"
-        },
-        "about": {
-          "@id": "https://www.sagekite.com/platforms/hubspot/#service"
-        },
-        "breadcrumb": {
-          "@id": "https://www.sagekite.com/platforms/hubspot/#breadcrumb"
-        },
-        "inLanguage": "en"
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": "https://www.sagekite.com/platforms/hubspot/#breadcrumb",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://www.sagekite.com/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Platforms",
-            "item": "https://www.sagekite.com/platforms"
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "name": "HubSpot"
-          }
-        ]
-      },
-      {
-        "@type": "Service",
-        "@id": "https://www.sagekite.com/platforms/hubspot/#service",
-        "name": "HubSpot implementation and consulting services",
-        "serviceType": "HubSpot implementation and consulting",
-        "description": "Business process discovery, HubSpot CRM architecture and account configuration, deal pipelines, lifecycle stages and lead management, forms, workflows and automation, reporting and dashboards, data cleanup, migration and integrations, testing, team training and handover.",
-        "provider": {
-          "@id": "https://www.sagekite.com/#organization"
-        },
-        "areaServed": [
-          { "@type": "Country", "name": "United States" },
-          { "@type": "Country", "name": "Canada" },
-          { "@type": "Place", "name": "Europe" },
-          { "@type": "Country", "name": "Australia" },
-          { "@type": "Country", "name": "New Zealand" }
-        ],
-        "hasOfferCatalog": {
-          "@type": "OfferCatalog",
-          "name": "What we implement in HubSpot",
-          "itemListElement": [
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "CRM architecture and data model" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Account setup and permissions" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Deal pipelines and stages" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Lifecycle stages and lead management" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Forms and lead capture" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Workflows and automation" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Reporting and dashboards" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Migration, data cleanup and integrations" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Testing, training and handover" } }
-          ]
-        }
-      },
-      {
-        "@type": "FAQPage",
-        "@id": "https://www.sagekite.com/platforms/hubspot/#faq",
-        "isPartOf": {
-          "@id": "https://www.sagekite.com/#website"
-        },
-        "about": {
-          "@id": "https://www.sagekite.com/platforms/hubspot/#service"
-        },
-        "inLanguage": "en",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "What is HubSpot implementation?",
-            "acceptedAnswer": { "@type": "Answer", "text": "HubSpot implementation is the work of designing and configuring HubSpot around how your business actually sells and serves customers. It goes beyond switching the account on: CRM architecture, contact and company data structure, deal pipelines, lifecycle stages, lead management, workflows, reporting and any migration or integrations. Sage Kite maps the process first, then builds the platform to fit it." }
-          },
-          {
-            "@type": "Question",
-            "name": "What does a HubSpot consultant do?",
-            "acceptedAnswer": { "@type": "Answer", "text": "A HubSpot consultant helps decide how HubSpot should be structured for your business, then configures it and builds the automation that runs it. That means the CRM data model, pipelines and lifecycle stages, workflows for routing and follow-up, reporting that reflects how you measure the business, and training so the team adopts it. The aim is a system that supports the business, not just an account that is switched on." }
-          },
-          {
-            "@type": "Question",
-            "name": "Is this the same as HubSpot's own onboarding?",
-            "acceptedAnswer": { "@type": "Answer", "text": "No. HubSpot's onboarding gets your account set up and your team started on the basics. Implementation goes further: designing the CRM architecture, sales and marketing process, automation, reporting, migration and integrations around your business. The two are complementary; if you have already been through HubSpot onboarding and it stopped short of a working system, implementation is usually what is missing." }
-          },
-          {
-            "@type": "Question",
-            "name": "Can Sage Kite set up a new HubSpot account from scratch?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. A new implementation starts by mapping how leads become customers, then structuring the CRM, building pipelines, lifecycle stages, forms, workflows and reporting to match, connecting the tools you already use, and testing it before your team relies on it." }
-          },
-          {
-            "@type": "Question",
-            "name": "Can you audit and improve an existing HubSpot portal?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Many engagements are existing portals that grew without a plan: duplicated or inconsistent data, pipelines that do not match the real sales process, workflows that misfire and reporting no one trusts. We audit what is there, fix the data and structure, rebuild the parts holding you back, and document it." }
-          },
-          {
-            "@type": "Question",
-            "name": "What does HubSpot CRM setup include?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Typically: account settings and user permissions, a contact and company data model with the properties you actually use, deal pipelines and stages that match your sales process, lifecycle stages and lead status, lead capture forms and routing, core workflows, and dashboards for the metrics you run on. Exact scope is agreed in the proposal." }
-          },
-          {
-            "@type": "Question",
-            "name": "Can you build HubSpot workflows and automation?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. HubSpot workflows automate the repetitive steps: routing and assigning leads, sending follow-up, updating properties and lifecycle stages, creating tasks and internal alerts. We build them around the process we mapped and test each path so the right action happens at the right time." }
-          },
-          {
-            "@type": "Question",
-            "name": "Can you migrate data from another CRM into HubSpot?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Usually. Migrations from tools like Salesforce, Pipedrive, Zoho or a spreadsheet are common, and HubSpot has strong import tools. Feasibility depends on what the current system can export and how the data is structured, so we confirm what is realistic and how records will map during discovery, then clean and de-duplicate as part of the move." }
-          },
-          {
-            "@type": "Question",
-            "name": "Can you set up reporting and dashboards?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. We build dashboards and reports around the questions the business actually asks — pipeline and forecast, source and conversion, activity and service — so the numbers reflect how you run, rather than the default reports every portal ships with." }
-          },
-          {
-            "@type": "Question",
-            "name": "Can you configure integrations?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, where they are supported. HubSpot connects to many tools through its app marketplace, and to others through custom integrations where feasible. We confirm what your stack allows in discovery so the CRM stays the single source of truth rather than one more disconnected tool." }
-          },
-          {
-            "@type": "Question",
-            "name": "Which HubSpot edition and Hubs do I need?",
-            "acceptedAnswer": { "@type": "Answer", "text": "It depends on how you sell and market, and it is worth getting right because the paid tiers are a real cost. HubSpot runs from a free CRM up through Starter, Professional and Enterprise, with Marketing, Sales, Service, Content and Data Hubs. We advise on the smallest configuration that does the job; we are independent and do not resell HubSpot licences, so the recommendation is based on fit, not commission." }
-          },
-          {
-            "@type": "Question",
-            "name": "Is HubSpot right for my business?",
-            "acceptedAnswer": { "@type": "Answer", "text": "HubSpot suits businesses with a real sales and marketing process to run and room to grow into it. If you are a solo or small service business that mainly needs to book, contract and invoice clients, a lighter tool such as Dubsado or HoneyBook is often a better fit, and we implement those too. Discovery is where we tell you honestly which way we would go." }
-          },
-          {
-            "@type": "Question",
-            "name": "Is Sage Kite a HubSpot partner?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Sage Kite is an independent implementation partner. HubSpot is a trademark of its owner; Sage Kite is not a HubSpot Solutions Partner and is not affiliated with or certified by HubSpot. We implement the platform on your behalf and are paid by you, not by HubSpot." }
-          },
-          {
-            "@type": "Question",
-            "name": "What happens after implementation?",
-            "acceptedAnswer": { "@type": "Answer", "text": "You own the portal and can run it. Handover includes training and documentation. Where it helps, Sage Kite offers maintenance with a defined support scope, further implementation as you add Hubs or processes, and the wider marketing, automation and staffing that turn a well-built CRM into growth." }
-          },
-          {
-            "@type": "Question",
-            "name": "Is Sage Kite only a HubSpot agency?",
-            "acceptedAnswer": { "@type": "Answer", "text": "No. Sage Kite is a business growth consultancy. HubSpot is one of the platforms we implement, alongside consultancy, marketing, automation and specialist staffing. The platform organises how you win and keep customers; the broader work decides what to change and creates the demand that flows through it." }
-          }
-        ]
-      }
-    ]
-  };
+/* ── JSON-LD ──────────────────────────────────────────────────────────── */
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://www.sagekite.com/#organization',
+      name: 'Sage Kite',
+      url: 'https://www.sagekite.com/',
+    },
+    {
+      '@type': 'WebPage',
+      '@id': 'https://www.sagekite.com/platforms/hubspot/#webpage',
+      url: 'https://www.sagekite.com/platforms/hubspot',
+      name: 'HubSpot implementation and consulting services | Sage Kite',
+      description:
+        'Sage Kite implements HubSpot around your sales and marketing process: CRM architecture, pipelines, lifecycle stages, workflows, reporting, migration and integrations, tested and handed over.',
+      isPartOf: { '@id': 'https://www.sagekite.com/#website' },
+      about: { '@id': 'https://www.sagekite.com/platforms/hubspot/#service' },
+      breadcrumb: {
+        '@id': 'https://www.sagekite.com/platforms/hubspot/#breadcrumb',
+      },
+      inLanguage: 'en',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': 'https://www.sagekite.com/platforms/hubspot/#breadcrumb',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: 'https://www.sagekite.com/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Platforms',
+          item: 'https://www.sagekite.com/platforms',
+        },
+        { '@type': 'ListItem', position: 3, name: 'HubSpot' },
+      ],
+    },
+    {
+      '@type': 'Service',
+      '@id': 'https://www.sagekite.com/platforms/hubspot/#service',
+      name: 'HubSpot implementation and consulting services',
+      serviceType: 'HubSpot implementation and consulting',
+      description:
+        'Process mapping, HubSpot Smart CRM architecture, Sales Hub, Marketing Hub, Service Hub and Data Hub configuration, workflows and automation, Breeze AI settings, reporting, data cleanup, migration and integrations, testing, training and handover.',
+      provider: { '@id': 'https://www.sagekite.com/#organization' },
+      areaServed: [
+        { '@type': 'Country', name: 'United States' },
+        { '@type': 'Country', name: 'Canada' },
+        { '@type': 'Place', name: 'Europe' },
+        { '@type': 'Country', name: 'Australia' },
+        { '@type': 'Country', name: 'New Zealand' },
+      ],
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'What we implement in HubSpot',
+        itemListElement: [
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Smart CRM' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Sales Hub' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Marketing Hub' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Service Hub' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Data Hub' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Workflows and automation' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Breeze AI' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Reporting and dashboards' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Migration and integrations' } },
+        ],
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://www.sagekite.com/platforms/hubspot/#faq',
+      isPartOf: { '@id': 'https://www.sagekite.com/#website' },
+      about: { '@id': 'https://www.sagekite.com/platforms/hubspot/#service' },
+      inLanguage: 'en',
+      mainEntity: [
+        { '@type': 'Question', name: 'What is HubSpot implementation?', acceptedAnswer: { '@type': 'Answer', text: 'HubSpot implementation is the work of designing and configuring HubSpot around how your business actually sells and serves customers. It goes beyond switching the account on: CRM architecture, contact and company data structure, deal pipelines, lifecycle stages, lead management, workflows, reporting and any migration or integrations. Sage Kite maps the process first, then builds the platform to fit it.' } },
+        { '@type': 'Question', name: 'What does a HubSpot consultant do?', acceptedAnswer: { '@type': 'Answer', text: 'A HubSpot consultant helps decide how HubSpot should be structured for your business, then configures it and builds the automation that runs it. That means the CRM data model, pipelines and lifecycle stages, workflows for routing and follow-up, reporting that reflects how you measure the business, and training so the team adopts it.' } },
+        { '@type': 'Question', name: "Is this the same as HubSpot's own onboarding?", acceptedAnswer: { '@type': 'Answer', text: "No. HubSpot's onboarding, which is required with some Professional and Enterprise purchases, gives your team guidance and training through a plan based on your goals and purchases. Implementation is the hands-on build around your process: architecture, pipelines, workflows, migration, integrations and reporting. The two are complementary. Sage Kite is not a HubSpot Solutions Partner, so our work does not replace any onboarding HubSpot requires." } },
+        { '@type': 'Question', name: 'How long does a HubSpot implementation take?', acceptedAnswer: { '@type': 'Answer', text: 'It depends on the Hubs involved, how much data needs to move and how many tools need to connect. A focused Sales Hub setup is a smaller project than a multi-Hub build with a migration. Your proposal sets out the milestones and dates before any work starts.' } },
+        { '@type': 'Question', name: 'Can you audit and fix an existing HubSpot portal?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Many engagements are existing portals that grew without a plan: duplicated or inconsistent data, pipelines that do not match the real sales process, workflows that misfire and reporting no one trusts. We audit what is there, fix the data and structure, rebuild the parts holding you back, and document it.' } },
+        { '@type': 'Question', name: 'Can you migrate data from another CRM into HubSpot?', acceptedAnswer: { '@type': 'Answer', text: 'Usually. Migrations from tools like Salesforce, Pipedrive, Zoho or a spreadsheet are common. Feasibility depends on what the current system can export and how the data is structured, so we confirm what is realistic and how records will map during discovery, then clean and de-duplicate as part of the move.' } },
+        { '@type': 'Question', name: 'Which HubSpot Hubs and edition do I need?', acceptedAnswer: { '@type': 'Answer', text: 'HubSpot offers a free CRM and paid Starter, Professional and Enterprise editions across Marketing, Sales, Service, Content, Data and Revenue Hubs. The right mix depends on how you sell and market, and it matters because the paid tiers are a real cost. We advise on the smallest setup that does the job. We do not resell HubSpot licences, so the advice is based on fit, not commission.' } },
+        { '@type': 'Question', name: 'Can you build HubSpot workflows and automation?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. HubSpot workflows automate the repetitive steps: routing and assigning leads, sending follow-up, updating properties and lifecycle stages, creating tasks and internal alerts. We build them around the process we mapped and test each path so the right action happens at the right time.' } },
+        { '@type': 'Question', name: 'Can you set up Breeze AI in HubSpot?', acceptedAnswer: { '@type': 'Answer', text: 'Yes, where your subscription includes the features. We agree with you where AI is useful, such as summarising records or drafting follow-up, and set limits on what it may do without a person checking it first.' } },
+        { '@type': 'Question', name: 'Is HubSpot right for my business?', acceptedAnswer: { '@type': 'Answer', text: 'HubSpot suits businesses with a real sales and marketing process to run and room to grow into it. If you are a solo or small service business that mainly needs to book, contract and invoice clients, a lighter tool such as Dubsado or HoneyBook is often a better fit, and we implement those too. Discovery is where we tell you honestly which way we would go.' } },
+        { '@type': 'Question', name: 'Is Sage Kite a HubSpot partner?', acceptedAnswer: { '@type': 'Answer', text: 'Sage Kite is an independent implementation partner. HubSpot is a trademark of its owner; Sage Kite is not a HubSpot Solutions Partner and is not affiliated with or certified by HubSpot. We implement the platform on your behalf and are paid by you, not by HubSpot.' } },
+        { '@type': 'Question', name: 'What happens after implementation?', acceptedAnswer: { '@type': 'Answer', text: 'You own the portal and can run it. Handover includes training and documentation. Where it helps, Sage Kite offers maintenance with a defined support scope, further implementation as you add Hubs or processes, and the wider marketing, automation and staffing that turn a well-built CRM into growth.' } },
+        { '@type': 'Question', name: 'Is Sage Kite only a HubSpot agency?', acceptedAnswer: { '@type': 'Answer', text: 'No. Sage Kite is a business growth consultancy. HubSpot is one of the platforms we implement, alongside consultancy, marketing, automation and specialist staffing. The platform organises how you win and keep customers; the broader work decides what to change and creates the demand that flows through it.' } },
+      ],
+    },
+  ],
+};
+
+/* ── Page-specific CSS (taken from reference HTML) ──────────────────── */
+
+const pageCSS = `
+/* ── HubSpot page additions. Homepage system, tokens only. ── */
+.sec{padding:clamp(64px,8vw,104px) 0}
+
+/* Hero is sized to fit above the fold on a laptop screen at 100% zoom */
+.pl-hero{padding:clamp(36px,4.2vw,60px) 0 clamp(64px,8vw,104px)}
+.pl-hero .hero-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(40px,5vw,72px);align-items:center}
+.pl-hero h1{font-size:clamp(2.4rem,4.2vw,3.5rem);line-height:1.04;letter-spacing:-.025em;max-width:none;text-wrap:pretty}
+.pl-hero .sub{margin:20px 0 28px;max-width:54ch}
+.hero-facts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:22px;font-size:.875rem;color:var(--sage);font-weight:600}
+.hero-facts span{display:inline-flex;align-items:center;gap:8px}
+
+/* Hero visual: a portal as layers */
+.portal{background:var(--pale-sage);border-radius:var(--r);padding:clamp(22px,3vw,34px);clip-path:polygon(0 0,calc(100% - 48px) 0,100% 48px,100% 100%,0 100%)}
+.portal .ui{box-shadow:8px 8px 0 var(--light-sage);padding:18px 20px 20px}
+.layer{border-radius:4px;padding:12px 14px}
+.layer small{display:block;font-size:.75rem;font-weight:600;color:var(--sage)}
+.layer strong{display:block;font-size:1rem;font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.3}
+.layer p{font-size:.8125rem;line-height:1.4;margin-top:2px}
+.layer-ai{background:var(--sky-soft)}
+.hubs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0}
+.hub{border:1px solid var(--light-sage);border-left:4px solid var(--c);border-radius:4px;padding:9px 12px;font-size:.875rem;font-weight:600;color:var(--ink);line-height:1.25}
+.hub span{display:block;font-size:.75rem;font-weight:500;color:var(--dark-sage)}
+.layer-crm{background:var(--pale-sage);border-top:4px solid var(--sage)}
+.portal figcaption{margin-top:14px;font-size:.75rem;color:var(--sage)}
+
+/* Symptoms */
+.symptoms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:clamp(36px,4vw,52px);border-top:1px solid var(--light-sage);border-left:1px solid var(--light-sage)}
+.symptoms li{border-right:1px solid var(--light-sage);border-bottom:1px solid var(--light-sage);padding:22px 24px;background:var(--warm-white)}
+.symptoms strong{display:block;font-size:1.1rem;font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.3;margin-bottom:6px}
+.symptoms p{font-size:.925rem;line-height:1.5}
+.after-line{margin-top:26px;max-width:70ch;font-size:1.05rem;color:var(--ink)}
+
+/* Starting points */
+.starts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:clamp(36px,4vw,52px)}
+.start{border:1px solid var(--light-sage);border-top:5px solid var(--c);border-radius:var(--r);padding:26px 24px;background:var(--warm-white);display:flex;flex-direction:column}
+.start h3{font-size:1.45rem;margin-bottom:10px}
+.start > p{font-size:.95rem;line-height:1.5}
+.start ul{margin-top:16px}
+.start li{position:relative;padding:8px 0 8px 20px;font-size:.9rem;line-height:1.45;border-top:1px solid var(--light-sage)}
+.start li::before{content:"";position:absolute;left:0;top:18px;width:10px;height:2px;background:var(--c)}
+
+/* By Hub */
+.hub-list{margin-top:clamp(36px,4vw,52px);border-top:1px solid var(--light-sage)}
+.hub-row{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,6fr) minmax(0,3fr);gap:24px;padding:24px 0;border-bottom:1px solid var(--light-sage);align-items:start}
+.hub-row h3{display:flex;align-items:center;gap:12px;font-size:1.35rem}
+.hub-row h3::before{content:"";width:5px;height:26px;border-radius:3px;background:var(--c);flex:0 0 auto}
+.hub-row p{font-size:.975rem;line-height:1.55}
+.hub-row .tags{margin:0}
+.hub-row.muted h3,.hub-row.muted p{color:var(--sage)}
+
+/* Onboarding vs implementation */
+.compare{width:100%;border-collapse:collapse;margin-top:clamp(36px,4vw,52px);background:var(--warm-white);border:1px solid var(--light-sage);border-radius:var(--r);overflow:hidden;font-size:.975rem}
+.compare th,.compare td{text-align:left;padding:16px 20px;border-bottom:1px solid var(--light-sage);vertical-align:top;line-height:1.5}
+.compare thead th{background:var(--pale-sage);color:var(--ink);font-weight:700;font-size:1rem}
+.compare thead th:last-child{border-top:4px solid var(--coral)}
+.compare tbody th{font-weight:600;color:var(--sage);font-size:.875rem;width:18%}
+.compare tbody tr:last-child th,.compare tbody tr:last-child td{border-bottom:0}
+.compare td:last-child{color:var(--ink)}
+.compare-note{margin-top:20px;max-width:72ch}
+
+/* Process + deliverables */
+.flow6{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin-top:clamp(40px,5vw,64px)}
+.flow6 li{padding-right:18px}
+.flow6 .bar{height:4px;background:var(--light-sage);margin-bottom:22px;position:relative}
+.flow6 .bar::after{content:"";position:absolute;left:0;top:0;height:100%;width:40%;background:var(--c)}
+.flow6 .num{font-weight:700;letter-spacing:-.02em;font-size:2.4rem;line-height:1;color:var(--sage)}
+.flow6 h3{font-size:1.3rem;margin:8px 0 6px}
+.flow6 p{font-size:.9rem;line-height:1.45}
+
+.two-col{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:clamp(36px,4vw,52px)}
+.panel{border:1px solid var(--light-sage);border-top:5px solid var(--c);border-radius:var(--r);background:var(--warm-white);padding:clamp(22px,3vw,34px)}
+.panel h3{font-size:1.35rem;margin-bottom:6px}
+.panel-k{font-size:.8125rem;font-weight:600;color:var(--sage);margin-bottom:14px}
+.gets li{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--light-sage);font-size:.95rem;line-height:1.45;color:var(--ink)}
+.gets svg{flex:0 0 auto;margin-top:4px;color:var(--sage)}
+
+/* Fit */
+.fit2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:clamp(36px,4vw,52px)}
+.fit2 .panel p{font-size:.95rem;line-height:1.55;margin-top:14px}
+
+/* Proof placeholder */
+.proof-ph{border:1px dashed var(--sage);border-radius:var(--r);padding:clamp(24px,3vw,36px);background:var(--warm-white);box-shadow:10px 10px 0 var(--butter-soft);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,4vw,56px);align-items:start}
+.proof-ph h2{font-size:clamp(1.6rem,2.6vw,2.1rem)}
+.proof-ph ul li{padding:8px 0;border-top:1px solid var(--light-sage);font-size:.925rem}
+
+/* Connected services */
+.conn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:clamp(32px,4vw,44px)}
+.conn a{display:flex;flex-direction:column;gap:6px;border:1px solid var(--light-sage);border-top:5px solid var(--c);border-radius:var(--r);padding:20px 20px 22px;background:var(--warm-white);text-decoration:none;transition:transform var(--t) var(--ease),border-color var(--t) var(--ease)}
+.conn a:hover{transform:translateY(-3px);border-color:var(--sage);border-top-color:var(--c)}
+.conn strong{font-size:1.15rem;font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.25}
+.conn span{font-size:.875rem;line-height:1.45}
+
+/* FAQ */
+.faq-wrap{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(32px,5vw,72px);align-items:start}
+.faq-wrap h2{font-size:clamp(1.8rem,3vw,2.4rem)}
+.faq-grp + .faq-grp{margin-top:36px}
+.faq-grp > .label{margin-bottom:6px}
+.qa{border-top:1px solid var(--light-sage)}
+.faq-grp .qa:last-child{border-bottom:1px solid var(--light-sage)}
+.qa summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;align-items:center;padding:18px 0;font-weight:700;font-size:1.075rem;color:var(--ink);letter-spacing:-.01em;line-height:1.35}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::after{content:"+";flex:0 0 auto;font-weight:400;font-size:1.5rem;color:var(--sage);line-height:1}
+.qa[open] summary::after{content:"\\2212"}
+.qa p{padding:0 0 20px;max-width:68ch;font-size:1rem}
+.trust-note{margin-top:32px;font-size:.85rem;color:var(--sage);max-width:72ch}
+
+@media (max-width:1040px){
+  .pl-hero .hero-grid{grid-template-columns:1fr}
+  .symptoms,.starts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hub-row{grid-template-columns:1fr;gap:10px}
+  .flow6{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:36px}
+  .proof-ph,.faq-wrap{grid-template-columns:1fr}
+  .conn{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:680px){
+  .portal{clip-path:polygon(0 0,calc(100% - 32px) 0,100% 32px,100% 100%,0 100%)}
+  .hubs{grid-template-columns:1fr}
+  .symptoms,.starts,.two-col,.fit2,.conn{grid-template-columns:1fr}
+  .flow6{grid-template-columns:1fr 1fr}
+  .compare,.compare thead,.compare tbody,.compare tr,.compare th,.compare td{display:block;width:100%}
+  .compare thead{display:none}
+  .compare tbody th{width:auto;padding:10px 16px;border-bottom:0;background:var(--pale-sage)}
+  .compare td{padding-top:8px}
+  .compare td::before{content:attr(data-h);display:block;font-size:.75rem;font-weight:700;color:var(--sage);margin-bottom:2px}
+  .hero-facts{flex-direction:column;gap:4px}
+}
+`;
+
+/* ── Checkmark SVG helper ─────────────────────────────────────────────── */
+
+function Check() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+
+/* ── Page component ───────────────────────────────────────────────────── */
+
+export default function HubspotPage() {
   return (
     <>
+      <Header />
+      <main id="main">
+        <style dangerouslySetInnerHTML={{ __html: pageCSS }} />
+
+        {/* ── 01 Hero ─────────────────────────────────────────────────── */}
+        <section className="pl-hero" aria-labelledby="hero-title">
+          <div className="wrap">
+            <div className="hero-grid">
+              <div>
+                <p className="label">Platforms / HubSpot</p>
+                <h1 id="hero-title">HubSpot implementation and consulting services</h1>
+                <p className="sub">Sage Kite builds HubSpot around the way your business actually sells and serves customers. We map the process first, then configure the CRM, pipelines, workflows, reporting and integrations to match it, migrate your data, test it and hand it over.</p>
+                <div className="cta-row">
+                  <Link href="/contact" className="btn">Discuss your HubSpot setup</Link>
+                  <a href="#what-we-implement" className="link">See what&#8217;s included</a>
+                </div>
+                <div className="hero-facts">
+                  <span>New or existing portals</span>
+                  <span>Fixed price, agreed up front</span>
+                  <span>We don&#8217;t resell licences</span>
+                </div>
+              </div>
+
+              <div>
+                <figure className="portal">
+                  <div className="ui">
+                    <div className="ui-title"><b>Your HubSpot portal</b> <span>Example scope</span></div>
+                    <div className="layer layer-ai">
+                      <small>AI</small>
+                      <strong>Breeze</strong>
+                      <p>Configured within limits your team sets.</p>
+                    </div>
+                    <div className="hubs">
+                      <div className="hub" style={{ '--c': 'var(--ink)' } as React.CSSProperties}>
+                        <strong>Sales Hub</strong>
+                        <span>Pipelines, sequences, quotes</span>
+                      </div>
+                      <div className="hub" style={{ '--c': 'var(--coral)' } as React.CSSProperties}>
+                        <strong>Marketing Hub</strong>
+                        <span>Forms, email, lead scoring</span>
+                      </div>
+                      <div className="hub" style={{ '--c': 'var(--butter)' } as React.CSSProperties}>
+                        <strong>Service Hub</strong>
+                        <span>Tickets, help desk, feedback</span>
+                      </div>
+                      <div className="hub" style={{ '--c': 'var(--sky)' } as React.CSSProperties}>
+                        <strong>Data Hub</strong>
+                        <span>Data sync, quality, automation</span>
+                      </div>
+                    </div>
+                    <div className="layer layer-crm">
+                      <small>Foundation</small>
+                      <strong>Smart CRM</strong>
+                      <p>Contacts, companies, deals, properties and lifecycle stages.</p>
+                    </div>
+                  </div>
+                  <figcaption>Illustrative. Hubs and editions depend on your subscription.</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 02 Problems ─────────────────────────────────────────────── */}
+        <section className="pale sec" id="problems" aria-labelledby="problems-title">
+          <div className="wrap">
+            <div className="head">
+              <p className="label">Common starting situations</p>
+              <h2 id="problems-title">The portal was switched on, but never built around the business.</h2>
+            </div>
+            <ul className="symptoms">
+              <li><strong>Data nobody trusts</strong><p>Duplicate contacts, empty properties and three fields that mean the same thing.</p></li>
+              <li><strong>Pipelines that don&#8217;t match reality</strong><p>Deal stages copied from a template, so the forecast says little about what will close.</p></li>
+              <li><strong>Leads without an owner</strong><p>Form fills arrive, but routing and follow-up still depend on someone checking the inbox.</p></li>
+              <li><strong>Sales and marketing disagree</strong><p>Lifecycle stages are undefined, so an MQL means something different to each team.</p></li>
+              <li><strong>Workflows that misfire</strong><p>Automation built one request at a time, with no map of what triggers what.</p></li>
+              <li><strong>Paying for unused Hubs</strong><p>Professional features bought and never configured, while the team works around them.</p></li>
+            </ul>
+            <p className="after-line">None of this means HubSpot is the wrong platform. It usually means the portal was configured around features rather than around your revenue process.</p>
+          </div>
+        </section>
+
+        {/* ── 03 Starting points ──────────────────────────────────────── */}
+        <section className="sec" id="starting-points" aria-labelledby="starts-title">
+          <div className="wrap">
+            <div className="head">
+              <p className="label">Three starting points</p>
+              <h2 id="starts-title">A new build, a portal that needs fixing, or a move to HubSpot.</h2>
+            </div>
+            <div className="starts">
+              <div className="start" style={{ '--c': 'var(--sage)' } as React.CSSProperties}>
+                <h3>New HubSpot implementation</h3>
+                <p>You have bought HubSpot, or are about to, and want it built properly the first time.</p>
+                <ul>
+                  <li>Revenue process mapped from enquiry to customer</li>
+                  <li>CRM architecture, pipelines and lifecycle stages</li>
+                  <li>Forms, workflows and reporting built and tested</li>
+                  <li>Training and handover for your team</li>
+                </ul>
+              </div>
+              <div className="start" style={{ '--c': 'var(--sky)' } as React.CSSProperties}>
+                <h3>HubSpot portal audit and fix</h3>
+                <p>You have used HubSpot for a while and it has drifted away from how the business works.</p>
+                <ul>
+                  <li>Audit of data, properties, pipelines and workflows</li>
+                  <li>Duplicates cleaned and unused properties retired</li>
+                  <li>Automation and reporting rebuilt where needed</li>
+                  <li>Underused Hubs configured where they earn it</li>
+                </ul>
+              </div>
+              <div className="start" style={{ '--c': 'var(--coral)' } as React.CSSProperties}>
+                <h3>Migration to HubSpot</h3>
+                <p>You are moving from another CRM or from spreadsheets and want the data to arrive usable.</p>
+                <ul>
+                  <li>Export and record mapping confirmed in discovery</li>
+                  <li>Data cleaned and de-duplicated before import</li>
+                  <li>Owners, stages and history mapped where feasible</li>
+                  <li>Old and new systems checked side by side</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 04 What we implement ────────────────────────────────────── */}
+        <section className="rule sec" id="what-we-implement" aria-labelledby="impl-title">
+          <div className="wrap">
+            <div className="head">
+              <p className="label">What we implement</p>
+              <h2 id="impl-title">What HubSpot implementation covers.</h2>
+              <p className="sub">Scope depends on the Hubs and editions you own. We confirm what your subscription supports during discovery.</p>
+            </div>
+            <div className="hub-list">
+              <div className="hub-row" style={{ '--c': 'var(--sage)' } as React.CSSProperties}><h3>Smart CRM</h3><p>The foundation everything else depends on: the contact, company and deal data model, custom properties, lifecycle stages, lead status, teams, permissions and record ownership.</p><div className="tags"><span className="tag">Data model</span><span className="tag">Properties</span><span className="tag">Lifecycle stages</span><span className="tag">Permissions</span></div></div>
+              <div className="hub-row" style={{ '--c': 'var(--ink)' } as React.CSSProperties}><h3>Sales Hub</h3><p>Deal pipelines with clear stage criteria, lead routing and rotation, sequences, meetings, quotes and forecasting, so the pipeline reflects what will actually close.</p><div className="tags"><span className="tag">Pipelines</span><span className="tag">Sequences</span><span className="tag">Quotes</span><span className="tag">Forecasting</span></div></div>
+              <div className="hub-row" style={{ '--c': 'var(--coral)' } as React.CSSProperties}><h3>Marketing Hub</h3><p>Forms and lead capture, lists and segments, email, lead scoring, and the nurture that passes sales-ready leads to sales at the right moment.</p><div className="tags"><span className="tag">Forms</span><span className="tag">Segments</span><span className="tag">Email</span><span className="tag">Lead scoring</span></div></div>
+              <div className="hub-row" style={{ '--c': 'var(--butter)' } as React.CSSProperties}><h3>Service Hub</h3><p>Ticket pipelines, help desk setup, knowledge base structure and feedback surveys, so service history sits on the same record as sales.</p><div className="tags"><span className="tag">Tickets</span><span className="tag">Help desk</span><span className="tag">Knowledge base</span><span className="tag">Surveys</span></div></div>
+              <div className="hub-row" style={{ '--c': 'var(--sky)' } as React.CSSProperties}><h3>Data Hub</h3><p>Data sync with the tools you already use, data quality rules and de-duplication, and more advanced automation where your edition supports it.</p><div className="tags"><span className="tag">Data sync</span><span className="tag">Data quality</span><span className="tag">Automation</span></div></div>
+              <div className="hub-row" style={{ '--c': 'var(--coral)' } as React.CSSProperties}><h3>Workflows and automation</h3><p>Routing, follow-up, property and stage updates, tasks and internal alerts, built from the mapped process and tested path by path.</p><div className="tags"><span className="tag">Routing</span><span className="tag">Follow-up</span><span className="tag">Alerts</span></div></div>
+              <div className="hub-row" style={{ '--c': 'var(--sky)' } as React.CSSProperties}><h3>Breeze AI</h3><p>Breeze features and agents set up where they help, with clear limits on what they may do alone and what needs a person to check.</p><div className="tags"><span className="tag">AI settings</span><span className="tag">Agents</span><span className="tag">Guardrails</span></div></div>
+              <div className="hub-row" style={{ '--c': 'var(--ink)' } as React.CSSProperties}><h3>Reporting and dashboards</h3><p>Dashboards built around the questions you run the business on: pipeline, forecast, source, conversion, activity and service.</p><div className="tags"><span className="tag">Pipeline</span><span className="tag">Attribution</span><span className="tag">Activity</span></div></div>
+              <div className="hub-row" style={{ '--c': 'var(--sage)' } as React.CSSProperties}><h3>Migration and integrations</h3><p>Records moved from your previous CRM or spreadsheets, cleaned on the way in, and the apps you rely on connected where supported.</p><div className="tags"><span className="tag">Migration</span><span className="tag">Cleanup</span><span className="tag">Integrations</span></div></div>
+              <div className="hub-row muted" style={{ '--c': 'var(--light-sage)' } as React.CSSProperties}><h3>Content Hub</h3><p>We do not build websites or blogs on Content Hub at present. If you already use it, we connect its forms and pages to the CRM.</p><div className="tags"><span className="tag">Forms to CRM</span></div></div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 05 Onboarding vs implementation ─────────────────────────── */}
+        <section className="pale sec" id="onboarding" aria-labelledby="onb-title">
+          <div className="wrap">
+            <div className="head">
+              <p className="label">HubSpot onboarding or implementation?</p>
+              <h2 id="onb-title">HubSpot&#8217;s onboarding gets you started. Implementation builds the system.</h2>
+              <p className="sub">HubSpot sells its own onboarding, and it is required with some Professional and Enterprise purchases. It is useful. The two do different jobs.</p>
+            </div>
+            <table className="compare">
+              <thead>
+                <tr><th scope="col"><span className="note">Question</span></th><th scope="col">HubSpot onboarding</th><th scope="col">Sage Kite implementation</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Starts from</th><td data-h="HubSpot onboarding">Your goals, product purchases and existing tech stack</td><td data-h="Sage Kite implementation">Your sales and service process, mapped step by step</td></tr>
+                <tr><th scope="row">Mainly</th><td data-h="HubSpot onboarding">Guidance and training on the product</td><td data-h="Sage Kite implementation">Hands-on build, done in your portal</td></tr>
+                <tr><th scope="row">Covers</th><td data-h="HubSpot onboarding">A customised onboarding plan for the tools you bought</td><td data-h="Sage Kite implementation">Architecture, pipelines, workflows, migration, integrations, reporting and training</td></tr>
+                <tr><th scope="row">Beyond HubSpot</th><td data-h="HubSpot onboarding">Focused on the HubSpot product</td><td data-h="Sage Kite implementation">Connected to consultancy, marketing and staffing where useful</td></tr>
+              </tbody>
+            </table>
+            <p className="compare-note note">If you have been through onboarding and it stopped short of a working system, implementation is usually the missing part. Sage Kite is not a HubSpot Solutions Partner, so our work does not replace any onboarding HubSpot requires with your purchase.</p>
+          </div>
+        </section>
+
+        {/* ── 06 Process ──────────────────────────────────────────────── */}
+        <section className="sec" id="process" aria-labelledby="process-title">
+          <div className="wrap">
+            <div className="head">
+              <p className="label">How it works</p>
+              <h2 id="process-title">How a HubSpot implementation runs.</h2>
+            </div>
+            <ol className="flow6">
+              <li style={{ '--c': 'var(--butter)' } as React.CSSProperties}><div className="bar"></div><div className="num">01</div><h3>Discovery</h3><p>Your process, Hubs, editions, current data, integrations and who signs off.</p></li>
+              <li style={{ '--c': 'var(--sage)' } as React.CSSProperties}><div className="bar"></div><div className="num">02</div><h3>Proposal</h3><p>Deliverables, exclusions, milestones and a fixed project price.</p></li>
+              <li style={{ '--c': 'var(--sky)' } as React.CSSProperties}><div className="bar"></div><div className="num">03</div><h3>Architecture</h3><p>Data model, properties, pipelines and lifecycle stages agreed before building.</p></li>
+              <li style={{ '--c': 'var(--coral)' } as React.CSSProperties}><div className="bar"></div><div className="num">04</div><h3>Build</h3><p>Configuration, workflows, migration and integrations, in that order.</p></li>
+              <li style={{ '--c': 'var(--ink)' } as React.CSSProperties}><div className="bar"></div><div className="num">05</div><h3>Test and train</h3><p>Real scenarios run end to end, then training for users and admins.</p></li>
+              <li style={{ '--c': 'var(--light-sage)' } as React.CSSProperties}><div className="bar"></div><div className="num">06</div><h3>Handover</h3><p>Documentation, then optional maintenance with a defined scope.</p></li>
+            </ol>
+          </div>
+        </section>
+
+        {/* ── 07 Before and after ─────────────────────────────────────── */}
+        <section className="tint sec" id="handover" aria-labelledby="handover-title">
+          <div className="wrap">
+            <div className="head">
+              <p className="label">Before and after</p>
+              <h2 id="handover-title">What we need from you, and what you receive.</h2>
+            </div>
+            <div className="two-col">
+              <div className="panel" style={{ '--c': 'var(--butter)' } as React.CSSProperties}>
+                <h3>What we need</h3>
+                <p className="panel-k">Confirmed during discovery</p>
+                <ul className="gets">
+                  <li><Check />Super Admin access to your HubSpot portal</li>
+                  <li><Check />Your Hubs and editions, or the ones you plan to buy</li>
+                  <li><Check />An export from your current CRM or spreadsheets</li>
+                  <li><Check />A list of tools that need to connect</li>
+                  <li><Check />One decision-maker to sign off the process</li>
+                </ul>
+              </div>
+              <div className="panel" style={{ '--c': 'var(--sage)' } as React.CSSProperties}>
+                <h3>At handover</h3>
+                <p className="panel-k">Final scope set in your proposal</p>
+                <ul className="gets">
+                  <li><Check />A portal configured around your process</li>
+                  <li><Check />Clean data and properties you actually use</li>
+                  <li><Check />Pipelines, lifecycle stages and routing</li>
+                  <li><Check />Workflows tested end to end</li>
+                  <li><Check />Dashboards for the numbers you run on</li>
+                  <li><Check />Training and written documentation</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 08 Fit ──────────────────────────────────────────────────── */}
+        <section className="sec" id="fit" aria-labelledby="fit-title">
+          <div className="wrap">
+            <div className="head">
+              <p className="label">Is HubSpot right for you?</p>
+              <h2 id="fit-title">HubSpot earns its cost when there is a real sales process to run.</h2>
+            </div>
+            <div className="fit2">
+              <div className="panel" style={{ '--c': 'var(--sage)' } as React.CSSProperties}>
+                <h3>Usually a good fit</h3>
+                <p>B2B and professional-services firms, SaaS and technology businesses, consultancies and agencies. Teams where sales, marketing and service need one shared view of the customer, and a sales cycle long enough to need pipeline and forecasting.</p>
+              </div>
+              <div className="panel" style={{ '--c': 'var(--coral)' } as React.CSSProperties}>
+                <h3>Worth comparing first</h3>
+                <p>Solo and small service businesses that mainly need to book, contract and invoice clients are often better served by <Link className="link" href="/platforms/dubsado">Dubsado</Link> or <Link className="link" href="/platforms/honeybook">HoneyBook</Link>. If email marketing is the main need, <Link className="link" href="/platforms/activecampaign">ActiveCampaign</Link> may be enough. We implement those too, so the recommendation is based on fit.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 09 Specialist experience placeholder ────────────────────── */}
+        <section className="sec" style={{ paddingTop: 0 }} aria-labelledby="proof-title">
+          <div className="wrap">
+            <div className="proof-ph">
+              <div>
+                <p className="label">Specialist experience</p>
+                <h2 id="proof-title">Previous HubSpot work by a Sage Kite delivery specialist</h2>
+              </div>
+              <div>
+                <p className="note" style={{ marginBottom: 10 }}>Placeholder for the sample. It will be filled only with approved, attributed examples.</p>
+                <ul>
+                  <li>Specialist role and what they built</li>
+                  <li>Project context and delivery period</li>
+                  <li>Screenshots with client details removed</li>
+                  <li>Results only where there is evidence for them</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 10 Connected services ───────────────────────────────────── */}
+        <section className="pale sec" aria-labelledby="conn-title">
+          <div className="wrap">
+            <div className="head">
+              <p className="label">Where HubSpot sits</p>
+              <h2 id="conn-title">The platform is one part of the growth system.</h2>
+              <p className="sub">HubSpot organises how you win and keep customers. The work around it decides what to change and keeps the pipeline full.</p>
+            </div>
+            <div className="conn">
+              <Link href="/services/consultancy" style={{ '--c': 'var(--butter)' } as React.CSSProperties}><strong>Growth consultancy</strong><span>Decide what the CRM should support before you configure it.</span></Link>
+              <Link href="/services/marketing" style={{ '--c': 'var(--coral)' } as React.CSSProperties}><strong>Marketing</strong><span>SEO, paid media and email that feed the pipeline you built.</span></Link>
+              <Link href="/services/recruitment-staffing" style={{ '--c': 'var(--ink)' } as React.CSSProperties}><strong>CRM and automation VA</strong><span>Someone to keep data clean and workflows running after handover.</span></Link>
+              <Link href="/for-agencies" style={{ '--c': 'var(--sky)' } as React.CSSProperties}><strong>White-label for agencies</strong><span>HubSpot builds for your clients, delivered under your brand.</span></Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 11 FAQ ──────────────────────────────────────────────────── */}
+        <section className="sec" id="faq" aria-labelledby="faq-title">
+          <div className="wrap faq-wrap">
+            <div>
+              <p className="label">Questions</p>
+              <h2 id="faq-title">HubSpot implementation FAQs</h2>
+            </div>
+            <div>
+              <div className="faq-grp">
+                <p className="label">HubSpot implementation</p>
+                <details className="qa"><summary>What is HubSpot implementation?</summary><p>HubSpot implementation is the work of designing and configuring HubSpot around how your business actually sells and serves customers. It goes beyond switching the account on: CRM architecture, contact and company data structure, deal pipelines, lifecycle stages, lead management, workflows, reporting and any migration or integrations. Sage Kite maps the process first, then builds the platform to fit it.</p></details>
+                <details className="qa"><summary>What does a HubSpot consultant do?</summary><p>A HubSpot consultant helps decide how HubSpot should be structured for your business, then configures it and builds the automation that runs it. That means the CRM data model, pipelines and lifecycle stages, workflows for routing and follow-up, reporting that reflects how you measure the business, and training so the team adopts it.</p></details>
+                <details className="qa"><summary>Is this the same as HubSpot&apos;s own onboarding?</summary><p>No. HubSpot&apos;s onboarding, which is required with some Professional and Enterprise purchases, gives your team guidance and training through a plan based on your goals and purchases. Implementation is the hands-on build around your process: architecture, pipelines, workflows, migration, integrations and reporting. The two are complementary. Sage Kite is not a HubSpot Solutions Partner, so our work does not replace any onboarding HubSpot requires.</p></details>
+                <details className="qa"><summary>How long does a HubSpot implementation take?</summary><p>It depends on the Hubs involved, how much data needs to move and how many tools need to connect. A focused Sales Hub setup is a smaller project than a multi-Hub build with a migration. Your proposal sets out the milestones and dates before any work starts.</p></details>
+                <details className="qa"><summary>Can you audit and fix an existing HubSpot portal?</summary><p>Yes. Many engagements are existing portals that grew without a plan: duplicated or inconsistent data, pipelines that do not match the real sales process, workflows that misfire and reporting no one trusts. We audit what is there, fix the data and structure, rebuild the parts holding you back, and document it.</p></details>
+              </div>
+              <div className="faq-grp">
+                <p className="label">Scope and configuration</p>
+                <details className="qa"><summary>Can you migrate data from another CRM into HubSpot?</summary><p>Usually. Migrations from tools like Salesforce, Pipedrive, Zoho or a spreadsheet are common. Feasibility depends on what the current system can export and how the data is structured, so we confirm what is realistic and how records will map during discovery, then clean and de-duplicate as part of the move.</p></details>
+                <details className="qa"><summary>Which HubSpot Hubs and edition do I need?</summary><p>HubSpot offers a free CRM and paid Starter, Professional and Enterprise editions across Marketing, Sales, Service, Content, Data and Revenue Hubs. The right mix depends on how you sell and market, and it matters because the paid tiers are a real cost. We advise on the smallest setup that does the job. We do not resell HubSpot licences, so the advice is based on fit, not commission.</p></details>
+                <details className="qa"><summary>Can you build HubSpot workflows and automation?</summary><p>Yes. HubSpot workflows automate the repetitive steps: routing and assigning leads, sending follow-up, updating properties and lifecycle stages, creating tasks and internal alerts. We build them around the process we mapped and test each path so the right action happens at the right time.</p></details>
+                <details className="qa"><summary>Can you set up Breeze AI in HubSpot?</summary><p>Yes, where your subscription includes the features. We agree with you where AI is useful, such as summarising records or drafting follow-up, and set limits on what it may do without a person checking it first.</p></details>
+              </div>
+              <div className="faq-grp">
+                <p className="label">Working with Sage Kite</p>
+                <details className="qa"><summary>Is HubSpot right for my business?</summary><p>HubSpot suits businesses with a real sales and marketing process to run and room to grow into it. If you are a solo or small service business that mainly needs to book, contract and invoice clients, a lighter tool such as Dubsado or HoneyBook is often a better fit, and we implement those too. Discovery is where we tell you honestly which way we would go.</p></details>
+                <details className="qa"><summary>Is Sage Kite a HubSpot partner?</summary><p>Sage Kite is an independent implementation partner. HubSpot is a trademark of its owner; Sage Kite is not a HubSpot Solutions Partner and is not affiliated with or certified by HubSpot. We implement the platform on your behalf and are paid by you, not by HubSpot.</p></details>
+                <details className="qa"><summary>What happens after implementation?</summary><p>You own the portal and can run it. Handover includes training and documentation. Where it helps, Sage Kite offers maintenance with a defined support scope, further implementation as you add Hubs or processes, and the wider marketing, automation and staffing that turn a well-built CRM into growth.</p></details>
+                <details className="qa"><summary>Is Sage Kite only a HubSpot agency?</summary><p>No. Sage Kite is a business growth consultancy. HubSpot is one of the platforms we implement, alongside consultancy, marketing, automation and specialist staffing. The platform organises how you win and keep customers; the broader work decides what to change and creates the demand that flows through it.</p></details>
+              </div>
+              <p className="trust-note">Sage Kite is an independent implementation partner. HubSpot is a trademark of its owner. Sage Kite is not a HubSpot Solutions Partner and is not affiliated with or certified by HubSpot.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 12 Final CTA ────────────────────────────────────────────── */}
+        <section className="tint final" aria-labelledby="final-title">
+          <div className="wrap">
+            <div className="final-inner">
+              <div className="final-words">
+                <span><span style={{ color: 'var(--sage)' }}>●</span> Process</span>
+                <span><span style={{ color: 'var(--sky)' }}>●</span> HubSpot</span>
+                <span><span style={{ color: 'var(--ink)' }}>●</span> People</span>
+                <span><span style={{ color: 'var(--coral)' }}>●</span> Growth</span>
+              </div>
+              <h2 id="final-title">Build HubSpot around how you sell.</h2>
+              <p className="sub">A discovery call looks at your current portal or plan, what the business needs from it, and what a fixed-scope project would cover.</p>
+              <div className="cta-row">
+                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/services/crm-implementation" className="link">See all CRM implementation services</Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <a className="skip" href="#main">Skip to content</a>
-      <Header />
-      <main id="main">
-        <style dangerouslySetInnerHTML={{ __html: `
-          /* HubSpot page additions */
-          .crumbs{padding:18px 0 0;font-size:.85rem}
-          .crumbs ol{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--sage)}
-          .crumbs a{text-decoration:none;font-weight:500}
-          .crumbs a:hover{text-decoration:underline;text-decoration-color:var(--coral);text-underline-offset:4px}
-          .crumbs li:not(:last-child)::after{content:"/";margin-left:8px;color:var(--light-sage)}
-          .crumbs [aria-current]{color:var(--ink);font-weight:600}
-
-          .plat-hero{padding:clamp(16px,3vw,32px) 0 clamp(72px,9vw,112px)}
-          .plat-hero h1{font-size:clamp(2.5rem,5vw,4.1rem);line-height:1.02;letter-spacing:-.025em;max-width:15ch}
-          .plat-hero .sub{margin:24px 0 34px;max-width:52ch}
-
-          .checklist{background:var(--pale-sage);border-radius:var(--r);padding:clamp(24px,3vw,34px);clip-path:polygon(0 0,calc(100% - 48px) 0,100% 48px,100% 100%,0 100%);align-self:start}
-          .checklist .ui{box-shadow:8px 8px 0 var(--light-sage); background:var(--warm-white); border:1px solid var(--light-sage); border-radius:var(--r); padding:18px 20px;}
-          .ui-title{display:flex;justify-content:space-between;align-items:baseline;font-size:.8125rem;font-weight:600;color:var(--sage);margin-bottom:12px}
-          .ui-title b{font-weight:600;color:var(--ink);font-size:.95rem}
-          .check{list-style:none;margin:0;padding:0;}
-          .check li{display:flex;gap:10px;align-items:flex-start;padding:9px 0;font-size:.925rem;color:var(--ink);border-bottom:1px solid var(--pale-sage)}
-          .check li:last-child{border-bottom:0}
-          .check svg{flex:0 0 auto;margin-top:3px;color:var(--sage)}
-          .check span{font-size:.8125rem;color:var(--sage);margin-left:auto;white-space:nowrap}
-          .checklist figcaption{margin-top:14px;font-size:.75rem;color:var(--sage)}
-
-          .fit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:clamp(36px,4vw,52px)}
-          .fit{border:1px solid var(--light-sage);border-left:5px solid var(--c);border-radius:var(--r);padding:20px 22px;background:var(--warm-white)}
-          .fit strong{display:block;font-family:var(--sans);font-weight:700;letter-spacing:-.01em;font-size:1.05rem;color:var(--ink);line-height:1.25;margin-bottom:0}
-
-          .symptoms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:clamp(36px,4vw,52px);border-top:1px solid var(--light-sage);border-left:1px solid var(--light-sage);list-style:none;padding:0;}
-          .symptoms li{border-right:1px solid var(--light-sage);border-bottom:1px solid var(--light-sage);padding:22px 24px;font-size:.95rem;color:var(--ink);line-height:1.4}
-          .after-line{margin-top:26px;max-width:66ch;font-size:1.05rem}
-
-          .journey{background:var(--warm-white);border:1px solid var(--light-sage);border-radius:var(--r);padding:clamp(22px,3vw,34px);margin-top:clamp(36px,4vw,52px)}
-          .track{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;position:relative;list-style:none;padding:0;margin:0;}
-          .track::before{content:"";position:absolute;left:9%;right:9%;top:15px;height:1px;background:var(--sage)}
-          .track li{text-align:center;position:relative}
-          .track .d{display:block;width:12px;height:12px;border-radius:50%;background:var(--warm-white);border:1px solid var(--sage);margin:9px auto 12px}
-          .track li.auto .d{background:var(--sky-soft);border-color:var(--sky)}
-          .track li.human .d{background:var(--butter-soft);border-color:var(--butter)}
-          .track strong{display:block;font-family:var(--sans);font-weight:700;letter-spacing:-.01em;font-size:1.15rem;color:var(--ink);line-height:1.2}
-          .track small{display:block;font-size:.75rem;color:var(--sage);margin-top:3px}
-          .key{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:26px;padding-top:18px;border-top:1px dashed var(--light-sage);font-size:.85rem}
-          .key span{display:inline-flex;align-items:center;gap:8px}
-
-          .impl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:clamp(36px,4vw,52px)}
-          .impl{border:1px solid var(--light-sage);border-top:5px solid var(--c);border-radius:var(--r);padding:22px 22px 24px;background:var(--warm-white);transition:transform var(--t) var(--ease)}
-          .impl:hover{transform:translateY(-3px)}
-          .impl h3{font-size:1.45rem;margin-bottom:8px;color:var(--ink)}
-          .impl p{font-size:.9rem;line-height:1.5}
-
-          .paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:clamp(36px,4vw,52px)}
-          .path-card{border:1px solid var(--light-sage);border-radius:var(--r);padding:28px 28px 30px;background:var(--warm-white)}
-          .path-card h3{font-size:1.75rem;margin-bottom:12px;color:var(--ink)}
-          .path-card ul{margin-top:14px;list-style:none;padding:0;}
-          .path-card li{padding:8px 0 8px 20px;position:relative;font-size:.925rem;line-height:1.45;border-top:1px solid var(--light-sage)}
-          .path-card li::before{content:"";position:absolute;left:0;top:18px;width:10px;height:2px;background:var(--c)}
-
-          .why-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,5vw,72px);align-items:start}
-          .why-list{list-style:none;padding:0;margin:0;}
-          .why-list li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;padding:16px 0;border-top:1px solid var(--light-sage);font-size:.975rem;line-height:1.5}
-          .why-list b{font-family:var(--sans);font-weight:700;font-size:1.15rem;color:var(--sage)}
-          .why-list strong{color:var(--ink);font-weight:600}
-
-          .partner{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,4fr);gap:clamp(28px,5vw,64px);align-items:center;border:1px solid var(--light-sage);border-left:6px solid var(--sage);border-radius:var(--r);padding:clamp(28px,4vw,48px)}
-          .partner h2{font-size:clamp(1.8rem,3vw,2.5rem)}
-          .partner .sub{margin-top:14px;font-size:1rem}
-
-          .deliver{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(28px,4vw,64px);margin-top:clamp(32px,4vw,44px);list-style:none;padding:0;}
-          .deliver li{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--light-sage);font-size:.975rem;line-height:1.45}
-          .deliver svg{flex:0 0 auto;margin-top:4px}
-
-          .stack{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-top:clamp(32px,4vw,48px);align-items:stretch;list-style:none;padding:0;}
-          .stack li{background:var(--warm-white);border:1px solid var(--light-sage);border-top:4px solid var(--c);border-radius:var(--r);padding:16px 14px;text-align:center;font-size:.9rem;font-weight:600;color:var(--ink);display:flex;align-items:center;justify-content:center;line-height:1.3}
-          .stack li a{text-decoration:none}
-          .stack li a:hover{text-decoration:underline;text-decoration-color:var(--coral);text-underline-offset:4px}
-          .stack-note{margin-top:22px;max-width:70ch;font-size:.975rem}
-
-          .related{display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:22px}
-          .mid-cta{display:flex;flex-wrap:wrap;align-items:center;gap:18px 28px;margin-top:clamp(32px,4vw,44px)}
-          .trust-note{margin-top:28px;font-size:.85rem;color:var(--sage);max-width:70ch}
-
-          .faq-group { display: grid; grid-template-columns: 280px 1fr; gap: 40px; padding: 48px 0; border-top: 1px solid var(--light-sage); }
-          .faq-group .label { margin: 0; color: var(--ink); font-weight: 500; font-size: 0.85rem; }
-          .faq-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 40px; }
-          .faq-grid > div h3 { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 12px; font-family: var(--sans); line-height: 1.4; }
-          .faq-grid > div p { font-size: 0.85rem; line-height: 1.55; color: var(--ink); }
-
-          .runs-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:40px 24px;margin-top:clamp(36px,4vw,52px)}
-          .run-step{display:flex;flex-direction:column}
-          .run-bar{height:4px;background:var(--light-sage);margin-bottom:20px;display:flex}
-          .run-bar::before{content:"";width:35%;height:100%;background:var(--c)}
-          .run-step .num{font-family:var(--sans);font-size:2.4rem;color:var(--sage);line-height:1;margin-bottom:12px;font-weight:700;letter-spacing:-.02em}
-          .run-step h3{font-family:var(--sans);font-size:1.35rem;color:var(--ink);margin-bottom:10px;font-weight:700;letter-spacing:-.01em}
-          .run-step p{font-size:.925rem;line-height:1.45}
-
-          @media (max-width:1040px){
-            .fit-grid,.symptoms,.impl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-            .track{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:22px}
-            .track::before{display:none}
-            .why-grid,.partner{grid-template-columns:1fr}
-            .stack{grid-template-columns:repeat(3,minmax(0,1fr))}
-            .plat-hero .hero-grid{gap:40px}
-            .runs-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-            .faq-group { grid-template-columns: 1fr; padding: 32px 0; gap: 24px; }
-            .faq-grid { grid-template-columns: 1fr; gap: 32px; }
-          }
-          @media (max-width:680px){
-            .fit-grid,.symptoms,.impl-grid,.paths,.deliver,.runs-grid{grid-template-columns:1fr}
-            .track{grid-template-columns:repeat(2,minmax(0,1fr))}
-            .stack{grid-template-columns:repeat(2,minmax(0,1fr))}
-            .mid-cta .btn{width:100%}
-          }
-        ` }} />
-
-        {/* Hero */}
-        <section className="plat-hero">
-          <div className="wrap">
-            <div className="brand-dashes" style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-              <div style={{ width: '24px', height: '6px', borderRadius: '4px', background: 'var(--coral)' }}></div>
-              <div style={{ width: '24px', height: '6px', borderRadius: '4px', background: 'var(--butter)' }}></div>
-              <div style={{ width: '24px', height: '6px', borderRadius: '4px', background: 'var(--sky)' }}></div>
-            </div>
-
-            
-            <div className="hero-grid" style={{ marginTop: '24px' }}>
-              <div className="hero-copy">
-                <h1>HubSpot implementation and consulting services</h1>
-                <p className="sub">
-                  Sage Kite implements HubSpot around the way your business actually sells and serves customers: CRM architecture, pipelines, lifecycle stages, workflows, reporting and integrations — mapped to your process, migrated, tested and handed over.
-                </p>
-                <div className="cta-row" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-                  <Link href="#contact" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Book a discovery call</Link>
-                  <Link href="#included" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>See what's included</Link>
-                </div>
-              </div>
-              
-              <div className="checklist">
-                 <div className="ui">
-                    <div className="ui-title"><b>Configured HubSpot portal</b> <span>Example scope</span></div>
-                    <ul className="check">
-                       <li><Check size={16} /> CRM data model and properties structured <span>Setup</span></li>
-                       <li><Check size={16} /> Lifecycle stages and lead status defined <span>Lifecycle</span></li>
-                       <li><Check size={16} /> Deal pipeline that matches your sales process <span>Pipelines</span></li>
-                       <li><Check size={16} /> Lead capture forms and routing <span>Lead mgmt</span></li>
-                       <li><Check size={16} /> Workflows built, tested and handed over <span>Automation</span></li>
-                       <li><Check size={16} /> Dashboards for the metrics you run on <span>Reporting</span></li>
-                    </ul>
-                 </div>
-                 <figcaption>Illustrative scope. Final scope is agreed in your proposal.</figcaption>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <hr style={{ border: 'none', borderTop: '1px solid var(--light-sage)', margin: 0 }} />
-
-        {/* Who it's for */}
-        <section className="wrap" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
-          <div className="head">
-            <div className="label">Who it's for</div>
-            <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '22ch', lineHeight: 1.05, marginBottom: '24px' }}>HubSpot suits businesses with a sales and marketing process to run.</h2>
-            <p className="sub" style={{ maxWidth: '54ch', fontSize: '1.05rem', lineHeight: 1.5, color: 'var(--ink)' }}>
-              We implement HubSpot CRM for B2B and professional-services firms, agencies, SaaS and technology businesses, and consultancies — built around how each one wins, converts and keeps customers.
-            </p>
-          </div>
-          <div className="fit-grid">
-             <div className="fit" style={{ '--c': 'var(--sage)' } as React.CSSProperties}>
-                <strong>B2B & professional services</strong>
-                <p style={{ marginTop: '8px', fontSize: '0.925rem', lineHeight: 1.45, color: 'var(--ink)' }}>Longer sales cycles that need pipeline visibility, consistent follow-up and reporting that reflects how deals really progress.</p>
-             </div>
-             <div className="fit" style={{ '--c': 'var(--sky)' } as React.CSSProperties}>
-                <strong>Marketing & creative agencies</strong>
-                <p style={{ marginTop: '8px', fontSize: '0.925rem', lineHeight: 1.45, color: 'var(--ink)' }}>Managing their own pipeline and their clients' — and, with Sage Kite, delivering HubSpot for clients under their own brand.</p>
-             </div>
-             <div className="fit" style={{ '--c': 'var(--coral)' } as React.CSSProperties}>
-                <strong>SaaS & technology</strong>
-                <p style={{ marginTop: '8px', fontSize: '0.925rem', lineHeight: 1.45, color: 'var(--ink)' }}>Connecting marketing, sales and customer success in one CRM so lifecycle, retention and revenue are visible end to end.</p>
-             </div>
-             <div className="fit" style={{ '--c': 'var(--butter)' } as React.CSSProperties}>
-                <strong>Consultants & advisory firms</strong>
-                <p style={{ marginTop: '8px', fontSize: '0.925rem', lineHeight: 1.45, color: 'var(--ink)' }}>Structured lead management and follow-up for a smaller number of higher-value relationships.</p>
-             </div>
-             <div className="fit" style={{ '--c': 'var(--ink)' } as React.CSSProperties}>
-                <strong>Sales-led teams</strong>
-                <p style={{ marginTop: '8px', fontSize: '0.925rem', lineHeight: 1.45, color: 'var(--ink)' }}>Businesses aligning sales and marketing around one source of truth, rather than a CRM and a marketing tool that disagree.</p>
-             </div>
-             <div className="fit" style={{ '--c': 'var(--sage)' } as React.CSSProperties}>
-                <strong>Outgrowing a basic CRM</strong>
-                <p style={{ marginTop: '8px', fontSize: '0.925rem', lineHeight: 1.45, color: 'var(--ink)' }}>Teams on spreadsheets or a starter tool that has run out of room and needs a platform built to scale.</p>
-             </div>
-          </div>
-          <p className="after-line" style={{ maxWidth: '100%', fontSize: '0.85rem' }}>
-            HubSpot earns its cost when there is a real sales and marketing motion to support. If you are a solo or small service business that mainly needs to book, contract and invoice clients, a lighter tool such as <Link href="/platforms/dubsado" className="link" style={{ fontSize: 'inherit' }}>Dubsado</Link> or <Link href="/platforms/honeybook" className="link" style={{ fontSize: 'inherit' }}>HoneyBook</Link> is often a better fit — and we implement those too. Discovery is where we tell you honestly which way we would go.
-          </p>
-        </section>
-
-        {/* The Problem */}
-        <section className="pale" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
-          <div className="wrap">
-            <div className="head">
-              <div className="label">The problem</div>
-              <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '24ch', lineHeight: 1.05, marginBottom: '32px' }}>When the portal was switched on but never built around the business.</h2>
-            </div>
-            <ul className="symptoms">
-               <li>HubSpot was set up quickly and never structured around a real process.</li>
-               <li>Sales and marketing work in the same tool but from different playbooks.</li>
-               <li>Contact and company data is duplicated, patchy or full of unused properties.</li>
-               <li>Pipelines and lifecycle stages do not match how deals actually progress.</li>
-               <li>Follow-up and lead routing still depend on someone remembering.</li>
-               <li>The default reports do not answer the questions the business runs on.</li>
-            </ul>
-            <p style={{ marginTop: '28px', maxWidth: '75ch', fontSize: '1.05rem', lineHeight: 1.5, color: 'var(--ink)' }}>
-              None of this means HubSpot is the wrong platform. It usually means it was configured around its features instead of around your revenue process.
-            </p>
-          </div>
-        </section>
-
-        {/* Our approach */}
-        <section className="wrap" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
-           <div className="head">
-              <div className="label">Our approach</div>
-              <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '24ch', lineHeight: 1.05, marginBottom: '24px' }}>We build the system around the business, not the other way around.</h2>
-              <p className="sub" style={{ maxWidth: '54ch', fontSize: '1.05rem', lineHeight: 1.5, color: 'var(--ink)' }}>
-                HubSpot's own onboarding gets an account started. Implementation is the part that decides whether it works: we map how a lead becomes a customer — and stays one — then structure the CRM, automation and reporting to fit that, rather than reshaping the business around default settings.
-              </p>
-           </div>
-           
-           <div className="journey">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '32px', fontSize: '1.05rem', fontWeight: 600, color: 'var(--ink)' }}>
-                 <span>A typical revenue process in HubSpot</span>
-                 <span style={{ fontSize: '0.85rem', color: 'var(--sage)', fontWeight: 500 }}>Mapped before anything is built</span>
-              </div>
-              <ul className="track" style={{ rowGap: '44px' }}>
-                 <li className="auto"><span className="d"></span><strong>Lead</strong><small>Form</small></li>
-                 <li className="auto"><span className="d"></span><strong>Lifecycle</strong><small>Property</small></li>
-                 <li className="auto"><span className="d"></span><strong>Route</strong><small>Workflow</small></li>
-                 <li className="human"><span className="d"></span><strong>Qualify</strong><small>Sales team</small></li>
-                 <li className="auto"><span className="d"></span><strong>Deal</strong><small>Pipeline</small></li>
-                 
-                 <li className="auto"><span className="d"></span><strong>Quote</strong><small>Sales Hub</small></li>
-                 <li className="human"><span className="d"></span><strong>Won</strong><small>Handoff</small></li>
-                 <li className="auto"><span className="d"></span><strong>Onboard</strong><small>Service Hub</small></li>
-                 <li className="auto"><span className="d"></span><strong>Report</strong><small>Dashboard</small></li>
-              </ul>
-              <div className="key">
-                 <span><span className="d" style={{ display: 'inline-block', width: '10px', height: '10px', borderRadius: '50%', border: '1px solid var(--sky)', background: 'var(--sky-soft)' }}></span> Automated where it should be</span>
-                 <span><span className="d" style={{ display: 'inline-block', width: '10px', height: '10px', borderRadius: '50%', border: '1px solid var(--butter)', background: 'var(--butter-soft)' }}></span> Kept with your team</span>
-              </div>
-           </div>
-           
-           <p style={{ marginTop: '36px', maxWidth: '64ch', fontSize: '1.05rem', lineHeight: 1.5, color: 'var(--ink)' }}>
-             We configure HubSpot so the predictable steps happen on their own and the numbers stay accurate, and leave qualification, closing and service — the parts that need judgement — with your people.
-           </p>
-        </section>
-
-        <hr style={{ border: 'none', borderTop: '1px solid var(--light-sage)', margin: 0 }} />
-
-        {/* What we implement */}
-        <section className="wrap" id="included" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
-           <div className="head">
-             <div className="label">What we implement</div>
-             <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '18ch', lineHeight: 1.05 }}>What HubSpot implementation services cover.</h2>
-           </div>
-           <div className="impl-grid">
-             <div className="impl" style={{ '--c': 'var(--sage)' } as React.CSSProperties}>
-                <h3>CRM architecture</h3>
-                <p>A contact, company and deal data model with the properties you actually use, so the CRM stays the single source of truth.</p>
-             </div>
-             <div className="impl" style={{ '--c': 'var(--sky)' } as React.CSSProperties}>
-                <h3>Account setup & permissions</h3>
-                <p>Account settings, teams and user permissions structured for how your business is organised and who should see what.</p>
-             </div>
-             <div className="impl" style={{ '--c': 'var(--coral)' } as React.CSSProperties}>
-                <h3>Pipelines & deal stages</h3>
-                <p>Sales pipelines and deal stages that match how deals really move, with the exit criteria that keep the forecast honest.</p>
-             </div>
-             
-             <div className="impl" style={{ '--c': 'var(--butter)' } as React.CSSProperties}>
-                <h3>Lifecycle & lead management</h3>
-                <p>Lifecycle stages, lead status and routing, so every enquiry has an owner and a next step from the moment it arrives.</p>
-             </div>
-             <div className="impl" style={{ '--c': 'var(--dark-sage)' } as React.CSSProperties}>
-                <h3>Forms & lead capture</h3>
-                <p>Forms and lead capture connected to the CRM, routing each enquiry into the right pipeline and workflow.</p>
-             </div>
-             <div className="impl" style={{ '--c': 'var(--sky)' } as React.CSSProperties}>
-                <h3>Workflows & automation</h3>
-                <p>Workflows for routing, follow-up, property and stage updates, tasks and internal alerts — built and tested around the mapped process.</p>
-             </div>
-             
-             <div className="impl" style={{ '--c': 'var(--coral)' } as React.CSSProperties}>
-                <h3>Reporting & dashboards</h3>
-                <p>Dashboards and reports built around the questions you run on: pipeline, forecast, source, conversion and activity.</p>
-             </div>
-             <div className="impl" style={{ '--c': 'var(--butter)' } as React.CSSProperties}>
-                <h3>Migration & integrations</h3>
-                <p>Data migrated and cleaned from your previous tool where feasible, and the apps you rely on connected to HubSpot.</p>
-             </div>
-             <div className="impl" style={{ '--c': 'var(--ink)' } as React.CSSProperties}>
-                <h3>Testing & handover</h3>
-                <p>The build tested against real scenarios, corrected, then training and documentation for the team who will run it.</p>
-             </div>
-           </div>
-           <div className="mid-cta" style={{ display: 'flex', alignItems: 'center', gap: '24px', marginTop: 'clamp(32px,4vw,44px)' }}>
-             <Link href="#contact" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Talk to a HubSpot specialist</Link>
-             <span style={{ fontSize: '0.85rem', color: 'var(--sage)' }}>Scope, exclusions and a fixed project price are agreed before any build starts.</span>
-           </div>
-        </section>
-
-        {/* Two starting points (paths) */}
-        <section className="pale" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
-           <div className="wrap">
-             <div className="head">
-               <div className="label">Two starting points</div>
-               <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '24ch', lineHeight: 1.05 }}>A new HubSpot build, or fixing an existing portal.</h2>
-             </div>
-             
-             <div className="paths">
-               <div className="path-card" style={{ '--c': 'var(--sage)' } as React.CSSProperties}>
-                 <h3>New HubSpot implementation</h3>
-                 <p style={{ fontSize: '0.975rem', lineHeight: 1.5, color: 'var(--ink)', marginBottom: '18px' }}>We map your revenue process, design the CRM architecture, then build the pipelines, automation and reporting around it.</p>
-                 <ul>
-                   <li>Revenue process mapped from lead to customer</li>
-                   <li>CRM, pipelines, lifecycle stages and forms built</li>
-                   <li>Workflows created and tested before launch</li>
-                   <li>Migration, training and handover for your team</li>
-                 </ul>
-               </div>
-               
-               <div className="path-card" style={{ '--c': 'var(--sky)' } as React.CSSProperties}>
-                 <h3>Existing portal audit & optimisation</h3>
-                 <p style={{ fontSize: '0.975rem', lineHeight: 1.5, color: 'var(--ink)', marginBottom: '18px' }}>We review what is already there, find where the setup and the real process have drifted apart, and rebuild the parts holding you back.</p>
-                 <ul>
-                   <li>Audit of data, properties, pipelines and workflows</li>
-                   <li>Duplicate and unused data cleaned or consolidated</li>
-                   <li>Pipelines, automation and reporting corrected</li>
-                   <li>Underused Hubs and features introduced where they earn it</li>
-                 </ul>
-               </div>
-             </div>
-           </div>
-        </section>
-
-        {/* Why hire a specialist */}
-        <section className="wrap" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
-           <div className="why-grid">
-             <div className="why-copy">
-               <div className="label">Doing it yourself, or not</div>
-               <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '12ch', lineHeight: 1.05 }}>Why hire a HubSpot specialist?</h2>
-               <p style={{ marginTop: '24px', fontSize: '1.05rem', lineHeight: 1.6, maxWidth: '38ch', color: 'var(--ink)' }}>
-                 HubSpot is usable out of the box, and many teams start themselves. The cost is usually a portal shaped by default settings, the manual work that follows, and the rebuild once the structure no longer matches how the business runs.
-               </p>
-             </div>
-             
-             <ul className="why-list">
-               <li><b>01</b><div><strong>Architecture first.</strong> The data model, pipelines and lifecycle stages are the decisions that everything else depends on, and the hardest to change later.</div></li>
-               <li><b>02</b><div><strong>Fewer configuration mistakes.</strong> Properties, lifecycle logic and workflow timings behave in specific ways; knowing them avoids automation that fires at the wrong moment.</div></li>
-               <li><b>03</b><div><strong>Data done properly.</strong> Migration, de-duplication and clean properties, so reporting can be trusted from the start.</div></li>
-               <li><b>04</b><div><strong>Sales and marketing aligned.</strong> One source of truth, so both work from the same pipeline and the same definitions.</div></li>
-               <li><b>05</b><div><strong>Reporting that reflects the business.</strong> Dashboards built around your metrics rather than the defaults every portal ships with.</div></li>
-               <li><b>06</b><div><strong>Handover and adoption.</strong> The team is trained on what was built and how to change it, with the structure documented.</div></li>
-             </ul>
-           </div>
-        </section>
-
-        <hr style={{ border: 'none', borderTop: '1px solid var(--light-sage)', margin: 0 }} />
-
-        {/* Partner Block */}
-        <section className="wrap" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
-           <div className="partner">
-             <div>
-               <h2 style={{ maxWidth: '20ch', marginBottom: '24px' }}>A HubSpot implementation partner, not a one-off setup.</h2>
-               <p style={{ fontSize: '1.05rem', lineHeight: 1.6, color: 'var(--ink)' }}>
-                 If you already know HubSpot is the right platform, Sage Kite can handle the implementation: process mapping, configuration, workflow automation, testing and handover. And because Sage Kite is a business growth consultancy, the same team can help with what sits around the platform.
-               </p>
-             </div>
-             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'flex-start' }}>
-               <Link href="#contact" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Discuss your HubSpot setup</Link>
-               <Link href="/platforms" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>See all CRM implementation services</Link>
-             </div>
-           </div>
-           
-           <p className="trust-note">
-             Sage Kite is an independent implementation partner. HubSpot is a trademark of its owner; Sage Kite is not a HubSpot Solutions Partner and is not affiliated with or certified by HubSpot.
-           </p>
-        </section>
-
-        {/* How it works (Runs) */}
-        <section className="pale" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
-           <div className="wrap">
-             <div className="head">
-               <div className="label">How it works</div>
-               <h2 style={{ maxWidth: '30ch' }}>How a HubSpot implementation runs.</h2>
-             </div>
-             
-             <div className="runs-grid">
-               <div className="run-step">
-                 <div className="run-bar" style={{ '--c': 'var(--butter)' } as React.CSSProperties}></div>
-                 <div className="num">01</div>
-                 <h3>Discovery</h3>
-                 <p>Your services, current process, team and constraints, and whether we are the right fit.</p>
-               </div>
-               
-               <div className="run-step">
-                 <div className="run-bar" style={{ '--c': 'var(--dark-sage)' } as React.CSSProperties}></div>
-                 <div className="num">02</div>
-                 <h3>Process mapping</h3>
-                 <p>The journey from enquiry to completion, written down service by service.</p>
-               </div>
-               
-               <div className="run-step">
-                 <div className="run-bar" style={{ '--c': 'var(--sky)' } as React.CSSProperties}></div>
-                 <div className="num">03</div>
-                 <h3>Architecture & setup</h3>
-                 <p>CRM data model, account settings, pipelines and stages configured.</p>
-               </div>
-               
-               <div className="run-step">
-                 <div className="run-bar" style={{ '--c': 'var(--coral)' } as React.CSSProperties}></div>
-                 <div className="num">04</div>
-                 <h3>Automate</h3>
-                 <p>Workflows built around the agreed process, with triggers and actions set deliberately.</p>
-               </div>
-               
-               <div className="run-step">
-                 <div className="run-bar" style={{ '--c': 'var(--ink)' } as React.CSSProperties}></div>
-                 <div className="num">05</div>
-                 <h3>Data & integrations</h3>
-                 <p>Migration of records from your old tools and connecting your tech stack.</p>
-               </div>
-               
-               <div className="run-step">
-                 <div className="run-bar" style={{ '--c': 'var(--dark-sage)' } as React.CSSProperties}></div>
-                 <div className="num">06</div>
-                 <h3>Test & handover</h3>
-                 <p>Representative client journeys run end to end, then training and documentation.</p>
-               </div>
-               
-               <div className="run-step">
-                 <div className="run-bar" style={{ '--c': 'var(--sky)' } as React.CSSProperties}></div>
-                 <div className="num">07</div>
-                 <h3>Ongoing support</h3>
-                 <p>Maintenance and further implementation as your services change.</p>
-               </div>
-             </div>
-           </div>
-        </section>
-
-        {/* At handover (Deliverables) */}
-        <section className="wrap" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
-           <div className="head">
-             <h2 style={{ fontSize: 'clamp(2.4rem, 4vw, 3.2rem)' }}>At handover.</h2>
-           </div>
-           
-           <ul className="deliver">
-             <li><Check size={18} color="var(--sage)" /> <span>A configured HubSpot portal, matched to your process</span></li>
-             <li><Check size={18} color="var(--sage)" /> <span>A CRM data model and properties you will actually use</span></li>
-             
-             <li><Check size={18} color="var(--sage)" /> <span>Deal pipelines and lifecycle stages</span></li>
-             <li><Check size={18} color="var(--sage)" /> <span>Lead capture forms and routing</span></li>
-             
-             <li><Check size={18} color="var(--sage)" /> <span>Workflows, tested end to end</span></li>
-             <li><Check size={18} color="var(--sage)" /> <span>Dashboards and reports for your key metrics</span></li>
-             
-             <li><Check size={18} color="var(--sage)" /> <span>Migrated and cleaned data where applicable</span></li>
-             <li><Check size={18} color="var(--sage)" /> <span>Training, documentation and optional ongoing support</span></li>
-           </ul>
-        </section>
-
-        {/* Where HubSpot sits */}
-        <section className="pale" style={{ padding: 'clamp(64px, 8vw, 104px) 0' }}>
-           <div className="wrap">
-             <div className="head">
-               <div className="label">Where HubSpot sits</div>
-               <h2 style={{ fontSize: 'clamp(2.5rem,5vw,3.1rem)', maxWidth: '18ch', lineHeight: 1.05 }}>The platform is one part of the growth system.</h2>
-             </div>
-             
-             <ul className="stack">
-               <li style={{ '--c': 'var(--butter)' } as React.CSSProperties}>Consultancy</li>
-               <li style={{ '--c': 'var(--dark-sage)' } as React.CSSProperties}>HubSpot and CRM</li>
-               <li style={{ '--c': 'var(--coral)' } as React.CSSProperties}>Marketing</li>
-               <li style={{ '--c': 'var(--sky)' } as React.CSSProperties}>AI and automation</li>
-               <li style={{ '--c': 'var(--ink)' } as React.CSSProperties}>People</li>
-               <li style={{ '--c': 'var(--dark-sage)' } as React.CSSProperties}>Execution</li>
-               <li style={{ '--c': 'var(--coral)' } as React.CSSProperties}>Growth</li>
-             </ul>
-             
-             <p className="stack-note" style={{ marginTop: '22px', maxWidth: '75ch', fontSize: '1.05rem', lineHeight: 1.6, color: 'var(--ink)' }}>
-               Sage Kite is a business growth consultancy. HubSpot is one of the platforms we implement, alongside the consultancy that decides what to change, the marketing that creates demand and the people who keep it running. On its own, HubSpot organises how you win and keep customers; connected to the rest, it becomes part of how the business grows.
-             </p>
-             
-             <div className="related">
-               <Link href="/platforms" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>CRM implementation services</Link>
-               <Link href="/consulting" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>Business growth consulting</Link>
-               <Link href="/marketing" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>Marketing services</Link>
-               <Link href="/white-label" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>White-label delivery for agencies</Link>
-               <Link href="/platforms" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>All platforms</Link>
-             </div>
-           </div>
-        </section>
-
-        {/* FAQ */}
-        <section className="wrap brief">
-           <div className="head" style={{ marginBottom: 0 }}>
-             <h2 style={{ fontSize: 'clamp(2.5rem, 4vw, 3rem)' }}>Frequently asked questions</h2>
-           </div>
-           
-           <div className="faq-group" style={{ marginTop: '32px' }}>
-              <div className="label">HubSpot implementation</div>
-              <div className="faq-grid">
-                 <div>
-                   <h3>What is HubSpot implementation?</h3>
-                   <p>HubSpot implementation is the work of designing and configuring HubSpot around how your business actually sells and serves customers. It goes beyond switching the account on: CRM architecture, contact and company data structure, deal pipelines, lifecycle stages, lead management, workflows, reporting and any migration or integrations. Sage Kite maps the process first, then builds the platform to fit it.</p>
-                 </div>
-                 <div>
-                   <h3>What does a HubSpot consultant do?</h3>
-                   <p>A HubSpot consultant helps decide how HubSpot should be structured for your business, then configures it and builds the automation that runs it. That means the CRM data model, pipelines and lifecycle stages, workflows for routing and follow-up, reporting that reflects how you measure the business, and training so the team adopts it. The aim is a system that supports the business, not just an account that is switched on.</p>
-                 </div>
-                 <div>
-                   <h3>Is this the same as HubSpot's own onboarding?</h3>
-                   <p>No. HubSpot's onboarding gets your account set up and your team started on the basics. Implementation goes further: designing the CRM architecture, sales and marketing process, automation, reporting, migration and integrations around your business. The two are complementary; if you have already been through HubSpot onboarding and it stopped short of a working system, implementation is usually what is missing.</p>
-                 </div>
-                 <div>
-                   <h3>Can Sage Kite set up a new HubSpot account from scratch?</h3>
-                   <p>Yes. A new implementation starts by mapping how leads become customers, then structuring the CRM, building pipelines, lifecycle stages, forms, workflows and reporting to match, connecting the tools you already use, and testing it before your team relies on it.</p>
-                 </div>
-                 <div>
-                   <h3>Can you audit and improve an existing HubSpot portal?</h3>
-                   <p>Yes. Many engagements are existing portals that grew without a plan: duplicated or inconsistent data, pipelines that do not match the real sales process, workflows that misfire and reporting no one trusts. We audit what is there, fix the data and structure, rebuild the parts holding you back, and document it.</p>
-                 </div>
-              </div>
-           </div>
-           
-           <div className="faq-group">
-              <div className="label">Scope and configuration</div>
-              <div className="faq-grid">
-                 <div>
-                   <h3>What does HubSpot CRM setup include?</h3>
-                   <p>Typically: account settings and user permissions, a contact and company data model with the properties you actually use, deal pipelines and stages that match your sales process, lifecycle stages and lead status, lead capture forms and routing, core workflows, and dashboards for the metrics you run on. Exact scope is agreed in the proposal.</p>
-                 </div>
-                 <div>
-                   <h3>Can you build HubSpot workflows and automation?</h3>
-                   <p>Yes. HubSpot workflows automate the repetitive steps: routing and assigning leads, sending follow-up, updating properties and lifecycle stages, creating tasks and internal alerts. We build them around the process we mapped and test each path so the right action happens at the right time.</p>
-                 </div>
-                 <div>
-                   <h3>Can you migrate data from another CRM into HubSpot?</h3>
-                   <p>Usually. Migrations from tools like Salesforce, Pipedrive, Zoho or a spreadsheet are common, and HubSpot has strong import tools. Feasibility depends on what the current system can export and how the data is structured, so we confirm what is realistic and how records will map during discovery, then clean and de-duplicate as part of the move.</p>
-                 </div>
-                 <div>
-                   <h3>Can you set up reporting and dashboards?</h3>
-                   <p>Yes. We build dashboards and reports around the questions the business actually asks — pipeline and forecast, source and conversion, activity and service — so the numbers reflect how you run, rather than the default reports every portal ships with.</p>
-                 </div>
-                 <div>
-                   <h3>Can you configure integrations?</h3>
-                   <p>Yes, where they are supported. HubSpot connects to many tools through its app marketplace, and to others through custom integrations where feasible. We confirm what your stack allows in discovery so the CRM stays the single source of truth rather than one more disconnected tool.</p>
-                 </div>
-              </div>
-           </div>
-           
-           <div className="faq-group">
-              <div className="label">Working with Sage Kite</div>
-              <div className="faq-grid">
-                 <div>
-                   <h3>Which HubSpot edition and Hubs do I need?</h3>
-                   <p>It depends on how you sell and market, and it is worth getting right because the paid tiers are a real cost. HubSpot runs from a free CRM up through Starter, Professional and Enterprise, with Marketing, Sales, Service, Content and Data Hubs. We advise on the smallest configuration that does the job; we are independent and do not resell HubSpot licences, so the recommendation is based on fit, not commission.</p>
-                 </div>
-                 <div>
-                   <h3>Is HubSpot right for my business?</h3>
-                   <p>HubSpot suits businesses with a real sales and marketing process to run and room to grow into it. If you are a solo or small service business that mainly needs to book, contract and invoice clients, a lighter tool such as Dubsado or HoneyBook is often a better fit, and we implement those too. Discovery is where we tell you honestly which way we would go.</p>
-                 </div>
-                 <div>
-                   <h3>Is Sage Kite a HubSpot partner?</h3>
-                   <p>Sage Kite is an independent implementation partner. HubSpot is a trademark of its owner; Sage Kite is not a HubSpot Solutions Partner and is not affiliated with or certified by HubSpot. We implement the platform on your behalf and are paid by you, not by HubSpot.</p>
-                 </div>
-                 <div>
-                   <h3>What happens after implementation?</h3>
-                   <p>You own the portal and can run it. Handover includes training and documentation. Where it helps, Sage Kite offers maintenance with a defined support scope, further implementation as you add Hubs or processes, and the wider marketing, automation and staffing that turn a well-built CRM into growth.</p>
-                 </div>
-                 <div>
-                   <h3>Is Sage Kite only a HubSpot agency?</h3>
-                   <p>No. Sage Kite is a business growth consultancy. HubSpot is one of the platforms we implement, alongside consultancy, marketing, automation and specialist staffing. The platform organises how you win and keep customers; the broader work decides what to change and creates the demand that flows through it.</p>
-                 </div>
-              </div>
-           </div>
-        </section>
-        
-        {/* Final CTA */}
-        <section className="pale" style={{ padding: 'clamp(80px, 10vw, 120px) 0' }}>
-           <div className="wrap" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', fontSize: '0.925rem', color: 'var(--ink)', marginBottom: '28px', flexWrap: 'wrap', fontWeight: 600 }}>
-               <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span className="dot" style={{ background: 'var(--sage)' }}></span> Map</span>
-               <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span className="dot" style={{ background: 'var(--sky)' }}></span> Build</span>
-               <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span className="dot" style={{ background: 'var(--butter)' }}></span> Automate</span>
-               <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span className="dot" style={{ background: 'var(--coral)' }}></span> Report</span>
-             </div>
-             
-             <h2 style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)', maxWidth: '20ch' }}>Get HubSpot built around your process.</h2>
-             <p className="sub" style={{ maxWidth: '60ch', margin: '20px auto 34px' }}>
-               Tell us how you win and keep customers today, and what is not working in HubSpot. We will tell you what we would map first, what the build would involve, and whether HubSpot is the right fit for your business.
-             </p>
-             
-             <div className="cta-row" style={{ justifyContent: 'center', display: 'flex', gap: '24px', alignItems: 'center' }}>
-               <Link href="#contact" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Book a discovery call</Link>
-               <Link href="/platforms" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>See other platforms we implement</Link>
-             </div>
-           </div>
-        </section>
-
-      </main>
       <Footer />
     </>
   );

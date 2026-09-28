@@ -57,7 +57,8 @@ write them by hand. [§1]
 - [ ] `hasOfferCatalog` lists exactly the capability cards shown on the page.
 - [ ] `areaServed` matches `app/layout.tsx`.
 - [ ] `FAQPage` block included, matching the page's FAQs word for word.
-- [ ] Platform name added to the platform list in `app/sitemap.ts`.
+- [ ] `slug` set on the platform in `content/platforms.ts` (adds it to the
+      sitemap and links it from the homepage "Platforms" grid).
 
 ## 4. Before committing
 
