@@ -14,11 +14,11 @@ export interface Platform {
 
 export const PLATFORMS: Platform[] = [
   { name: 'GoHighLevel' },
-  { name: 'Keap' },
-  { name: 'Follow Up Boss' },
+  { name: 'Keap', slug: 'keap' },
+  { name: 'Follow Up Boss', slug: 'follow-up-boss' },
   { name: 'Lofty', slug: 'lofty' },
   { name: 'ServiceTitan' },
-  { name: 'Housecall Pro' },
+  { name: 'Housecall Pro', slug: 'housecall-pro' },
   { name: 'Jobber', slug: 'jobber' },
   { name: 'Kajabi', slug: 'kajabi' },
   { name: 'Clio Grow' },

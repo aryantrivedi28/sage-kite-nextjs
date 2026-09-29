@@ -50,7 +50,7 @@ schema by hand. The shared template builds all of that from the post file.
 | `tags` | no | Become schema `keywords` and meta keywords. |
 | `guide` | yes | Sidebar table of contents. Each `id` **must** match an `id` on a heading inside `content`. |
 | `faqs` | no | Only if the article has an FAQ section. Question and answer text must be **identical** to what the page shows. Produces FAQPage schema. |
-| `relatedPlatform` | no | `'dubsado' \| 'honeybook' \| 'hubspot' \| 'activecampaign' \| 'jobber' \| 'lofty' \| 'kajabi' \| 'bloomerang'`. Links the article to that platform page's Service schema. Only set it if the post is mainly about that platform. |
+| `relatedPlatform` | no | `'dubsado' \| 'honeybook' \| 'hubspot' \| 'activecampaign' \| 'jobber' \| 'lofty' \| 'kajabi' \| 'bloomerang' \| 'keap' \| 'follow-up-boss' \| 'housecall-pro'`. Links the article to that platform page's Service schema. Only set it if the post is mainly about that platform. |
 | `featured` | no | Puts the post at the top of `/blog`. **Only one post** may have it; remove it from the old one. |
 | `draft` | no | `true` hides the post from the site, listing and sitemap. The template starts as a draft; delete the line to publish. |
 | `content` | yes | The article body. |
