@@ -5,12 +5,12 @@ import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
 
-const PAGE_URL = "https://www.sagekite.com/platforms/housecall-pro";
+const PAGE_URL = "https://www.sagekite.com/platforms/servicetitan";
 
 export const metadata: Metadata = {
-  title: "Housecall Pro Setup & Consulting Services | Sage Kite",
-  description: "Housecall Pro setup from Sage Kite: booking, dispatch, price book, estimate follow-up, service plans, reviews and campaigns for home service businesses.",
-  keywords: ["Housecall Pro consultant", "Housecall Pro setup", "Housecall Pro price book", "Housecall Pro service plans", "Housecall Pro training", "home services CRM"],
+  title: "ServiceTitan Setup & Consulting Services | Sage Kite",
+  description: "ServiceTitan consulting from Sage Kite: pricebook, dispatch, memberships, estimate follow-up, marketing tracking and reporting for trade businesses.",
+  keywords: ["ServiceTitan consultant", "ServiceTitan implementation", "ServiceTitan pricebook", "ServiceTitan memberships", "ServiceTitan training", "ServiceTitan admin"],
   alternates: {
     canonical: PAGE_URL,
   },
@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "Housecall Pro setup and consulting services | Sage Kite",
-    description: "Sage Kite sets up Housecall Pro around how home service businesses win and keep customers: booking, estimates, follow-up, service plans and campaigns.",
+    title: "ServiceTitan setup and consulting services | Sage Kite",
+    description: "Sage Kite sets up ServiceTitan around how trade businesses book, sell and keep customers: pricebook, dispatch, memberships, marketing and reporting.",
   },
   twitter: {
     card: "summary",
-    title: "Housecall Pro setup and consulting services | Sage Kite",
-    description: "Housecall Pro setup for home service businesses: booking, dispatch, price book, estimate follow-up, service plans, reviews and campaigns.",
+    title: "ServiceTitan setup and consulting services | Sage Kite",
+    description: "ServiceTitan consulting for trade businesses: pricebook, dispatch, estimates, memberships, marketing tracking, reporting and training.",
   },
 };
 
@@ -32,16 +32,16 @@ type Capability = { title: string; color: string; text: string; tags: string[]; 
 
 // "What we implement" rows. Offered rows also feed hasOfferCatalog, so schema always matches the page.
 const capabilities: Capability[] = [
-  { title: "Customers, tags and lead sources", color: "var(--sage)", offered: true, tags: ["Customers", "Tags", "Lead sources"], text: "Customer records, tags and lead sources set up consistently, so you can see who your customers are, what they have bought and where the work came from." },
-  { title: "Online booking and intake", color: "var(--coral)", offered: true, tags: ["Online booking", "Chat", "CSR AI"], text: "Online booking, website chat and, where you use it, CSR AI, set up so every enquiry becomes a booked job or an estimate visit instead of a missed call." },
-  { title: "Scheduling and dispatch", color: "var(--sky)", offered: true, tags: ["Job types", "Dispatch", "Arrival windows"], text: "Job types, schedules, dispatch rules and customer notifications, so the office knows who is where and the customer knows when to expect you." },
-  { title: "Price book and estimates", color: "var(--butter)", offered: true, tags: ["Price book", "Options", "Photos"], text: "A flat-rate price book built for your trade, and estimates with options and photos, so technicians quote consistently and customers can say yes on the spot." },
-  { title: "Estimate follow-up", color: "var(--ink)", offered: true, tags: ["Reminders", "Pipeline", "Tasks"], text: "Automated reminders for open estimates and, where you use it, Pipeline to track them, so quotes are chased before they go cold." },
-  { title: "Invoicing and payments", color: "var(--coral)", offered: true, tags: ["Invoices", "Card on file", "QuickBooks"], text: "Invoices, payments in the field and card on file, with QuickBooks connected where your plan includes it, so money comes in without chasing." },
-  { title: "Service plans", color: "var(--sage)", offered: true, tags: ["Maintenance plans", "Recurring visits", "Auto-invoicing"], text: "Maintenance plans and service agreements with recurring visits, card on file and automatic invoicing, and the reminders that renew them." },
-  { title: "Reviews and campaigns", color: "var(--sky)", offered: true, tags: ["Review requests", "Email", "Postcards"], text: "Review requests after every finished job, and email and postcard Campaigns for seasonal reminders and repeat work that stop once a customer books." },
-  { title: "Reporting and integrations", color: "var(--ink)", offered: true, tags: ["Lead sources", "Revenue", "Integrations"], text: "Reports on lead sources, estimates, jobs and revenue, and the integrations your business depends on, set up and checked." },
-  { title: "Payroll and bookkeeping", color: "var(--light-sage)", offered: false, tags: ["Connected, not run"], text: "We connect Housecall Pro to your accounting tools. We do not run payroll or bookkeeping for you." },
+  { title: "Call booking and customer records", color: "var(--sage)", offered: true, tags: ["Call booking", "Customers", "Locations"], text: "Call booking, job types and customer and location records set up consistently, so every call is booked the same way and every job has the right history." },
+  { title: "Scheduling and dispatch", color: "var(--sky)", offered: true, tags: ["Business units", "Dispatch board", "Capacity"], text: "Business units, job types, arrival windows and the dispatch board set up around how your office really runs, with Scheduling Pro or Dispatch Pro where you use them." },
+  { title: "Pricebook", color: "var(--butter)", offered: true, tags: ["Services", "Materials", "Options"], text: "A pricebook structured so technicians find the right item in seconds, with clear descriptions, images and options, and Pricebook Pro where you use it." },
+  { title: "Estimates and field sales", color: "var(--coral)", offered: true, tags: ["Mobile estimates", "Options", "Follow-up"], text: "Estimate templates with options your technicians present on site, and a process for following up unsold estimates before they go cold." },
+  { title: "Memberships and recurring service", color: "var(--sage)", offered: true, tags: ["Memberships", "Recurring services", "Renewals"], text: "Membership types, recurring service events and renewals set up so maintenance visits are booked automatically and memberships are not left to lapse." },
+  { title: "Marketing and campaign tracking", color: "var(--coral)", offered: true, tags: ["Campaigns", "Marketing Pro", "Reviews"], text: "Campaigns that show which marketing brings in calls and revenue, and Marketing Pro audiences for unsold estimates, expiring memberships and past customers." },
+  { title: "Invoicing and accounting sync", color: "var(--ink)", offered: true, tags: ["Invoices", "Payments", "Accounting"], text: "Invoice templates, payments and the connection to your accounting system, set up and checked so the office is not reconciling by hand." },
+  { title: "Reporting and dashboards", color: "var(--sky)", offered: true, tags: ["Business units", "Technicians", "Campaigns"], text: "Reports and dashboards by business unit, technician and campaign, built on clean job types so the numbers can be trusted." },
+  { title: "Roles, workflows and training", color: "var(--ink)", offered: true, tags: ["Permissions", "Office", "Field"], text: "Roles, permissions and written workflows for CSRs, dispatchers and technicians, with training so everyone uses ServiceTitan the same way." },
+  { title: "ServiceTitan's own onboarding", color: "var(--light-sage)", offered: false, tags: ["Run by ServiceTitan"], text: "ServiceTitan runs its own onboarding when you buy. We do not replace it. We help you prepare for it and improve the account afterwards." },
 ];
 
 type FaqGroup = { label: string; items: { q: string; a: string }[] };
@@ -49,56 +49,58 @@ type FaqGroup = { label: string; items: { q: string; a: string }[] };
 // Rendered on the page and in FAQPage schema from the same data, so the text always matches.
 const faqGroups: FaqGroup[] = [
   {
-    label: "Housecall Pro consulting",
+    label: "ServiceTitan consulting",
     items: [
-      { q: "What does a Housecall Pro consultant do?", a: "A Housecall Pro consultant sets up Housecall Pro around how a home service business wins and keeps customers: customer records, online booking, scheduling and dispatch, the price book and estimates, estimate follow-up, payments, service plans, reviews and campaigns. Sage Kite starts by mapping the path from first call to repeat job, then configures Housecall Pro to match." },
-      { q: "Doesn't Housecall Pro include onboarding?", a: "The MAX plan includes a dedicated onboarding specialist, and every plan includes phone and chat support. That help focuses on using the product. We focus on your process: how enquiries are captured, how estimates are followed up, how service plans are sold and renewed, and how past customers are brought back." },
-      { q: "Can you fix an existing Housecall Pro account?", a: "Yes. Common issues are duplicate customers, no lead sources, a price book nobody has updated, estimates nobody follows up, and service plans tracked in a spreadsheet. We audit the account, clean the records, rebuild the price book and follow-up, and document how the office should use it." },
-      { q: "How long does a Housecall Pro project take?", a: "It depends on the size of your price book, how many customers and service plans need to move, and how many technicians and job types you have. Tightening an existing account is a smaller project than a full setup with a migration. Your proposal sets out the milestones and dates before work starts." },
+      { q: "What does a ServiceTitan consultant do?", a: "A ServiceTitan consultant helps a trade business set up and run ServiceTitan around how it actually books, sells and keeps customers: call booking, dispatch, the pricebook, estimates, memberships, marketing tracking and reporting. Sage Kite starts by mapping how a call becomes a job, a sale and a member, then configures ServiceTitan to match." },
+      { q: "Doesn't ServiceTitan include onboarding?", a: "Yes. ServiceTitan runs its own onboarding when you buy, focused on getting you live. We help you prepare your data and processes before it, and improve the account afterwards: the pricebook, memberships, estimate follow-up, campaign tracking, reporting and team adoption." },
+      { q: "Can you fix an existing ServiceTitan account?", a: "Yes. Common issues are a pricebook technicians cannot navigate, job types and business units used inconsistently, campaigns that are not tracked, unsold estimates nobody follows up, memberships that lapse and Pro products that were bought but never configured. We audit the account, fix the structure and document how each role should use it." },
+      { q: "How long does a ServiceTitan project take?", a: "It depends on the size of your pricebook, the number of business units and technicians, and how much needs fixing. A focused pricebook or membership project is much smaller than a full account overhaul. Your proposal sets out the milestones and dates before work starts." },
     ],
   },
   {
     label: "Scope and setup",
     items: [
-      { q: "Can you move our customers into Housecall Pro?", a: "Usually. We move customer records, addresses and history from spreadsheets or another field service tool, clean and de-duplicate them, and add the tags and lead sources your reports depend on. We confirm what your current system can export during discovery." },
-      { q: "Can you set up our Housecall Pro price book?", a: "Yes. We build a flat-rate price book around the work you actually do, with clear names, descriptions, photos and options, so technicians quote the same way and customers can compare choices on the estimate." },
-      { q: "Can you set up service plans and maintenance agreements?", a: "Yes. We set up service plans with recurring visits, card on file and automatic invoicing, plus the reminders that renew them. Service Plans are a paid add-on on some Housecall Pro plans, so we confirm what yours includes first." },
-      { q: "Can you set up Housecall Pro marketing campaigns?", a: "Yes. We set up review requests after finished jobs, and email and postcard Campaigns for seasonal tune-ups, maintenance reminders and past customers, with stop conditions so a message ends as soon as the customer books." },
-      { q: "Which Housecall Pro plan do we need?", a: "Basic includes one user, Essentials five and MAX eight, with a dedicated onboarding specialist on MAX. Some features, including Service Plans, Pipeline and the Sales Proposal Tool, are paid add-ons depending on the plan. We recommend the smallest plan that fits your team and the way you sell." },
+      { q: "Can you prepare our data for a move to ServiceTitan?", a: "Yes. ServiceTitan's onboarding team usually handles the import. We clean your customers, locations, equipment, memberships and price lists beforehand so they arrive usable, and check the records afterwards." },
+      { q: "Can you build or clean up our ServiceTitan pricebook?", a: "Yes. We structure the pricebook into clear categories, write descriptions customers understand, add images and options, and remove duplicates, so technicians can find the right item quickly and present choices on site." },
+      { q: "Can you set up memberships in ServiceTitan?", a: "Yes. We set up membership types, the recurring service events attached to them and the renewal process, so maintenance visits are booked automatically and members are reminded before they lapse. Customizable memberships are part of ServiceTitan's The Works package." },
+      { q: "Can you set up marketing tracking in ServiceTitan?", a: "Yes. We set up campaigns so calls and jobs are tied to the marketing that produced them, and, where you use Marketing Pro, audiences for unsold estimates, expiring memberships and past customers." },
+      { q: "Which ServiceTitan package do we need?", a: "ServiceTitan offers Starter, Essentials and The Works, priced per technician on request, plus Pro add-ons such as Pricebook Pro, Marketing Pro and Scheduling Pro. We help you decide which features you will actually use before you buy or upgrade." },
     ],
   },
   {
     label: "Working with Sage Kite",
     items: [
-      { q: "Does Housecall Pro work outside the United States and Canada?", a: "Housecall Pro is built for home service businesses in the United States and Canada. If you are elsewhere, check with Housecall Pro before you commit. If it is not the right fit, we can recommend and implement a field service platform that works in your country." },
-      { q: "Is Sage Kite a Housecall Pro partner?", a: "Sage Kite is an independent consultant. Housecall Pro is a trademark of its owner, and Sage Kite is not affiliated with, endorsed by or certified by Housecall Pro. We work on your behalf and are paid by you, not by Housecall Pro." },
-      { q: "What happens after the project?", a: "You own the account and can run it. Handover includes training for the office and technicians and documentation of your price book, job types and follow-up. Where it helps, Sage Kite offers maintenance with a defined support scope, and a CRM and automation VA to follow up estimates and keep records clean." },
-      { q: "Is Sage Kite only a Housecall Pro consultant?", a: "No. Sage Kite is a business growth consultancy. Housecall Pro is one of the platforms we implement, alongside consultancy, marketing, automation and specialist staffing. Housecall Pro runs the jobs; the broader work decides what to change and keeps the phone ringing." },
+      { q: "Where is ServiceTitan available?", a: "ServiceTitan serves trade businesses in the United States and Canada and is also used in Australia. If you are elsewhere, check with ServiceTitan before you commit. If it is not the right fit, we can recommend and implement a field service platform that works in your country." },
+      { q: "Is Sage Kite a ServiceTitan partner?", a: "Sage Kite is an independent consultant. ServiceTitan is a trademark of its owner, and Sage Kite is not affiliated with, endorsed by or certified by ServiceTitan. We work on your behalf and are paid by you, not by ServiceTitan." },
+      { q: "What happens after the project?", a: "You own the account and can run it. Handover includes training for CSRs, dispatchers, technicians and managers, and documentation of your pricebook, job types and workflows. Where it helps, Sage Kite offers maintenance with a defined support scope, and a CRM and automation VA to keep the account tidy." },
+      { q: "Is Sage Kite only a ServiceTitan consultant?", a: "No. Sage Kite is a business growth consultancy. ServiceTitan is one of the platforms we implement, alongside consultancy, marketing, automation and specialist staffing. ServiceTitan runs the operation; the broader work decides what to change and keeps the phones busy." },
     ],
   },
 ];
 
 // Hero diagram: one illustrative customer journey. `human` marks the step kept with a person.
 const journey = [
-  { step: "Call, chat or online booking", tool: "Booking", color: "var(--sky)" },
-  { step: "Estimate visit scheduled", tool: "Schedule", color: "var(--sky)" },
-  { step: "Estimate with options sent", tool: "Estimate", color: "var(--sky)" },
-  { step: "Open estimate followed up", tool: "Reminder", color: "var(--sky)" },
-  { step: "Technician does the job", tool: "You", color: "var(--butter)", human: true },
-  { step: "Invoiced and paid on site", tool: "Payment", color: "var(--coral)" },
-  { step: "Review ask and service plan", tool: "Campaign", color: "var(--sage)" },
+  { step: "Call answered and booked", tool: "Call booking", color: "var(--sky)" },
+  { step: "Dispatched to the right tech", tool: "Dispatch", color: "var(--sky)" },
+  { step: "Technician presents options", tool: "You", color: "var(--butter)", human: true },
+  { step: "Invoiced and paid on site", tool: "Invoice", color: "var(--sky)" },
+  { step: "Membership added", tool: "Membership", color: "var(--coral)" },
+  { step: "Review request sent", tool: "Marketing", color: "var(--sky)" },
+  { step: "Maintenance visit booked", tool: "Recurring", color: "var(--sage)" },
 ];
 
-// From Housecall Pro's published pricing, September 2026 (housecallpro.com/pricing). Recheck when editing.
+// From ServiceTitan's published package comparison, September 2026 (servicetitan.com/pricing). Recheck when editing.
 const plans = [
-  { row: "Price, billed annually", basic: "$59/month", essentials: "$149/month", max: "$299/month" },
-  { row: "Users included", basic: "1", essentials: "5", max: "8" },
-  { row: "Onboarding", basic: "Phone and chat", essentials: "Phone and chat", max: "Dedicated specialist" },
+  { row: "Dispatch, scheduling and pricebook", starter: "Included", essentials: "Included", works: "Included" },
+  { row: "Mobile estimates", starter: "Not included", essentials: "Included", works: "Included" },
+  { row: "Payroll management", starter: "Not included", essentials: "Included", works: "Included" },
+  { row: "Advanced reporting", starter: "Not included", essentials: "Not included", works: "Included" },
+  { row: "Customizable memberships", starter: "Not included", essentials: "Not included", works: "Included" },
 ];
 
 const c = (color: string) => ({ '--c': color } as React.CSSProperties);
 
-export default function HousecallProPage() {
+export default function ServiceTitanPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -110,44 +112,44 @@ export default function HousecallProPage() {
       },
       {
         "@type": "WebPage",
-        "@id": "https://www.sagekite.com/platforms/housecall-pro/#webpage",
+        "@id": "https://www.sagekite.com/platforms/servicetitan/#webpage",
         "url": PAGE_URL,
-        "name": "Housecall Pro setup and consulting services | Sage Kite",
-        "description": "Sage Kite sets up Housecall Pro for home service businesses: customers and lead sources, online booking, scheduling and dispatch, price book and estimates, estimate follow-up, payments, service plans, reviews, campaigns and reporting.",
+        "name": "ServiceTitan setup and consulting services | Sage Kite",
+        "description": "Sage Kite sets up ServiceTitan for trade businesses: call booking and customer records, scheduling and dispatch, pricebook, estimates, memberships, marketing and campaign tracking, invoicing, reporting and training.",
         "isPartOf": { "@id": "https://www.sagekite.com/#website" },
-        "about": { "@id": "https://www.sagekite.com/platforms/housecall-pro/#service" },
-        "breadcrumb": { "@id": "https://www.sagekite.com/platforms/housecall-pro/#breadcrumb" },
+        "about": { "@id": "https://www.sagekite.com/platforms/servicetitan/#service" },
+        "breadcrumb": { "@id": "https://www.sagekite.com/platforms/servicetitan/#breadcrumb" },
         "inLanguage": "en"
       },
       {
         "@type": "BreadcrumbList",
-        "@id": "https://www.sagekite.com/platforms/housecall-pro/#breadcrumb",
+        "@id": "https://www.sagekite.com/platforms/servicetitan/#breadcrumb",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.sagekite.com/" },
           { "@type": "ListItem", "position": 2, "name": "Platforms", "item": "https://www.sagekite.com/platforms" },
-          { "@type": "ListItem", "position": 3, "name": "Housecall Pro" }
+          { "@type": "ListItem", "position": 3, "name": "ServiceTitan" }
         ]
       },
       {
         "@type": "Service",
-        "@id": "https://www.sagekite.com/platforms/housecall-pro/#service",
-        "name": "Housecall Pro setup and consulting services",
-        "serviceType": "Housecall Pro setup, configuration and consulting",
-        "description": "Home service process mapping, Housecall Pro customers, tags and lead sources, online booking and intake, scheduling and dispatch, price book and estimates, estimate follow-up, invoicing and payments, service plans, review requests and campaigns, reporting, integrations, data migration, testing, training and handover.",
+        "@id": "https://www.sagekite.com/platforms/servicetitan/#service",
+        "name": "ServiceTitan setup and consulting services",
+        "serviceType": "ServiceTitan setup, configuration and consulting",
+        "description": "Trade business process mapping, ServiceTitan call booking and customer records, scheduling and dispatch, pricebook, estimates and field sales, memberships and recurring service, marketing and campaign tracking, invoicing and accounting sync, reporting, roles and workflows, data preparation, testing, training and handover.",
         "provider": { "@id": "https://www.sagekite.com/#organization" },
-        // Housecall Pro is built for US and Canadian home service businesses (see FAQ), so this service is scoped to those two markets.
+        // ServiceTitan serves the US and Canada and is also used in Australia (see FAQ), so this service is scoped to those markets.
         "areaServed": [
           { "@type": "Country", "name": "United States" },
-          { "@type": "Country", "name": "Canada" }
+          { "@type": "Country", "name": "Canada" },
+          { "@type": "Country", "name": "Australia" }
         ],
         "audience": [
-          { "@type": "Audience", "audienceType": "Home service businesses" },
           { "@type": "Audience", "audienceType": "HVAC, plumbing and electrical contractors" },
-          { "@type": "Audience", "audienceType": "Cleaning and landscaping businesses" }
+          { "@type": "Audience", "audienceType": "Residential and commercial trade businesses" }
         ],
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
-          "name": "What we implement in Housecall Pro",
+          "name": "What we implement in ServiceTitan",
           "itemListElement": capabilities.filter((cap) => cap.offered).map((cap) => ({
             "@type": "Offer",
             "itemOffered": { "@type": "Service", "name": cap.title }
@@ -156,9 +158,9 @@ export default function HousecallProPage() {
       },
       {
         "@type": "FAQPage",
-        "@id": "https://www.sagekite.com/platforms/housecall-pro/#faq",
+        "@id": "https://www.sagekite.com/platforms/servicetitan/#faq",
         "isPartOf": { "@id": "https://www.sagekite.com/#website" },
-        "about": { "@id": "https://www.sagekite.com/platforms/housecall-pro/#service" },
+        "about": { "@id": "https://www.sagekite.com/platforms/servicetitan/#service" },
         "inLanguage": "en",
         "mainEntity": faqGroups.flatMap((g) => g.items).map((f) => ({
           "@type": "Question",
@@ -175,7 +177,7 @@ export default function HousecallProPage() {
 
       <main id="main">
         <style dangerouslySetInnerHTML={{ __html: `
-          /* Housecall Pro page additions, built from the approved homepage system */
+          /* ServiceTitan page additions, built from the approved homepage system */
           .sec{padding:clamp(64px,8vw,104px) 0}
 
           /* Hero is sized to fit above the fold on a laptop screen at 100% zoom */
@@ -298,25 +300,25 @@ export default function HousecallProPage() {
                 <span style={{ background: 'var(--butter)' }}></span>
                 <span style={{ background: 'var(--sky)' }}></span>
               </div>
-              <p className="label">Platforms / Housecall Pro</p>
-              <h1 id="hero-title">Housecall Pro setup and consulting services</h1>
+              <p className="label">Platforms / ServiceTitan</p>
+              <h1 id="hero-title">ServiceTitan setup and consulting services</h1>
               <p className="sub">
-                Sage Kite sets up Housecall Pro around how your home service business wins and keeps customers. We map the path from first call to repeat job, then build booking, estimates, follow-up and service plans to match.
+                Sage Kite sets up ServiceTitan around how your trade business books, sells and keeps customers. We map the path from first call to membership, then build the pricebook, dispatch, follow-up and reporting to match.
               </p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Discuss your Housecall Pro setup</Link>
+                <Link href="/contact" className="btn">Discuss your ServiceTitan setup</Link>
                 <Link href="#what-we-implement" className="link">See what&apos;s included</Link>
               </div>
               <p className="hero-facts">
                 <span><span className="dot" style={c('var(--sage)')}></span>New or existing accounts</span>
-                <span><span className="dot" style={c('var(--sky)')}></span>Service plan setup</span>
+                <span><span className="dot" style={c('var(--sky)')}></span>Pricebook cleanup</span>
                 <span><span className="dot" style={c('var(--coral)')}></span>Fixed price, agreed up front</span>
               </p>
             </div>
 
             <figure className="journey-fig" aria-labelledby="journey-title">
               <div className="ui">
-                <p className="ui-title"><b id="journey-title">A customer journey in Housecall Pro</b><span>Example</span></p>
+                <p className="ui-title"><b id="journey-title">A customer journey in ServiceTitan</b><span>Example</span></p>
                 <ol className="jsteps">
                   {journey.map((j) => (
                     <li key={j.step} className={j.human ? 'human' : undefined} style={c(j.color)}>
@@ -325,7 +327,7 @@ export default function HousecallProPage() {
                   ))}
                 </ol>
                 <p className="key">
-                  <span><span className="dot" style={c('var(--sky)')}></span>Automated in Housecall Pro</span>
+                  <span><span className="dot" style={c('var(--sky)')}></span>Run in ServiceTitan</span>
                   <span><span className="dot" style={c('var(--butter)')}></span>Kept with your team</span>
                 </p>
               </div>
@@ -339,17 +341,17 @@ export default function HousecallProPage() {
           <div className="wrap">
             <div className="head">
               <p className="label">Common starting situations</p>
-              <h2 id="problems-title">Housecall Pro runs the jobs well. The follow-up around them is where work gets lost.</h2>
+              <h2 id="problems-title">ServiceTitan can run the whole business. Most accounts use a fraction of it.</h2>
             </div>
             <ul className="symptoms">
-              <li><strong>Estimates that go cold</strong><p>Quotes are sent and never chased, so the work quietly goes to a competitor.</p></li>
-              <li><strong>Customer records in pieces</strong><p>Duplicates, no tags and no lead source, so you cannot tell what brings in work.</p></li>
-              <li><strong>A price book nobody updates</strong><p>Prices are out of date, so technicians quote from memory and margins slip.</p></li>
-              <li><strong>Service plans on a spreadsheet</strong><p>Maintenance customers are tracked by hand, and renewals are missed.</p></li>
-              <li><strong>Reviews left to chance</strong><p>Review requests are switched off or generic, so happy customers never say so.</p></li>
-              <li><strong>No reason to call back</strong><p>No seasonal reminders, so one-off customers never become repeat customers.</p></li>
+              <li><strong>A pricebook that fights technicians</strong><p>Thousands of items and no structure, so techs skip it and quote from memory.</p></li>
+              <li><strong>Marketing nobody can measure</strong><p>Campaigns are not set up, so you cannot tell which spend brings in calls.</p></li>
+              <li><strong>Unsold estimates forgotten</strong><p>Options are presented on site, then nobody follows up on the ones that did not close.</p></li>
+              <li><strong>Memberships that lapse</strong><p>Members are sold, but renewals and maintenance visits are not booked automatically.</p></li>
+              <li><strong>Reports nobody trusts</strong><p>Job types and business units are used inconsistently, so the numbers disagree.</p></li>
+              <li><strong>Pro products bought, not used</strong><p>Add-ons are paid for every month but were never properly configured.</p></li>
             </ul>
-            <p className="after-line">These are rarely software problems. They come from setting up Housecall Pro for the day&apos;s jobs and not for the customer relationship around them.</p>
+            <p className="after-line">These are rarely software problems. They come from going live quickly and never returning to set ServiceTitan up around how the business actually sells.</p>
           </div>
         </section>
 
@@ -358,37 +360,37 @@ export default function HousecallProPage() {
           <div className="wrap">
             <div className="head">
               <p className="label">Three starting points</p>
-              <h2 id="starts-title">A new account, one that needs tightening, or a move to Housecall Pro.</h2>
+              <h2 id="starts-title">Before you go live, an account that needs fixing, or one that has outgrown its setup.</h2>
             </div>
             <div className="starts">
               <div className="start" style={c('var(--sage)')}>
-                <h3>New Housecall Pro setup</h3>
-                <p>You are starting on Housecall Pro and want the office and the field working the same way from day one.</p>
+                <h3>Preparing for ServiceTitan</h3>
+                <p>You have bought ServiceTitan and want your data and processes ready for onboarding.</p>
                 <ul>
-                  <li>Job types, price book and estimates set up first</li>
-                  <li>Online booking and dispatch configured</li>
-                  <li>Estimate follow-up and review requests switched on</li>
-                  <li>Office and technicians trained</li>
+                  <li>Customers, equipment and price lists cleaned</li>
+                  <li>Job types and business units agreed first</li>
+                  <li>Pricebook structure planned before import</li>
+                  <li>Membership and follow-up rules written down</li>
                 </ul>
               </div>
               <div className="start" style={c('var(--sky)')}>
-                <h3>Account tune-up</h3>
-                <p>You have used Housecall Pro for a while and follow-up has slipped as the business grew.</p>
+                <h3>Account cleanup</h3>
+                <p>You are live on ServiceTitan, but the account has drifted and the numbers do not add up.</p>
                 <ul>
-                  <li>Audit of customers, price book and follow-up</li>
-                  <li>Duplicates merged and lead sources added</li>
-                  <li>Service plans moved off the spreadsheet</li>
-                  <li>Campaigns for repeat and seasonal work</li>
+                  <li>Audit of pricebook, job types and business units</li>
+                  <li>Campaigns and reporting fixed</li>
+                  <li>Estimate follow-up and memberships rebuilt</li>
+                  <li>Workflows documented for each role</li>
                 </ul>
               </div>
               <div className="start" style={c('var(--coral)')}>
-                <h3>Move to Housecall Pro</h3>
-                <p>You are leaving paper, spreadsheets or another field service tool.</p>
+                <h3>Getting more from it</h3>
+                <p>The basics work, and you want the features you are paying for to earn their keep.</p>
                 <ul>
-                  <li>Export and field mapping confirmed in discovery</li>
-                  <li>Customers cleaned and de-duplicated</li>
-                  <li>Service plans and history mapped where feasible</li>
-                  <li>Old system retired once the office has switched</li>
+                  <li>Pro products configured where they fit</li>
+                  <li>Marketing audiences for repeat work</li>
+                  <li>Dashboards for managers and owners</li>
+                  <li>Training for new and existing staff</li>
                 </ul>
               </div>
             </div>
@@ -400,8 +402,8 @@ export default function HousecallProPage() {
           <div className="wrap">
             <div className="head">
               <p className="label">What we implement</p>
-              <h2 id="impl-title">What Housecall Pro setup covers.</h2>
-              <p className="sub">Some features depend on your Housecall Pro plan or are paid add-ons. We confirm what yours includes during discovery.</p>
+              <h2 id="impl-title">What ServiceTitan setup covers.</h2>
+              <p className="sub">Some features depend on your ServiceTitan package and Pro add-ons. We confirm what yours includes during discovery.</p>
             </div>
             <div className="cap-list">
               {capabilities.map((cap) => (
@@ -421,32 +423,32 @@ export default function HousecallProPage() {
         <section className="pale sec" id="plans" aria-labelledby="plans-title">
           <div className="wrap">
             <div className="head">
-              <p className="label">Which Housecall Pro plan?</p>
-              <h2 id="plans-title">Choose the plan for your team, then add what you need.</h2>
-              <p className="sub">We recommend the smallest plan that fits your team and the way you sell. We do not earn commission on your subscription.</p>
+              <p className="label">Which ServiceTitan package?</p>
+              <h2 id="plans-title">The package decides what you can set up.</h2>
+              <p className="sub">We help you decide which features you will actually use before you buy or upgrade. We do not earn commission on your subscription.</p>
             </div>
             <table className="compare">
               <thead>
                 <tr>
                   <th scope="col"><span className="note">What changes the setup</span></th>
-                  <th scope="col">Basic</th>
+                  <th scope="col">Starter</th>
                   <th scope="col">Essentials</th>
-                  <th scope="col">MAX</th>
+                  <th scope="col">The Works</th>
                 </tr>
               </thead>
               <tbody>
                 {plans.map((p) => (
                   <tr key={p.row}>
                     <th scope="row">{p.row}</th>
-                    {([['Basic', p.basic], ['Essentials', p.essentials], ['MAX', p.max]] as const).map(([plan, value]) => (
-                      <td key={plan} data-h={plan}>{value}</td>
+                    {([['Starter', p.starter], ['Essentials', p.essentials], ['The Works', p.works]] as const).map(([plan, value]) => (
+                      <td key={plan} data-h={plan} className={value === 'Not included' ? 'no' : value === 'Included' ? 'yes' : undefined}>{value}</td>
                     ))}
                   </tr>
                 ))}
               </tbody>
             </table>
             <p className="compare-note note">
-              Based on Housecall Pro&apos;s published pricing, September 2026. Some features, including Service Plans, Pipeline and the Sales Proposal Tool, are paid add-ons depending on the plan. Check <a className="link" href="https://www.housecallpro.com/pricing/" target="_blank" rel="noopener noreferrer">Housecall Pro&apos;s pricing page</a> before you buy.
+              Based on ServiceTitan&apos;s published package comparison, September 2026. Packages are priced per technician on request, and Pro products such as Pricebook Pro and Marketing Pro are add-ons. Check <a className="link" href="https://www.servicetitan.com/pricing" target="_blank" rel="noopener noreferrer">ServiceTitan&apos;s pricing page</a> before you buy.
             </p>
           </div>
         </section>
@@ -456,15 +458,15 @@ export default function HousecallProPage() {
           <div className="wrap">
             <div className="head">
               <p className="label">How it works</p>
-              <h2 id="process-title">How a Housecall Pro project runs.</h2>
+              <h2 id="process-title">How a ServiceTitan project runs.</h2>
             </div>
             <ol className="flow6">
-              <li style={c('var(--butter)')}><div className="bar"></div><div className="num">01</div><h3>Discovery</h3><p>Your services, team, current account, data and who signs off.</p></li>
+              <li style={c('var(--butter)')}><div className="bar"></div><div className="num">01</div><h3>Discovery</h3><p>Your trades, team, current account, package and who signs off.</p></li>
               <li style={c('var(--sage)')}><div className="bar"></div><div className="num">02</div><h3>Proposal</h3><p>Deliverables, exclusions, milestones and a fixed project price.</p></li>
-              <li style={c('var(--sky)')}><div className="bar"></div><div className="num">03</div><h3>Journey map</h3><p>Booking, estimates, follow-up and service plan rules agreed.</p></li>
-              <li style={c('var(--coral)')}><div className="bar"></div><div className="num">04</div><h3>Build</h3><p>Price book, job types, follow-up and campaigns, then any migration.</p></li>
-              <li style={c('var(--ink)')}><div className="bar"></div><div className="num">05</div><h3>Test</h3><p>Test bookings, estimates and payments run end to end.</p></li>
-              <li style={c('var(--light-sage)')}><div className="bar"></div><div className="num">06</div><h3>Handover</h3><p>Office and technician training, documentation and optional maintenance.</p></li>
+              <li style={c('var(--sky)')}><div className="bar"></div><div className="num">03</div><h3>Process map</h3><p>Job types, business units, pricebook and membership rules agreed.</p></li>
+              <li style={c('var(--coral)')}><div className="bar"></div><div className="num">04</div><h3>Build</h3><p>Pricebook, dispatch, follow-up, campaigns and reports.</p></li>
+              <li style={c('var(--ink)')}><div className="bar"></div><div className="num">05</div><h3>Test</h3><p>Test calls, jobs, estimates and invoices run end to end.</p></li>
+              <li style={c('var(--light-sage)')}><div className="bar"></div><div className="num">06</div><h3>Handover</h3><p>Training by role, documentation and optional maintenance.</p></li>
             </ol>
           </div>
         </section>
@@ -481,23 +483,23 @@ export default function HousecallProPage() {
                 <h3>What we need</h3>
                 <p className="panel-k">Confirmed during discovery</p>
                 <ul className="gets">
-                  <li><Check size={15} aria-hidden="true" />Admin access to Housecall Pro, or your plan choice</li>
-                  <li><Check size={15} aria-hidden="true" />Your services, current prices and job types</li>
-                  <li><Check size={15} aria-hidden="true" />Exports from any tool or spreadsheet you are moving from</li>
-                  <li><Check size={15} aria-hidden="true" />Your service plan terms and current maintenance customers</li>
-                  <li><Check size={15} aria-hidden="true" />One person who signs off how the office works</li>
+                  <li><Check size={15} aria-hidden="true" />Admin access to ServiceTitan, or your onboarding plan</li>
+                  <li><Check size={15} aria-hidden="true" />Your current pricebook or price lists</li>
+                  <li><Check size={15} aria-hidden="true" />Membership terms and a list of current members</li>
+                  <li><Check size={15} aria-hidden="true" />Your marketing channels and what you spend on each</li>
+                  <li><Check size={15} aria-hidden="true" />One person who signs off how the office and field work</li>
                 </ul>
               </div>
               <div className="panel" style={c('var(--sage)')}>
                 <h3>At handover</h3>
                 <p className="panel-k">Final scope set in your proposal</p>
                 <ul className="gets">
-                  <li><Check size={15} aria-hidden="true" />Clean customer records with lead sources</li>
-                  <li><Check size={15} aria-hidden="true" />A price book and estimate templates your techs use</li>
-                  <li><Check size={15} aria-hidden="true" />Booking, dispatch and notifications set up</li>
-                  <li><Check size={15} aria-hidden="true" />Estimate follow-up and review requests running</li>
-                  <li><Check size={15} aria-hidden="true" />Service plans and campaigns for repeat work</li>
-                  <li><Check size={15} aria-hidden="true" />Training for the office and technicians</li>
+                  <li><Check size={15} aria-hidden="true" />A pricebook technicians can navigate</li>
+                  <li><Check size={15} aria-hidden="true" />Consistent job types and business units</li>
+                  <li><Check size={15} aria-hidden="true" />Estimate follow-up and membership renewals</li>
+                  <li><Check size={15} aria-hidden="true" />Campaigns that tie marketing to revenue</li>
+                  <li><Check size={15} aria-hidden="true" />Dashboards for managers and owners</li>
+                  <li><Check size={15} aria-hidden="true" />Training and workflows for every role</li>
                 </ul>
               </div>
             </div>
@@ -508,17 +510,17 @@ export default function HousecallProPage() {
         <section className="sec" id="fit" aria-labelledby="fit-title">
           <div className="wrap">
             <div className="head">
-              <p className="label">Is Housecall Pro right for you?</p>
-              <h2 id="fit-title">Housecall Pro suits home service businesses that want one app for the whole job.</h2>
+              <p className="label">Is ServiceTitan right for you?</p>
+              <h2 id="fit-title">ServiceTitan suits trade businesses with a full office behind the field team.</h2>
             </div>
             <div className="fit2">
               <div className="panel" style={c('var(--sage)')}>
                 <h3>Usually a good fit</h3>
-                <p>HVAC, plumbing, electrical, cleaning, landscaping and handyman businesses in the United States and Canada, from owner-operators to growing teams, that want booking, dispatch, payments, reviews and marketing in one place.</p>
+                <p>Established HVAC, plumbing, electrical and other residential or commercial trade businesses with several technicians, dedicated CSRs and dispatchers, and a focus on memberships, field sales and measurable marketing.</p>
               </div>
               <div className="panel" style={c('var(--coral)')}>
                 <h3>Worth comparing first</h3>
-                <p>If you mainly run recurring or quote-heavy work, <Link className="link" href="/platforms/jobber">Jobber</Link> is worth comparing, and we implement that too. Larger multi-location or commercial contractors may need a platform such as <Link className="link" href="/platforms/servicetitan">ServiceTitan</Link>. Discovery is where we tell you honestly which way we would go.</p>
+                <p>ServiceTitan is a large platform with a price and setup to match. Owner-operators and smaller teams are often better served by <Link className="link" href="/platforms/housecall-pro">Housecall Pro</Link> or <Link className="link" href="/platforms/jobber">Jobber</Link>, and we implement those too. Discovery is where we tell you honestly which way we would go.</p>
               </div>
             </div>
           </div>
@@ -530,7 +532,7 @@ export default function HousecallProPage() {
             <div className="proof-ph">
               <div>
                 <p className="label">Specialist experience</p>
-                <h2 id="proof-title">Previous Housecall Pro work by a Sage Kite delivery specialist</h2>
+                <h2 id="proof-title">Previous ServiceTitan work by a Sage Kite delivery specialist</h2>
               </div>
               <div>
                 <p className="note" style={{ marginBottom: '10px' }}>Examples are being prepared. We publish only approved, attributed work. Each example will show:</p>
@@ -545,19 +547,19 @@ export default function HousecallProPage() {
           </div>
         </section>
 
-        {/* Where Housecall Pro sits */}
+        {/* Where ServiceTitan sits */}
         <section className="pale sec" id="system" aria-labelledby="conn-title">
           <div className="wrap">
             <div className="head">
-              <p className="label">Where Housecall Pro sits</p>
+              <p className="label">Where ServiceTitan sits</p>
               <h2 id="conn-title">The platform is one part of the growth system.</h2>
-              <p className="sub">Housecall Pro runs the jobs. The work around it decides what to change and keeps the calendar full. See how this fits <Link className="link" href="/industries/home-services">home services</Link>.</p>
+              <p className="sub">ServiceTitan runs the operation. The work around it decides what to change and keeps the phones busy. See how this fits <Link className="link" href="/industries/home-services">home services</Link>.</p>
             </div>
             <div className="conn">
-              <Link href="/services/consultancy" style={c('var(--butter)')}><strong>Growth consultancy</strong><span>Which services, areas and customers to grow first.</span></Link>
-              <Link href="/services/marketing" style={c('var(--coral)')}><strong>Marketing</strong><span>Local SEO and Google Ads that bring in booked jobs.</span></Link>
-              <Link href="/services/recruitment-staffing" style={c('var(--ink)')}><strong>CRM and automation VA</strong><span>Someone to follow up estimates and keep records clean.</span></Link>
-              <Link href="/for-agencies" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Housecall Pro work for your trade clients, under your brand.</span></Link>
+              <Link href="/services/consultancy" style={c('var(--butter)')}><strong>Growth consultancy</strong><span>Which services, areas and memberships to grow first.</span></Link>
+              <Link href="/services/marketing" style={c('var(--coral)')}><strong>Marketing</strong><span>Local SEO, Google Ads and email that bring in booked calls.</span></Link>
+              <Link href="/services/recruitment-staffing" style={c('var(--ink)')}><strong>CRM and automation VA</strong><span>Someone to keep the pricebook, records and follow-up tidy.</span></Link>
+              <Link href="/for-agencies" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>ServiceTitan work for your trade clients, under your brand.</span></Link>
             </div>
           </div>
         </section>
@@ -567,7 +569,7 @@ export default function HousecallProPage() {
           <div className="wrap faq-wrap">
             <div>
               <p className="label">Questions</p>
-              <h2 id="faq-title">Housecall Pro consulting FAQs</h2>
+              <h2 id="faq-title">ServiceTitan consulting FAQs</h2>
             </div>
             <div>
               {faqGroups.map((group) => (
@@ -581,7 +583,7 @@ export default function HousecallProPage() {
                   ))}
                 </div>
               ))}
-              <p className="trust-note">Sage Kite is an independent consultant. Housecall Pro is a trademark of its owner. Sage Kite is not affiliated with, endorsed by or certified by Housecall Pro.</p>
+              <p className="trust-note">Sage Kite is an independent consultant. ServiceTitan is a trademark of its owner. Sage Kite is not affiliated with, endorsed by or certified by ServiceTitan.</p>
             </div>
           </div>
         </section>
@@ -591,13 +593,13 @@ export default function HousecallProPage() {
           <div className="wrap">
             <div className="final-inner">
               <p className="final-words" aria-hidden="true">
-                <span><span className="dot" style={c('var(--butter)')}></span>Enquiries</span>
-                <span><span className="dot" style={c('var(--sky)')}></span>Housecall Pro</span>
+                <span><span className="dot" style={c('var(--butter)')}></span>Calls</span>
+                <span><span className="dot" style={c('var(--sky)')}></span>ServiceTitan</span>
                 <span><span className="dot" style={c('var(--sage)')}></span>Team</span>
-                <span><span className="dot" style={c('var(--coral)')}></span>Repeat work</span>
+                <span><span className="dot" style={c('var(--coral)')}></span>Members</span>
               </p>
-              <h2 id="final-title">Build Housecall Pro around how you win and keep customers.</h2>
-              <p className="sub">A discovery call looks at your current setup or plan, how enquiries become jobs today, and what a fixed-scope project would cover.</p>
+              <h2 id="final-title">Build ServiceTitan around how you book, sell and keep customers.</h2>
+              <p className="sub">A discovery call looks at your current account or onboarding plan, where work is being lost, and what a fixed-scope project would cover.</p>
               <div className="cta-row">
                 <Link href="/contact" className="btn">Book a discovery call</Link>
                 <Link href="/platforms" className="link">See other platforms we implement</Link>

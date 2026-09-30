@@ -5,12 +5,12 @@ import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
 
-const PAGE_URL = "https://www.sagekite.com/platforms/housecall-pro";
+const PAGE_URL = "https://www.sagekite.com/platforms/mindbody";
 
 export const metadata: Metadata = {
-  title: "Housecall Pro Setup & Consulting Services | Sage Kite",
-  description: "Housecall Pro setup from Sage Kite: booking, dispatch, price book, estimate follow-up, service plans, reviews and campaigns for home service businesses.",
-  keywords: ["Housecall Pro consultant", "Housecall Pro setup", "Housecall Pro price book", "Housecall Pro service plans", "Housecall Pro training", "home services CRM"],
+  title: "Mindbody Setup & Consulting Services | Sage Kite",
+  description: "Mindbody consulting from Sage Kite: pricing options, intro offer follow-up, lead management, automated campaigns and retention for fitness and wellness.",
+  keywords: ["Mindbody consultant", "Mindbody setup", "Mindbody marketing automation", "Mindbody lead management", "Mindbody for studios", "fitness studio CRM"],
   alternates: {
     canonical: PAGE_URL,
   },
@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "Housecall Pro setup and consulting services | Sage Kite",
-    description: "Sage Kite sets up Housecall Pro around how home service businesses win and keep customers: booking, estimates, follow-up, service plans and campaigns.",
+    title: "Mindbody setup and consulting services | Sage Kite",
+    description: "Sage Kite sets up Mindbody around how studios turn first visits into members who stay: pricing, intro offers, leads, campaigns and retention.",
   },
   twitter: {
     card: "summary",
-    title: "Housecall Pro setup and consulting services | Sage Kite",
-    description: "Housecall Pro setup for home service businesses: booking, dispatch, price book, estimate follow-up, service plans, reviews and campaigns.",
+    title: "Mindbody setup and consulting services | Sage Kite",
+    description: "Mindbody setup for fitness and wellness businesses: pricing options, intro offer follow-up, lead management, campaigns and retention reporting.",
   },
 };
 
@@ -32,16 +32,16 @@ type Capability = { title: string; color: string; text: string; tags: string[]; 
 
 // "What we implement" rows. Offered rows also feed hasOfferCatalog, so schema always matches the page.
 const capabilities: Capability[] = [
-  { title: "Customers, tags and lead sources", color: "var(--sage)", offered: true, tags: ["Customers", "Tags", "Lead sources"], text: "Customer records, tags and lead sources set up consistently, so you can see who your customers are, what they have bought and where the work came from." },
-  { title: "Online booking and intake", color: "var(--coral)", offered: true, tags: ["Online booking", "Chat", "CSR AI"], text: "Online booking, website chat and, where you use it, CSR AI, set up so every enquiry becomes a booked job or an estimate visit instead of a missed call." },
-  { title: "Scheduling and dispatch", color: "var(--sky)", offered: true, tags: ["Job types", "Dispatch", "Arrival windows"], text: "Job types, schedules, dispatch rules and customer notifications, so the office knows who is where and the customer knows when to expect you." },
-  { title: "Price book and estimates", color: "var(--butter)", offered: true, tags: ["Price book", "Options", "Photos"], text: "A flat-rate price book built for your trade, and estimates with options and photos, so technicians quote consistently and customers can say yes on the spot." },
-  { title: "Estimate follow-up", color: "var(--ink)", offered: true, tags: ["Reminders", "Pipeline", "Tasks"], text: "Automated reminders for open estimates and, where you use it, Pipeline to track them, so quotes are chased before they go cold." },
-  { title: "Invoicing and payments", color: "var(--coral)", offered: true, tags: ["Invoices", "Card on file", "QuickBooks"], text: "Invoices, payments in the field and card on file, with QuickBooks connected where your plan includes it, so money comes in without chasing." },
-  { title: "Service plans", color: "var(--sage)", offered: true, tags: ["Maintenance plans", "Recurring visits", "Auto-invoicing"], text: "Maintenance plans and service agreements with recurring visits, card on file and automatic invoicing, and the reminders that renew them." },
-  { title: "Reviews and campaigns", color: "var(--sky)", offered: true, tags: ["Review requests", "Email", "Postcards"], text: "Review requests after every finished job, and email and postcard Campaigns for seasonal reminders and repeat work that stop once a customer books." },
-  { title: "Reporting and integrations", color: "var(--ink)", offered: true, tags: ["Lead sources", "Revenue", "Integrations"], text: "Reports on lead sources, estimates, jobs and revenue, and the integrations your business depends on, set up and checked." },
-  { title: "Payroll and bookkeeping", color: "var(--light-sage)", offered: false, tags: ["Connected, not run"], text: "We connect Housecall Pro to your accounting tools. We do not run payroll or bookkeeping for you." },
+  { title: "Services, pricing options and contracts", color: "var(--sage)", offered: true, tags: ["Classes", "Pricing options", "Contracts"], text: "Classes, appointments, pricing options, intro offers and membership contracts structured so clients can buy the right thing and nothing old is left on sale." },
+  { title: "Online booking", color: "var(--sky)", offered: true, tags: ["Booking widgets", "Mindbody app", "Branded app"], text: "Booking on your website, your listing on the Mindbody app and, where you use it, your branded app, set up so clients can book and pay in a few taps." },
+  { title: "Lead management", color: "var(--coral)", offered: true, tags: ["Lead capture", "Pipeline", "Tasks"], text: "Enquiries from your website and social channels captured in Mindbody's lead pipeline, with follow-up tasks so every lead gets a reply." },
+  { title: "Intro offer conversion", color: "var(--butter)", offered: true, tags: ["Welcome", "Check-ins", "Offers"], text: "A journey for new clients, with welcome messages, staff check-ins and a membership offer at the right moment, so trials turn into members." },
+  { title: "Automated campaigns", color: "var(--sky)", offered: true, tags: ["Email", "Text", "Segments"], text: "Automated email and text campaigns for welcome, birthdays, milestones and inactive clients, sent to segments built from real attendance." },
+  { title: "Retention and win-back", color: "var(--ink)", offered: true, tags: ["Attendance drops", "Expiring memberships", "Win-back"], text: "Alerts and campaigns for members whose visits drop off or whose memberships are ending, so the team can step in before they leave." },
+  { title: "Messenger[ai] front desk", color: "var(--coral)", offered: true, tags: ["AI front desk", "Booking rules", "Guardrails"], text: "Mindbody's AI front desk set up with your answers, booking rules and limits where you use it, so it books and replies the way your team would." },
+  { title: "Payments and memberships billing", color: "var(--sage)", offered: true, tags: ["Autopay", "Cancellation policy", "Retail"], text: "Mindbody Payments, autopays, cancellation and late-cancel policies and retail set up so billing runs on time and policies are applied consistently." },
+  { title: "Reporting and staff training", color: "var(--ink)", offered: true, tags: ["Conversion", "Retention", "Training"], text: "Reports on intro offer conversion, retention, attendance and revenue, and training so front desk staff and instructors use Mindbody the same way." },
+  { title: "Custom website and brand design", color: "var(--light-sage)", offered: false, tags: ["Connected, not built"], text: "We connect Mindbody booking to your existing website. We do not design websites or branding." },
 ];
 
 type FaqGroup = { label: string; items: { q: string; a: string }[] };
@@ -49,56 +49,58 @@ type FaqGroup = { label: string; items: { q: string; a: string }[] };
 // Rendered on the page and in FAQPage schema from the same data, so the text always matches.
 const faqGroups: FaqGroup[] = [
   {
-    label: "Housecall Pro consulting",
+    label: "Mindbody consulting",
     items: [
-      { q: "What does a Housecall Pro consultant do?", a: "A Housecall Pro consultant sets up Housecall Pro around how a home service business wins and keeps customers: customer records, online booking, scheduling and dispatch, the price book and estimates, estimate follow-up, payments, service plans, reviews and campaigns. Sage Kite starts by mapping the path from first call to repeat job, then configures Housecall Pro to match." },
-      { q: "Doesn't Housecall Pro include onboarding?", a: "The MAX plan includes a dedicated onboarding specialist, and every plan includes phone and chat support. That help focuses on using the product. We focus on your process: how enquiries are captured, how estimates are followed up, how service plans are sold and renewed, and how past customers are brought back." },
-      { q: "Can you fix an existing Housecall Pro account?", a: "Yes. Common issues are duplicate customers, no lead sources, a price book nobody has updated, estimates nobody follows up, and service plans tracked in a spreadsheet. We audit the account, clean the records, rebuild the price book and follow-up, and document how the office should use it." },
-      { q: "How long does a Housecall Pro project take?", a: "It depends on the size of your price book, how many customers and service plans need to move, and how many technicians and job types you have. Tightening an existing account is a smaller project than a full setup with a migration. Your proposal sets out the milestones and dates before work starts." },
+      { q: "What does a Mindbody consultant do?", a: "A Mindbody consultant helps a fitness or wellness business set up and run Mindbody around how it actually wins and keeps clients: pricing options and contracts, online booking, lead management, intro offer follow-up, automated campaigns, retention and reporting. Sage Kite starts by mapping the path from first visit to renewal, then configures Mindbody to match." },
+      { q: "Doesn't Mindbody include onboarding?", a: "Yes. Mindbody includes one-on-one onboarding and training on every plan, with no setup fee. That help focuses on using the product. We focus on your process: how intro offers convert, how leads are followed up, how pricing is structured, how members are kept and how you measure it." },
+      { q: "Can you clean up an existing Mindbody account?", a: "Yes. Common issues are years of old pricing options still on sale, intro offers with no follow-up, leads that never reach Mindbody, campaigns nobody set up and reports nobody reads. We audit the account, retire what is out of date, rebuild the follow-up and document how the front desk should use it." },
+      { q: "How long does a Mindbody project take?", a: "It depends on the number of locations, services and pricing options, and how much follow-up and reporting you need. Tightening one studio's setup is a much smaller project than a multi-location rebuild with a data move. Your proposal sets out the milestones and dates before work starts." },
     ],
   },
   {
     label: "Scope and setup",
     items: [
-      { q: "Can you move our customers into Housecall Pro?", a: "Usually. We move customer records, addresses and history from spreadsheets or another field service tool, clean and de-duplicate them, and add the tags and lead sources your reports depend on. We confirm what your current system can export during discovery." },
-      { q: "Can you set up our Housecall Pro price book?", a: "Yes. We build a flat-rate price book around the work you actually do, with clear names, descriptions, photos and options, so technicians quote the same way and customers can compare choices on the estimate." },
-      { q: "Can you set up service plans and maintenance agreements?", a: "Yes. We set up service plans with recurring visits, card on file and automatic invoicing, plus the reminders that renew them. Service Plans are a paid add-on on some Housecall Pro plans, so we confirm what yours includes first." },
-      { q: "Can you set up Housecall Pro marketing campaigns?", a: "Yes. We set up review requests after finished jobs, and email and postcard Campaigns for seasonal tune-ups, maintenance reminders and past customers, with stop conditions so a message ends as soon as the customer books." },
-      { q: "Which Housecall Pro plan do we need?", a: "Basic includes one user, Essentials five and MAX eight, with a dedicated onboarding specialist on MAX. Some features, including Service Plans, Pipeline and the Sales Proposal Tool, are paid add-ons depending on the plan. We recommend the smallest plan that fits your team and the way you sell." },
+      { q: "Can you move our clients and memberships to Mindbody?", a: "We clean and prepare client, membership and pricing data for import, and check the records afterwards. Moving active autopays depends on your current payment processor, so we confirm what is feasible in discovery before it is included in scope." },
+      { q: "Can you set up intro offer follow-up in Mindbody?", a: "Yes. We set up a journey for new clients, with welcome messages, reminders, staff check-in tasks and a timed membership offer, so trial clients are followed up consistently instead of when someone remembers." },
+      { q: "Can you set up lead management in Mindbody?", a: "Yes. We connect your enquiry forms to Mindbody's lead pipeline and set up follow-up tasks and stages, so the team can see every lead and what happens next. Mindbody lists the lead management dashboard as part of its Ultimate plan." },
+      { q: "Can you set up Messenger[ai]?", a: "Yes, where your plan includes it. Mindbody lists its AI front desk as included on Ultimate and as an add-on on Accelerate. We set it up with your answers, booking rules and limits, and review how it replies before clients rely on it." },
+      { q: "Which Mindbody plan do we need?", a: "Mindbody's Starter plan starts at $99 a month per location, and Accelerate, Ultimate and Enterprise are priced on request. Automated email and text campaigns and lead management come with Ultimate. We recommend the smallest plan that covers how you sell and keep members." },
     ],
   },
   {
     label: "Working with Sage Kite",
     items: [
-      { q: "Does Housecall Pro work outside the United States and Canada?", a: "Housecall Pro is built for home service businesses in the United States and Canada. If you are elsewhere, check with Housecall Pro before you commit. If it is not the right fit, we can recommend and implement a field service platform that works in your country." },
-      { q: "Is Sage Kite a Housecall Pro partner?", a: "Sage Kite is an independent consultant. Housecall Pro is a trademark of its owner, and Sage Kite is not affiliated with, endorsed by or certified by Housecall Pro. We work on your behalf and are paid by you, not by Housecall Pro." },
-      { q: "What happens after the project?", a: "You own the account and can run it. Handover includes training for the office and technicians and documentation of your price book, job types and follow-up. Where it helps, Sage Kite offers maintenance with a defined support scope, and a CRM and automation VA to follow up estimates and keep records clean." },
-      { q: "Is Sage Kite only a Housecall Pro consultant?", a: "No. Sage Kite is a business growth consultancy. Housecall Pro is one of the platforms we implement, alongside consultancy, marketing, automation and specialist staffing. Housecall Pro runs the jobs; the broader work decides what to change and keeps the phone ringing." },
+      { q: "Is Mindbody part of ClassPass?", a: "Mindbody and ClassPass are both part of Playlist. Many Mindbody businesses also list on ClassPass. We can set up how ClassPass fits your schedule and pricing, so it fills spare spots without undercutting your own members." },
+      { q: "Is Sage Kite a Mindbody partner?", a: "Sage Kite is an independent consultant. Mindbody is a trademark of its owner, and Sage Kite is not affiliated with, endorsed by or certified by Mindbody or Playlist. We work on your behalf and are paid by you, not by Mindbody." },
+      { q: "What happens after the project?", a: "You own the account and can run it. Handover includes training for the front desk and managers, and documentation of your pricing, follow-up and campaigns. Where it helps, Sage Kite offers maintenance with a defined support scope, and a marketing operations or social media VA to keep campaigns running." },
+      { q: "Is Sage Kite only a Mindbody consultant?", a: "No. Sage Kite is a business growth consultancy. Mindbody is one of the platforms we implement, alongside consultancy, marketing, automation and specialist staffing. Mindbody runs bookings and memberships; the broader work decides what to change and brings in new clients." },
     ],
   },
 ];
 
-// Hero diagram: one illustrative customer journey. `human` marks the step kept with a person.
+// Hero diagram: one illustrative member journey. `human` marks the step kept with a person.
 const journey = [
-  { step: "Call, chat or online booking", tool: "Booking", color: "var(--sky)" },
-  { step: "Estimate visit scheduled", tool: "Schedule", color: "var(--sky)" },
-  { step: "Estimate with options sent", tool: "Estimate", color: "var(--sky)" },
-  { step: "Open estimate followed up", tool: "Reminder", color: "var(--sky)" },
-  { step: "Technician does the job", tool: "You", color: "var(--butter)", human: true },
-  { step: "Invoiced and paid on site", tool: "Payment", color: "var(--coral)" },
-  { step: "Review ask and service plan", tool: "Campaign", color: "var(--sage)" },
+  { step: "Intro offer booked online", tool: "Booking", color: "var(--sky)" },
+  { step: "Lead added to pipeline", tool: "Leads", color: "var(--sky)" },
+  { step: "Welcome texts and emails", tool: "Campaign", color: "var(--sky)" },
+  { step: "First visit, met by staff", tool: "You", color: "var(--butter)", human: true },
+  { step: "Membership sold", tool: "Contract", color: "var(--coral)" },
+  { step: "Missed visits flagged", tool: "Automation", color: "var(--sky)" },
+  { step: "Win-back or renewal", tool: "Campaign", color: "var(--sage)" },
 ];
 
-// From Housecall Pro's published pricing, September 2026 (housecallpro.com/pricing). Recheck when editing.
+// From Mindbody's published plan comparison, September 2026 (mindbodyonline.com/business/pricing). Recheck when editing.
 const plans = [
-  { row: "Price, billed annually", basic: "$59/month", essentials: "$149/month", max: "$299/month" },
-  { row: "Users included", basic: "1", essentials: "5", max: "8" },
-  { row: "Onboarding", basic: "Phone and chat", essentials: "Phone and chat", max: "Dedicated specialist" },
+  { row: "Price per location", starter: "From $99/month", accelerate: "On request", ultimate: "On request" },
+  { row: "Automated email and text campaigns", starter: "Not included", accelerate: "Not included", ultimate: "Included" },
+  { row: "Lead management", starter: "Not included", accelerate: "Not included", ultimate: "Included" },
+  { row: "Messenger[ai] front desk", starter: "Not included", accelerate: "Add-on", ultimate: "Included" },
+  { row: "Branded app", starter: "Not included", accelerate: "Add-on", ultimate: "Add-on" },
 ];
 
 const c = (color: string) => ({ '--c': color } as React.CSSProperties);
 
-export default function HousecallProPage() {
+export default function MindbodyPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -110,44 +112,46 @@ export default function HousecallProPage() {
       },
       {
         "@type": "WebPage",
-        "@id": "https://www.sagekite.com/platforms/housecall-pro/#webpage",
+        "@id": "https://www.sagekite.com/platforms/mindbody/#webpage",
         "url": PAGE_URL,
-        "name": "Housecall Pro setup and consulting services | Sage Kite",
-        "description": "Sage Kite sets up Housecall Pro for home service businesses: customers and lead sources, online booking, scheduling and dispatch, price book and estimates, estimate follow-up, payments, service plans, reviews, campaigns and reporting.",
+        "name": "Mindbody setup and consulting services | Sage Kite",
+        "description": "Sage Kite sets up Mindbody for fitness and wellness businesses: pricing options and contracts, online booking, lead management, intro offer conversion, automated campaigns, retention, Messenger[ai], payments and reporting.",
         "isPartOf": { "@id": "https://www.sagekite.com/#website" },
-        "about": { "@id": "https://www.sagekite.com/platforms/housecall-pro/#service" },
-        "breadcrumb": { "@id": "https://www.sagekite.com/platforms/housecall-pro/#breadcrumb" },
+        "about": { "@id": "https://www.sagekite.com/platforms/mindbody/#service" },
+        "breadcrumb": { "@id": "https://www.sagekite.com/platforms/mindbody/#breadcrumb" },
         "inLanguage": "en"
       },
       {
         "@type": "BreadcrumbList",
-        "@id": "https://www.sagekite.com/platforms/housecall-pro/#breadcrumb",
+        "@id": "https://www.sagekite.com/platforms/mindbody/#breadcrumb",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.sagekite.com/" },
           { "@type": "ListItem", "position": 2, "name": "Platforms", "item": "https://www.sagekite.com/platforms" },
-          { "@type": "ListItem", "position": 3, "name": "Housecall Pro" }
+          { "@type": "ListItem", "position": 3, "name": "Mindbody" }
         ]
       },
       {
         "@type": "Service",
-        "@id": "https://www.sagekite.com/platforms/housecall-pro/#service",
-        "name": "Housecall Pro setup and consulting services",
-        "serviceType": "Housecall Pro setup, configuration and consulting",
-        "description": "Home service process mapping, Housecall Pro customers, tags and lead sources, online booking and intake, scheduling and dispatch, price book and estimates, estimate follow-up, invoicing and payments, service plans, review requests and campaigns, reporting, integrations, data migration, testing, training and handover.",
+        "@id": "https://www.sagekite.com/platforms/mindbody/#service",
+        "name": "Mindbody setup and consulting services",
+        "serviceType": "Mindbody setup, configuration and consulting",
+        "description": "Member journey mapping, Mindbody services, pricing options and contracts, online booking, lead management, intro offer conversion, automated email and text campaigns, retention and win-back, Messenger[ai] setup, payments and memberships billing, reporting, data preparation, testing, staff training and handover.",
         "provider": { "@id": "https://www.sagekite.com/#organization" },
-        // Housecall Pro is built for US and Canadian home service businesses (see FAQ), so this service is scoped to those two markets.
         "areaServed": [
           { "@type": "Country", "name": "United States" },
-          { "@type": "Country", "name": "Canada" }
+          { "@type": "Country", "name": "Canada" },
+          { "@type": "Place", "name": "Europe" },
+          { "@type": "Country", "name": "Australia" },
+          { "@type": "Country", "name": "New Zealand" }
         ],
         "audience": [
-          { "@type": "Audience", "audienceType": "Home service businesses" },
-          { "@type": "Audience", "audienceType": "HVAC, plumbing and electrical contractors" },
-          { "@type": "Audience", "audienceType": "Cleaning and landscaping businesses" }
+          { "@type": "Audience", "audienceType": "Fitness studios and gyms" },
+          { "@type": "Audience", "audienceType": "Yoga and pilates studios" },
+          { "@type": "Audience", "audienceType": "Spas and wellness centres" }
         ],
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
-          "name": "What we implement in Housecall Pro",
+          "name": "What we implement in Mindbody",
           "itemListElement": capabilities.filter((cap) => cap.offered).map((cap) => ({
             "@type": "Offer",
             "itemOffered": { "@type": "Service", "name": cap.title }
@@ -156,9 +160,9 @@ export default function HousecallProPage() {
       },
       {
         "@type": "FAQPage",
-        "@id": "https://www.sagekite.com/platforms/housecall-pro/#faq",
+        "@id": "https://www.sagekite.com/platforms/mindbody/#faq",
         "isPartOf": { "@id": "https://www.sagekite.com/#website" },
-        "about": { "@id": "https://www.sagekite.com/platforms/housecall-pro/#service" },
+        "about": { "@id": "https://www.sagekite.com/platforms/mindbody/#service" },
         "inLanguage": "en",
         "mainEntity": faqGroups.flatMap((g) => g.items).map((f) => ({
           "@type": "Question",
@@ -175,7 +179,7 @@ export default function HousecallProPage() {
 
       <main id="main">
         <style dangerouslySetInnerHTML={{ __html: `
-          /* Housecall Pro page additions, built from the approved homepage system */
+          /* Mindbody page additions, built from the approved homepage system */
           .sec{padding:clamp(64px,8vw,104px) 0}
 
           /* Hero is sized to fit above the fold on a laptop screen at 100% zoom */
@@ -298,25 +302,25 @@ export default function HousecallProPage() {
                 <span style={{ background: 'var(--butter)' }}></span>
                 <span style={{ background: 'var(--sky)' }}></span>
               </div>
-              <p className="label">Platforms / Housecall Pro</p>
-              <h1 id="hero-title">Housecall Pro setup and consulting services</h1>
+              <p className="label">Platforms / Mindbody</p>
+              <h1 id="hero-title">Mindbody setup and consulting services</h1>
               <p className="sub">
-                Sage Kite sets up Housecall Pro around how your home service business wins and keeps customers. We map the path from first call to repeat job, then build booking, estimates, follow-up and service plans to match.
+                Sage Kite sets up Mindbody around how your studio turns first visits into members who stay. We map the path from intro offer to renewal, then build the pricing, follow-up, campaigns and reporting to match.
               </p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Discuss your Housecall Pro setup</Link>
+                <Link href="/contact" className="btn">Discuss your Mindbody setup</Link>
                 <Link href="#what-we-implement" className="link">See what&apos;s included</Link>
               </div>
               <p className="hero-facts">
-                <span><span className="dot" style={c('var(--sage)')}></span>New or existing accounts</span>
-                <span><span className="dot" style={c('var(--sky)')}></span>Service plan setup</span>
+                <span><span className="dot" style={c('var(--sage)')}></span>Studios and gyms</span>
+                <span><span className="dot" style={c('var(--sky)')}></span>New or existing accounts</span>
                 <span><span className="dot" style={c('var(--coral)')}></span>Fixed price, agreed up front</span>
               </p>
             </div>
 
             <figure className="journey-fig" aria-labelledby="journey-title">
               <div className="ui">
-                <p className="ui-title"><b id="journey-title">A customer journey in Housecall Pro</b><span>Example</span></p>
+                <p className="ui-title"><b id="journey-title">A member journey in Mindbody</b><span>Example</span></p>
                 <ol className="jsteps">
                   {journey.map((j) => (
                     <li key={j.step} className={j.human ? 'human' : undefined} style={c(j.color)}>
@@ -325,11 +329,11 @@ export default function HousecallProPage() {
                   ))}
                 </ol>
                 <p className="key">
-                  <span><span className="dot" style={c('var(--sky)')}></span>Automated in Housecall Pro</span>
+                  <span><span className="dot" style={c('var(--sky)')}></span>Automated in Mindbody</span>
                   <span><span className="dot" style={c('var(--butter)')}></span>Kept with your team</span>
                 </p>
               </div>
-              <figcaption>Illustrative. Your customer journey is mapped in discovery.</figcaption>
+              <figcaption>Illustrative. Your member journey is mapped in discovery.</figcaption>
             </figure>
           </div>
         </section>
@@ -339,17 +343,17 @@ export default function HousecallProPage() {
           <div className="wrap">
             <div className="head">
               <p className="label">Common starting situations</p>
-              <h2 id="problems-title">Housecall Pro runs the jobs well. The follow-up around them is where work gets lost.</h2>
+              <h2 id="problems-title">Mindbody fills the schedule. Keeping clients is where most accounts fall short.</h2>
             </div>
             <ul className="symptoms">
-              <li><strong>Estimates that go cold</strong><p>Quotes are sent and never chased, so the work quietly goes to a competitor.</p></li>
-              <li><strong>Customer records in pieces</strong><p>Duplicates, no tags and no lead source, so you cannot tell what brings in work.</p></li>
-              <li><strong>A price book nobody updates</strong><p>Prices are out of date, so technicians quote from memory and margins slip.</p></li>
-              <li><strong>Service plans on a spreadsheet</strong><p>Maintenance customers are tracked by hand, and renewals are missed.</p></li>
-              <li><strong>Reviews left to chance</strong><p>Review requests are switched off or generic, so happy customers never say so.</p></li>
-              <li><strong>No reason to call back</strong><p>No seasonal reminders, so one-off customers never become repeat customers.</p></li>
+              <li><strong>Intro offers that do not convert</strong><p>Trial clients come once or twice, then leave without anyone following up.</p></li>
+              <li><strong>Leads that never reach Mindbody</strong><p>Enquiries sit in inboxes and social messages, so nobody can see or chase them.</p></li>
+              <li><strong>Pricing options everywhere</strong><p>Years of old offers and contracts are still on sale, confusing clients and staff.</p></li>
+              <li><strong>Members who leave quietly</strong><p>Nothing flags when attendance drops, so cancellations come as a surprise.</p></li>
+              <li><strong>Marketing is one newsletter</strong><p>No automated welcome, milestone or win-back messages, just an occasional blast.</p></li>
+              <li><strong>Reports nobody reads</strong><p>You cannot see intro offer conversion or retention, so decisions are guesses.</p></li>
             </ul>
-            <p className="after-line">These are rarely software problems. They come from setting up Housecall Pro for the day&apos;s jobs and not for the customer relationship around them.</p>
+            <p className="after-line">These are rarely software problems. They come from setting Mindbody up to take bookings and not to keep the clients who make them.</p>
           </div>
         </section>
 
@@ -358,37 +362,37 @@ export default function HousecallProPage() {
           <div className="wrap">
             <div className="head">
               <p className="label">Three starting points</p>
-              <h2 id="starts-title">A new account, one that needs tightening, or a move to Housecall Pro.</h2>
+              <h2 id="starts-title">A new account, one that needs tidying, or a move to Mindbody.</h2>
             </div>
             <div className="starts">
               <div className="start" style={c('var(--sage)')}>
-                <h3>New Housecall Pro setup</h3>
-                <p>You are starting on Housecall Pro and want the office and the field working the same way from day one.</p>
+                <h3>New Mindbody setup</h3>
+                <p>You are opening on Mindbody and want pricing and follow-up right from the first class.</p>
                 <ul>
-                  <li>Job types, price book and estimates set up first</li>
-                  <li>Online booking and dispatch configured</li>
-                  <li>Estimate follow-up and review requests switched on</li>
-                  <li>Office and technicians trained</li>
+                  <li>Services, pricing options and contracts planned</li>
+                  <li>Online booking connected to your site</li>
+                  <li>Intro offer follow-up and welcome journey</li>
+                  <li>Front desk trained on the daily routine</li>
                 </ul>
               </div>
               <div className="start" style={c('var(--sky)')}>
-                <h3>Account tune-up</h3>
-                <p>You have used Housecall Pro for a while and follow-up has slipped as the business grew.</p>
+                <h3>Account tidy-up</h3>
+                <p>You have run Mindbody for years and the setup has grown messy.</p>
                 <ul>
-                  <li>Audit of customers, price book and follow-up</li>
-                  <li>Duplicates merged and lead sources added</li>
-                  <li>Service plans moved off the spreadsheet</li>
-                  <li>Campaigns for repeat and seasonal work</li>
+                  <li>Audit of pricing, contracts and campaigns</li>
+                  <li>Old pricing options retired safely</li>
+                  <li>Lead follow-up and retention journeys built</li>
+                  <li>Reports on conversion and retention</li>
                 </ul>
               </div>
               <div className="start" style={c('var(--coral)')}>
-                <h3>Move to Housecall Pro</h3>
-                <p>You are leaving paper, spreadsheets or another field service tool.</p>
+                <h3>Move to Mindbody</h3>
+                <p>You are leaving another booking system or spreadsheets.</p>
                 <ul>
-                  <li>Export and field mapping confirmed in discovery</li>
-                  <li>Customers cleaned and de-duplicated</li>
-                  <li>Service plans and history mapped where feasible</li>
-                  <li>Old system retired once the office has switched</li>
+                  <li>Client and membership data cleaned first</li>
+                  <li>Pricing mapped to Mindbody pricing options</li>
+                  <li>Autopay transfer assessed in discovery</li>
+                  <li>Records checked after import</li>
                 </ul>
               </div>
             </div>
@@ -400,8 +404,8 @@ export default function HousecallProPage() {
           <div className="wrap">
             <div className="head">
               <p className="label">What we implement</p>
-              <h2 id="impl-title">What Housecall Pro setup covers.</h2>
-              <p className="sub">Some features depend on your Housecall Pro plan or are paid add-ons. We confirm what yours includes during discovery.</p>
+              <h2 id="impl-title">What Mindbody setup covers.</h2>
+              <p className="sub">Some features depend on your Mindbody plan or are add-ons. We confirm what yours includes during discovery.</p>
             </div>
             <div className="cap-list">
               {capabilities.map((cap) => (
@@ -421,32 +425,32 @@ export default function HousecallProPage() {
         <section className="pale sec" id="plans" aria-labelledby="plans-title">
           <div className="wrap">
             <div className="head">
-              <p className="label">Which Housecall Pro plan?</p>
-              <h2 id="plans-title">Choose the plan for your team, then add what you need.</h2>
-              <p className="sub">We recommend the smallest plan that fits your team and the way you sell. We do not earn commission on your subscription.</p>
+              <p className="label">Which Mindbody plan?</p>
+              <h2 id="plans-title">The plan decides how much follow-up you can automate.</h2>
+              <p className="sub">We recommend the smallest plan that covers how you sell and keep members. We do not earn commission on your subscription.</p>
             </div>
             <table className="compare">
               <thead>
                 <tr>
                   <th scope="col"><span className="note">What changes the setup</span></th>
-                  <th scope="col">Basic</th>
-                  <th scope="col">Essentials</th>
-                  <th scope="col">MAX</th>
+                  <th scope="col">Starter</th>
+                  <th scope="col">Accelerate</th>
+                  <th scope="col">Ultimate</th>
                 </tr>
               </thead>
               <tbody>
                 {plans.map((p) => (
                   <tr key={p.row}>
                     <th scope="row">{p.row}</th>
-                    {([['Basic', p.basic], ['Essentials', p.essentials], ['MAX', p.max]] as const).map(([plan, value]) => (
-                      <td key={plan} data-h={plan}>{value}</td>
+                    {([['Starter', p.starter], ['Accelerate', p.accelerate], ['Ultimate', p.ultimate]] as const).map(([plan, value]) => (
+                      <td key={plan} data-h={plan} className={value === 'Not included' ? 'no' : value === 'Included' ? 'yes' : undefined}>{value}</td>
                     ))}
                   </tr>
                 ))}
               </tbody>
             </table>
             <p className="compare-note note">
-              Based on Housecall Pro&apos;s published pricing, September 2026. Some features, including Service Plans, Pipeline and the Sales Proposal Tool, are paid add-ons depending on the plan. Check <a className="link" href="https://www.housecallpro.com/pricing/" target="_blank" rel="noopener noreferrer">Housecall Pro&apos;s pricing page</a> before you buy.
+              Based on Mindbody&apos;s published plan comparison, September 2026. Mindbody also offers an Enterprise plan, and onboarding is included on every plan with no setup fee. Check <a className="link" href="https://www.mindbodyonline.com/business/pricing" target="_blank" rel="noopener noreferrer">Mindbody&apos;s pricing page</a> before you buy.
             </p>
           </div>
         </section>
@@ -456,15 +460,15 @@ export default function HousecallProPage() {
           <div className="wrap">
             <div className="head">
               <p className="label">How it works</p>
-              <h2 id="process-title">How a Housecall Pro project runs.</h2>
+              <h2 id="process-title">How a Mindbody project runs.</h2>
             </div>
             <ol className="flow6">
-              <li style={c('var(--butter)')}><div className="bar"></div><div className="num">01</div><h3>Discovery</h3><p>Your services, team, current account, data and who signs off.</p></li>
+              <li style={c('var(--butter)')}><div className="bar"></div><div className="num">01</div><h3>Discovery</h3><p>Your services, locations, current account, plan and who signs off.</p></li>
               <li style={c('var(--sage)')}><div className="bar"></div><div className="num">02</div><h3>Proposal</h3><p>Deliverables, exclusions, milestones and a fixed project price.</p></li>
-              <li style={c('var(--sky)')}><div className="bar"></div><div className="num">03</div><h3>Journey map</h3><p>Booking, estimates, follow-up and service plan rules agreed.</p></li>
-              <li style={c('var(--coral)')}><div className="bar"></div><div className="num">04</div><h3>Build</h3><p>Price book, job types, follow-up and campaigns, then any migration.</p></li>
-              <li style={c('var(--ink)')}><div className="bar"></div><div className="num">05</div><h3>Test</h3><p>Test bookings, estimates and payments run end to end.</p></li>
-              <li style={c('var(--light-sage)')}><div className="bar"></div><div className="num">06</div><h3>Handover</h3><p>Office and technician training, documentation and optional maintenance.</p></li>
+              <li style={c('var(--sky)')}><div className="bar"></div><div className="num">03</div><h3>Journey map</h3><p>Pricing, intro offer, lead and retention rules agreed.</p></li>
+              <li style={c('var(--coral)')}><div className="bar"></div><div className="num">04</div><h3>Build</h3><p>Pricing, booking, lead follow-up, campaigns and reports.</p></li>
+              <li style={c('var(--ink)')}><div className="bar"></div><div className="num">05</div><h3>Test</h3><p>Test bookings, purchases and campaigns run end to end.</p></li>
+              <li style={c('var(--light-sage)')}><div className="bar"></div><div className="num">06</div><h3>Handover</h3><p>Front desk and manager training, documentation and optional maintenance.</p></li>
             </ol>
           </div>
         </section>
@@ -481,23 +485,23 @@ export default function HousecallProPage() {
                 <h3>What we need</h3>
                 <p className="panel-k">Confirmed during discovery</p>
                 <ul className="gets">
-                  <li><Check size={15} aria-hidden="true" />Admin access to Housecall Pro, or your plan choice</li>
-                  <li><Check size={15} aria-hidden="true" />Your services, current prices and job types</li>
-                  <li><Check size={15} aria-hidden="true" />Exports from any tool or spreadsheet you are moving from</li>
-                  <li><Check size={15} aria-hidden="true" />Your service plan terms and current maintenance customers</li>
-                  <li><Check size={15} aria-hidden="true" />One person who signs off how the office works</li>
+                  <li><Check size={15} aria-hidden="true" />Owner or admin access to Mindbody, or your plan choice</li>
+                  <li><Check size={15} aria-hidden="true" />Your services, prices, intro offers and membership terms</li>
+                  <li><Check size={15} aria-hidden="true" />Exports from any booking system you are moving from</li>
+                  <li><Check size={15} aria-hidden="true" />Your current welcome and follow-up messages</li>
+                  <li><Check size={15} aria-hidden="true" />One person who signs off how the front desk works</li>
                 </ul>
               </div>
               <div className="panel" style={c('var(--sage)')}>
                 <h3>At handover</h3>
                 <p className="panel-k">Final scope set in your proposal</p>
                 <ul className="gets">
-                  <li><Check size={15} aria-hidden="true" />Clean customer records with lead sources</li>
-                  <li><Check size={15} aria-hidden="true" />A price book and estimate templates your techs use</li>
-                  <li><Check size={15} aria-hidden="true" />Booking, dispatch and notifications set up</li>
-                  <li><Check size={15} aria-hidden="true" />Estimate follow-up and review requests running</li>
-                  <li><Check size={15} aria-hidden="true" />Service plans and campaigns for repeat work</li>
-                  <li><Check size={15} aria-hidden="true" />Training for the office and technicians</li>
+                  <li><Check size={15} aria-hidden="true" />A clean set of pricing options and contracts</li>
+                  <li><Check size={15} aria-hidden="true" />Online booking that works on your site</li>
+                  <li><Check size={15} aria-hidden="true" />Lead capture and follow-up in one pipeline</li>
+                  <li><Check size={15} aria-hidden="true" />Intro offer, retention and win-back campaigns</li>
+                  <li><Check size={15} aria-hidden="true" />Reports on conversion, retention and revenue</li>
+                  <li><Check size={15} aria-hidden="true" />Training for the front desk and managers</li>
                 </ul>
               </div>
             </div>
@@ -508,17 +512,17 @@ export default function HousecallProPage() {
         <section className="sec" id="fit" aria-labelledby="fit-title">
           <div className="wrap">
             <div className="head">
-              <p className="label">Is Housecall Pro right for you?</p>
-              <h2 id="fit-title">Housecall Pro suits home service businesses that want one app for the whole job.</h2>
+              <p className="label">Is Mindbody right for you?</p>
+              <h2 id="fit-title">Mindbody suits businesses that sell classes, appointments and memberships.</h2>
             </div>
             <div className="fit2">
               <div className="panel" style={c('var(--sage)')}>
                 <h3>Usually a good fit</h3>
-                <p>HVAC, plumbing, electrical, cleaning, landscaping and handyman businesses in the United States and Canada, from owner-operators to growing teams, that want booking, dispatch, payments, reviews and marketing in one place.</p>
+                <p>Fitness studios, gyms, yoga and pilates studios, martial arts schools, spas and wellness centres, from single locations to growing groups, that want booking, payments, memberships and marketing in one place and value being listed on the Mindbody app.</p>
               </div>
               <div className="panel" style={c('var(--coral)')}>
                 <h3>Worth comparing first</h3>
-                <p>If you mainly run recurring or quote-heavy work, <Link className="link" href="/platforms/jobber">Jobber</Link> is worth comparing, and we implement that too. Larger multi-location or commercial contractors may need a platform such as <Link className="link" href="/platforms/servicetitan">ServiceTitan</Link>. Discovery is where we tell you honestly which way we would go.</p>
+                <p>If you mainly sell online programmes, courses or coaching rather than in-person visits, <Link className="link" href="/platforms/kajabi">Kajabi</Link> may fit better, and we implement that too. Small teams should check that the plan with the features they need earns its cost. Discovery is where we tell you honestly which way we would go.</p>
               </div>
             </div>
           </div>
@@ -530,14 +534,14 @@ export default function HousecallProPage() {
             <div className="proof-ph">
               <div>
                 <p className="label">Specialist experience</p>
-                <h2 id="proof-title">Previous Housecall Pro work by a Sage Kite delivery specialist</h2>
+                <h2 id="proof-title">Previous Mindbody work by a Sage Kite delivery specialist</h2>
               </div>
               <div>
                 <p className="note" style={{ marginBottom: '10px' }}>Examples are being prepared. We publish only approved, attributed work. Each example will show:</p>
                 <ul>
                   <li>Specialist role and what they built</li>
                   <li>Project context and delivery period</li>
-                  <li>Screenshots with customer details removed</li>
+                  <li>Screenshots with client details removed</li>
                   <li>Results only where there is evidence for them</li>
                 </ul>
               </div>
@@ -545,19 +549,19 @@ export default function HousecallProPage() {
           </div>
         </section>
 
-        {/* Where Housecall Pro sits */}
+        {/* Where Mindbody sits */}
         <section className="pale sec" id="system" aria-labelledby="conn-title">
           <div className="wrap">
             <div className="head">
-              <p className="label">Where Housecall Pro sits</p>
+              <p className="label">Where Mindbody sits</p>
               <h2 id="conn-title">The platform is one part of the growth system.</h2>
-              <p className="sub">Housecall Pro runs the jobs. The work around it decides what to change and keeps the calendar full. See how this fits <Link className="link" href="/industries/home-services">home services</Link>.</p>
+              <p className="sub">Mindbody runs bookings and memberships. The work around it decides what to change and brings in new clients. See how this fits <Link className="link" href="/industries/fitness-wellness">fitness and wellness</Link>.</p>
             </div>
             <div className="conn">
-              <Link href="/services/consultancy" style={c('var(--butter)')}><strong>Growth consultancy</strong><span>Which services, areas and customers to grow first.</span></Link>
-              <Link href="/services/marketing" style={c('var(--coral)')}><strong>Marketing</strong><span>Local SEO and Google Ads that bring in booked jobs.</span></Link>
-              <Link href="/services/recruitment-staffing" style={c('var(--ink)')}><strong>CRM and automation VA</strong><span>Someone to follow up estimates and keep records clean.</span></Link>
-              <Link href="/for-agencies" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Housecall Pro work for your trade clients, under your brand.</span></Link>
+              <Link href="/services/consultancy" style={c('var(--butter)')}><strong>Growth consultancy</strong><span>Pricing, intro offers and which members to grow first.</span></Link>
+              <Link href="/services/marketing" style={c('var(--coral)')}><strong>Marketing</strong><span>Local SEO, Meta Ads and email that bring in new clients.</span></Link>
+              <Link href="/services/recruitment-staffing" style={c('var(--ink)')}><strong>Social media and marketing VAs</strong><span>Someone to run campaigns, social channels and follow-up.</span></Link>
+              <Link href="/for-agencies" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Mindbody work for your studio clients, under your brand.</span></Link>
             </div>
           </div>
         </section>
@@ -567,7 +571,7 @@ export default function HousecallProPage() {
           <div className="wrap faq-wrap">
             <div>
               <p className="label">Questions</p>
-              <h2 id="faq-title">Housecall Pro consulting FAQs</h2>
+              <h2 id="faq-title">Mindbody consulting FAQs</h2>
             </div>
             <div>
               {faqGroups.map((group) => (
@@ -581,7 +585,7 @@ export default function HousecallProPage() {
                   ))}
                 </div>
               ))}
-              <p className="trust-note">Sage Kite is an independent consultant. Housecall Pro is a trademark of its owner. Sage Kite is not affiliated with, endorsed by or certified by Housecall Pro.</p>
+              <p className="trust-note">Sage Kite is an independent consultant. Mindbody is a trademark of its owner. Sage Kite is not affiliated with, endorsed by or certified by Mindbody or Playlist.</p>
             </div>
           </div>
         </section>
@@ -591,13 +595,13 @@ export default function HousecallProPage() {
           <div className="wrap">
             <div className="final-inner">
               <p className="final-words" aria-hidden="true">
-                <span><span className="dot" style={c('var(--butter)')}></span>Enquiries</span>
-                <span><span className="dot" style={c('var(--sky)')}></span>Housecall Pro</span>
+                <span><span className="dot" style={c('var(--butter)')}></span>First visits</span>
+                <span><span className="dot" style={c('var(--sky)')}></span>Mindbody</span>
                 <span><span className="dot" style={c('var(--sage)')}></span>Team</span>
-                <span><span className="dot" style={c('var(--coral)')}></span>Repeat work</span>
+                <span><span className="dot" style={c('var(--coral)')}></span>Members</span>
               </p>
-              <h2 id="final-title">Build Housecall Pro around how you win and keep customers.</h2>
-              <p className="sub">A discovery call looks at your current setup or plan, how enquiries become jobs today, and what a fixed-scope project would cover.</p>
+              <h2 id="final-title">Build Mindbody around how you keep members.</h2>
+              <p className="sub">A discovery call looks at your current account or plan, where clients drop off today, and what a fixed-scope project would cover.</p>
               <div className="cta-row">
                 <Link href="/contact" className="btn">Book a discovery call</Link>
                 <Link href="/platforms" className="link">See other platforms we implement</Link>

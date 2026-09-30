@@ -42,7 +42,7 @@ app/
   platforms/<name>/page.tsx
                         One service page per CRM platform (dubsado, honeybook, hubspot,
                         activecampaign, jobber, lofty, kajabi, bloomerang, keap,
-                        follow-up-boss, housecall-pro). Metadata + Service JSON-LD + content.
+                        follow-up-boss, housecall-pro, servicetitan, mindbody, clio-grow). Metadata + Service JSON-LD + content.
   blog/page.tsx         Blog listing.
   blog/<slug>/          One folder per blog post: post.tsx (data + article)
                         and a 3-line page.tsx. blog/_template/ is the starter.
