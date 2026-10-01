@@ -97,8 +97,13 @@ export default function FoundersThoughtsPage() {
             .ft-card-media{border-right:0;border-bottom:1px solid var(--light-sage);aspect-ratio:4/3}
           }
           @media (max-width:680px){
-            .ft-hero-grid{grid-template-columns:1fr}
-            .ft-hero .founder-photo{max-width:180px}
+            .ft-hero{padding-top:32px}
+            .ft-hero-grid{grid-template-columns:1fr;gap:24px}
+            .ft-hero .founder-photo{max-width:120px;box-shadow:8px 8px 0 var(--butter-soft)}
+            .ft-card-body{padding:24px 22px 26px}
+            /* Topic gets its own line, so no separator starts a wrapped line */
+            .ft-meta span:last-child{flex-basis:100%}
+            .ft-meta span:last-child::before{display:none}
           }
         ` }} />
 
