@@ -292,7 +292,8 @@ Rules:
 - The WebPage `url` has no trailing slash and must equal the page's canonical.
 - After adding a new platform page, set `slug: '<name>'` on that platform in
   `content/platforms.ts`. That adds it to the sitemap and links it from the
-  homepage "Platforms" grid. Add the platform to the list first if it is new.
+  homepage "Platforms" grid and the /platforms directory. If the platform is
+  new, add it to the list first with its `group` and one-line `summary`.
 
 For a new top-level service page outside `/platforms`, use the same
 structure with that page's path in every `@id` and `url`.

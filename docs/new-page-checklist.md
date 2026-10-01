@@ -58,7 +58,8 @@ write them by hand. [§1]
 - [ ] `areaServed` matches `app/layout.tsx`.
 - [ ] `FAQPage` block included, matching the page's FAQs word for word.
 - [ ] `slug` set on the platform in `content/platforms.ts` (adds it to the
-      sitemap and links it from the homepage "Platforms" grid).
+      sitemap and links it from the homepage grid and the /platforms
+      directory). New platforms also need a `group` and `summary`.
 
 ## 4. Before committing
 

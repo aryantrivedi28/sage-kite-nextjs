@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getPublishedPosts } from '@/content/blog'
 import { PLATFORM_PAGE_SLUGS } from '@/content/platforms'
+import { FOUNDER_ESSAYS, FOUNDERS_THOUGHTS_PATH, essayPath } from '@/content/founders-thoughts'
 
 const BASE_URL = 'https://www.sagekite.com'
 
@@ -18,11 +19,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
+    {
+      url: `${BASE_URL}/platforms`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
     ...PLATFORM_PAGE_SLUGS.map((platform) => ({
       url: `${BASE_URL}/platforms/${platform}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.9,
+    })),
+    {
+      url: `${BASE_URL}${FOUNDERS_THOUGHTS_PATH}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    ...FOUNDER_ESSAYS.map((essay) => ({
+      url: `${BASE_URL}${essayPath(essay.slug)}`,
+      lastModified: new Date(essay.datePublished),
+      changeFrequency: 'yearly' as const,
+      priority: 0.7,
     })),
     {
       url: `${BASE_URL}/blog`,

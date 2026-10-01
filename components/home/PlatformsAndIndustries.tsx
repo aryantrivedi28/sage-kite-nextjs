@@ -21,7 +21,7 @@ export function PlatformsAndIndustries() {
             </ul>
             
             <p className="foot">
-              Plus custom CRM development. GoHighLevel work is delivered with GHL Scale Up. <Link href="#platforms" style={{ color: 'inherit', textDecoration: 'underline', textDecorationThickness: '1px', textUnderlineOffset: '3px' }}>All platforms</Link>
+              Plus custom CRM development. GoHighLevel work is delivered with <a href="https://www.ghlscaleup.com" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline', textDecorationThickness: '1px', textUnderlineOffset: '3px' }}>GHL Scale Up</a>. <Link href="/platforms" style={{ color: 'inherit', textDecoration: 'underline', textDecorationThickness: '1px', textUnderlineOffset: '3px' }}>All platforms</Link>
             </p>
           </div>
 

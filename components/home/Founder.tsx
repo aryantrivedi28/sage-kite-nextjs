@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import { FOUNDER_ESSAYS, FOUNDERS_THOUGHTS_PATH, essayPath } from '@/content/founders-thoughts';
 
 export function Founder() {
+  const latest = FOUNDER_ESSAYS[0];
   return (
     <section id="founders-thoughts" className="founder" style={{ borderTop: '1px solid var(--light-sage)' }}>
       <div className="wrap reveal">
@@ -28,12 +30,12 @@ export function Founder() {
             
             <div className="founder-latest">
               <span style={{ fontSize: '0.8125rem', color: 'var(--sage)', marginRight: '12px', fontWeight: 600 }}>Latest essay</span>
-              <Link href="#essay-1" style={{ fontFamily: 'var(--sans)', fontSize: '1.1rem', color: 'var(--ink)', textDecoration: 'underline', textDecorationStyle: 'dashed', textDecorationColor: 'var(--sage)', textUnderlineOffset: '4px' }}>
-                [First published essay title]
+              <Link href={essayPath(latest.slug)} style={{ fontFamily: 'var(--sans)', fontSize: '1.1rem', color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '4px' }}>
+                {latest.title}
               </Link>
             </div>
             
-            <Link href="#founder-thoughts" className="text-link">Read Founder’s Thoughts</Link>
+            <Link href={FOUNDERS_THOUGHTS_PATH} className="text-link">Read Founder’s Thoughts</Link>
           </div>
 
         </div>

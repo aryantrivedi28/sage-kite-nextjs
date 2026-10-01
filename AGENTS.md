@@ -39,10 +39,16 @@ app/
   page.tsx              Homepage (sections from components/home/*) + homepage WebPage JSON-LD.
   about/, privacy-policy/, terms-of-service/
                         page.tsx = content; layout.tsx = that page's metadata.
+  platforms/page.tsx    /platforms directory. Built from content/platforms.ts; no edits needed
+                        when a platform page is added.
   platforms/<name>/page.tsx
                         One service page per CRM platform (dubsado, honeybook, hubspot,
                         activecampaign, jobber, lofty, kajabi, bloomerang, keap,
                         follow-up-boss, housecall-pro, servicetitan, mindbody, clio-grow). Metadata + Service JSON-LD + content.
+  insights/founders-thoughts/
+                        Founder's Thoughts: page.tsx lists essays; <slug>/page.tsx is one essay
+                        with its own layout (not a blog post). Essays are registered in
+                        content/founders-thoughts.ts (homepage section + sitemap read it).
   blog/page.tsx         Blog listing.
   blog/<slug>/          One folder per blog post: post.tsx (data + article)
                         and a 3-line page.tsx. blog/_template/ is the starter.
@@ -57,9 +63,14 @@ content/blog/
   index.tsx               Registry of posts + selectors. Read its header comment.
   types.ts                BlogPost type + CATEGORIES.
   authors.ts              Author name/avatar.
-content/platforms.ts      Platform list: homepage "Platforms" grid + sitemap. A platform
-                          with a `slug` links to /platforms/<slug> and is in the sitemap.
-public/                   Static files. Blog images go in public/images/blog/.
+content/platforms.ts      Platform list and industry groups: homepage "Platforms" grid,
+                          /platforms directory and sitemap. A platform with a `slug` links
+                          to /platforms/<slug> and is in the sitemap.
+content/founders-thoughts.ts
+                          Founder's Thoughts essays, newest first. Add a new essay here
+                          and create app/insights/founders-thoughts/<slug>/page.tsx.
+public/                   Static files. Blog images go in public/images/blog/,
+                          essay images in public/images/founders-thoughts/.
 ```
 
 ## Blog posts, SEO and schema
@@ -106,7 +117,7 @@ The essentials:
 
 ## Known gaps (do not "fix" these without asking)
 
-- `/contact`, `/platforms` (index page) and `/services/*` do not exist yet.
+- `/contact`, `/insights` (index page) and `/services/*` do not exist yet.
   Many "Book a discovery call" buttons link to `/contact`; leave them unless
   told otherwise.
 - `components/Footer.tsx` links (`#consulting`, `#crm`, …) are placeholders.
