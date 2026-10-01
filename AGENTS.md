@@ -126,8 +126,6 @@ The essentials:
   Many "Book a discovery call" buttons link to `/contact`; leave them unless
   told otherwise.
 - `components/Footer.tsx`: Work, Insights and Contact links are placeholders until those pages exist.
-- About, Privacy and Terms pages contain their own copy of the header/footer
-  instead of using `components/Header.tsx` / `Footer.tsx`.
 - No `og:image` share image yet, except blog posts (they use their featured image).
 - `app/home-interactions.tsx` and `app/site-content.ts` are not used by any page.
   `components/home/Work.tsx` is imported in `app/page.tsx` but not rendered.

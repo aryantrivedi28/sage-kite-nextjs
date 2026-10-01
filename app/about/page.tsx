@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export default function About() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [perspectiveHover, setPerspectiveHover] = useState<string | null>(null);
   const [osHover, setOsHover] = useState<'none'|'systems'|'people'|'execution'>('none');
 
@@ -12,31 +13,7 @@ export default function About() {
     <>
       <a className="skip" href="#main">Skip to content</a>
 
-      <header className="site-header" style={{background: "var(--warm-white)", zIndex: 100, backdropFilter: "none", WebkitBackdropFilter: "none"}}>
-        <div className="wrap header-inner">
-          <Link className="logo" href="/" aria-label="Sage Kite home">
-            <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" title="Sage Kite logo" />
-          </Link>
-          <button className="menu-toggle" type="button" aria-expanded={menuOpen} aria-label="Toggle menu" onClick={() => setMenuOpen(!menuOpen)}>
-            Menu
-          </button>
-
-          <nav className={`nav ${menuOpen ? "open" : ""}`} aria-label="Main navigation">
-            <ul>
-              <li><Link href="/#services" onClick={() => setMenuOpen(false)}>Services</Link></li>
-              <li><Link href="/#platforms" onClick={() => setMenuOpen(false)}>Platforms</Link></li>
-              <li><Link href="/#industries" onClick={() => setMenuOpen(false)}>Industries</Link></li>
-              <li><Link href="/blog" onClick={() => setMenuOpen(false)}>Blogs</Link></li>
-              <li><Link href="/about" onClick={() => setMenuOpen(false)}>About us</Link></li>
-              <li className="mobile-only-btn"><Link href="/contact" className="btn btn-small" onClick={() => setMenuOpen(false)}>Book a discovery call</Link></li>
-            </ul>
-          </nav>
-          
-          <div className="header-cta">
-            <Link href="/contact" className="btn btn-small">Book a discovery call</Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main id="main">
         {/* 1. Hero */}
@@ -897,58 +874,7 @@ export default function About() {
         </section>
       </main>
 
-      <footer className="site-footer" style={{paddingBottom: "44px", paddingTop: "56px"}}>
-        <div className="wrap foot-grid">
-          
-          <div className="foot-brand" style={{paddingRight: "clamp(40px, 8vw, 120px)"}}>
-            <Link className="logo" href="/" aria-label="Sage Kite home">
-              <img src="/sage-kite-logo-transparent.png" alt="Sage Kite logo" title="Sage Kite logo" style={{maxWidth: "180px"}} />
-            </Link>
-            <p style={{color: "var(--ink)", fontSize: "0.95rem", lineHeight: "1.6", marginTop: "24px"}}>Sage Kite is a business growth consultancy. We improve the systems, people and execution behind growth for SMEs, and deliver white-label work for agencies.</p>
-          </div>
-          
-          <div>
-            <h2 style={{color: "var(--sage)", marginBottom: "24px", fontWeight: "600", fontSize: "1.1rem"}}>Services</h2>
-            <ul style={{display: "flex", flexDirection: "column", gap: "10px", listStyle: "none", padding: 0, margin: 0}}>
-              <li><Link href="/#services" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Business growth consulting</Link></li>
-              <li><Link href="/#services" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>CRM implementation</Link></li>
-              <li><Link href="/#services" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Custom CRM development</Link></li>
-              <li><Link href="/#services" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Marketing</Link></li>
-              <li><Link href="/#services" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Recruitment and staffing</Link></li>
-              <li><Link href="/#white-label" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>White-label delivery</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h2 style={{color: "var(--sage)", marginBottom: "24px", fontWeight: "600", fontSize: "1.1rem"}}>Explore</h2>
-            <ul style={{display: "flex", flexDirection: "column", gap: "10px", listStyle: "none", padding: 0, margin: 0}}>
-              <li><Link href="/#platforms" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Platforms</Link></li>
-              <li><Link href="/#industries" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Industries</Link></li>
-              <li><Link href="/#library" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Work</Link></li>
-              <li><Link href="/blog" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Insights</Link></li>
-              <li><Link href="/#founders-thoughts" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Founder's Thoughts</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h2 style={{color: "var(--sage)", marginBottom: "24px", fontWeight: "600", fontSize: "1.1rem"}}>Company</h2>
-            <ul style={{display: "flex", flexDirection: "column", gap: "10px", listStyle: "none", padding: 0, margin: 0}}>
-              <li><Link href="/about" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>About</Link></li>
-              <li><Link href="/contact" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Contact</Link></li>
-              <li><Link href="/privacy-policy" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Privacy Policy</Link></li>
-              <li><Link href="/terms-of-service" style={{color: "var(--ink)", fontSize: "0.95rem", textDecoration: "none"}}>Terms of Service</Link></li>
-            </ul>
-          </div>
-
-        </div>
-        
-        <div className="wrap">
-          <div className="legal" style={{borderTop: "1px solid var(--light-sage)", marginTop: "44px", paddingTop: "24px", display: "flex", justifyContent: "space-between", color: "var(--ink)", fontSize: "0.85rem"}}>
-            <p style={{margin: 0}}>© 2026 Sage Kite. All rights reserved.</p>
-            <p style={{margin: 0}}>Streamlined systems for growth.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }
