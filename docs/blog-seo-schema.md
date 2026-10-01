@@ -296,7 +296,9 @@ Rules:
   new, add it to the list first with its `group` and one-line `summary`.
 
 For a new top-level service page outside `/platforms`, use the same
-structure with that page's path in every `@id` and `url`.
+structure with that page's path in every `@id` and `url`. `app/services/page.tsx`
+is the worked example: one `Service` whose `hasOfferCatalog` lists the five
+service areas shown on the page, each with its `#anchor` URL.
 
 ---
 

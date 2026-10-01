@@ -17,26 +17,26 @@ export function Footer() {
 
           <div>
             <h2>Services</h2>
-            <Link href="#consulting">Business growth consulting</Link><br />
-            <Link href="#crm">CRM implementation</Link><br />
-            <Link href="#custom-crm">Custom CRM development</Link><br />
-            <Link href="#marketing">Marketing</Link><br />
-            <Link href="#staffing">Specialist staffing</Link><br />
-            <Link href="#whitelabel">White-label delivery</Link>
+            <Link href="/services#consultancy">Business growth consulting</Link><br />
+            <Link href="/services#crm-implementation">CRM implementation</Link><br />
+            <Link href="/services#crm-implementation">Custom CRM development</Link><br />
+            <Link href="/services#marketing">Marketing</Link><br />
+            <Link href="/services#specialist-staffing">Specialist staffing</Link><br />
+            <Link href="/services#white-label">White-label delivery</Link>
           </div>
 
           <div>
             <h2>Explore</h2>
-            <Link href="#platforms">Platforms</Link><br />
-            <Link href="#industries">Industries</Link><br />
+            <Link href="/platforms">Platforms</Link><br />
+            <Link href="/#industries">Industries</Link><br />
             <Link href="#work">Work</Link><br />
             <Link href="#insights">Insights</Link><br />
-            <Link href="#thoughts">Founder's Thoughts</Link>
+            <Link href="/insights/founders-thoughts">Founder's Thoughts</Link>
           </div>
 
           <div>
             <h2>Company</h2>
-            <Link href="#about">About</Link><br />
+            <Link href="/about">About</Link><br />
             <Link href="#contact">Contact</Link><br />
             <Link href="/privacy-policy">Privacy Policy</Link><br />
             <Link href="/terms-of-service">Terms of Service</Link>

@@ -26,7 +26,7 @@ export function Header() {
 
         <nav className={`nav ${open ? 'open' : ''}`}>
           <ul>
-                                    <li><Link href="/#services" onClick={() => setOpen(false)}>Services</Link></li>
+                                    <li><Link href="/services" onClick={() => setOpen(false)}>Services</Link></li>
             <li><Link href="/platforms" onClick={() => setOpen(false)}>Platforms</Link></li>
             <li><Link href="/#industries" onClick={() => setOpen(false)}>Industries</Link></li>
             <li><Link href="/blog" onClick={() => setOpen(false)}>Blogs</Link></li>

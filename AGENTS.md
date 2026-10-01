@@ -39,6 +39,10 @@ app/
   page.tsx              Homepage (sections from components/home/*) + homepage WebPage JSON-LD.
   about/, privacy-policy/, terms-of-service/
                         page.tsx = content; layout.tsx = that page's metadata.
+  services/page.tsx     /services overview: the five service areas (data arrays at the top feed
+                        the page, Service hasOfferCatalog and FAQPage). Each area has an anchor
+                        (#consultancy, #crm-implementation, #marketing, #specialist-staffing,
+                        #white-label) used by the header and homepage links.
   platforms/page.tsx    /platforms directory. Built from content/platforms.ts; no edits needed
                         when a platform page is added.
   platforms/<name>/page.tsx
@@ -117,10 +121,11 @@ The essentials:
 
 ## Known gaps (do not "fix" these without asking)
 
-- `/contact`, `/insights` (index page) and `/services/*` do not exist yet.
+- `/contact`, `/insights` (index page) and individual `/services/<service>` pages
+  do not exist yet (`/services` itself does).
   Many "Book a discovery call" buttons link to `/contact`; leave them unless
   told otherwise.
-- `components/Footer.tsx` links (`#consulting`, `#crm`, …) are placeholders.
+- `components/Footer.tsx`: Work, Insights and Contact links are placeholders until those pages exist.
 - About, Privacy and Terms pages contain their own copy of the header/footer
   instead of using `components/Header.tsx` / `Footer.tsx`.
 - No `og:image` share image yet, except blog posts (they use their featured image).

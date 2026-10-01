@@ -497,7 +497,7 @@ export default function PlatformsPage() {
               <p className="sub">A discovery call looks at how you sell today, the system you have or are considering, and what a fixed-scope project would cover.</p>
               <div className="cta-row">
                 <Link href="/contact" className="btn">Book a discovery call</Link>
-                <Link href="/#services" className="link">Explore our services</Link>
+                <Link href="/services" className="link">Explore our services</Link>
               </div>
             </div>
           </div>
