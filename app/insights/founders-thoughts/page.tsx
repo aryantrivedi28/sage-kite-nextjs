@@ -80,7 +80,7 @@ export default function FoundersThoughtsPage() {
           .ft-card{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);border:1px solid var(--light-sage);border-radius:var(--r);overflow:hidden;background:var(--warm-white);text-decoration:none;color:inherit;transition:transform var(--t) var(--ease),border-color var(--t) var(--ease),box-shadow var(--t) var(--ease)}
           .ft-card:hover{transform:translateY(-3px);border-color:var(--sage);box-shadow:6px 6px 0 var(--pale-sage)}
           .ft-card-media{background:var(--pale-sage);border-right:1px solid var(--light-sage);display:flex;align-items:center;justify-content:center}
-          .ft-card-media img{width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;filter:grayscale(1)}
+          .ft-card-media img{width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply}
           .ft-card-body{padding:clamp(28px,3.6vw,48px);display:flex;flex-direction:column;justify-content:center}
           .ft-meta{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:.8125rem;font-weight:600;color:var(--sage);margin-bottom:16px}
           .ft-meta span+span::before{content:"/";margin-right:14px;color:var(--light-sage)}
