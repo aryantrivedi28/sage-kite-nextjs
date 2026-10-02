@@ -13,7 +13,7 @@ export function Agency() {
             </p>
           </div>
           <div className="cta-col">
-            <Link href="/services#white-label" className="btn">Explore white-label delivery</Link>
+            <Link href="/services/white-label" className="btn">Explore white-label delivery</Link>
           </div>
         </div>
       </div>

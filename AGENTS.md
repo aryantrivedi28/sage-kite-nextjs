@@ -43,6 +43,10 @@ app/
                         the page, Service hasOfferCatalog and FAQPage). Each area has an anchor
                         (#consultancy, #crm-implementation, #marketing, #specialist-staffing,
                         #white-label) used by the header and homepage links.
+  services/<service>/page.tsx
+                        One page per service area (consultancy, crm-implementation, marketing, specialist-staffing, white-label). Same template as a
+                        platform page: metadata + Service JSON-LD + content. When one is added,
+                        set `page` on that service in app/services/page.tsx and add it to sitemap.ts.
   platforms/page.tsx    /platforms directory. Built from content/platforms.ts; no edits needed
                         when a platform page is added.
   platforms/<name>/page.tsx
@@ -121,8 +125,9 @@ The essentials:
 
 ## Known gaps (do not "fix" these without asking)
 
-- `/contact`, `/insights` (index page) and individual `/services/<service>` pages
-  do not exist yet (`/services` itself does).
+- `/contact`, `/insights` (index page), `/for-agencies` and `/industries/*` do not
+  exist yet. Platform pages link to `/for-agencies`; `/services/white-label` is
+  the agency page that exists today.
   Many "Book a discovery call" buttons link to `/contact`; leave them unless
   told otherwise.
 - `components/Footer.tsx`: Work, Insights and Contact links are placeholders until those pages exist.

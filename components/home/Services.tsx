@@ -11,7 +11,7 @@ export function Services() {
       
       <div className="svc-grid">
         {/* Consultancy */}
-        <Link href="/services#consultancy" className="svc" style={{ '--c': 'var(--butter)' } as React.CSSProperties}>
+        <Link href="/services/consultancy" className="svc" style={{ '--c': 'var(--butter)' } as React.CSSProperties}>
           <div className="svc-k">Direction</div>
           <h3>Consultancy</h3>
           <div className="tags">
@@ -23,7 +23,7 @@ export function Services() {
         </Link>
 
         {/* CRM */}
-        <Link href="/services#crm-implementation" className="svc" style={{ '--c': 'var(--sage)' } as React.CSSProperties}>
+        <Link href="/services/crm-implementation" className="svc" style={{ '--c': 'var(--sage)' } as React.CSSProperties}>
           <div className="svc-k">Systems</div>
           <h3>CRM Implementation</h3>
           <div className="tags">
@@ -37,7 +37,7 @@ export function Services() {
         </Link>
 
         {/* Marketing */}
-        <Link href="/services#marketing" className="svc" style={{ '--c': 'var(--coral)' } as React.CSSProperties}>
+        <Link href="/services/marketing" className="svc" style={{ '--c': 'var(--coral)' } as React.CSSProperties}>
           <div className="svc-k">Demand</div>
           <h3>Marketing</h3>
           <div className="tags">
@@ -51,7 +51,7 @@ export function Services() {
         </Link>
 
         {/* Specialist Staffing */}
-        <Link href="/services#specialist-staffing" className="svc" style={{ '--c': 'var(--ink)' } as React.CSSProperties}>
+        <Link href="/services/specialist-staffing" className="svc" style={{ '--c': 'var(--ink)' } as React.CSSProperties}>
           <div className="svc-k">Capability</div>
           <h3>Specialist Staffing</h3>
           <div className="tags">
@@ -63,7 +63,7 @@ export function Services() {
         </Link>
 
         {/* White-label */}
-        <Link href="/services#white-label" className="svc" style={{ '--c': 'var(--sky)' } as React.CSSProperties}>
+        <Link href="/services/white-label" className="svc" style={{ '--c': 'var(--sky)' } as React.CSSProperties}>
           <div className="svc-k">For agencies</div>
           <h3>White-label delivery</h3>
           <div className="tags">

@@ -22,7 +22,7 @@ export function SpecialistCapability() {
               <div className="chip"><span className="dot"></span> Social media</div>
               <div className="chip"><span className="dot"></span> Lead generation and sales support</div>
             </div>
-            <Link href="/services#specialist-staffing" className="cap-link" style={{ color: 'inherit', textDecoration: 'underline', textDecorationThickness: '1px', textUnderlineOffset: '3px' }}>
+            <Link href="/services/specialist-staffing" className="cap-link" style={{ color: 'inherit', textDecoration: 'underline', textDecorationThickness: '1px', textUnderlineOffset: '3px' }}>
               Explore specialist staffing
             </Link>
           </div>

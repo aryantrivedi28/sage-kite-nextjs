@@ -40,6 +40,8 @@ type Service = {
   receive: string[];
   suits: string;
   cta: { href: string; label: string };
+  /** Dedicated service page, once it exists. */
+  page?: string;
 };
 
 // The five service areas. Rendered as equal blocks and listed in the Service schema,
@@ -59,7 +61,8 @@ const services: Service[] = [
     ],
     receive: ["A growth diagnosis", "Agreed priorities", "An implementation roadmap", "Guidance on marketing decisions"],
     suits: "Founders and leadership teams who want direction before investing in systems, campaigns or hires.",
-    cta: { href: "/contact", label: "Discuss consultancy" },
+    cta: { href: "/services/consultancy", label: "Explore consultancy" },
+    page: "/services/consultancy",
   },
   {
     id: "crm-implementation",
@@ -77,7 +80,8 @@ const services: Service[] = [
     ],
     receive: ["A configured, tested platform", "Documentation of the setup", "A trained team", "Optional maintenance after handover"],
     suits: "Businesses setting up a new CRM, or fixing one that has drifted away from how the business works.",
-    cta: { href: "/platforms", label: "See the platforms we implement" },
+    cta: { href: "/services/crm-implementation", label: "Explore CRM implementation" },
+    page: "/services/crm-implementation",
   },
   {
     id: "marketing",
@@ -94,7 +98,8 @@ const services: Service[] = [
     ],
     receive: ["An ongoing plan built around your priorities", "Campaign execution", "Reporting connected to your pipeline"],
     suits: "Businesses with a working sales system that need more, better-qualified demand. Often the next stage after a CRM project.",
-    cta: { href: "/contact", label: "Discuss marketing" },
+    cta: { href: "/services/marketing", label: "Explore marketing" },
+    page: "/services/marketing",
   },
   {
     id: "specialist-staffing",
@@ -112,7 +117,8 @@ const services: Service[] = [
     ],
     receive: ["A Tier 1 virtual assistant matched to the role", "Work inside your systems and processes", "Role scope agreed before anyone starts"],
     suits: "Businesses that have invested in systems and need hands to keep them running.",
-    cta: { href: "/contact", label: "Discuss a specialist" },
+    cta: { href: "/services/specialist-staffing", label: "Explore specialist staffing" },
+    page: "/services/specialist-staffing",
   },
   {
     id: "white-label",
@@ -128,7 +134,8 @@ const services: Service[] = [
     ],
     receive: ["Delivered work for your client", "A clear handover to your team", "Pricing agreed per engagement"],
     suits: "Marketing agencies that need a reliable delivery partner without adding permanent headcount.",
-    cta: { href: "/contact", label: "Discuss white-label delivery" },
+    cta: { href: "/services/white-label", label: "Explore white-label delivery" },
+    page: "/services/white-label",
   },
 ];
 
@@ -239,7 +246,7 @@ export default function ServicesPage() {
               "@type": "Service",
               "name": s.name,
               "description": s.outcome,
-              "url": `${PAGE_URL}#${s.id}`
+              "url": s.page ? `${SITE_URL}${s.page}` : `${PAGE_URL}#${s.id}`
             }
           }))
         }
@@ -359,6 +366,11 @@ export default function ServicesPage() {
             .incl li{gap:2px}
             .chain{grid-template-columns:repeat(2,minmax(0,1fr))}
             .steps-list{grid-template-columns:1fr}
+          }
+          /* Small phones: tag drops below the name so long words such as "implementation" fit */
+          @media (max-width:380px){
+            .sv-index li a{grid-template-columns:5px minmax(0,1fr)}
+            .sv-index .kick{grid-column:2;justify-self:start}
           }
         ` }} />
 

@@ -17,12 +17,12 @@ export function Footer() {
 
           <div>
             <h2>Services</h2>
-            <Link href="/services#consultancy">Business growth consulting</Link><br />
-            <Link href="/services#crm-implementation">CRM implementation</Link><br />
-            <Link href="/services#crm-implementation">Custom CRM development</Link><br />
-            <Link href="/services#marketing">Marketing</Link><br />
-            <Link href="/services#specialist-staffing">Specialist staffing</Link><br />
-            <Link href="/services#white-label">White-label delivery</Link>
+            <Link href="/services/consultancy">Business growth consulting</Link><br />
+            <Link href="/services/crm-implementation">CRM implementation</Link><br />
+            <Link href="/services/crm-implementation#custom-crm">Custom CRM development</Link><br />
+            <Link href="/services/marketing">Marketing</Link><br />
+            <Link href="/services/specialist-staffing">Specialist staffing</Link><br />
+            <Link href="/services/white-label">White-label delivery</Link>
           </div>
 
           <div>
