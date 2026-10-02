@@ -60,6 +60,10 @@ schema by hand. The shared template builds all of that from the post file.
 - Plain HTML elements in JSX: `<h2>`, `<h3>`, `<p>`, `<ul>/<ol>/<li>`,
   `<blockquote>`, `<strong>`, `<em>`, `<a>`, `<table>`. The `.article-content`
   styles in `app/globals.css` format them. Do not add inline styles or classes.
+- The one exception is a diagram: use `<FieldDiagram>` from
+  `components/blog/FieldDiagram.tsx` with its `fd-*` classes (listed in that file).
+  It matches the Founder's Thoughts "field diagrams". Build diagrams only from
+  what the article says, and do not add new facts in them.
 - Start with `<h2>`. The page already renders the `<h1>` from `title`.
 - Give every heading listed in `guide` a matching `id`.
 - Escape in JSX text: `'` → `&apos;`, `—` → `&mdash;`, `"` → `&quot;`.

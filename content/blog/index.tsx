@@ -42,10 +42,12 @@ import { CATEGORIES, type BlogPost } from './types';
 /* Posts – one folder per post in app/blog/<slug>/. Import its post.tsx here and add it to `posts`. */
 import crmFoundation from '@/app/blog/how-crm-systems-create-a-foundation-for-sustainable-growth/post';
 import whatIsDubsado from '@/app/blog/what-is-dubsado/post';
+import whatIsHoneyBook from '@/app/blog/what-is-honeybook/post';
+import dubsadoVsHoneyBook from '@/app/blog/dubsado-vs-honeybook/post';
 
 export * from './types';
 
-export const posts: BlogPost[] = [crmFoundation, whatIsDubsado];
+export const posts: BlogPost[] = [crmFoundation, whatIsDubsado, whatIsHoneyBook, dubsadoVsHoneyBook];
 
 /* ─────────────────────────── Selectors ─────────────────────────────────── */
 

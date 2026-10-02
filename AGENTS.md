@@ -66,7 +66,8 @@ components/
   home/                   Homepage sections.
   blog/                   Blog UI + BlogPostPage (used by every post's page.tsx),
                           BlogArticleLayout (page shell), blogMetadata.ts
-                          (metadata), blogJsonLd.ts (schema).
+                          (metadata), blogJsonLd.ts (schema), FieldDiagram
+                          (HTML/CSS diagrams inside articles).
 content/blog/
   index.tsx               Registry of posts + selectors. Read its header comment.
   types.ts                BlogPost type + CATEGORIES.

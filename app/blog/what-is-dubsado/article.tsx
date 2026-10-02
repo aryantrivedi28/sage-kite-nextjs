@@ -2,6 +2,8 @@
  * Article body for /blog/what-is-dubsado. Kept in its own file because it is
  * long; post.tsx points `content` at it.
  */
+import { FieldDiagram } from '@/components/blog/FieldDiagram';
+
 export default function WhatIsDubsadoArticle() {
   return (
     <>
@@ -107,6 +109,26 @@ export default function WhatIsDubsadoArticle() {
         unrelated features; they are different parts of the same client-work
         record.
       </p>
+
+      <FieldDiagram
+        id="project-record"
+        label="The project record"
+        title="Forms, contracts, invoices and appointments all belong to one client project."
+        takeaway="These are not unrelated features; they are different parts of the same client-work record."
+      >
+        <div className="fd-layer fd-dark">
+          <span className="fd-k">The central organizing unit</span>
+          <b>One client project</b>
+          <small>Client · status · dates · tags · portal access · referral source</small>
+        </div>
+        <div className="fd-link-label">CONNECTED TO IT</div>
+        <div className="fd-cols fd-n4">
+          <div className="fd-step"><span className="fd-k">Form</span><b>Collects</b><small>Information for the project</small></div>
+          <div className="fd-step"><span className="fd-k">Contract</span><b>Agrees</b><small>Attached to the project</small></div>
+          <div className="fd-step"><span className="fd-k">Invoice</span><b>Bills</b><small>Created for the same project</small></div>
+          <div className="fd-step"><span className="fd-k">Appointment</span><b>Schedules</b><small>Associated with the project</small></div>
+        </div>
+      </FieldDiagram>
 
       <h2 id="what-can-dubsado-do">What can Dubsado do?</h2>
       <p>
@@ -244,6 +266,21 @@ export default function WhatIsDubsadoArticle() {
         consistently.
       </p>
 
+      <FieldDiagram
+        id="how-a-flow-works"
+        label="How a Flow works"
+        title="Flows connect an event in the client journey to the next action."
+        takeaway="Flows are not the same thing as simply scheduling emails. They are included in the Premier plan."
+      >
+        <div className="fd-flow">
+          <div className="fd-step fd-muted"><span className="fd-k">First</span><b>Map the process</b><small>Dubsado recommends this before building a Flow</small></div>
+          <span className="fd-arrow" aria-hidden="true"></span>
+          <div className="fd-step"><span className="fd-k">Trigger</span><b>A relevant event</b><small>For example, a completed form</small></div>
+          <span className="fd-arrow" aria-hidden="true"></span>
+          <div className="fd-step fd-dark"><span className="fd-k">Action</span><b>The next step</b><small>Send an email, form, contract or invoice, create a task, update the status</small></div>
+        </div>
+      </FieldDiagram>
+
       <h2 id="how-these-dubsado-features-fit-together">How these Dubsado features fit together</h2>
       <p>
         The individual features make more sense when viewed as parts of one
@@ -255,6 +292,23 @@ export default function WhatIsDubsadoArticle() {
         an invoice can handle payment. Scheduling can manage appointments, while
         the client portal provides a client-facing space for the project.
       </p>
+
+      <FieldDiagram
+        id="client-journey"
+        label="The client journey"
+        title="One inquiry becomes a project that moves through each stage."
+        takeaway="Scheduling manages appointments along the way, and the client portal gives the client a space for the project."
+      >
+        <div className="fd-flow">
+          <div className="fd-step"><span className="fd-k">01 Inquiry</span><b>Lead capture form</b><small>Collects details and creates the project</small></div>
+          <span className="fd-arrow" aria-hidden="true"></span>
+          <div className="fd-step"><span className="fd-k">02 Details</span><b>Proposal</b><small>Or a questionnaire, to gather more information</small></div>
+          <span className="fd-arrow" aria-hidden="true"></span>
+          <div className="fd-step"><span className="fd-k">03 Agreement</span><b>Contract</b><small>Formalizes the engagement</small></div>
+          <span className="fd-arrow" aria-hidden="true"></span>
+          <div className="fd-step fd-dark"><span className="fd-k">04 Payment</span><b>Invoice</b><small>Handles payment</small></div>
+        </div>
+      </FieldDiagram>
       <p>
         If the business uses automation, Flows can connect selected events to
         subsequent actions. For example, a completed form could be one of the
@@ -343,6 +397,33 @@ export default function WhatIsDubsadoArticle() {
         should therefore evaluate the plan against the specific functions they
         need rather than assuming every feature is included in every tier.
       </p>
+
+      <FieldDiagram
+        id="starter-vs-premier"
+        label="Starter and Premier"
+        title="Both plans cover the core. Premier adds the process tools."
+        takeaway="Evaluate the plan against the functions you need, and check Dubsado's pricing page for current inclusions."
+      >
+        <div className="fd-compare">
+          <div className="fd-box">
+            <span className="fd-k">Both plans</span>
+            <b>Core capabilities</b>
+            <div className="fd-chips fd-n2">
+              <i>Projects and clients</i><i>Invoicing</i><i>Templates</i><i>Client portals</i>
+            </div>
+            <small>Unlimited projects and clients, payment plans, calendar connection</small>
+          </div>
+          <div className="fd-versus">PLUS</div>
+          <div className="fd-box">
+            <span className="fd-k">Premier adds</span>
+            <b>Process tools</b>
+            <div className="fd-chips fd-n2">
+              <i>Scheduling</i><i>Flows</i><i>Public proposals</i><i>Zapier</i>
+            </div>
+            <small>Multiple active lead captures, more integrations and reporting</small>
+          </div>
+        </div>
+      </FieldDiagram>
 
       <h2 id="how-much-does-dubsado-cost">How much does Dubsado cost?</h2>
       <p>
