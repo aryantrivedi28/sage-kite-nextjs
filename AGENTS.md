@@ -60,6 +60,9 @@ app/
   blog/page.tsx         Blog listing.
   blog/<slug>/          One folder per blog post: post.tsx (data + article)
                         and a 3-line page.tsx. blog/_template/ is the starter.
+  contact/page.tsx      /contact: details, enquiry form (components/contact/ContactForm.tsx),
+                        office hours and quick questions. Contact details, office hours,
+                        form webhook and booking link live in content/contact.ts.
   sitemap.ts, robots.ts, not-found.tsx
 components/
   Header.tsx, Footer.tsx  Shared header/footer.
@@ -126,12 +129,13 @@ The essentials:
 
 ## Known gaps (do not "fix" these without asking)
 
-- `/contact`, `/insights` (index page), `/for-agencies` and `/industries/*` do not
+- `/insights` (index page), `/for-agencies` and `/industries/*` do not
   exist yet. Platform pages link to `/for-agencies`; `/services/white-label` is
   the agency page that exists today.
-  Many "Book a discovery call" buttons link to `/contact`; leave them unless
-  told otherwise.
-- `components/Footer.tsx`: Work, Insights and Contact links are placeholders until those pages exist.
+- The `/contact` form is frontend only. `CONTACT_WEBHOOK_URL` in
+  `content/contact.ts` is empty until the backend webhook exists; until then the
+  form validates but tells visitors to email instead. `BOOKING_URL` is empty too.
+- `components/Footer.tsx`: Work and Insights links are placeholders until those pages exist.
 - No `og:image` share image yet, except blog posts (they use their featured image).
 - `app/home-interactions.tsx` and `app/site-content.ts` are not used by any page.
   `components/home/Work.tsx` is imported in `app/page.tsx` but not rendered.
