@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useId, useState, useRef } from 'react';
+import { flushSync } from 'react-dom';
+import { BookOpen, ChevronDown } from 'lucide-react';
 import { BlogGuideItem } from '@/content/blog';
 
 interface BlogGuideProps {
@@ -9,6 +11,10 @@ interface BlogGuideProps {
 
 export function BlogGuide({ items }: BlogGuideProps) {
   const [activeId, setActiveId] = useState<string>('');
+  // Only used in the stacked (mobile/tablet) layout, where the guide is a collapsible bar.
+  // On desktop the CSS always shows the list.
+  const [open, setOpen] = useState(false);
+  const listId = useId();
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const listRef = useRef<HTMLUListElement | null>(null);
 
@@ -62,10 +68,22 @@ export function BlogGuide({ items }: BlogGuideProps) {
     <nav aria-label="In this guide" className="blog-guide">
       <div className="blog-guide-card">
         <h3 className="blog-guide-title">
-          <span role="img" aria-label="book" style={{ marginRight: '8px' }}>📖</span> 
-          IN THIS GUIDE
+          <BookOpen size={16} aria-hidden="true" />
+          In this guide
         </h3>
-        <ul className="blog-guide-list" ref={listRef}>
+        <button
+          type="button"
+          className="blog-guide-toggle"
+          aria-expanded={open}
+          aria-controls={listId}
+          onClick={() => setOpen((o) => !o)}
+        >
+          <BookOpen size={16} aria-hidden="true" />
+          <span className="blog-guide-toggle-label">In this guide</span>
+          <span className="blog-guide-count">{items.length} sections</span>
+          <ChevronDown size={18} aria-hidden="true" className="blog-guide-chevron" />
+        </button>
+        <ul id={listId} className={`blog-guide-list${open ? ' is-open' : ''}`} ref={listRef}>
           {items.map((item) => {
             const isActive = activeId === item.id;
             return (
@@ -80,6 +98,9 @@ export function BlogGuide({ items }: BlogGuideProps) {
                     e.preventDefault();
                     const target = document.getElementById(item.id);
                     if (target) {
+                      // Collapse the stacked guide first so the scroll target is measured
+                      // after the content above it has shrunk.
+                      if (open) flushSync(() => setOpen(false));
                       const headerOffset = 120;
                       const elementPosition = target.getBoundingClientRect().top;
                       const offsetPosition = elementPosition + window.scrollY - headerOffset;
