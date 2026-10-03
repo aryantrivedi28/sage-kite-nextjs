@@ -10,6 +10,7 @@ interface BlogGuideProps {
 export function BlogGuide({ items }: BlogGuideProps) {
   const [activeId, setActiveId] = useState<string>('');
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const listRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
     if (!items || items.length === 0) return;
@@ -38,13 +39,20 @@ export function BlogGuide({ items }: BlogGuideProps) {
     return () => observer.disconnect();
   }, [items]);
 
-  // Scroll active item into view within the guide
+  // Keep the active item visible inside the guide's own scrolling list.
+  // Not scrollIntoView: that also scrolls the page, and on mobile (guide above
+  // the article, not sticky) it yanked the reader back up to the guide.
   useEffect(() => {
-    if (activeId && linkRefs.current[activeId]) {
-      linkRefs.current[activeId]?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-      });
+    const list = listRef.current;
+    const link = activeId ? linkRefs.current[activeId] : null;
+    if (!list || !link || list.scrollHeight <= list.clientHeight) return;
+
+    const linkTop = link.offsetTop - list.offsetTop;
+    const linkBottom = linkTop + link.offsetHeight;
+    if (linkTop < list.scrollTop) {
+      list.scrollTo({ top: linkTop, behavior: 'smooth' });
+    } else if (linkBottom > list.scrollTop + list.clientHeight) {
+      list.scrollTo({ top: linkBottom - list.clientHeight, behavior: 'smooth' });
     }
   }, [activeId]);
 
@@ -57,7 +65,7 @@ export function BlogGuide({ items }: BlogGuideProps) {
           <span role="img" aria-label="book" style={{ marginRight: '8px' }}>📖</span> 
           IN THIS GUIDE
         </h3>
-        <ul className="blog-guide-list">
+        <ul className="blog-guide-list" ref={listRef}>
           {items.map((item) => {
             const isActive = activeId === item.id;
             return (
