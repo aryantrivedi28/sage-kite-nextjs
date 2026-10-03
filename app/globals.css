@@ -306,6 +306,10 @@ section{padding:clamp(80px,11vw,140px) 0}
 @media (max-width:1040px){
   .hero-grid,.ops-grid,.cap-band,.two,.work-grid,.agency-card{grid-template-columns:1fr}
   .hero h1{max-width:16ch}
+  /* Stacked hero: size to content, not the viewport (100svh is huge in Chrome's "Desktop site" mode) */
+  .hero{min-height:0}
+  .hero-visual{min-height:0;height:auto;padding:36px 32px 52px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:start}
+  .hv-pipeline,.hv-flow,.hv-revenue{position:static;width:auto}
   .fragments{grid-template-columns:repeat(2,minmax(0,1fr))}
   .frag + .frag{border-left:1px solid var(--light-sage)}
   .frag:nth-child(even){border-left:0}
@@ -335,8 +339,7 @@ section{padding:clamp(80px,11vw,140px) 0}
   .cta-row{flex-direction:column;align-items:stretch}
   .cta-row .link{align-self:flex-start}
   .final .cta-row .link{align-self:center}
-  .hero-visual{min-height:0;height:auto;padding:28px 18px 44px;display:grid;gap:18px;clip-path:polygon(0 0,calc(100% - 36px) 0,100% 36px,100% 100%,0 100%)}
-  .hv-pipeline,.hv-flow,.hv-revenue{position:static;width:auto}
+  .hero-visual{padding:28px 18px 44px;grid-template-columns:1fr;gap:18px;clip-path:polygon(0 0,calc(100% - 36px) 0,100% 36px,100% 100%,0 100%)}
   .hv-caption{right:18px;bottom:14px}
   .fragments{grid-template-columns:1fr}
   .frag{border-left:1px solid var(--light-sage)!important;border-top:0}
