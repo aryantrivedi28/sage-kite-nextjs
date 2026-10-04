@@ -10,7 +10,7 @@ import type React from 'react';
  *   .fd-flow      a left-to-right sequence (.fd-step, .fd-arrow); stacks on phones
  *   .fd-cols      equal columns of .fd-step (3 by default; add fd-n2 or fd-n4)
  * Pieces: .fd-k (small eyebrow), <b> (title), <small> (note), .fd-chips (4 by
- * default; add fd-n2 for 2), .fd-solid, .fd-scatter, .fd-dark and .fd-muted (box
+ * default; add fd-n1, fd-n2 or fd-n3), .fd-solid, .fd-scatter, .fd-dark and .fd-muted (box
  * fills), .fd-layer (full-width dark band), .fd-link-label, .fd-row-label.
  * Examples: app/blog/what-is-honeybook/article.tsx and dubsado-vs-honeybook/article.tsx.
  */

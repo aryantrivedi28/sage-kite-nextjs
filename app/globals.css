@@ -1112,6 +1112,7 @@ html {
 .article-content .fd-cols { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 10px; padding-top: 26px; }
 .article-content .fd-cols > .fd-step { min-height: 125px; }
 /* Column counts for .fd-chips and .fd-cols (default 4 chips, 3 columns) */
+.article-content .fd .fd-n1 { --n: 1; }
 .article-content .fd .fd-n2 { --n: 2; }
 .article-content .fd .fd-n3 { --n: 3; }
 .article-content .fd .fd-n4 { --n: 4; }
@@ -1137,6 +1138,10 @@ html {
   .article-content .fd-step { flex: 0 0 auto; }
   .article-content .fd-arrow { flex: 0 0 22px; width: 0; height: auto; border-top: 0; border-left: 2px solid var(--ink); }
   .article-content .fd-arrow::after { right: auto; top: auto; left: -7px; bottom: -2px; border: 6px solid transparent; border-top: 8px solid var(--ink); border-bottom: 0; }
+  /* A sequence split over two rows becomes one column: draw the arrow between the rows */
+  .article-content .fd-flow + .fd-flow { position: relative; padding-top: 22px; }
+  .article-content .fd-flow + .fd-flow::before { content: ''; position: absolute; top: 0; left: 50%; height: 22px; border-left: 2px solid var(--ink); margin-left: -1px; }
+  .article-content .fd-flow + .fd-flow::after { content: ''; position: absolute; top: 14px; left: 50%; margin-left: -6px; border: 6px solid transparent; border-top: 8px solid var(--ink); border-bottom: 0; }
   .article-content .fd-cols { grid-template-columns: 1fr; gap: 8px; }
   .article-content .fd-cols > .fd-step { min-height: 0; }
 }

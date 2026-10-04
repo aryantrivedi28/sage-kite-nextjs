@@ -45,10 +45,11 @@ import whatIsDubsado from '@/app/blog/what-is-dubsado/post';
 import whatIsHoneyBook from '@/app/blog/what-is-honeybook/post';
 import dubsadoVsHoneyBook from '@/app/blog/dubsado-vs-honeybook/post';
 import aiMarketingAutomationMistakes from '@/app/blog/ai-marketing-automation-mistakes/post';
+import dubsadoSetupServices from '@/app/blog/dubsado-setup-services/post';
 
 export * from './types';
 
-export const posts: BlogPost[] = [crmFoundation, whatIsDubsado, whatIsHoneyBook, dubsadoVsHoneyBook, aiMarketingAutomationMistakes];
+export const posts: BlogPost[] = [crmFoundation, whatIsDubsado, whatIsHoneyBook, dubsadoVsHoneyBook, aiMarketingAutomationMistakes, dubsadoSetupServices];
 
 /* ─────────────────────────── Selectors ─────────────────────────────────── */
 
