@@ -119,7 +119,7 @@ export default function ContactPage() {
           .ct-hero h1{font-size:clamp(2.3rem,4vw,3.3rem);line-height:1.05;letter-spacing:-.025em;max-width:none;text-wrap:pretty}
           .ct-hero h1 .hl{text-decoration:underline;text-decoration-color:var(--butter);text-decoration-thickness:.12em;text-underline-offset:.12em}
           .ct-hero .sub{margin:20px 0 0;max-width:42ch}
-          .ct-book{margin-top:18px}
+          .ct-book{margin-top:28px}
           .ct-list{margin-top:clamp(36px,4vw,48px);border-top:1px solid var(--light-sage)}
           .ct-list li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:16px;align-items:start;padding:18px 0;border-bottom:1px solid var(--light-sage)}
           .ct-list svg{color:var(--sage);margin-top:3px}
@@ -198,7 +198,7 @@ export default function ContactPage() {
                 Tell us about your business and where things are getting stuck. We will reply within 24 hours on business days to arrange a discovery call.
               </p>
               {BOOKING_URL && (
-                <p className="ct-book"><a className="link" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">Prefer to pick a time? Book a discovery call</a></p>
+                <p className="ct-book"><Link className="btn" href={BOOKING_URL}>Book a discovery call</Link></p>
               )}
 
               <ul className="ct-list">

@@ -137,7 +137,7 @@ export function BlogArticleLayout({
               back, we can help you fix the system behind it.
             </p>
             <div className="cta-row" style={{ marginTop: '32px' }}>
-              <Link href="/contact" className="btn">
+              <Link href="/book" className="btn">
                 Book a discovery call
               </Link>
             </div>

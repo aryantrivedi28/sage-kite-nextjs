@@ -601,7 +601,7 @@ export default function ServiceTitanPage() {
               <h2 id="final-title">Build ServiceTitan around how you book, sell and keep customers.</h2>
               <p className="sub">A discovery call looks at your current account or onboarding plan, where work is being lost, and what a fixed-scope project would cover.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/platforms" className="link">See other platforms we implement</Link>
               </div>
             </div>

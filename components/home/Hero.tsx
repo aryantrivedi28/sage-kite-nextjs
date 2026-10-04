@@ -18,7 +18,7 @@ export function Hero() {
             Sage Kite designs, builds and runs the growth operations behind revenue. CRM, marketing, automation and AI, connected and executed.
           </p>
           <div className="cta-row">
-            <Link href="#book" className="btn">Book a discovery call</Link>
+            <Link href="/book" className="btn">Book a discovery call</Link>
             <Link href="#system" className="text-link">See the growth system</Link>
           </div>
         </div>

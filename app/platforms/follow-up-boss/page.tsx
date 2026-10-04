@@ -602,7 +602,7 @@ export default function FollowUpBossPage() {
               <h2 id="final-title">Build Follow Up Boss around how your team works leads.</h2>
               <p className="sub">A discovery call looks at your lead sources, your current setup or plan, and what a fixed-scope project would cover.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/platforms" className="link">See other platforms we implement</Link>
               </div>
             </div>

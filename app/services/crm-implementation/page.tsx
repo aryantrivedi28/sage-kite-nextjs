@@ -558,7 +558,7 @@ export default function CrmImplementationPage() {
               <h2 id="final-title">Build a CRM your team relies on.</h2>
               <p className="sub">A discovery call looks at how you sell today, the system you have or are considering, and what a fixed-scope project would cover.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/platforms" className="link">See the platforms we implement</Link>
               </div>
             </div>

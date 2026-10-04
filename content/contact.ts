@@ -14,10 +14,10 @@
 export const CONTACT_WEBHOOK_URL = '';
 
 /**
- * Discovery-call booking page (Calendly, Cal.com, GHL calendar…). While empty,
- * "Book a discovery call" scrolls to the form instead.
+ * Discovery-call booking page: /book (app/book/page.tsx) embeds the GHL booking
+ * widget. Every "Book a discovery call" button on the site links there.
  */
-export const BOOKING_URL = '';
+export const BOOKING_URL = '/book';
 
 export const CONTACT = {
   email: 'aryan@sagekite.com',

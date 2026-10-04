@@ -453,7 +453,7 @@ export default function DubsadoPage() {
                   Sage Kite configures Dubsado around the way your business actually wins, onboards and serves clients: lead capture, proposals, contracts, payments, scheduling and automated workflows. We map the process first, then build the system to match it.
                 </p>
                 <div className="cta-row" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-                  <Link href="#contact" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Book a discovery call</Link>
+                  <Link href="/book" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Book a discovery call</Link>
                   <Link href="#included" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>See what's included</Link>
                 </div>
               </div>
@@ -946,7 +946,7 @@ export default function DubsadoPage() {
              </p>
              
              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '28px', flexWrap: 'wrap' }}>
-               <Link href="#contact" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Book a discovery call</Link>
+               <Link href="/book" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Book a discovery call</Link>
                <Link href="/platforms" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>See other platforms we implement</Link>
              </div>
            </div>

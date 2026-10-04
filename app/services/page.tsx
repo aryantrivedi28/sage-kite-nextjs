@@ -389,7 +389,7 @@ export default function ServicesPage() {
                 Most businesses do not have one problem. They have a CRM, campaigns and a team that were never set up to work together. Sage Kite brings consultancy, systems, people and marketing together around the same growth goal.
               </p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="#services-list" className="link">Explore the five services</Link>
               </div>
               <p className="hero-facts">
@@ -556,7 +556,7 @@ export default function ServicesPage() {
               <h2 id="final-title">Not sure which service you need?</h2>
               <p className="sub">A discovery call looks at how you win customers today, where growth is getting stuck, and which service, or combination, would make the biggest difference first.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/platforms" className="link">Browse the platforms we implement</Link>
               </div>
             </div>

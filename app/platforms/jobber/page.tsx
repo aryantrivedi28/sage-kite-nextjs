@@ -421,7 +421,7 @@ export default function JobberPage() {
       <h1 id="hero-title">Jobber CRM services and setup</h1>
       <p className="sub">Sage Kite is a business growth consultancy that implements Jobber — the field-service platform for home-service businesses — around how your team actually wins work, schedules crews and gets paid: requests, quotes, scheduling, jobs, invoicing and recurring work.</p>
       <div className="cta-row">
-        <Link href="/contact" className="btn">Book a discovery call</Link>
+        <Link href="/book" className="btn">Book a discovery call</Link>
         <Link href="#impl" className="link">See what's included</Link>
       </div>
     </div>
@@ -881,7 +881,7 @@ export default function JobberPage() {
                 <span><span className="dot" style={{ '--c': 'var(--coral)' } as React.CSSProperties}></span> Train</span>
             </div>
             <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/services" className="link">Explore all services</Link>
             </div>
         </div>

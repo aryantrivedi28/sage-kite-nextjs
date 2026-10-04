@@ -418,7 +418,7 @@ export default function ActiveCampaignPage() {
       <h1 id="hero-title">ActiveCampaign implementation and automation services</h1>
       <p className="sub">Sage Kite implements ActiveCampaign around the way your business actually markets and sells: contacts and segmentation, email marketing, automations, the sales CRM and deliverability &mdash; mapped to your customer journey, tested and handed over.</p>
       <div className="cta-row">
-        <Link className="btn" href="/contact">Book a discovery call</Link>
+        <Link className="btn" href="/book">Book a discovery call</Link>
         <Link className="link" href="#implement">See what's included</Link>
       </div>
     </div>
@@ -702,7 +702,7 @@ export default function ActiveCampaignPage() {
     <h2 id="final-title">Get ActiveCampaign built around your journey.</h2>
     <p className="sub">Tell us how you attract and follow up with customers today, and what is not working in ActiveCampaign. We will tell you what we would map first, what the build would involve, and whether ActiveCampaign is the right fit.</p>
     <div className="cta-row">
-      <Link className="btn" href="/contact">Book a discovery call</Link>
+      <Link className="btn" href="/book">Book a discovery call</Link>
       <Link className="link" href="/platforms">See other platforms we implement</Link>
     </div>
   </div>

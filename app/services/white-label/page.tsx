@@ -517,7 +517,7 @@ export default function WhiteLabelPage() {
               <h2 id="final-title">Take on more client work.</h2>
               <p className="sub">A discovery call looks at your agency, the client work you want to hand over, how your clients should hear from the team, and what a first engagement would cover.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/services" className="link">See all services</Link>
               </div>
             </div>

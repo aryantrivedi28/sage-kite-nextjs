@@ -607,7 +607,7 @@ export default function HubspotPage() {
               <h2 id="final-title">Build HubSpot around how you sell.</h2>
               <p className="sub">A discovery call looks at your current portal or plan, what the business needs from it, and what a fixed-scope project would cover.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/services/crm-implementation" className="link">See all CRM implementation services</Link>
               </div>
             </div>

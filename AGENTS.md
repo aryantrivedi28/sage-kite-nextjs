@@ -63,6 +63,10 @@ app/
   contact/page.tsx      /contact: details, enquiry form (components/contact/ContactForm.tsx),
                         office hours and quick questions. Contact details, office hours,
                         form webhook and booking link live in content/contact.ts.
+  book/page.tsx         /book: the GoHighLevel booking widget (iframe + form_embed.js), embedded
+                        as supplied. Every "Book a discovery call" button links here.
+                        form_embed.js is loaded by components/book/BookingEmbedScript.tsx, not
+                        next/script: it must re-run on every visit or the iframe is not resized.
   sitemap.ts, robots.ts, not-found.tsx
 components/
   Header.tsx, Footer.tsx  Shared header/footer.
@@ -134,7 +138,7 @@ The essentials:
   the agency page that exists today.
 - The `/contact` form is frontend only. `CONTACT_WEBHOOK_URL` in
   `content/contact.ts` is empty until the backend webhook exists; until then the
-  form validates but tells visitors to email instead. `BOOKING_URL` is empty too.
+  form validates but tells visitors to email instead.
 - `components/Footer.tsx`: Work and Insights links are placeholders until those pages exist.
 - No `og:image` share image yet, except blog posts (they use their featured image).
 - `app/home-interactions.tsx` and `app/site-content.ts` are not used by any page.

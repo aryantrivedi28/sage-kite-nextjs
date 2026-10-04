@@ -639,7 +639,7 @@ export default function LoftyPage() {
             <h2 id="final-title">Get Lofty built around how you sell.</h2>
             <p className="sub">Tell us where your leads come from and how you follow up today. We will tell you what we would map first, what the setup would involve, and whether Lofty is the right fit for your real-estate business.</p>
             <div className="cta-row">
-              <Link href="/contact" className="btn">Book a discovery call</Link>
+              <Link href="/book" className="btn">Book a discovery call</Link>
               <Link href="/platforms" className="link">See other platforms we implement</Link>
             </div>
           </div>

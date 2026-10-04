@@ -290,7 +290,7 @@ export default function PlatformsPage() {
                 The platform is the tool, not the strategy. Sage Kite maps how your business wins and keeps customers, then sets up the right platform to match, whether it is a CRM, an industry system or marketing automation.
               </p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="#directory" className="link">Find your platform</Link>
               </div>
               <p className="hero-facts">
@@ -496,7 +496,7 @@ export default function PlatformsPage() {
               <h2 id="final-title">Not sure which platform fits?</h2>
               <p className="sub">A discovery call looks at how you sell today, the system you have or are considering, and what a fixed-scope project would cover.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/services" className="link">Explore our services</Link>
               </div>
             </div>

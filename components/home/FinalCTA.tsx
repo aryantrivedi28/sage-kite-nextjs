@@ -20,7 +20,7 @@ export function FinalCTA() {
           </p>
           
           <div className="cta-row">
-            <Link href="#book" className="btn">Book a discovery call</Link>
+            <Link href="/book" className="btn">Book a discovery call</Link>
             <Link href="#library" className="link" style={{ textDecoration: 'underline', textUnderlineOffset: '4px' }}>Read the Library first</Link>
           </div>
           

@@ -493,7 +493,7 @@ export default function MarketingPage() {
               <h2 id="final-title">Marketing you can trace to revenue.</h2>
               <p className="sub">A discovery call looks at your priorities, the channels you use today, how enquiries are followed up, and what a scoped marketing plan would cover.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/services" className="link">See all services</Link>
               </div>
             </div>

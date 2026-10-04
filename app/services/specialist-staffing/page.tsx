@@ -535,7 +535,7 @@ export default function SpecialistStaffingPage() {
               <h2 id="final-title">Keep the systems you built in use.</h2>
               <p className="sub">A discovery call looks at the work piling up, the systems it lives in, who would manage it, and what a scoped specialist role would cover.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/services" className="link">See all services</Link>
               </div>
             </div>

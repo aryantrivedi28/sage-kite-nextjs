@@ -553,7 +553,7 @@ export default function ConsultancyPage() {
               <h2 id="final-title">Know what to fix first.</h2>
               <p className="sub">A discovery call looks at where growth is getting stuck, what you have tried, and what a scoped consultancy engagement would cover.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/services" className="link">See all services</Link>
               </div>
             </div>

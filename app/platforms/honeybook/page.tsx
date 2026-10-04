@@ -343,7 +343,7 @@ export default function HoneyBookPage() {
                   Sage Kite configures HoneyBook around the way your business actually books and serves clients: lead capture, Smart Files, contracts, payments, scheduling and automated workflows — mapped to your process, tested and handed over.
                 </p>
                 <div className="cta-row" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-                  <Link href="/contact" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Book a discovery call</Link>
+                  <Link href="/book" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Book a discovery call</Link>
                   <Link href="#included" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>See what's included</Link>
                 </div>
               </div>
@@ -840,7 +840,7 @@ export default function HoneyBookPage() {
              </p>
              
              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '28px', flexWrap: 'wrap' }}>
-               <Link href="/contact" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Book a discovery call</Link>
+               <Link href="/book" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Book a discovery call</Link>
                <Link href="/platforms" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>See other platforms we implement</Link>
              </div>
            </div>
