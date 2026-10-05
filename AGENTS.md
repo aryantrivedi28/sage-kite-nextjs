@@ -47,6 +47,10 @@ app/
                         One page per service area (consultancy, crm-implementation, marketing, specialist-staffing, white-label). Same template as a
                         platform page: metadata + Service JSON-LD + content. When one is added,
                         set `page` on that service in app/services/page.tsx and add it to sitemap.ts.
+  industries/page.tsx   /industries: CRM and automation by industry. Service-page template
+                        (metadata + Service/FAQPage JSON-LD). Industry rows and FAQs are data
+                        arrays at the top that feed both the page and the schema. Header and
+                        footer "Industries" links point here.
   platforms/page.tsx    /platforms directory. Built from content/platforms.ts; no edits needed
                         when a platform page is added.
   platforms/<name>/page.tsx
@@ -84,6 +88,17 @@ content/founders-thoughts.ts
 public/                   Static files. Blog images go in public/images/blog/,
                           essay images in public/images/founders-thoughts/.
 ```
+
+## Writing content
+
+**Read [docs/content-standard.md](docs/content-standard.md) before writing or
+rewriting any blog post, service page, platform page, essay or other substantial
+copy.** It is the Sage Kite editorial standard (voice, research, depth, SEO in the
+prose), benchmarked on the essay at
+`app/insights/founders-thoughts/when-everyone-has-ai/`. Learn its techniques from
+Appendix A; never reuse its arguments, examples or statistics. Verify every
+statistic and platform claim against a primary source before using it, and never
+invent first-person experience, client stories or testimonials.
 
 ## Blog posts, SEO and schema
 
@@ -129,8 +144,8 @@ The essentials:
 
 ## Known gaps (do not "fix" these without asking)
 
-- `/insights` (index page), `/for-agencies` and `/industries/*` do not
-  exist yet. Platform pages link to `/for-agencies`; `/services/white-label` is
+- `/insights` (index page), `/for-agencies` and per-industry pages
+  (`/industries/<name>`) do not exist yet. `/industries` (the overview) does. Platform pages link to `/for-agencies`; `/services/white-label` is
   the agency page that exists today.
 - The `/contact` form is frontend only. `CONTACT_WEBHOOK_URL` in
   `content/contact.ts` is empty until the backend webhook exists; until then the
