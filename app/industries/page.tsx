@@ -635,7 +635,7 @@ export default function IndustriesPage() {
               <h2 id="final-title">Tell us how your customers decide.</h2>
               <p className="sub">A discovery call looks at your industry, the system you use today, and where customers slip away. We&apos;ll tell you plainly whether we can help, and where we&apos;d start.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/platforms" className="link">See the platforms we implement</Link>
               </div>
             </div>
