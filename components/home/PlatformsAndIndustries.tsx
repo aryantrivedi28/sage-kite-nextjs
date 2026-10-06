@@ -31,7 +31,7 @@ export function PlatformsAndIndustries() {
             <h2 style={{ maxWidth: '14em' }}>SMEs in the US, Canada, Europe, Australia and New Zealand.</h2>
             
             <div className="ind-grid">
-              <Link href="#real-estate">
+              <Link href="/industries/real-estate">
                 Real estate <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </Link>
               <Link href="#home-services">

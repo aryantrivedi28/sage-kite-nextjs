@@ -47,6 +47,8 @@ type Industry = {
   /** Names from content/platforms.ts. A platform with a published page is linked. */
   platforms: string[];
   limit: string;
+  /** Industry page under /industries, once it exists. Linked from the row. */
+  page?: string;
 };
 
 // "Where each industry tends to lose customers". Rendered as rows and listed in the
@@ -62,7 +64,7 @@ const industries: Industry[] = [
     limit: "If pricing lives in one person's head, quotes stay slow. A proper pricebook helps more than automation.",
   },
   {
-    id: "real-estate", name: "Real estate", color: "var(--coral)",
+    id: "real-estate", name: "Real estate", color: "var(--coral)", page: "/industries/real-estate",
     shape: { label: "Urgent, then slow", color: URGENT },
     who: "Agents, teams and brokerages handling buyer and seller leads.",
     problem: "Leads come from portals, the website, open houses and referrals, and not evenly. A routing rule that worked with three agents gets murky with eight, and nobody is sure who owns Saturday night's lead. Then there's the buyer who won't be ready for six months, which is where follow-up usually thins out.",
@@ -322,6 +324,7 @@ export default function IndustriesPage() {
           .ind-row h3::before{content:"";width:5px;height:26px;border-radius:3px;background:var(--c);flex:0 0 auto}
           .shape{display:inline-flex;align-items:center;gap:8px;font-size:.8125rem;font-weight:600;color:var(--sage);margin-bottom:10px}
           .ind-who{font-size:.9rem;line-height:1.5;color:var(--sage);margin-top:10px}
+          .ind-more{display:inline-block;margin-top:14px;font-size:.95rem}
           .ind-main > p{font-size:1rem;line-height:1.6}
           .mini{display:block;font-size:.8125rem;font-weight:600;color:var(--sage);margin:18px 0 8px}
           .build li{position:relative;padding:7px 0 7px 20px;font-size:.925rem;line-height:1.45;border-top:1px solid var(--light-sage);color:var(--ink)}
@@ -492,6 +495,7 @@ export default function IndustriesPage() {
                     <span className="shape"><span className="dot" style={c(ind.shape.color)}></span>{ind.shape.label}</span>
                     <h3>{ind.name}</h3>
                     <p className="ind-who">{ind.who}</p>
+                    {ind.page && <Link href={ind.page} className="link ind-more">{ind.name} in detail</Link>}
                   </div>
                   <div className="ind-main">
                     <p>{ind.problem}</p>

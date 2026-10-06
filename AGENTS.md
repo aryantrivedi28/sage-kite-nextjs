@@ -51,6 +51,11 @@ app/
                         (metadata + Service/FAQPage JSON-LD). Industry rows and FAQs are data
                         arrays at the top that feed both the page and the schema. Header and
                         footer "Industries" links point here.
+  industries/<name>/page.tsx
+                        One page per industry (real-estate so far). Same service-page template.
+                        When one is added: set `page` on that industry in app/industries/page.tsx,
+                        point its homepage card (components/home/PlatformsAndIndustries.tsx) at
+                        it, and add it to sitemap.ts.
   platforms/page.tsx    /platforms directory. Built from content/platforms.ts; no edits needed
                         when a platform page is added.
   platforms/<name>/page.tsx
@@ -148,8 +153,9 @@ The essentials:
 
 ## Known gaps (do not "fix" these without asking)
 
-- `/insights` (index page), `/for-agencies` and per-industry pages
-  (`/industries/<name>`) do not exist yet. `/industries` (the overview) does. Platform pages link to `/for-agencies`; `/services/white-label` is
+- `/insights` (index page) and `/for-agencies` do not exist yet. Of the
+  per-industry pages, only `/industries/real-estate` exists; the other homepage
+  industry cards still link to `#` anchors. Platform pages link to `/for-agencies`; `/services/white-label` is
   the agency page that exists today.
 - The `/contact` form is frontend only. `CONTACT_WEBHOOK_URL` in
   `content/contact.ts` is empty until the backend webhook exists; until then the
