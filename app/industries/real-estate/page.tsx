@@ -609,7 +609,7 @@ export default function RealEstateIndustryPage() {
               <h2 id="final-title">Build a CRM for the whole cycle, not just the first call.</h2>
               <p className="sub">A discovery call looks at your lead sources, how your team works leads today, and where they go quiet. We&apos;ll tell you plainly where we&apos;d start.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/industries" className="link">See other industries</Link>
               </div>
             </div>
