@@ -55,7 +55,7 @@ type Industry = {
 // Service schema (hasOfferCatalog), so the page and schema always match.
 const industries: Industry[] = [
   {
-    id: "home-services", name: "Home services", color: "var(--sky)",
+    id: "home-services", name: "Home services", color: "var(--sky)", page: "/industries/home-services",
     shape: { label: "Urgent + recurring", color: URGENT },
     who: "Plumbing, HVAC, electrical, cleaning and other trade businesses.",
     problem: "Calls get answered on a roof or under a sink, and the estimate goes out when someone is back at the office. The quote nobody follows up is often the easiest job to win back: the customer already said they were interested. Service plans tend to slip first when the diary is full.",

@@ -73,6 +73,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
+    {
+      url: `${BASE_URL}/industries/home-services`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
     ...PLATFORM_PAGE_SLUGS.map((platform) => ({
       url: `${BASE_URL}/platforms/${platform}`,
       lastModified: new Date(),
