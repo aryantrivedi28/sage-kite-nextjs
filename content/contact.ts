@@ -7,11 +7,14 @@
  */
 
 /**
- * Where the contact form POSTs enquiries, as JSON. Empty until the backend
- * webhook exists: while empty, the form validates but does not send, and tells
- * the visitor to email instead.
+ * GoHighLevel inbound webhook the contact form POSTs enquiries to, as JSON
+ * (name, first_name, last_name, email, phone, service, message, source, ...).
+ * Set NEXT_PUBLIC_GHL_WEBHOOK_URL in .env.local (see .env.example) and on the
+ * hosting platform. It is inlined at build time, so rebuild after changing it.
+ * While empty, the form validates but does not send, and tells the visitor to
+ * email instead.
  */
-export const CONTACT_WEBHOOK_URL = '';
+export const CONTACT_WEBHOOK_URL = process.env.NEXT_PUBLIC_GHL_WEBHOOK_URL ?? '';
 
 /**
  * Discovery-call booking page: /book (app/book/page.tsx) embeds the GHL booking

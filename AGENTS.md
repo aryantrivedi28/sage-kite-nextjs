@@ -10,7 +10,8 @@ Marketing website for **Sage Kite**, a business growth consultancy.
 Live at `https://www.sagekite.com`.
 
 - Next.js 16 (App Router), React 19, TypeScript. No database, no API routes,
-  no auth, no environment variables.
+  no auth. One environment variable: `NEXT_PUBLIC_GHL_WEBHOOK_URL` (contact form
+  webhook), set in `.env.local` locally and on the host. See `.env.example`.
 - Every page is statically generated at build time.
 - Styling is plain CSS. Brand colours, font and spacing tokens are in
   `app/brand.css`; shared classes are in `app/globals.css`.
@@ -157,8 +158,9 @@ The essentials:
   per-industry pages, only `/industries/real-estate` exists; the other homepage
   industry cards still link to `#` anchors. Platform pages link to `/for-agencies`; `/services/white-label` is
   the agency page that exists today.
-- The `/contact` form is frontend only. `CONTACT_WEBHOOK_URL` in
-  `content/contact.ts` is empty until the backend webhook exists; until then the
+- The `/contact` form posts straight from the browser to a GoHighLevel inbound
+  webhook (temporary handler from the team lead). `CONTACT_WEBHOOK_URL` in
+  `content/contact.ts` reads `NEXT_PUBLIC_GHL_WEBHOOK_URL`; while it is empty the
   form validates but tells visitors to email instead.
 - `components/Footer.tsx`: Work and Insights links are placeholders until those pages exist.
 - No `og:image` share image yet, except blog posts (they use their featured image).
