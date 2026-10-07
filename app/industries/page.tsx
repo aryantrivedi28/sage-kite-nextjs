@@ -73,7 +73,7 @@ const industries: Industry[] = [
     limit: "Routing decides who gets the lead. It doesn't make that agent pick up the phone.",
   },
   {
-    id: "law-firms", name: "Law firms", color: "var(--ink)",
+    id: "law-firms", name: "Law firms", color: "var(--ink)", page: "/industries/law-firms",
     shape: { label: "Considered", color: CONSIDERED },
     who: "Firms that take on new clients through enquiries and consultations.",
     problem: "The gap is usually between the enquiry and the consultation. Someone fills in a form at 9pm, often at a stressful moment, and hears nothing until a conflict check is done and a slot is found. By then they may have contacted two other firms.",
@@ -82,7 +82,7 @@ const industries: Industry[] = [
     limit: "Automation never gives advice or decides whether to take a case. Client messages are built to your conduct rules and signed off by your firm.",
   },
   {
-    id: "coaching", name: "Coaches & course businesses", color: "var(--butter)",
+    id: "coaching", name: "Coaches & course businesses", color: "var(--butter)", page: "/industries/coaching",
     shape: { label: "Considered + recurring", color: CONSIDERED },
     who: "Coaches, educators and creators selling programmes, courses and memberships.",
     problem: "The content is usually fine. What breaks is everything around it: a free guide that triggers a sequence from two launches ago, onboarding that assumes someone bought a different programme, and so many tags and funnels that nobody knows which automations are still live.",

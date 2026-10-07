@@ -79,6 +79,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
+    {
+      url: `${BASE_URL}/industries/coaching`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/industries/law-firms`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
     ...PLATFORM_PAGE_SLUGS.map((platform) => ({
       url: `${BASE_URL}/platforms/${platform}`,
       lastModified: new Date(),

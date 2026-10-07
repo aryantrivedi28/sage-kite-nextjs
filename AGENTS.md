@@ -52,7 +52,7 @@ app/
                         arrays at the top that feed both the page and the schema. Header and
                         footer "Industries" links point here.
   industries/<name>/page.tsx
-                        One page per industry (real-estate, home-services so far). Same service-page template.
+                        One page per industry (real-estate, home-services, coaching, law-firms so far). Same service-page template.
                         When one is added: set `page` on that industry in app/industries/page.tsx,
                         point its homepage card (components/home/PlatformsAndIndustries.tsx) at
                         it, and add it to sitemap.ts.
@@ -150,7 +150,7 @@ The essentials:
 ## Known gaps (do not "fix" these without asking)
 
 - `/insights` (index page) and `/for-agencies` do not exist yet. Of the
-  per-industry pages, only `/industries/real-estate` and `/industries/home-services` exist; the other homepage
+  per-industry pages, only `/industries/real-estate`, `/industries/home-services`, `/industries/coaching` and `/industries/law-firms` exist; the other homepage
   industry cards still link to `#` anchors. Platform pages link to `/for-agencies`; `/services/white-label` is
   the agency page that exists today.
 - The `/contact` form is frontend only. `CONTACT_WEBHOOK_URL` in
