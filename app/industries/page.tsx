@@ -100,7 +100,7 @@ const industries: Industry[] = [
     limit: "If packages change with every proposal, the workflow keeps breaking. Settle the offer, then automate it.",
   },
   {
-    id: "fitness-wellness", name: "Fitness & wellness", color: "var(--coral)",
+    id: "fitness-wellness", name: "Fitness & wellness", color: "var(--coral)", page: "/industries/fitness-wellness",
     shape: { label: "Recurring", color: RECURRING },
     who: "Studios, gyms and wellness centres with classes, memberships and intro offers.",
     problem: "Intro offers are easy to sell and hard to convert: someone comes twice, and the next thing they hear is a general newsletter. Members rarely cancel the day they stop coming. They drift first, and the drift usually shows in attendance well before the cancellation email.",
@@ -109,7 +109,7 @@ const industries: Industry[] = [
     limit: "Full at 6pm and empty at 11am is a timetable decision, not a CRM one.",
   },
   {
-    id: "nonprofits", name: "Nonprofits", color: "var(--sky)",
+    id: "nonprofits", name: "Nonprofits", color: "var(--sky)", page: "/industries/nonprofits",
     shape: { label: "Recurring", color: RECURRING },
     who: "Fundraising teams managing donors, gifts and supporter relationships.",
     problem: "Most fundraisers will tell you the second gift matters more than the first. Yet the thank-you often depends on someone remembering, and gift entry happens in batches when someone has a spare afternoon. By the time the database is current, the moment to say thank you properly has passed.",
