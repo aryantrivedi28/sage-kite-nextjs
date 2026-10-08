@@ -53,7 +53,7 @@ app/
                         arrays at the top that feed both the page and the schema. Header and
                         footer "Industries" links point here.
   industries/<name>/page.tsx
-                        One page per industry (real-estate so far). Same service-page template.
+                        One page per industry (real-estate, home-services, coaching, law-firms, fitness-wellness, nonprofits). Same service-page template.
                         When one is added: set `page` on that industry in app/industries/page.tsx,
                         point its homepage card (components/home/PlatformsAndIndustries.tsx) at
                         it, and add it to sitemap.ts.
@@ -154,10 +154,10 @@ The essentials:
 
 ## Known gaps (do not "fix" these without asking)
 
-- `/insights` (index page) and `/for-agencies` do not exist yet. Of the
-  per-industry pages, only `/industries/real-estate` exists; the other homepage
-  industry cards still link to `#` anchors. Platform pages link to `/for-agencies`; `/services/white-label` is
-  the agency page that exists today.
+- `/insights` (index page) and `/for-agencies` do not exist yet. Platform pages
+  link to `/for-agencies`; `/services/white-label` is the agency page that exists today.
+- Every homepage industry card has its own page. On `/industries`, the
+  "Client-based service businesses" and "Everyone else" rows have no page yet.
 - The `/contact` form posts straight from the browser to a GoHighLevel inbound
   webhook (temporary handler from the team lead). `CONTACT_WEBHOOK_URL` in
   `content/contact.ts` reads `NEXT_PUBLIC_GHL_WEBHOOK_URL`; while it is empty the

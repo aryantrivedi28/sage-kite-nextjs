@@ -55,7 +55,7 @@ type Industry = {
 // Service schema (hasOfferCatalog), so the page and schema always match.
 const industries: Industry[] = [
   {
-    id: "home-services", name: "Home services", color: "var(--sky)",
+    id: "home-services", name: "Home services", color: "var(--sky)", page: "/industries/home-services",
     shape: { label: "Urgent + recurring", color: URGENT },
     who: "Plumbing, HVAC, electrical, cleaning and other trade businesses.",
     problem: "Calls get answered on a roof or under a sink, and the estimate goes out when someone is back at the office. The quote nobody follows up is often the easiest job to win back: the customer already said they were interested. Service plans tend to slip first when the diary is full.",
@@ -73,7 +73,7 @@ const industries: Industry[] = [
     limit: "Routing decides who gets the lead. It doesn't make that agent pick up the phone.",
   },
   {
-    id: "law-firms", name: "Law firms", color: "var(--ink)",
+    id: "law-firms", name: "Law firms", color: "var(--ink)", page: "/industries/law-firms",
     shape: { label: "Considered", color: CONSIDERED },
     who: "Firms that take on new clients through enquiries and consultations.",
     problem: "The gap is usually between the enquiry and the consultation. Someone fills in a form at 9pm, often at a stressful moment, and hears nothing until a conflict check is done and a slot is found. By then they may have contacted two other firms.",
@@ -82,7 +82,7 @@ const industries: Industry[] = [
     limit: "Automation never gives advice or decides whether to take a case. Client messages are built to your conduct rules and signed off by your firm.",
   },
   {
-    id: "coaching", name: "Coaches & course businesses", color: "var(--butter)",
+    id: "coaching", name: "Coaches & course businesses", color: "var(--butter)", page: "/industries/coaching",
     shape: { label: "Considered + recurring", color: CONSIDERED },
     who: "Coaches, educators and creators selling programmes, courses and memberships.",
     problem: "The content is usually fine. What breaks is everything around it: a free guide that triggers a sequence from two launches ago, onboarding that assumes someone bought a different programme, and so many tags and funnels that nobody knows which automations are still live.",
@@ -100,7 +100,7 @@ const industries: Industry[] = [
     limit: "If packages change with every proposal, the workflow keeps breaking. Settle the offer, then automate it.",
   },
   {
-    id: "fitness-wellness", name: "Fitness & wellness", color: "var(--coral)",
+    id: "fitness-wellness", name: "Fitness & wellness", color: "var(--coral)", page: "/industries/fitness-wellness",
     shape: { label: "Recurring", color: RECURRING },
     who: "Studios, gyms and wellness centres with classes, memberships and intro offers.",
     problem: "Intro offers are easy to sell and hard to convert: someone comes twice, and the next thing they hear is a general newsletter. Members rarely cancel the day they stop coming. They drift first, and the drift usually shows in attendance well before the cancellation email.",
@@ -109,7 +109,7 @@ const industries: Industry[] = [
     limit: "Full at 6pm and empty at 11am is a timetable decision, not a CRM one.",
   },
   {
-    id: "nonprofits", name: "Nonprofits", color: "var(--sky)",
+    id: "nonprofits", name: "Nonprofits", color: "var(--sky)", page: "/industries/nonprofits",
     shape: { label: "Recurring", color: RECURRING },
     who: "Fundraising teams managing donors, gifts and supporter relationships.",
     problem: "Most fundraisers will tell you the second gift matters more than the first. Yet the thank-you often depends on someone remembering, and gift entry happens in batches when someone has a spare afternoon. By the time the database is current, the moment to say thank you properly has passed.",
