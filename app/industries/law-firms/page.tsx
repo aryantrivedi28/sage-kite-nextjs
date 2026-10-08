@@ -622,7 +622,7 @@ export default function LawFirmsIndustryPage() {
               <h2 id="final-title">Answer the enquiry before another firm does.</h2>
               <p className="sub">A discovery call looks at how enquiries reach you, how intake and consultations work today, and where potential clients go quiet. We&apos;ll tell you plainly where we&apos;d start.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/industries" className="link">See other industries</Link>
               </div>
             </div>

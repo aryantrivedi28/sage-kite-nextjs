@@ -636,7 +636,7 @@ export default function NonprofitsIndustryPage() {
               <h2 id="final-title">Build a system for the second gift, not just the first.</h2>
               <p className="sub">A discovery call looks at how gifts are entered and thanked today, the database you use, and where donors stop giving. We&apos;ll tell you plainly where we&apos;d start.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/industries" className="link">See other industries</Link>
               </div>
             </div>

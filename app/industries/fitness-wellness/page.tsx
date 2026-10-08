@@ -630,7 +630,7 @@ export default function FitnessWellnessIndustryPage() {
               <h2 id="final-title">Build a system for the hundredth visit, not just the first.</h2>
               <p className="sub">A discovery call looks at your offers, how new clients find you, and where members start to slip away. We&apos;ll tell you plainly where we&apos;d start.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/industries" className="link">See other industries</Link>
               </div>
             </div>

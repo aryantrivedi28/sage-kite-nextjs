@@ -624,7 +624,7 @@ export default function CoachingIndustryPage() {
               <h2 id="final-title">Build a system that&apos;s still clean after the next launch.</h2>
               <p className="sub">A discovery call looks at your offers, what&apos;s live in your account and where people drop out. We&apos;ll tell you plainly where we&apos;d start.</p>
               <div className="cta-row">
-                <Link href="/contact" className="btn">Book a discovery call</Link>
+                <Link href="/book" className="btn">Book a discovery call</Link>
                 <Link href="/industries" className="link">See other industries</Link>
               </div>
             </div>
