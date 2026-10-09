@@ -11,7 +11,8 @@ Live at `https://www.sagekite.com`.
 
 - Next.js 16 (App Router), React 19, TypeScript. No database, no API routes,
   no auth. One environment variable: `NEXT_PUBLIC_GHL_WEBHOOK_URL` (contact form
-  webhook), set in `.env.local` locally and on the host. See `.env.example`.
+  webhook), set in `.env` locally (not committed) and in Vercel's environment
+  variables. It is fixed at build time, so redeploy after changing it. See `.env.example`.
 - Every page is statically generated at build time.
 - Styling is plain CSS. Brand colours, font and spacing tokens are in
   `app/brand.css`; shared classes are in `app/globals.css`.
