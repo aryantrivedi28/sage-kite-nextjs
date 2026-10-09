@@ -9,6 +9,8 @@ import { CONTACT, CONTACT_WEBHOOK_URL, ENQUIRY_TYPES } from '@/content/contact';
  * to a GoHighLevel inbound webhook. The webhook URL is CONTACT_WEBHOOK_URL in
  * content/contact.ts.
  */
+
+
 const GHL_WEBHOOK_URL = CONTACT_WEBHOOK_URL;
 
 type FormData = {
@@ -102,9 +104,20 @@ export function ContactForm() {
         body: JSON.stringify(payload),
       });
 
-      setIsSuccess(true);
-      setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+      if (!response.ok) {
+        throw new Error(`Webhook failed with status ${response.status}`);
+      }
 
+      setIsSuccess(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        service: '',
+        message: '',
+      });
+
+      setTimeout(() => setIsSuccess(false), 5000);
       // Optional: Track conversion in Google Analytics
       if (typeof window !== 'undefined' && (window as any).gtag) {
         (window as any).gtag('event', 'generate_lead', {
