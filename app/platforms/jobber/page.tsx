@@ -481,7 +481,7 @@ export default function JobberPage() {
                 </div>
             </div>
 
-            <p className="note" style={{ marginTop: '24px' } as React.CSSProperties}>If your work is office-based or done online rather than at a customer's property — professional services or client work at a desk — Jobber is the wrong tool, and we would point you to something like <Link href="/platforms/hubspot/" className="link">HubSpot</Link> or <Link href="/platforms/dubsado/" className="link">Dubsado</Link> instead. See also our <Link href="/services/home-services" className="link">home services</Link> work.</p>
+            <p className="note" style={{ marginTop: '24px' } as React.CSSProperties}>If your work is office-based or done online rather than at a customer's property — professional services or client work at a desk — Jobber is the wrong tool, and we would point you to something like <Link href="/platforms/hubspot/" className="link">HubSpot</Link> or <Link href="/platforms/dubsado/" className="link">Dubsado</Link> instead. See also our <Link href="/industries/home-services" className="link">home services</Link> work.</p>
         </div>
     </section>
 
@@ -667,7 +667,7 @@ export default function JobberPage() {
                 <div>
                     <Link href="/contact" className="btn">Discuss your Jobber setup</Link>
                     <div style={{ marginTop: '20px' } as React.CSSProperties}>
-                        <Link href="/services/home-services" className="link">See all CRM implementation services</Link>
+                        <Link href="/services/crm-implementation" className="link">See all CRM implementation services</Link>
                     </div>
                 </div>
             </div>
@@ -776,7 +776,7 @@ export default function JobberPage() {
             <div className="related-links" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', marginTop: '32px' } as React.CSSProperties}>
                 <Link href="/services/crm-implementation" className="link">CRM implementation services</Link>
                 <Link href="/services/marketing" className="link">Marketing services</Link>
-                <Link href="/services/home-services" className="link">Home services</Link>
+                <Link href="/industries/home-services" className="link">Home services</Link>
                 <Link href="/platforms/housecall-pro" className="link">Housecall Pro</Link>
                 <Link href="/platforms/servicetitan" className="link">ServiceTitan</Link>
                 <Link href="/platforms" className="link">All platforms</Link>

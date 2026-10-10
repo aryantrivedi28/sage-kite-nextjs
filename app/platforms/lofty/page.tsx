@@ -592,7 +592,7 @@ export default function LoftyPage() {
               <li style={{ '--c': 'var(--sage)' } as React.CSSProperties}>Lofty and CRM</li>
               <li style={{ '--c': 'var(--coral)' } as React.CSSProperties}><Link href="/services/marketing">Marketing</Link></li>
               <li style={{ '--c': 'var(--sky)' } as React.CSSProperties}>AI and automation</li>
-              <li style={{ '--c': 'var(--ink)' } as React.CSSProperties}><Link href="/services/recruitment-staffing">People</Link></li>
+              <li style={{ '--c': 'var(--ink)' } as React.CSSProperties}><Link href="/services/specialist-staffing">People</Link></li>
               <li style={{ '--c': 'var(--sage)' } as React.CSSProperties}>Execution</li>
               <li style={{ '--c': 'var(--coral)' } as React.CSSProperties}>Growth</li>
             </ul>

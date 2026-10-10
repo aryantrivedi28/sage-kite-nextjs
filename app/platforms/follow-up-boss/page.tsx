@@ -559,7 +559,7 @@ export default function FollowUpBossPage() {
             <div className="conn">
               <Link href="/services/consultancy" style={c('var(--butter)')}><strong>Growth consultancy</strong><span>Which lead sources to invest in and what to change first.</span></Link>
               <Link href="/services/marketing" style={c('var(--coral)')}><strong>Marketing</strong><span>SEO, Google Ads and Meta Ads that bring in your own leads.</span></Link>
-              <Link href="/services/recruitment-staffing" style={c('var(--ink)')}><strong>Lead generation and sales support VA</strong><span>Someone to work Smart Lists, set appointments and update the CRM.</span></Link>
+              <Link href="/services/specialist-staffing#lead-generation-va" style={c('var(--ink)')}><strong>Lead generation and sales support VA</strong><span>Someone to work Smart Lists, set appointments and update the CRM.</span></Link>
               <Link href="/for-agencies" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Follow Up Boss work for your real estate clients, under your brand.</span></Link>
             </div>
           </div>

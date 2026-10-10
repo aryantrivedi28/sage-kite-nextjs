@@ -29,7 +29,7 @@ const SRC = {
   paymentProcessors: 'https://help.dubsado.com/en/articles/580108-connect-a-payment-processor-with-dubsado-payments-square-or-paypal',
   migrateClients: 'https://help.dubsado.com/en/articles/2789241-migrate-existing-clients-into-dubsado-in-2-0',
   bulkImport: 'https://help.dubsado.com/en/articles/1458403-bulk-import-a-client-list-in-2-0',
-  threePointO: 'https://www.dubsado.com/three-point-o',
+  threePointO: 'https://www.dubsado.com/blog/introducing-dubsado-three-point-o',
   changelog: 'https://updates.dubsado.com/',
 };
 

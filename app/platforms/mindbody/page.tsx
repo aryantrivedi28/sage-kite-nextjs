@@ -560,7 +560,7 @@ export default function MindbodyPage() {
             <div className="conn">
               <Link href="/services/consultancy" style={c('var(--butter)')}><strong>Growth consultancy</strong><span>Pricing, intro offers and which members to grow first.</span></Link>
               <Link href="/services/marketing" style={c('var(--coral)')}><strong>Marketing</strong><span>Local SEO, Meta Ads and email that bring in new clients.</span></Link>
-              <Link href="/services/recruitment-staffing" style={c('var(--ink)')}><strong>Social media and marketing VAs</strong><span>Someone to run campaigns, social channels and follow-up.</span></Link>
+              <Link href="/services/specialist-staffing#social-media-va" style={c('var(--ink)')}><strong>Social media and marketing VAs</strong><span>Someone to run campaigns, social channels and follow-up.</span></Link>
               <Link href="/for-agencies" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Mindbody work for your studio clients, under your brand.</span></Link>
             </div>
           </div>

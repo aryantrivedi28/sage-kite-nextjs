@@ -18,7 +18,7 @@ function Src({ href, children }: { href: string; children: React.ReactNode }) {
 
 const DS = {
   help: 'https://help.dubsado.com/en/collections/16716300-dubsado-3-0',
-  threePointO: 'https://www.dubsado.com/three-point-o',
+  threePointO: 'https://www.dubsado.com/blog/introducing-dubsado-three-point-o',
   threePointOBlog: 'https://www.dubsado.com/blog/introducing-dubsado-three-point-o',
   flowActions: 'https://help.dubsado.com/en/articles/15668756-flow-actions',
   flowTriggers: 'https://help.dubsado.com/en/articles/15668762-flow-triggers-general',

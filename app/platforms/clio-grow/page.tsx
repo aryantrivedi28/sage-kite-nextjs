@@ -553,7 +553,7 @@ export default function ClioGrowPage() {
             <div className="conn">
               <Link href="/services/consultancy" style={c('var(--butter)')}><strong>Growth consultancy</strong><span>Which practice areas and referral sources to grow first.</span></Link>
               <Link href="/services/marketing" style={c('var(--coral)')}><strong>Marketing</strong><span>Local SEO and Google Ads that bring in qualified enquiries.</span></Link>
-              <Link href="/services/recruitment-staffing" style={c('var(--ink)')}><strong>Sales support VA</strong><span>Someone to respond to enquiries and book consultations.</span></Link>
+              <Link href="/services/specialist-staffing#lead-generation-va" style={c('var(--ink)')}><strong>Sales support VA</strong><span>Someone to respond to enquiries and book consultations.</span></Link>
               <Link href="/for-agencies" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Clio Grow work for your law firm clients, under your brand.</span></Link>
             </div>
           </div>

@@ -550,7 +550,7 @@ export default function BloomerangPage() {
             <div className="conn">
               <Link href="/services/consultancy" style={c('var(--butter)')}><strong>Growth consultancy</strong><span>Which donors to focus on and what to change first.</span></Link>
               <Link href="/services/marketing" style={c('var(--coral)')}><strong>Marketing</strong><span>Email marketing and SEO that bring in new supporters.</span></Link>
-              <Link href="/services/recruitment-staffing" style={c('var(--ink)')}><strong>CRM and automation VA</strong><span>Someone to keep records clean and gift entry consistent.</span></Link>
+              <Link href="/services/specialist-staffing#crm-automation-va" style={c('var(--ink)')}><strong>CRM and automation VA</strong><span>Someone to keep records clean and gift entry consistent.</span></Link>
               <Link href="/for-agencies" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Bloomerang work for your nonprofit clients, under your brand.</span></Link>
             </div>
           </div>

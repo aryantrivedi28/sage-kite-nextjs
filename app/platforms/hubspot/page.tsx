@@ -553,7 +553,7 @@ export default function HubspotPage() {
             <div className="conn">
               <Link href="/services/consultancy" style={{ '--c': 'var(--butter)' } as React.CSSProperties}><strong>Growth consultancy</strong><span>Decide what the CRM should support before you configure it.</span></Link>
               <Link href="/services/marketing" style={{ '--c': 'var(--coral)' } as React.CSSProperties}><strong>Marketing</strong><span>SEO, paid media and email that feed the pipeline you built.</span></Link>
-              <Link href="/services/recruitment-staffing" style={{ '--c': 'var(--ink)' } as React.CSSProperties}><strong>CRM and automation VA</strong><span>Someone to keep data clean and workflows running after handover.</span></Link>
+              <Link href="/services/specialist-staffing#crm-automation-va" style={{ '--c': 'var(--ink)' } as React.CSSProperties}><strong>CRM and automation VA</strong><span>Someone to keep data clean and workflows running after handover.</span></Link>
               <Link href="/for-agencies" style={{ '--c': 'var(--sky)' } as React.CSSProperties}><strong>White-label for agencies</strong><span>HubSpot builds for your clients, delivered under your brand.</span></Link>
             </div>
           </div>
