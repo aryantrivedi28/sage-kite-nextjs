@@ -28,7 +28,7 @@ schema by hand. The shared template builds all of that from the post file.
 4. **Register it** in `content/blog/index.tsx`:
    ```tsx
    import myNewPost from '@/app/blog/<slug>/post';
-   export const posts: BlogPost[] = [crmFoundation, whatIsDubsado, myNewPost];
+   export const posts: BlogPost[] = [whatIsDubsado, whatIsHoneyBook, myNewPost];
    ```
 5. **Verify** (see section 6).
 
