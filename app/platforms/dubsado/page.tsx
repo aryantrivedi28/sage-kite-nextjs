@@ -621,7 +621,7 @@ export default function DubsadoPage() {
              </div>
            </div>
            <div className="mid-cta" style={{ marginTop: 'clamp(32px,4vw,44px)' }}>
-             <Link href="#contact" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Talk to a Dubsado specialist</Link>
+             <Link href="/contact" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Talk to a Dubsado specialist</Link>
              <span style={{ fontSize: '0.9rem', color: 'var(--ink)' }}>Scope, exclusions and a fixed project price are agreed before any build starts.</span>
            </div>
         </section>
@@ -713,7 +713,7 @@ export default function DubsadoPage() {
                </p>
              </div>
              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'flex-start' }}>
-               <Link href="#contact" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Discuss your Dubsado setup</Link>
+               <Link href="/contact" className="btn" style={{ background: 'var(--coral)', borderColor: 'var(--coral)' }}>Discuss your Dubsado setup</Link>
                <Link href="/platforms" style={{ fontWeight: 600, color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '6px' }}>See all CRM implementation services</Link>
              </div>
            </div>
