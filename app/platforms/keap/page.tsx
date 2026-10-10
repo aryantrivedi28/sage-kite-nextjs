@@ -554,7 +554,7 @@ export default function KeapPage() {
               <Link href="/services/consultancy" style={c('var(--butter)')}><strong>Growth consultancy</strong><span>Decide what your sales process should be before you automate it.</span></Link>
               <Link href="/services/marketing" style={c('var(--coral)')}><strong>Marketing</strong><span>SEO, paid media and email that fill the pipeline you built.</span></Link>
               <Link href="/services/specialist-staffing#crm-automation-va" style={c('var(--ink)')}><strong>CRM and automation VA</strong><span>Someone to keep contacts clean and automations running.</span></Link>
-              <Link href="/for-agencies" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Keap builds for your clients, delivered under your brand.</span></Link>
+              <Link href="/services/white-label" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Keap builds for your clients, delivered under your brand.</span></Link>
             </div>
           </div>
         </section>

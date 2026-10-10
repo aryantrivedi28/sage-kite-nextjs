@@ -560,7 +560,7 @@ export default function KajabiPage() {
               <Link href="/services/consultancy" style={c('var(--butter)')}><strong>Growth consultancy</strong><span>Offer structure, pricing and launch plans before anything is built.</span></Link>
               <Link href="/services/marketing" style={c('var(--coral)')}><strong>Marketing</strong><span>Email marketing, Meta Ads and SEO that fill your funnels.</span></Link>
               <Link href="/services/specialist-staffing#email-marketing-va" style={c('var(--ink)')}><strong>Email and social media VAs</strong><span>Someone to run broadcasts, launches and community day to day.</span></Link>
-              <Link href="/for-agencies" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Kajabi builds for your clients, delivered under your brand.</span></Link>
+              <Link href="/services/white-label" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Kajabi builds for your clients, delivered under your brand.</span></Link>
             </div>
           </div>
         </section>

@@ -155,8 +155,8 @@ The essentials:
 
 ## Known gaps (do not "fix" these without asking)
 
-- `/insights` (index page) and `/for-agencies` do not exist yet. Platform pages
-  link to `/for-agencies`; `/services/white-label` is the agency page that exists today.
+- `/insights` (index page) does not exist yet. There is no `/for-agencies` page:
+  agency links go to `/services/white-label`.
 - Every homepage industry card has its own page. On `/industries`, the
   "Client-based service businesses" and "Everyone else" rows have no page yet.
 - The `/contact` form posts straight from the browser to a GoHighLevel inbound

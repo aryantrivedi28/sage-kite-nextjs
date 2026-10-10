@@ -559,7 +559,7 @@ export default function ServiceTitanPage() {
               <Link href="/services/consultancy" style={c('var(--butter)')}><strong>Growth consultancy</strong><span>Which services, areas and memberships to grow first.</span></Link>
               <Link href="/services/marketing" style={c('var(--coral)')}><strong>Marketing</strong><span>Local SEO, Google Ads and email that bring in booked calls.</span></Link>
               <Link href="/services/specialist-staffing#crm-automation-va" style={c('var(--ink)')}><strong>CRM and automation VA</strong><span>Someone to keep the pricebook, records and follow-up tidy.</span></Link>
-              <Link href="/for-agencies" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>ServiceTitan work for your trade clients, under your brand.</span></Link>
+              <Link href="/services/white-label" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>ServiceTitan work for your trade clients, under your brand.</span></Link>
             </div>
           </div>
         </section>

@@ -557,7 +557,7 @@ export default function HousecallProPage() {
               <Link href="/services/consultancy" style={c('var(--butter)')}><strong>Growth consultancy</strong><span>Which services, areas and customers to grow first.</span></Link>
               <Link href="/services/marketing" style={c('var(--coral)')}><strong>Marketing</strong><span>Local SEO and Google Ads that bring in booked jobs.</span></Link>
               <Link href="/services/specialist-staffing#crm-automation-va" style={c('var(--ink)')}><strong>CRM and automation VA</strong><span>Someone to follow up estimates and keep records clean.</span></Link>
-              <Link href="/for-agencies" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Housecall Pro work for your trade clients, under your brand.</span></Link>
+              <Link href="/services/white-label" style={c('var(--sky)')}><strong>White-label for agencies</strong><span>Housecall Pro work for your trade clients, under your brand.</span></Link>
             </div>
           </div>
         </section>
