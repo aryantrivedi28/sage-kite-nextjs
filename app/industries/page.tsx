@@ -91,7 +91,7 @@ const industries: Industry[] = [
     limit: "A cleaner funnel won't rescue an offer people don't want. If conversion is low at every step, look at the offer first.",
   },
   {
-    id: "service-businesses", name: "Client-based service businesses", color: "var(--sage)",
+    id: "service-businesses", name: "Client-based service businesses", color: "var(--sage)", page: "/industries/service-businesses",
     shape: { label: "Considered", color: CONSIDERED },
     who: "Photographers, planners, designers, consultants and studios working project by project.",
     problem: "Enquiry, questionnaire, proposal, contract, deposit, scheduling, reminders, final payment, handover. Each step is simple. Fifteen of them across thirty clients at different stages is where things slip, usually between the signed contract and the final invoice.",
@@ -118,7 +118,7 @@ const industries: Industry[] = [
     limit: "Major donors need relationships, not sequences. Automation can remind you to call. It shouldn't do the calling.",
   },
   {
-    id: "cross-industry", name: "Everyone else", color: "var(--sage)",
+    id: "cross-industry", name: "Everyone else", color: "var(--sage)", page: "/industries/other-businesses",
     shape: { label: "Any shape", color: 'var(--sage)' },
     who: "Clinics, agencies, B2B firms and businesses that don't fit an industry platform.",
     problem: "Not every business fits a vertical platform, and plenty shouldn't try. A multi-location clinic, a B2B consultancy or a growing agency often needs a general CRM shaped around its own process instead.",
