@@ -45,10 +45,12 @@ import whatIsHoneyBook from '@/app/blog/what-is-honeybook/post';
 import dubsadoVsHoneyBook from '@/app/blog/dubsado-vs-honeybook/post';
 import aiMarketingAutomationMistakes from '@/app/blog/ai-marketing-automation-mistakes/post';
 import dubsadoSetupServices from '@/app/blog/dubsado-setup-services/post';
+import dubsadoForInteriorDesigners from '@/app/blog/dubsado-for-interior-designers/post';
+import automateServiceBusinessHoneyBook from '@/app/blog/automate-service-business-honeybook/post';
 
 export * from './types';
 
-export const posts: BlogPost[] = [whatIsDubsado, whatIsHoneyBook, dubsadoVsHoneyBook, aiMarketingAutomationMistakes, dubsadoSetupServices];
+export const posts: BlogPost[] = [whatIsDubsado, whatIsHoneyBook, dubsadoVsHoneyBook, aiMarketingAutomationMistakes, dubsadoSetupServices, dubsadoForInteriorDesigners, automateServiceBusinessHoneyBook];
 
 /* ─────────────────────────── Selectors ─────────────────────────────────── */
 

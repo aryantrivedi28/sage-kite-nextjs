@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jiva Ayurveda Case Study</title>
+<meta name="description" content="How an Ayurvedic healthcare brand moved beyond branded search: organic traffic grew from 22,000 to 130,000+ monthly visitors and monthly organic revenue from ₹5–6L to ₹25L.">
+<meta property="og:title" content="Jiva Ayurveda: from brand searches to ₹25L a month in organic revenue">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap">
+<style>
+/* Layout concept: a light editorial case study where every section carries one working graphic.
+   Hero typed-search demo, before/after search-flow diagram, rising process line, add-a-page linking demo, scale-true results. */
+:root {
+  --bg: #F7F5EE;
+  --fg: #344033;
+  --muted: #566456;
+  --line: #D5DDD2;
+  --pale: #E9EEE7;
+  --sage: #596B57;
+  --ink: #243746;
+  --coral: #D96F4F;
+  --coral-hover: #c75f40;
+  --on-coral: #1d2b36;
+  --sky: #4F82A3;
+  --sky-text: #2f5f80;
+  --butter: #EFC75E;
+  --coral-soft: #F5D6CA;
+  --sky-soft: #C9E0EB;
+  --sky-wash: #E4EFF5;
+  --butter-soft: #F7E6A8;
+  --card: #FFFFFF;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Manrope", Arial, Helvetica, sans-serif;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 1.0625rem/1.7 var(--font-body); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p, ul, ol, dl, dd, figure, blockquote { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; border-radius: 4px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.wrap { width: 100%; max-width: 1180px; margin-inline: auto; padding-inline: clamp(16px, 4vw, 40px); }
+.band { padding-block: clamp(56px, 8vw, 104px); }
+.band--pale { background: var(--pale); }
+.band--sky { background: var(--sky-wash); }
+
+.display { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; text-wrap: balance; color: var(--ink); }
+h1.display { font-size: clamp(2.35rem, 5.2vw, 4.1rem); line-height: 1.04; }
+h2.display { font-size: clamp(1.9rem, 3.6vw, 2.9rem); line-height: 1.1; }
+h3 { font-weight: 700; font-size: 1.1rem; line-height: 1.35; color: var(--ink); }
+.lede { font-size: clamp(1.1rem, 1.6vw, 1.25rem); line-height: 1.65; color: var(--muted); max-width: 60ch; }
+.kicker { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 0.9rem; color: var(--sky-text); }
+.ribbon { display: inline-flex; gap: 3px; }
+.ribbon i { display: block; width: 18px; height: 6px; border-radius: 2px; transform-origin: left; animation: ribbon 700ms cubic-bezier(.2,.7,.2,1) both; }
+.ribbon i:nth-child(1) { background: var(--coral); }
+.ribbon i:nth-child(2) { background: var(--butter); animation-delay: 90ms; }
+.ribbon i:nth-child(3) { background: var(--sky); animation-delay: 180ms; }
+@keyframes ribbon { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.section-head { display: grid; gap: 18px; margin-bottom: clamp(32px, 5vw, 56px); }
+.section-head--tight { margin-bottom: 0; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 24px; border-radius: 999px; border: 0; font: 700 0.98rem/1 var(--font-body); text-decoration: none; background: var(--coral); color: var(--on-coral); transition: background 180ms ease, transform 180ms ease; }
+.btn:hover { background: var(--coral-hover); transform: translateY(-1px); }
+.btn--ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); min-height: 42px; padding: 9px 18px; font-size: 0.9rem; }
+.btn--ghost:hover { background: var(--ink); color: var(--bg); }
+.link-quiet { font-weight: 600; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
+.link-quiet:hover { color: var(--coral); }
+
+.progress { position: fixed; inset: 0 0 auto 0; height: 4px; background: var(--coral); transform: scaleX(0); transform-origin: left; z-index: 50; }
+
+/* header */
+.site-header { border-top: 5px solid var(--butter); border-bottom: 1px solid var(--line); background: var(--bg); }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 72px; }
+.wordmark { font-family: var(--font-display); font-weight: 500; font-size: 1.65rem; letter-spacing: -0.02em; color: var(--sage); text-decoration: none; }
+.nav { display: none; gap: 28px; font-weight: 600; font-size: 0.95rem; }
+.nav a { text-decoration: none; }
+.nav a:hover { color: var(--coral); }
+@media (min-width: 960px) { .nav { display: flex; } }
+.site-header .btn { min-height: 44px; padding: 10px 20px; font-size: 0.92rem; }
+
+/* hero */
+.hero { padding-block: clamp(36px, 6vw, 80px) clamp(48px, 7vw, 88px); }
+.crumbs { font-size: 0.9rem; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.hero-grid { display: grid; gap: clamp(36px, 6vw, 72px); align-items: start; }
+@media (min-width: 960px) { .hero-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
+.hero-copy { display: grid; gap: 24px; }
+.hero-sub { font-family: var(--font-display); font-style: italic; font-size: clamp(1.25rem, 2.2vw, 1.6rem); line-height: 1.3; color: var(--sage); max-width: 36ch; }
+.badge { display: inline-flex; align-items: center; gap: 10px; align-self: start; padding: 8px 14px; border-radius: 999px; background: var(--sky-soft); color: var(--ink); font-weight: 600; font-size: 0.86rem; line-height: 1.3; }
+.badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--sky); flex: none; }
+.hero-visual { display: grid; gap: 28px; }
+
+.search { background: var(--sky-wash); border: 1px solid var(--sky-soft); border-radius: 10px; padding: 20px; display: grid; gap: 14px; }
+.search-bar { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1.5px solid var(--sky); border-radius: 999px; padding: 12px 18px; min-height: 52px; box-shadow: 0 2px 0 var(--sky-soft); }
+.search-bar svg { flex: none; }
+.typed { font-weight: 600; color: var(--ink); font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.caret { width: 2px; height: 1.2em; background: var(--coral); margin-left: -8px; animation: blink 1s steps(1) infinite; flex: none; }
+@keyframes blink { 50% { opacity: 0; } }
+.search-result { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; min-height: 2.6em; font-size: 0.93rem; line-height: 1.4; }
+.tag { padding: 3px 12px; border-radius: 999px; font-weight: 700; font-size: 0.8rem; background: var(--butter-soft); color: var(--ink); transition: background 200ms ease; }
+.tag[data-kind="disease"] { background: var(--coral-soft); }
+.tag[data-kind="city"] { background: var(--sky-soft); }
+.search figcaption { font-size: 0.8rem; color: var(--muted); }
+
+.glance { position: relative; isolation: isolate; }
+.glance::before { content: ""; position: absolute; inset: 12px -12px -12px 12px; background: var(--butter-soft); border-radius: 6px; z-index: -1; }
+.glance-card { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: clamp(20px, 3vw, 28px); overflow: hidden; position: relative; }
+.glance-card::after { content: ""; position: absolute; top: 0; right: 0; width: 56px; height: 56px; background: var(--coral-soft); clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.glance h2 { font-family: var(--font-display); font-weight: 500; font-size: 1.4rem; letter-spacing: -0.01em; margin-bottom: 10px; color: var(--ink); }
+.glance .row { display: grid; grid-template-columns: 7.2rem minmax(0, 1fr); gap: 12px; padding-block: 11px; border-top: 1px solid var(--line); font-size: 0.95rem; line-height: 1.45; }
+.glance dt { color: var(--muted); font-weight: 500; }
+.glance dd { font-weight: 600; }
+
+/* metrics */
+.metrics { display: grid; gap: 14px; }
+@media (min-width: 640px) { .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1040px) { .metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.metric { padding: 26px 24px 24px; border-radius: 6px; color: var(--ink); display: grid; gap: 10px; align-content: space-between; min-height: 164px; }
+.metric--sky { background: var(--sky-soft); }
+.metric--butter { background: var(--butter-soft); }
+.metric--coral { background: var(--coral-soft); }
+.metric--sage { background: var(--pale); border: 1px solid var(--line); }
+.metric b { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 3.2vw, 2.7rem); line-height: 1.05; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.metric span.lab { font-weight: 600; font-size: 0.92rem; line-height: 1.4; }
+.footnote { margin-top: 18px; font-size: 0.88rem; color: var(--muted); max-width: 80ch; }
+
+/* split */
+.split { display: grid; gap: clamp(28px, 5vw, 72px); }
+@media (min-width: 900px) { .split { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); } .split--sticky > :first-child { position: sticky; top: 24px; align-self: start; } }
+.prose { display: grid; gap: 20px; }
+.prose p { max-width: 62ch; }
+.drivers { display: grid; gap: 10px; }
+.drivers li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 14px; align-items: baseline; font-weight: 600; }
+.drivers li::before { content: ""; width: 14px; height: 14px; border-radius: 3px; background: var(--sky); transform: translateY(2px); }
+.drivers li:nth-child(2)::before { background: var(--butter); }
+.drivers li:nth-child(3)::before { background: var(--coral); }
+.audience { display: grid; gap: 14px; }
+@media (min-width: 640px) { .audience { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.audience li { display: grid; gap: 10px; align-content: start; padding: 18px; border-radius: 6px; background: var(--card); border: 1px solid var(--line); font-weight: 500; line-height: 1.5; }
+.audience svg { width: 40px; height: 40px; }
+.callout { background: var(--butter-soft); color: var(--ink); border-radius: 6px; padding: clamp(22px, 3vw, 32px); display: grid; gap: 8px; }
+.callout .display { font-size: clamp(1.4rem, 2.4vw, 1.8rem); line-height: 1.25; }
+.callout p { max-width: 58ch; }
+
+/* problem */
+.problems { display: grid; gap: 0 clamp(28px, 4vw, 56px); }
+@media (min-width: 760px) { .problems { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.problems li { padding-block: 22px; border-top: 1px solid var(--line); display: grid; gap: 6px; align-content: start; }
+.problems h3 { display: flex; align-items: center; gap: 12px; }
+.problems h3 i { width: 12px; height: 12px; border-radius: 3px; background: var(--coral); flex: none; }
+.problems li:nth-child(2) h3 i { background: var(--butter); }
+.problems li:nth-child(3) h3 i { background: var(--sky); }
+.problems li:nth-child(4) h3 i { background: var(--sage); }
+.problems p { color: var(--muted); max-width: 52ch; }
+
+.sim { margin-top: clamp(36px, 5vw, 56px); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: clamp(18px, 3vw, 32px); display: grid; gap: 20px; }
+.sim-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; }
+.sim-top h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.5rem; letter-spacing: -0.01em; }
+.seg { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: transparent; color: var(--ink); border-radius: 999px; padding: 9px 18px; font-weight: 700; font-size: 0.9rem; min-height: 40px; transition: background 180ms ease, color 180ms ease; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.scroll { overflow-x: auto; }
+.scroll svg { display: block; width: 100%; min-width: 620px; height: auto; }
+.sim-caption { font-size: 0.95rem; color: var(--muted); max-width: 70ch; min-height: 3.4em; }
+.note { font-size: 0.82rem; color: var(--muted); }
+
+.flow-ok { stroke: var(--sky); stroke-width: 3; fill: none; stroke-dasharray: 7 9; animation: dash 1.3s linear infinite; }
+.flow-lost { stroke: var(--coral); stroke-width: 3; fill: none; stroke-dasharray: 3 10; animation: dash 1.8s linear infinite; opacity: .85; }
+@keyframes dash { to { stroke-dashoffset: -64; } }
+#flow[data-state="before"] .s-after { display: none; }
+#flow[data-state="after"] .s-before { display: none; }
+#flow[data-state="after"] .comp-box { opacity: .35; }
+.fl-text { font-family: var(--font-body); fill: var(--ink); }
+
+.pull { margin-top: clamp(40px, 6vw, 72px); }
+.pull p { font-family: var(--font-display); font-style: italic; font-size: clamp(1.6rem, 3.2vw, 2.5rem); line-height: 1.2; letter-spacing: -0.015em; max-width: 30ch; text-wrap: balance; color: var(--ink); }
+.pull p::before { content: ""; display: block; width: 56px; height: 5px; background: var(--butter); margin-bottom: 22px; border-radius: 2px; }
+
+/* approach */
+.diagnosis { display: grid; gap: 12px; }
+.diagnosis li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; }
+.diagnosis li::before { content: ""; width: 22px; height: 2px; background: var(--sky); margin-top: 0.85em; }
+.lift { display: none; margin-top: clamp(32px, 5vw, 56px); }
+@media (min-width: 1040px) { .lift { display: block; } }
+.lift svg { width: 100%; height: auto; display: block; }
+.steps { display: grid; gap: 16px; margin-top: 8px; }
+@media (min-width: 640px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1040px) { .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; margin-top: 0; } .step:nth-child(1) { margin-top: 64px; } .step:nth-child(2) { margin-top: 42px; } .step:nth-child(3) { margin-top: 20px; } }
+.step { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 24px 22px 26px; display: grid; gap: 10px; border-top: 5px solid var(--sky); }
+.step:nth-child(2) { border-top-color: var(--sage); }
+.step:nth-child(3) { border-top-color: var(--butter); }
+.step:nth-child(4) { border-top-color: var(--coral); }
+.step-n { font-family: var(--font-display); font-size: 3rem; line-height: 1; color: var(--sage); letter-spacing: -0.03em; }
+.step p { font-size: 0.97rem; line-height: 1.6; color: var(--muted); }
+
+/* delivered */
+.bento { display: grid; gap: 16px; }
+@media (min-width: 720px) { .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1040px) { .bento { grid-template-columns: repeat(6, minmax(0, 1fr)); } .b-a, .b-b, .b-c { grid-column: span 2; } .b-d { grid-column: span 4; } .b-e { grid-column: span 2; } }
+.tile { border-radius: 8px; padding: clamp(22px, 3vw, 30px); color: var(--ink); display: grid; gap: 12px; align-content: start; }
+.tile--sky { background: var(--sky-soft); }
+.tile--coral { background: var(--coral-soft); }
+.tile--butter { background: var(--butter-soft); }
+.tile--sage { background: var(--pale); border: 1px solid var(--line); }
+.tile--white { background: var(--card); border: 1px solid var(--line); }
+.tile h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.5rem; letter-spacing: -0.01em; line-height: 1.15; }
+.tile p { font-size: 0.99rem; line-height: 1.6; }
+.tile-tag { font-weight: 700; font-size: 0.82rem; opacity: 0.85; }
+.venn { width: 100%; max-width: 220px; height: auto; justify-self: center; }
+.venn circle { animation: drift 6s ease-in-out infinite alternate; }
+.venn circle:nth-child(2) { animation-delay: -2s; }
+.venn circle:nth-child(3) { animation-delay: -4s; }
+@keyframes drift { from { transform: translate(0, 0); } to { transform: translate(3px, -3px); } }
+.pagecard { display: grid; gap: 10px; padding: 12px 14px; background: var(--card); border-radius: 6px; font-size: 0.95rem; }
+.pagecard b { font-weight: 700; }
+.pagecard span { color: var(--muted); font-size: 0.85rem; }
+.pagecard i { display: block; height: 6px; border-radius: 3px; background: var(--coral-soft); }
+.pagecard i:nth-of-type(2) { width: 70%; }
+.pagecard i:nth-of-type(3) { width: 85%; }
+
+.arch { grid-column: 1 / -1; }
+.arch-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.arch-status { font-size: 0.95rem; min-height: 3.2em; max-width: 72ch; }
+.arch-svg text { font-family: var(--font-body); }
+.draw { stroke-dasharray: 400; stroke-dashoffset: 400; animation: drawin 700ms ease-out forwards; }
+@keyframes drawin { to { stroke-dashoffset: 0; } }
+.pop { transform-box: fill-box; transform-origin: center; animation: pop 450ms cubic-bezier(.2,1.4,.4,1) both; }
+@keyframes pop { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.tree { font-size: 0.93rem; line-height: 1.5; display: grid; gap: 4px; }
+.tree ul { margin-left: 10px; padding-left: 18px; border-left: 2px solid var(--sage); display: grid; gap: 6px; margin-top: 6px; }
+.tree li { position: relative; }
+.tree ul > li::before { content: ""; position: absolute; left: -18px; top: 0.8em; width: 14px; height: 2px; background: var(--sage); }
+.tree b { background: var(--card); padding: 2px 10px; border-radius: 4px; border: 1px solid var(--line); font-weight: 700; display: inline-block; }
+.tree em { font-style: normal; color: var(--muted); font-size: 0.85rem; }
+
+/* results */
+.results { display: grid; gap: 18px; }
+@media (min-width: 900px) { .results { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.rcard { background: var(--card); border: 1px solid var(--sky-soft); border-radius: 10px; padding: clamp(22px, 3vw, 32px); display: grid; gap: 22px; align-content: start; }
+.rcard-top { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.mult { font-family: var(--font-display); font-size: clamp(3rem, 6vw, 4.6rem); line-height: 1; letter-spacing: -0.03em; color: var(--coral); font-variant-numeric: tabular-nums; }
+.bars { display: grid; gap: 14px; }
+.bar { display: grid; gap: 6px; }
+.bar-label { display: flex; justify-content: space-between; gap: 12px; font-size: 0.92rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
+.bar-label span:first-child { color: var(--muted); font-weight: 500; }
+.bar-track { height: 20px; border-radius: 4px; background: var(--pale); overflow: hidden; }
+.bar-fill { height: 100%; width: var(--w); background: #98AA97; transform-origin: left center; animation: grow 1000ms 200ms cubic-bezier(.2,.7,.2,1) both; }
+.bar-fill--after { background: var(--sky); }
+.bar-fill--range { background: linear-gradient(90deg, #98AA97 0 var(--solid), #C4D0C3 var(--solid) 100%); }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.rtexts { display: grid; gap: 18px; }
+@media (min-width: 900px) { .rtexts { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.rtext { background: var(--card); border-radius: 10px; padding: clamp(20px, 3vw, 28px); border-left: 6px solid var(--sky); display: grid; gap: 8px; align-content: start; }
+.rtext:nth-child(2) { border-left-color: var(--coral); }
+.rtext h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.35rem; line-height: 1.2; }
+.rtext p { color: var(--muted); max-width: 48ch; }
+
+/* changes */
+.changes { display: grid; gap: 16px; }
+@media (min-width: 720px) { .changes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.change { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: clamp(22px, 3vw, 30px); display: grid; gap: 12px; align-content: start; }
+.change-icon { width: 64px; height: 64px; border-radius: 12px; display: grid; place-items: center; }
+.change:nth-child(1) .change-icon { background: var(--sky-soft); }
+.change:nth-child(2) .change-icon { background: var(--butter-soft); }
+.change:nth-child(3) .change-icon { background: var(--coral-soft); }
+.change:nth-child(4) .change-icon { background: var(--pale); }
+.change-icon svg { width: 44px; height: 44px; }
+.change h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.45rem; line-height: 1.2; letter-spacing: -0.01em; }
+.change p { color: var(--muted); max-width: 52ch; }
+.ripple { transform-box: fill-box; transform-origin: center; animation: ripple 2.4s ease-out infinite; }
+.ripple:nth-child(2) { animation-delay: .8s; }
+.ripple:nth-child(3) { animation-delay: 1.6s; }
+@keyframes ripple { from { transform: scale(.3); opacity: 1; } to { transform: scale(1); opacity: 0; } }
+.hop { animation: hop 2s ease-in-out infinite alternate; }
+@keyframes hop { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+.grow-bar { transform-box: fill-box; transform-origin: bottom; animation: pulsebar 2.4s ease-in-out infinite alternate; }
+.grow-bar:nth-child(2) { animation-delay: .3s; }
+.grow-bar:nth-child(3) { animation-delay: .6s; }
+@keyframes pulsebar { from { transform: scaleY(.8); } to { transform: scaleY(1); } }
+.blink-node { animation: nodepulse 2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.blink-node:nth-of-type(2) { animation-delay: .5s; }
+.blink-node:nth-of-type(3) { animation-delay: 1s; }
+@keyframes nodepulse { 50% { transform: scale(1.35); } }
+
+/* tools */
+.tools { display: grid; gap: 12px; }
+@media (min-width: 760px) { .tools { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tools li { display: grid; gap: 2px; padding: 16px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; border-left: 6px solid var(--sky); transition: transform 180ms ease; }
+.tools li:nth-child(2) { border-left-color: var(--butter); }
+.tools li:nth-child(3) { border-left-color: var(--coral); }
+.tools li:nth-child(4) { border-left-color: var(--sage); }
+.tools li:hover { transform: translateX(4px); }
+.tools b { font-weight: 700; color: var(--ink); }
+.tools span { color: var(--muted); font-size: 0.95rem; }
+
+/* takeaway */
+.takeaway-panel { background: var(--butter-soft); border-radius: 12px; padding: clamp(28px, 5vw, 64px); display: grid; gap: clamp(28px, 4vw, 44px); color: var(--ink); }
+.takeaway-panel h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.9rem, 4vw, 3.1rem); line-height: 1.12; letter-spacing: -0.02em; max-width: 24ch; text-wrap: balance; }
+.takeaway-panel p.body { max-width: 62ch; }
+.versus { display: grid; gap: 16px; }
+@media (min-width: 760px) { .versus { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.versus figure { background: var(--card); border-radius: 8px; padding: 18px; display: grid; gap: 10px; }
+.versus svg { width: 100%; height: auto; max-height: 220px; }
+.versus figcaption { font-weight: 700; font-size: 0.95rem; }
+.versus figcaption span { display: block; font-weight: 500; font-size: 0.85rem; color: var(--muted); }
+.pulse { animation: nodepulse 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.fit { display: flex; flex-wrap: wrap; gap: 10px; }
+.fit li { padding: 8px 16px; border-radius: 999px; background: var(--card); color: var(--ink); font-weight: 700; font-size: 0.92rem; }
+.fit-label { font-weight: 600; font-size: 0.95rem; }
+
+/* about + cta */
+.about { display: grid; gap: 16px; padding: clamp(22px, 3vw, 32px); border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+.about .display { font-size: 1.5rem; line-height: 1.2; }
+.about p { color: var(--muted); max-width: 64ch; }
+.cta { background: var(--coral-soft); color: var(--ink); border-radius: 12px; padding: clamp(28px, 5vw, 56px); display: grid; gap: 20px; margin-top: 28px; position: relative; overflow: hidden; }
+.cta::after { content: ""; position: absolute; right: 0; bottom: 0; width: clamp(80px, 14vw, 180px); height: clamp(80px, 14vw, 180px); background: var(--butter); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+.cta .display { font-size: clamp(1.8rem, 3.4vw, 2.7rem); line-height: 1.12; max-width: 24ch; }
+.cta p { max-width: 54ch; }
+.cta-actions { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: center; position: relative; z-index: 1; }
+.cta .btn { background: var(--ink); color: #F7F5EE; }
+.cta .btn:hover { background: #344c5e; }
+.footer { padding-block: 40px; border-top: 1px solid var(--line); margin-top: clamp(48px, 7vw, 88px); font-size: 0.9rem; color: var(--muted); }
+.footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.footer strong { font-family: var(--font-display); font-weight: 500; font-size: 1.1rem; color: var(--sage); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .draw { stroke-dashoffset: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="/" aria-label="Sage Kite home">Sage Kite</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/services">Services</a>
+      <a href="/platforms">Platforms</a>
+      <a href="/industries">Industries</a>
+      <a href="/for-agencies">For agencies</a>
+      <a href="/insights">Insights</a>
+      <a href="/about">About</a>
+    </nav>
+    <a class="btn" href="/contact">Book a discovery call</a>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="title">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/work">Work</a><span aria-hidden="true">/</span><span>Jiva Ayurveda</span></nav>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Case study · Search and discovery</p>
+          <h1 id="title" class="display">How Jiva Ayurveda grew from 22,000 to 130,000+ monthly organic visitors</h1>
+          <p class="hero-sub">Turning brand-dependent traffic into a ₹25L-a-month organic revenue engine.</p>
+          <p class="lede">Jiva Ayurveda is a healthcare and Ayurvedic treatment brand. Its growth had hit a ceiling because most visits came from people who already knew its name. A rebuilt content architecture, city-level pages and a structured internal linking system opened up the patients who didn't.</p>
+          <p class="badge">Previous work by a Sage Kite delivery specialist</p>
+        </div>
+
+        <div class="hero-visual">
+          <figure class="search" aria-label="Illustrative searches: a brand search, a disease search and a city search, each now answered by a matching page type">
+            <div class="search-bar" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#243746" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="9" r="6.5"/><line x1="14" y1="14" x2="20" y2="20"/></svg>
+              <span class="typed" id="typed">Jiva Ayurveda</span><span class="caret"></span>
+            </div>
+            <div class="search-result" aria-hidden="true"><span class="tag" id="tag" data-kind="brand">Brand search</span><span id="note">Already reached the site</span></div>
+            <figcaption>Illustrative searches, not measured data.</figcaption>
+          </figure>
+
+          <aside class="glance" aria-labelledby="glance-title">
+            <div class="glance-card">
+              <h2 id="glance-title">At a glance</h2>
+              <dl>
+                <div class="row"><dt>Client</dt><dd>Jiva Ayurveda</dd></div>
+                <div class="row"><dt>Industry</dt><dd>Healthcare and Ayurvedic treatment</dd></div>
+                <div class="row"><dt>Engagement</dt><dd>Enterprise SEO consulting</dd></div>
+                <div class="row"><dt>Consultant</dt><dd>Sangram Singh</dd></div>
+              </dl>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METRICS -->
+  <section aria-label="Headline results">
+    <div class="wrap">
+      <div class="metrics">
+        <div class="metric metric--sky"><b><span class="cnt" data-to="22">22</span>K to <span class="cnt" data-to="130">130</span>K+</b><span class="lab">Monthly organic traffic</span></div>
+        <div class="metric metric--butter"><b>₹<span class="cnt" data-to="5">5</span>–<span class="cnt" data-to="6">6</span>L to ₹<span class="cnt" data-to="25">25</span>L</b><span class="lab">Monthly organic revenue</span></div>
+        <div class="metric metric--coral"><b>~<span class="cnt" data-to="6">6</span>×</b><span class="lab">Traffic growth</span></div>
+        <div class="metric metric--sage"><b>~<span class="cnt" data-to="4">4</span>–<span class="cnt" data-to="5">5</span>×</b><span class="lab">Revenue growth</span></div>
+      </div>
+      <p class="footnote">₹25L is ₹25 lakh, or ₹2.5 million. Figures are as reported by the delivery specialist for this engagement.</p>
+    </div>
+  </section>
+
+  <!-- STARTING POINT -->
+  <section class="band" aria-labelledby="bg-title">
+    <div class="wrap split split--sticky">
+      <div class="section-head section-head--tight">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>The starting point</p>
+        <h2 id="bg-title" class="display">A known brand with real demand around it, and a site that wasn't built to capture it</h2>
+      </div>
+      <div class="prose">
+        <p>Jiva Ayurveda works in healthcare and wellness, offering Ayurvedic treatments and consultations for a range of medical conditions. It brought in an SEO consultant to fix a growth ceiling caused by heavy reliance on branded search traffic. The growth came from three changes:</p>
+        <ul class="drivers">
+          <li>A rebuilt content architecture</li>
+          <li>City-level local pages</li>
+          <li>A structured internal linking system</li>
+        </ul>
+        <p>Its audience is made up of two groups of searchers:</p>
+        <ul class="audience">
+          <li>
+            <svg viewBox="0 0 40 40" fill="none" stroke="#243746" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="17" cy="17" r="10"/><line x1="25" y1="25" x2="35" y2="35"/><line x1="17" y1="12" x2="17" y2="22" stroke="#D96F4F"/><line x1="12" y1="17" x2="22" y2="17" stroke="#D96F4F"/></svg>
+            Patients searching for disease-specific and treatment-specific solutions
+          </li>
+          <li>
+            <svg viewBox="0 0 40 40" fill="none" stroke="#243746" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 36 C12 26 8 21 8 15 a12 12 0 0 1 24 0 c0 6-4 11-12 21z"/><circle cx="20" cy="15" r="4.5" stroke="#4F82A3"/></svg>
+            People looking for Ayurvedic doctors and clinics in their city
+          </li>
+        </ul>
+        <p>When the engagement began, Jiva Ayurveda was an established brand with decent traffic, but its growth had plateaued. Most of its visibility came from people who already knew the brand name and searched for it directly, rather than from new patients finding it through disease or treatment searches.</p>
+        <div class="callout">
+          <p class="display">Scaling, but capped.</p>
+          <p>Real demand existed in the market. The website wasn't built to capture it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="band band--pale" aria-labelledby="problem-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>The problem</p>
+        <h2 id="problem-title" class="display">The issue was the type of traffic the site was getting, not the amount</h2>
+      </div>
+      <ul class="problems">
+        <li><h3><i aria-hidden="true"></i>Branded search dependence</h3><p>Most organic visits came from people typing "Jiva Ayurveda" directly. The site was capturing people who already knew the brand and wasn't winning any new demand.</p></li>
+        <li><h3><i aria-hidden="true"></i>No structured disease pages</h3><p>Patients searching for specific conditions, the highest-intent and most valuable searches in healthcare, had no dedicated, well-optimized pages to land on. That demand went to competitors.</p></li>
+        <li><h3><i aria-hidden="true"></i>No city-level pages</h3><p>Despite strong local search demand for Ayurvedic treatment "near me" or by city, no location-based landing pages existed, so entire pockets of local demand were left on the table.</p></li>
+        <li><h3><i aria-hidden="true"></i>Weak internal linking</h3><p>Diseases, treatments and cities weren't connected on the site, so even the existing content wasn't passing authority or guiding users (or Google) between related pages effectively.</p></li>
+      </ul>
+
+      <div class="sim">
+        <div class="sim-top">
+          <h3>Where three kinds of searches ended up</h3>
+          <div class="seg" role="group" aria-label="Choose a state to show">
+            <button type="button" id="b-before" aria-pressed="true">Before</button>
+            <button type="button" id="b-after" aria-pressed="false">After</button>
+          </div>
+        </div>
+        <div class="scroll">
+          <svg id="flow" data-state="before" viewBox="0 0 800 330" role="img" aria-label="Diagram of three searches flowing toward either the Jiva Ayurveda site or competitors. Use the Before and After buttons to switch.">
+            <g class="fl-text">
+              <rect x="10" y="20" width="290" height="62" rx="8" fill="#F7F5EE" stroke="#D5DDD2" stroke-width="1.5"/>
+              <text x="28" y="48" font-size="16" font-weight="700">"Jiva Ayurveda"</text>
+              <text x="28" y="68" font-size="13" fill="#566456">Brand search</text>
+              <rect x="10" y="134" width="290" height="62" rx="8" fill="#F7F5EE" stroke="#D5DDD2" stroke-width="1.5"/>
+              <text x="28" y="162" font-size="15" font-weight="700">"Ayurvedic treatment for [condition]"</text>
+              <text x="28" y="182" font-size="13" fill="#566456">Disease search</text>
+              <rect x="10" y="248" width="290" height="62" rx="8" fill="#F7F5EE" stroke="#D5DDD2" stroke-width="1.5"/>
+              <text x="28" y="276" font-size="16" font-weight="700">"Ayurvedic doctor in [city]"</text>
+              <text x="28" y="296" font-size="13" fill="#566456">City search</text>
+            </g>
+            <path class="flow-ok" d="M300 51 C 420 51, 420 62, 540 62"/>
+            <path class="flow-lost s-before" d="M300 165 C 420 165, 420 238, 540 238"/>
+            <path class="flow-lost s-before" d="M300 279 C 420 279, 420 270, 540 270"/>
+            <path class="flow-ok s-after" d="M300 165 C 420 165, 420 94, 540 94"/>
+            <path class="flow-ok s-after" d="M300 279 C 440 279, 420 126, 540 126"/>
+            <g class="fl-text">
+              <rect x="540" y="20" width="250" height="150" rx="10" fill="#C9E0EB" stroke="#4F82A3" stroke-width="2"/>
+              <text x="560" y="46" font-size="17" font-weight="700">Jiva Ayurveda site</text>
+              <text class="s-before" x="560" y="156" font-size="13" fill="#2f5f80" font-weight="700">Brand searches only</text>
+              <text class="s-after" x="560" y="156" font-size="13" fill="#2f5f80" font-weight="700">Brand, disease and city searches</text>
+              <g class="comp-box">
+                <rect x="540" y="200" width="250" height="110" rx="10" fill="#F5D6CA" stroke="#D96F4F" stroke-width="2" stroke-dasharray="6 5"/>
+                <text x="560" y="228" font-size="17" font-weight="700">Competitors</text>
+                <text class="s-before" x="560" y="296" font-size="13" fill="#8a3a22" font-weight="700">Win disease and city searches</text>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <p class="sim-caption" id="flow-caption" aria-live="polite">Before: the site captured brand searches. Condition and city searches had no dedicated page to land on, so that demand went to competitors.</p>
+        <p class="note">Illustrative diagram of the three search types, not measured data.</p>
+      </div>
+
+      <blockquote class="pull">
+        <p>Real patients with real medical needs were searching for exactly what Jiva Ayurveda offered, and weren't finding it in search results.</p>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- APPROACH -->
+  <section class="band" aria-labelledby="approach-title">
+    <div class="wrap">
+      <div class="split">
+        <div class="section-head section-head--tight">
+          <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>How the work was done</p>
+          <h2 id="approach-title" class="display">Diagnosis first, then four layers of work</h2>
+        </div>
+        <div class="prose">
+          <p>The engagement started with a diagnosis of where growth was actually stuck, rather than assuming more content or more backlinks was the answer. That meant:</p>
+          <ul class="diagnosis">
+            <li>Analyzing the traffic mix, brand versus non-brand</li>
+            <li>Reviewing what search demand existed for diseases and cities</li>
+            <li>Identifying the structural gaps keeping the site from capturing it</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="lift" aria-hidden="true">
+        <svg viewBox="0 0 1000 120">
+          <path id="liftpath" d="M0 112 C 60 112, 85 108, 125 104 S 330 82, 375 76 S 580 52, 625 46 S 830 24, 875 18 L 1000 6" fill="none" stroke="#D5DDD2" stroke-width="3"/>
+          <path d="M0 112 C 60 112, 85 108, 125 104 S 330 82, 375 76 S 580 52, 625 46 S 830 24, 875 18 L 1000 6" fill="none" stroke="#4F82A3" stroke-width="3" stroke-dasharray="1100" stroke-dashoffset="1100" style="animation: drawin 2.4s .3s ease-out forwards"/>
+          <g stroke="#F7F5EE" stroke-width="3">
+            <circle cx="125" cy="104" r="9" fill="#4F82A3"/>
+            <circle cx="375" cy="76" r="9" fill="#596B57"/>
+            <circle cx="625" cy="46" r="9" fill="#EFC75E"/>
+            <circle cx="875" cy="18" r="9" fill="#D96F4F"/>
+          </g>
+          <circle r="5" fill="#243746"><animateMotion dur="5s" repeatCount="indefinite" path="M0 112 C 60 112, 85 108, 125 104 S 330 82, 375 76 S 580 52, 625 46 S 830 24, 875 18 L 1000 6"/></circle>
+        </svg>
+      </div>
+
+      <ol class="steps" aria-label="The four layers of work, in order">
+        <li class="step"><span class="step-n" aria-hidden="true">1</span><h3>Demand mapping first</h3><p>Understanding what patients were searching for at the disease, treatment and city level before building anything.</p></li>
+        <li class="step"><span class="step-n" aria-hidden="true">2</span><h3>Structural fixes</h3><p>Reorganizing the sitemap and internal linking so the site's architecture could support scale, not just individual pages.</p></li>
+        <li class="step"><span class="step-n" aria-hidden="true">3</span><h3>Content build-out</h3><p>Creating disease and city pages designed around real search intent rather than generic descriptions.</p></li>
+        <li class="step"><span class="step-n" aria-hidden="true">4</span><h3>Systemized linking</h3><p>Instead of linking pages one by one, an internal linking system was built so new disease, treatment and city pages connect to relevant related pages automatically. It stays scalable as more content is added.</p></li>
+      </ol>
+
+      <div class="callout" style="margin-top:36px">
+        <p>Because the architecture came first, the results weren't a one-time traffic bump. The site was designed to keep compounding as more pages were added.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DELIVERED -->
+  <section class="band band--sky" aria-labelledby="delivered-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>What was delivered</p>
+        <h2 id="delivered-title" class="display">Five pieces that turned a website into a system</h2>
+      </div>
+      <div class="bento">
+        <article class="tile tile--white b-a">
+          <p class="tile-tag">Plan</p>
+          <h3>Master keyword architecture</h3>
+          <p>Covering disease queries, city-level queries and doctor-related queries, it gave the site a content roadmap tied to actual search demand.</p>
+          <svg class="venn" viewBox="0 0 220 190" role="img" aria-label="Three overlapping query families: disease, city and doctor">
+            <circle cx="80" cy="70" r="52" fill="#D96F4F" fill-opacity=".45"/>
+            <circle cx="140" cy="70" r="52" fill="#4F82A3" fill-opacity=".45"/>
+            <circle cx="110" cy="122" r="52" fill="#EFC75E" fill-opacity=".6"/>
+            <g font-family="Manrope, Arial, sans-serif" font-size="12" font-weight="700" fill="#243746" text-anchor="middle">
+              <text x="62" y="62">Disease</text><text x="158" y="62">City</text><text x="110" y="148">Doctor</text>
+            </g>
+          </svg>
+        </article>
+        <article class="tile tile--coral b-b">
+          <p class="tile-tag">Pages</p>
+          <h3>Structured disease pages</h3>
+          <p>Built to answer what patients search for around specific conditions and treatments.</p>
+          <div class="pagecard" aria-hidden="true"><b>[Condition]</b><span>Treatment · What patients ask</span><i></i><i></i><i></i></div>
+        </article>
+        <article class="tile tile--butter b-c">
+          <p class="tile-tag">Pages</p>
+          <h3>City-level landing pages</h3>
+          <p>Created for locations with high Ayurvedic treatment search demand, capturing local intent that hadn't been addressed before.</p>
+          <div class="pagecard" aria-hidden="true"><b>[City]</b><span>Ayurvedic treatment · Doctors and clinics</span><i style="background:#F7E6A8"></i><i style="background:#F7E6A8"></i></div>
+        </article>
+
+        <article class="tile tile--white b-d arch" aria-labelledby="arch-title">
+          <p class="tile-tag">System</p>
+          <h3 id="arch-title">An automated internal linking system</h3>
+          <p>It connects diseases, treatments and cities, which improved user navigation and how search engines understood the site's structure. Try adding a page below: it links itself in.</p>
+          <div class="arch-controls">
+            <button class="btn btn--ghost" type="button" data-add="D">Add a disease page</button>
+            <button class="btn btn--ghost" type="button" data-add="T">Add a treatment page</button>
+            <button class="btn btn--ghost" type="button" data-add="C">Add a city page</button>
+            <button class="btn btn--ghost" type="button" id="arch-reset">Reset</button>
+          </div>
+          <div class="scroll"><svg id="arch" class="arch-svg" viewBox="0 0 760 370" role="img" aria-label="Network of disease, treatment and city pages joined by links"></svg></div>
+          <p class="arch-status" id="arch-status" aria-live="polite">Start with two pages of each type. Every page links to its related pages in the next group.</p>
+          <p class="note">Illustrative demo of the principle, not the client's actual site map.</p>
+        </article>
+        <article class="tile tile--sage b-e">
+          <p class="tile-tag">Structure</p>
+          <h3>A reorganized sitemap</h3>
+          <p>It reflects the new content structure and supports better crawling and indexing.</p>
+          <div class="tree" aria-label="Illustrative sitemap structure">
+            <b>Home</b>
+            <ul>
+              <li><b>Diseases</b> <em>one page per condition</em></li>
+              <li><b>Treatments</b> <em>linked to diseases</em></li>
+              <li><b>Cities</b> <em>one page per location</em></li>
+              <li><b>Doctors</b> <em>doctor-related queries</em></li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="band" aria-labelledby="results-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Results</p>
+        <h2 id="results-title" class="display">What the numbers looked like once the site could be found for more than its name</h2>
+      </div>
+      <div class="results">
+        <article class="rcard" aria-labelledby="r-traffic">
+          <div class="rcard-top"><h3 id="r-traffic">Monthly organic visitors</h3><p class="mult" aria-label="About six times">~6×</p></div>
+          <div class="bars">
+            <div class="bar"><div class="bar-label"><span>Before</span><span>22,000</span></div><div class="bar-track"><div class="bar-fill" style="--w:16.9%"></div></div></div>
+            <div class="bar"><div class="bar-label"><span>After</span><span>130,000+</span></div><div class="bar-track"><div class="bar-fill bar-fill--after" style="--w:100%"></div></div></div>
+          </div>
+          <p class="note">Bars drawn to scale.</p>
+        </article>
+        <article class="rcard" aria-labelledby="r-revenue">
+          <div class="rcard-top"><h3 id="r-revenue">Monthly organic revenue</h3><p class="mult" aria-label="About four to five times">~4–5×</p></div>
+          <div class="bars">
+            <div class="bar"><div class="bar-label"><span>Before</span><span>₹5–6L</span></div><div class="bar-track"><div class="bar-fill bar-fill--range" style="--w:24%; --solid:83.3%"></div></div></div>
+            <div class="bar"><div class="bar-label"><span>After</span><span>₹25L</span></div><div class="bar-track"><div class="bar-fill bar-fill--after" style="--w:100%"></div></div></div>
+          </div>
+          <p class="note">Bars drawn to scale. The lighter segment marks the range in the starting figure.</p>
+        </article>
+        <div class="rtexts">
+          <div class="rtext"><h3>Growth came from new patient discovery</h3><p>Non-brand keyword rankings improved substantially, which means the growth wasn't just repeat brand searches.</p></div>
+          <div class="rtext"><h3>Less dependence on paid channels</h3><p>Dependency on paid channels for new patient acquisition went down, since organic search began doing more of the top-of-funnel work.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT CHANGED -->
+  <section class="band band--pale" aria-labelledby="changed-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>What changed for the business</p>
+        <h2 id="changed-title" class="display">A foundation, not a campaign</h2>
+      </div>
+      <div class="changes">
+        <article class="change">
+          <div class="change-icon"><svg viewBox="0 0 44 44" fill="none" stroke="#4F82A3" stroke-width="2.5" aria-hidden="true"><circle class="ripple" cx="22" cy="22" r="19"/><circle class="ripple" cx="22" cy="22" r="19"/><circle class="ripple" cx="22" cy="22" r="19"/><circle cx="22" cy="22" r="4" fill="#243746" stroke="none"/></svg></div>
+          <h3>Less reliance on brand awareness</h3>
+          <p>Growth used to depend on how many people already knew the brand. New patients now find Jiva Ayurveda through disease and city searches, which reduces the pressure on other marketing channels to "introduce" the brand.</p>
+        </article>
+        <article class="change">
+          <div class="change-icon"><svg viewBox="0 0 44 44" aria-hidden="true"><g stroke="#243746" stroke-width="2" fill="none"><line x1="22" y1="9" x2="9" y2="33"/><line x1="22" y1="9" x2="35" y2="33"/><line x1="9" y1="33" x2="35" y2="33"/></g><circle class="blink-node" cx="22" cy="9" r="5" fill="#D96F4F"/><circle class="blink-node" cx="9" cy="33" r="5" fill="#4F82A3"/><circle class="blink-node" cx="35" cy="33" r="5" fill="#596B57"/></svg></div>
+          <h3>A content system that sustains itself</h3>
+          <p>Internal linking is automated and built into the site structure, so adding a disease or city page doesn't mean rebuilding the linking strategy. The system scales on its own.</p>
+        </article>
+        <article class="change">
+          <div class="change-icon"><svg viewBox="0 0 44 44" aria-hidden="true"><g fill="#D96F4F"><rect class="grow-bar" x="6" y="26" width="9" height="12" rx="2"/><rect class="grow-bar" x="18" y="16" width="9" height="22" rx="2"/><rect class="grow-bar" x="30" y="6" width="9" height="32" rx="2"/></g><line x1="4" y1="40" x2="41" y2="40" stroke="#243746" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+          <h3>Clearer visibility into what's working</h3>
+          <p>With pages mapped to specific diseases and cities, the business can see which conditions and locations drive traffic and revenue. Future content and marketing decisions rest on data rather than guesswork.</p>
+        </article>
+        <article class="change">
+          <div class="change-icon"><svg viewBox="0 0 44 44" aria-hidden="true"><rect x="5" y="30" width="34" height="9" rx="2" fill="#596B57"/><rect x="9" y="21" width="26" height="9" rx="2" fill="#8FA68C"/><rect class="hop" x="13" y="8" width="18" height="9" rx="2" fill="#EFC75E"/></svg></div>
+          <h3>A foundation rather than a campaign</h3>
+          <p>The architecture keeps supporting growth as pages are added, and the business doesn't need a fresh SEO overhaul each time it expands into a new city or treatment area.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="band" aria-labelledby="tools-title">
+    <div class="wrap split">
+      <div class="section-head section-head--tight">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Tools and methods</p>
+        <h2 id="tools-title" class="display">The methods behind the system</h2>
+      </div>
+      <ul class="tools">
+        <li><b>Technical SEO auditing</b><span>Crawl budget, indexation, sitemap architecture</span></li>
+        <li><b>Keyword research and demand mapping</b><span>What patients search for, by disease, treatment and city</span></li>
+        <li><b>Internal linking automation</b><span>New pages connect to related pages without manual work</span></li>
+        <li><b>On-page content optimization</b><span>For healthcare and medical search intent</span></li>
+        <li><b>Local and city-page SEO structuring</b><span>Location pages built for local search demand</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TAKEAWAY -->
+  <section class="band" aria-labelledby="takeaway-title" style="padding-top:0">
+    <div class="wrap">
+      <div class="takeaway-panel">
+        <p class="kicker" style="color:#243746"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Takeaway</p>
+        <h2 id="takeaway-title">This is what happens when SEO is treated as a system instead of a series of one-off content pieces.</h2>
+        <div class="versus">
+          <figure>
+            <svg viewBox="0 0 300 180" role="img" aria-label="Seven separate dots with no links between them">
+              <g fill="#98AA97"><circle cx="40" cy="40" r="10"/><circle cx="120" cy="30" r="10"/><circle cx="210" cy="50" r="10"/><circle cx="270" cy="30" r="10"/><circle cx="70" cy="120" r="10"/><circle cx="170" cy="130" r="10"/><circle cx="256" cy="116" r="10"/></g>
+            </svg>
+            <figcaption>One-off content pieces<span>Each page stands alone and has to be pushed individually.</span></figcaption>
+          </figure>
+          <figure>
+            <svg viewBox="0 0 300 180" role="img" aria-label="The same seven dots joined into a connected network">
+              <g stroke="#4F82A3" stroke-width="2" opacity=".7"><line x1="40" y1="40" x2="120" y2="30"/><line x1="120" y1="30" x2="210" y2="50"/><line x1="210" y1="50" x2="270" y2="30"/><line x1="40" y1="40" x2="70" y2="120"/><line x1="120" y1="30" x2="170" y2="130"/><line x1="210" y1="50" x2="170" y2="130"/><line x1="270" y1="30" x2="256" y2="116"/><line x1="70" y1="120" x2="170" y2="130"/><line x1="170" y1="130" x2="256" y2="116"/><line x1="210" y1="50" x2="256" y2="116"/></g>
+              <g fill="#4F82A3"><circle class="pulse" cx="40" cy="40" r="10"/><circle class="pulse" style="animation-delay:.4s" cx="120" cy="30" r="10"/><circle class="pulse" style="animation-delay:.8s" cx="210" cy="50" r="10"/><circle class="pulse" style="animation-delay:1.2s" cx="270" cy="30" r="10"/><circle class="pulse" style="animation-delay:1.6s" cx="70" cy="120" r="10"/><circle class="pulse" style="animation-delay:2s" cx="170" cy="130" r="10"/><circle class="pulse" style="animation-delay:2.4s" cx="256" cy="116" r="10"/></g>
+            </svg>
+            <figcaption>A system<span>Pages reinforce one another, and new pages join the network.</span></figcaption>
+          </figure>
+        </div>
+        <p class="body">A healthcare brand stuck on brand-only traffic reached 6× traffic growth and 4–5× revenue growth by capturing demand it had been losing to competitors. The same approach applies to any business with strong offline trust but weak non-brand search visibility, especially in:</p>
+        <ul class="fit" aria-label="Where the same approach applies">
+          <li>Healthcare</li>
+          <li>Multi-location businesses</li>
+          <li>High-intent service categories</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT + CTA -->
+  <section aria-labelledby="about-title">
+    <div class="wrap">
+      <div class="about">
+        <p class="badge" style="justify-self:start">Previous work by a Sage Kite delivery specialist</p>
+        <h2 id="about-title" class="display">Delivered by Sangram Singh, SEO consultant</h2>
+        <p>This is previous work by Sangram Singh, a Sage Kite delivery specialist, for Jiva Ayurveda. It was not a Sage Kite client engagement, and the results above are as reported by the specialist. It is published here as an example of the search and discovery work Sage Kite can bring to a growth problem.</p>
+        <p><a class="link-quiet" href="/work">See more work</a></p>
+      </div>
+      <div class="cta">
+        <h2 class="display">Strong trust offline, but few new customers finding you in search?</h2>
+        <p>Book a discovery call and we'll look at where your demand sits and whether your site is built to capture it.</p>
+        <div class="cta-actions">
+          <a class="btn" href="/contact">Book a discovery call</a>
+          <a class="link-quiet" href="/services">Explore services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap"><strong>Sage Kite</strong><span>Make selling easier.</span></div>
+</footer>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* reading progress */
+  var bar = document.querySelector('.progress');
+  function onScroll() {
+    var h = document.documentElement, max = h.scrollHeight - window.innerHeight;
+    bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, window.scrollY / max) : 0) + ')';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  /* count-up: final numbers are already in the markup; this only replays them once on view */
+  function countUp(el) {
+    var to = +el.getAttribute('data-to'), t0 = null;
+    function step(t) {
+      if (t0 === null) t0 = t;
+      var p = Math.min(1, (t - t0) / 900);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        io.unobserve(e.target);
+        e.target.querySelectorAll('.cnt').forEach(countUp);
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.metric').forEach(function (m) { io.observe(m); });
+  }
+
+  /* hero: typed illustrative searches */
+  var queries = [
+    { q: 'Jiva Ayurveda', kind: 'brand', tag: 'Brand search', note: 'Already reached the site' },
+    { q: 'Ayurvedic treatment for [condition]', kind: 'disease', tag: 'Disease search', note: 'Now answered by a dedicated disease page' },
+    { q: 'Ayurvedic doctor in [city]', kind: 'city', tag: 'City search', note: 'Now answered by a city landing page' }
+  ];
+  var typed = document.getElementById('typed'), tag = document.getElementById('tag'), note = document.getElementById('note');
+  var qi = 0, ci = 0, timer;
+  function show(i) { tag.textContent = queries[i].tag; tag.setAttribute('data-kind', queries[i].kind); note.textContent = queries[i].note; }
+  function typeLoop() {
+    var cur = queries[qi];
+    if (ci === 0) show(qi);
+    if (ci <= cur.q.length) { typed.textContent = cur.q.slice(0, ci++); timer = setTimeout(typeLoop, 55); }
+    else { timer = setTimeout(function () { ci = 0; qi = (qi + 1) % queries.length; typed.textContent = ''; timer = setTimeout(typeLoop, 350); }, 2200); }
+  }
+  if (!reduce) { ci = 0; typeLoop(); }
+
+  /* before / after search flow */
+  var flow = document.getElementById('flow'), cap = document.getElementById('flow-caption');
+  var bB = document.getElementById('b-before'), bA = document.getElementById('b-after');
+  var caps = {
+    before: 'Before: the site captured brand searches. Condition and city searches had no dedicated page to land on, so that demand went to competitors.',
+    after: 'After: disease pages and city pages give condition and city searches somewhere to land, and the linking system connects them to related pages.'
+  };
+  function setFlow(state) {
+    flow.setAttribute('data-state', state); cap.textContent = caps[state];
+    bB.setAttribute('aria-pressed', state === 'before'); bA.setAttribute('aria-pressed', state === 'after');
+  }
+  bB.addEventListener('click', function () { setFlow('before'); });
+  bA.addEventListener('click', function () { setFlow('after'); });
+
+  /* process lift line: drop the travelling dot for reduced motion */
+  if (reduce) document.querySelectorAll('animateMotion').forEach(function (n) { n.remove(); });
+
+  /* add-a-page linking demo */
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = document.getElementById('arch'), status = document.getElementById('arch-status');
+  var cols = { D: { x: 120, name: 'Disease', fill: '#F5D6CA', stroke: '#D96F4F' }, T: { x: 380, name: 'Treatment', fill: '#F7E6A8', stroke: '#B8922A' }, C: { x: 640, name: 'City', fill: '#C9E0EB', stroke: '#4F82A3' } };
+  var counts, last;
+  function reset() { counts = { D: 2, T: 2, C: 2 }; last = null; draw(); status.textContent = 'Start with two pages of each type. Every page links to its related pages in the next group.'; }
+  function yFor(i, n) { return n === 1 ? 200 : 80 + i * (240 / (n - 1)); }
+  function el(name, attrs, text) { var n = document.createElementNS(NS, name); for (var k in attrs) n.setAttribute(k, attrs[k]); if (text) n.textContent = text; return n; }
+  function draw() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var pos = {}; ['D', 'T', 'C'].forEach(function (t) { pos[t] = []; for (var i = 0; i < counts[t]; i++) pos[t].push(yFor(i, counts[t])); });
+    function isNew(t, i) { return last && last.t === t && last.i === i; }
+    var gl = el('g', { stroke: '#243746', 'stroke-width': 1.6, opacity: 0.45, fill: 'none' }); svg.appendChild(gl);
+    [['D', 'T'], ['T', 'C']].forEach(function (pair) {
+      var a = pair[0], b = pair[1];
+      pos[a].forEach(function (ya, i) { pos[b].forEach(function (yb, j) {
+        var ln = el('line', { x1: cols[a].x + 80, y1: ya, x2: cols[b].x - 80, y2: yb });
+        if (isNew(a, i) || isNew(b, j)) { ln.setAttribute('class', 'draw'); ln.setAttribute('stroke', '#D96F4F'); ln.setAttribute('stroke-width', 2.4); }
+        gl.appendChild(ln);
+      }); });
+    });
+    ['D', 'T', 'C'].forEach(function (t) {
+      svg.appendChild(el('text', { x: cols[t].x, y: 32, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 700, fill: '#566456' }, cols[t].name + ' pages'));
+      pos[t].forEach(function (y, i) {
+        var g = el('g', isNew(t, i) ? { class: 'pop' } : {});
+        g.appendChild(el('rect', { x: cols[t].x - 80, y: y - 19, width: 160, height: 38, rx: 8, fill: cols[t].fill, stroke: cols[t].stroke, 'stroke-width': 2 }));
+        g.appendChild(el('text', { x: cols[t].x, y: y + 5, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 700, fill: '#243746' }, cols[t].name + ' ' + (i + 1)));
+        svg.appendChild(g);
+      });
+    });
+  }
+  document.querySelectorAll('[data-add]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-add');
+      if (counts[t] >= 5) { status.textContent = 'That group is full in this demo. Reset to start again.'; return; }
+      counts[t]++; last = { t: t, i: counts[t] - 1 };
+      var made = t === 'T' ? counts.D + counts.C : (t === 'D' ? counts.T : counts.T);
+      var rel = t === 'T' ? 'disease and city pages' : (t === 'D' ? 'treatment pages' : 'treatment pages');
+      var total = counts.D * counts.T + counts.T * counts.C;
+      draw();
+      status.textContent = 'Added ' + cols[t].name + ' ' + counts[t] + '. It linked itself to ' + made + ' related ' + rel + ' without anyone editing the other pages. The network now has ' + total + ' links.';
+    });
+  });
+  document.getElementById('arch-reset').addEventListener('click', reset);
+  reset();
+})();
+</script>
+
+</body>
+</html>

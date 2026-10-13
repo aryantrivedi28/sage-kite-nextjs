@@ -68,6 +68,11 @@ app/
                         Founder's Thoughts: page.tsx lists essays; <slug>/page.tsx is one essay
                         with its own layout (not a blog post). Essays are registered in
                         content/founders-thoughts.ts (homepage section + sitemap read it).
+  case-studies/page.tsx /case-studies: case study collection, built from content/case-studies/.
+  case-studies/<slug>/  One folder per case study: study.tsx (all content, typed by
+                        content/case-studies/types.ts) and a page.tsx identical in every folder.
+                        case-studies/_template/ is the starter. Metadata, Article JSON-LD and
+                        sitemap are generated. Register the study in content/case-studies/index.ts.
   blog/page.tsx         Blog listing.
   blog/<slug>/          One folder per blog post: post.tsx (data + article)
                         and a 3-line page.tsx. blog/_template/ is the starter.
@@ -93,6 +98,12 @@ content/blog/
 content/platforms.ts      Platform list and industry groups: homepage "Platforms" grid,
                           /platforms directory and sitemap. A platform with a `slug` links
                           to /platforms/<slug> and is in the sitemap.
+content/case-studies/
+  index.ts                Registry of case studies, newest first. Read its header comment.
+  types.ts                CaseStudy type: every section after the hero is optional.
+components/case-studies/  CaseStudyPage (renders every case study + metadata + JSON-LD),
+                          caseStudyStyles.ts (shared CSS), blocks.tsx (reusable content and
+                          sketches) and the interactive SearchTyper, SearchFlow, LinkingDemo.
 content/founders-thoughts.ts
                           Founder's Thoughts essays, newest first. Add a new essay here
                           and create app/insights/founders-thoughts/<slug>/page.tsx.
@@ -148,6 +159,9 @@ The essentials:
   exists. The homepage would link to a 404 and the sitemap would list it.
 - Edit a post's `page.tsx`. It is identical in every post folder; change
   `components/blog/BlogPostPage.tsx` instead.
+  The same applies to a case study's `page.tsx` (`components/case-studies/CaseStudyPage.tsx`).
+- Publish a case study without its origin, or with figures nobody reported. Results are
+  "as reported" unless Sage Kite measured them.
 - Use a blog `guide` id that does not match an `id` on a heading in the article.
 - Change a heading or FAQ answer without updating `guide` / `faqs` to match.
 - Add Tailwind, CSS frameworks or component libraries.
@@ -164,7 +178,8 @@ The essentials:
   webhook (temporary handler from the team lead). `CONTACT_WEBHOOK_URL` in
   `content/contact.ts` reads `NEXT_PUBLIC_GHL_WEBHOOK_URL`; while it is empty the
   form validates but tells visitors to email instead.
-- `components/Footer.tsx`: Work and Insights links are placeholders until those pages exist.
+- `components/Footer.tsx`: the Insights link is a placeholder until that page exists.
+  (The old Work link now points to `/case-studies`.)
 - No `og:image` share image yet, except blog posts (they use their featured image).
 - `app/home-interactions.tsx` and `app/site-content.ts` are not used by any page.
   `components/home/Work.tsx` is imported in `app/page.tsx` but not rendered.

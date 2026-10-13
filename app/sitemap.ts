@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { getPublishedPosts } from '@/content/blog'
 import { PLATFORM_PAGE_SLUGS } from '@/content/platforms'
 import { FOUNDER_ESSAYS, FOUNDERS_THOUGHTS_PATH, essayPath } from '@/content/founders-thoughts'
+import { CASE_STUDIES, CASE_STUDIES_PATH, caseStudyPath } from '@/content/case-studies'
 
 const BASE_URL = 'https://www.sagekite.com'
 
@@ -130,6 +131,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...FOUNDER_ESSAYS.map((essay) => ({
       url: `${BASE_URL}${essayPath(essay.slug)}`,
       lastModified: new Date(essay.datePublished),
+      changeFrequency: 'yearly' as const,
+      priority: 0.7,
+    })),
+    {
+      url: `${BASE_URL}${CASE_STUDIES_PATH}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    ...CASE_STUDIES.map((study) => ({
+      url: `${BASE_URL}${caseStudyPath(study.slug)}`,
+      lastModified: new Date(study.dateModified ?? study.datePublished),
       changeFrequency: 'yearly' as const,
       priority: 0.7,
     })),

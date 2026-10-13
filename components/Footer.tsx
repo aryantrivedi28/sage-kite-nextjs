@@ -29,7 +29,7 @@ export function Footer() {
             <h2>Explore</h2>
             <Link href="/platforms">Platforms</Link><br />
             <Link href="/industries">Industries</Link><br />
-            <Link href="#work">Work</Link><br />
+            <Link href="/case-studies">Case studies</Link><br />
             <Link href="#insights">Insights</Link><br />
             <Link href="/insights/founders-thoughts">Founder's Thoughts</Link>
           </div>
