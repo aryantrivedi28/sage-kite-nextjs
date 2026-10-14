@@ -33,7 +33,6 @@ const study: CaseStudy = {
   results: [],
 
   hero: {
-    label: 'Case study · Shopify migration and conversion optimization',
     dek: 'How Esma moved from a legacy WordPress store to a premium Shopify storefront built to convert.',
     lede: 'Esma needed to leave a legacy WordPress and WooCommerce setup without losing its customer data, order history or product catalogs. It also needed a premium storefront that could scale, plus the features to lift conversion and give the team deeper business intelligence.',
     visual: (
