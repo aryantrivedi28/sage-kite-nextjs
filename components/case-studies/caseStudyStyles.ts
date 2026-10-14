@@ -10,6 +10,7 @@ export const CASE_STUDY_CSS = `
           .cs h2{font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.08}
           .cs-head{display:grid;gap:4px;align-content:start;margin-bottom:clamp(32px,5vw,56px);max-width:820px}
           .cs-head .label{margin-bottom:6px}
+          .cs-head .sub{max-width:60ch;margin-top:14px}
           .cs-split{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:clamp(28px,5vw,72px)}
           .cs-split.sticky > :first-child{position:sticky;top:120px;align-self:start}
           .cs-split .cs-head{margin-bottom:0}
@@ -53,9 +54,31 @@ export const CASE_STUDY_CSS = `
           .cs-glance dt{color:var(--sage);font-weight:500}
           .cs-glance dd{margin:0;font-weight:600;color:var(--ink)}
 
+          .cs-serp{background:color-mix(in srgb,var(--sky-soft) 45%,var(--warm-white));border:1px solid var(--sky-soft);border-radius:10px;padding:20px;display:grid;gap:14px;margin:0}
+          .cs-serp-list{--row:34px;position:relative;display:grid;gap:6px}
+          .cs-serp-row{height:var(--row);display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px;align-items:center;padding:0 12px;border-radius:var(--r);background:var(--warm-white);font-size:.82rem;color:var(--sage);font-variant-numeric:tabular-nums}
+          .cs-serp-row i{height:8px;border-radius:4px;background:var(--pale-sage)}
+          .cs-serp-row.top{background:color-mix(in srgb,var(--butter-soft) 60%,var(--warm-white))}
+          .cs-serp-row.stuck{background:color-mix(in srgb,var(--coral-soft) 55%,var(--warm-white))}
+          .cs-serp-marker{position:absolute;left:-6px;right:-6px;top:0;height:calc(var(--row) * 3 + 20px);margin-top:-4px;border:2.5px solid var(--sky);border-radius:10px;background:color-mix(in srgb,var(--sky-soft) 85%,transparent);display:flex;align-items:center;padding:0 18px;box-shadow:0 4px 0 color-mix(in srgb,var(--ink) 12%,transparent);font-weight:700;font-size:.92rem;color:var(--ink);pointer-events:none;animation:cs-climb 8s cubic-bezier(.55,0,.25,1) infinite}
+          @keyframes cs-climb{0%,14%{transform:translateY(calc((var(--row) + 6px) * 7))}42%,72%{transform:translateY(0)}100%{transform:translateY(calc((var(--row) + 6px) * 7))}}
+          .cs-serp-legend{display:grid;gap:6px;font-size:.86rem;font-weight:600;color:var(--ink)}
+          .cs-serp-legend li{display:flex;align-items:center;gap:10px}
+          .cs-serp-legend .sw{width:14px;height:14px;border-radius:3px;flex:none}
+          .cs-serp-legend .sw.top{background:color-mix(in srgb,var(--butter) 70%,var(--warm-white))}
+          .cs-serp-legend .sw.stuck{background:color-mix(in srgb,var(--coral) 45%,var(--warm-white))}
+          .cs-serp figcaption{font-size:.8rem;color:var(--sage)}
+
+          .cs-journey{display:flex;align-items:center;gap:8px;margin:0}
+          .cs-j-node{flex:1;padding:14px 16px;border-radius:8px;background:var(--warm-white);border:1px solid var(--light-sage);font-weight:700;color:var(--ink);line-height:1.3}
+          .cs-j-node small{display:block;font-weight:500;font-size:.8rem;color:var(--sage)}
+          .cs-j-node.hi{background:var(--sky-soft);border-color:var(--sky)}
+          .cs-j-arrow{flex:none;width:28px;height:2px;background:var(--sky);position:relative}
+          .cs-j-arrow::after{content:"";position:absolute;right:-1px;top:-4px;border-left:7px solid var(--sky);border-top:5px solid transparent;border-bottom:5px solid transparent}
+
           /* metrics */
           .cs .cs-metrics-sec{padding:0 0 clamp(24px,4vw,40px)}
-          .cs-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+          .cs-metrics{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:14px}
           .cs-metric{padding:26px 24px 24px;border-radius:var(--r);color:var(--ink);display:grid;gap:10px;align-content:space-between;min-height:150px}
           .cs-metric.sky{background:var(--sky-soft)}
           .cs-metric.butter{background:var(--butter-soft)}
@@ -110,6 +133,8 @@ export const CASE_STUDY_CSS = `
           .cs-flow[data-state="before"] .s-after{display:none}
           .cs-flow[data-state="after"] .s-before{display:none}
           .cs-flow[data-state="after"] .comp-box{opacity:.35}
+          .cs-flow .fl-bar-lost{fill:var(--coral)}
+          .cs-flow .fl-bar-ok{fill:var(--sky)}
 
           .cs-pull{margin:clamp(40px,6vw,72px) 0 0}
           .cs-pull p{font-size:clamp(1.5rem,3vw,2.3rem);line-height:1.2;font-weight:700;letter-spacing:-.02em;max-width:30ch;text-wrap:balance;color:var(--ink)}
@@ -196,6 +221,51 @@ export const CASE_STUDY_CSS = `
           .cs-tree b{background:var(--warm-white);padding:2px 10px;border-radius:4px;border:1px solid var(--light-sage);font-weight:700;display:inline-block}
           .cs-tree em{font-style:normal;color:var(--sage);font-size:.85rem}
 
+          /* delivered: four fixes to one category page (CategoryFixes) */
+          .cs-build{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:28px;align-items:start}
+          .cs-fixes{display:grid;gap:14px}
+          .cs-fixes .cs-tile{gap:10px}
+          .cs-fix-btn{align-self:flex-start}
+          .cs-fix-btn[aria-pressed="true"]{background:var(--ink);color:var(--warm-white)}
+          .cs-fix-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+          .cs-fix-actions .btn{border:0;cursor:pointer;font-family:var(--sans)}
+          .cs-mockwrap{position:sticky;top:120px;display:grid;gap:10px;margin:0}
+          .cs-mock{background:var(--warm-white);border:1px solid var(--light-sage);border-radius:10px;overflow:hidden;box-shadow:8px 8px 0 var(--butter-soft)}
+          .cs-mock-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;background:var(--pale-sage);border-bottom:1px solid var(--light-sage);font-size:.85rem;font-weight:600}
+          .cs-url{background:var(--warm-white);border:1px solid var(--light-sage);border-radius:999px;padding:3px 12px;color:var(--ink)}
+          .cs-url em{font-style:normal;font-size:.75rem;font-weight:700;margin-left:6px}
+          .cs-url.dup{border:1.5px dashed var(--coral)}
+          .cs-url.dup em{color:color-mix(in srgb,var(--coral) 70%,var(--ink))}
+          .cs-url.one{border-color:var(--sky);background:var(--sky-soft)}
+          .cs-url.one em{color:color-mix(in srgb,var(--sky) 70%,var(--ink))}
+          .cs-mock-body{padding:18px 18px 8px;display:grid;gap:12px}
+          .cs-mock-title{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+          .cs-layer{max-height:0;opacity:0;overflow:hidden;transition:max-height 250ms var(--ease),opacity 250ms var(--ease)}
+          .cs-mock.on-links .cs-layer.links{max-height:70px;opacity:1}
+          .cs-mock.on-content .cs-layer.content{max-height:190px;opacity:1}
+          .cs-mock.on-review .cs-layer.review{max-height:110px;opacity:1}
+          .cs-chips-row{display:flex;flex-wrap:wrap;gap:8px;padding:2px 0}
+          .cs-chips-row span{padding:4px 12px;border-radius:999px;background:var(--butter-soft);font-size:.82rem;font-weight:700;color:var(--ink)}
+          .cs-mock-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+          .cs-pc{display:grid;gap:6px}
+          .cs-pc-img{aspect-ratio:4/3;background:var(--pale-sage);border-radius:var(--r)}
+          .cs-pc i{display:block;height:7px;border-radius:4px;background:var(--light-sage)}
+          .cs-pc i.s{width:60%}
+          .cs-stars-row{color:color-mix(in srgb,var(--butter) 75%,var(--ink));letter-spacing:1px}
+          .cs-pc-stars{height:1.1em;font-size:.8rem;opacity:0;transition:opacity 250ms var(--ease)}
+          .cs-mock.on-review .cs-pc-stars{opacity:1}
+          .cs-content-block{display:grid;gap:6px;padding:14px;background:var(--coral-soft);border-radius:8px;margin-bottom:10px}
+          .cs-content-block b{font-size:.85rem;color:var(--ink)}
+          .cs-content-block i{display:block;height:7px;border-radius:4px;background:color-mix(in srgb,var(--ink) 25%,transparent)}
+          .cs-content-block i.s{width:55%}
+          .cs-mock-serp{border-top:1px dashed var(--light-sage);padding:14px 18px 18px;display:grid;gap:2px;background:color-mix(in srgb,var(--sky-soft) 45%,var(--warm-white))}
+          .cs-mock-serp small{font-weight:600;font-size:.78rem;color:var(--sage);margin-bottom:4px}
+          .cs-serp-title{color:color-mix(in srgb,var(--sky) 60%,var(--ink));font-size:1.05rem;font-weight:700}
+          .cs-serp-url{font-size:.82rem;color:var(--sage)}
+          .cs-serp-product{display:grid;gap:2px;margin-top:12px}
+          .cs-serp-stars{font-size:.85rem;color:var(--sage)}
+          .cs-mockwrap figcaption{font-size:.95rem;min-height:3.2em}
+
           /* results */
           .cs-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px}
           .cs-rcard{background:var(--warm-white);border:1px solid var(--sky-soft);border-radius:10px;padding:clamp(22px,3vw,32px);display:grid;gap:22px;align-content:start}
@@ -210,6 +280,13 @@ export const CASE_STUDY_CSS = `
           .cs-bar-fill.after{background:var(--sky)}
           .cs-bar-fill.range{background:linear-gradient(90deg,var(--sage) 0 var(--solid),var(--light-sage) var(--solid) 100%)}
           @keyframes cs-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+          .cs-rcard.count{grid-column:1/-1;grid-template-columns:minmax(0,4fr) minmax(0,7fr);grid-template-areas:"top dots" "note dots";gap:16px clamp(28px,4vw,56px)}
+          .cs-rcard.count .cs-rcard-top{grid-area:top;flex-direction:column;align-items:flex-start}
+          .cs-rcard.count .cs-dots{grid-area:dots;align-self:center}
+          .cs-rcard.count .note{grid-area:note}
+          .cs-dots{display:grid;grid-template-columns:repeat(auto-fill,minmax(12px,1fr));gap:6px}
+          .cs-dots i{aspect-ratio:1;border-radius:50%;background:var(--sky);animation:cs-lit 500ms calc(var(--i) * 14ms + 300ms) both}
+          @keyframes cs-lit{from{background:var(--light-sage);transform:scale(.6)}to{background:var(--sky);transform:scale(1)}}
           .cs-rtexts{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px}
           .cs-rtext{background:var(--pale-sage);border-radius:10px;padding:clamp(20px,3vw,28px);border-left:6px solid var(--sky);display:grid;gap:8px;align-content:start}
           .cs-rtext:nth-child(2){border-left-color:var(--coral)}
@@ -243,6 +320,11 @@ export const CASE_STUDY_CSS = `
           .cs-change .grow-bar:nth-child(2){animation-delay:.3s}
           .cs-change .grow-bar:nth-child(3){animation-delay:.6s}
           @keyframes cs-pulsebar{from{transform:scaleY(.8)}to{transform:scaleY(1)}}
+          .cs-change .i-page{fill:var(--warm-white);stroke:var(--ink);stroke-width:2.4}
+          .cs-change .i-arrow{fill:none;stroke:var(--sky);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+          .cs-change .i-stroke{fill:none;stroke:var(--ink);stroke-width:2.5;stroke-linecap:round}
+          .cs-change .pop-loop{transform-box:fill-box;transform-origin:center;animation:cs-popl 2.4s ease-in-out infinite}
+          @keyframes cs-popl{0%,20%{transform:scale(0);opacity:0}45%,90%{transform:scale(1);opacity:1}100%{transform:scale(0);opacity:0}}
           .cs .blink-node,.cs .pulse{transform-box:fill-box;transform-origin:center;animation:cs-nodepulse 2s ease-in-out infinite}
           .cs .blink-node:nth-of-type(2){animation-delay:.5s}
           .cs .blink-node:nth-of-type(3){animation-delay:1s}
@@ -270,6 +352,10 @@ export const CASE_STUDY_CSS = `
           .cs-versus .d-off{fill:var(--sage);opacity:.55}
           .cs-versus .d-on{fill:var(--sky)}
           .cs-versus .d-link{stroke:var(--sky);stroke-width:2;opacity:.7}
+          .cs-pagegrid .pg-old rect{fill:var(--sage);opacity:.55}
+          .cs-pagegrid .pg-new rect{fill:none;stroke:var(--sage);stroke-width:2;stroke-dasharray:5 4;opacity:.75}
+          .cs-pagegrid .pg-strong rect{fill:var(--sky)}
+          .cs-pagegrid .pg-arrow path{fill:none;stroke:var(--warm-white);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
           .cs-versus figcaption{font-weight:700;font-size:.95rem}
           .cs-versus figcaption span{display:block;font-weight:500;font-size:.85rem;color:var(--sage)}
           .cs-fit-label{font-weight:600;font-size:.95rem}
@@ -294,9 +380,12 @@ export const CASE_STUDY_CSS = `
             .cs-lift{display:none}
             .cs-bento{grid-template-columns:repeat(2,minmax(0,1fr))}
             .cs-bento .wide{grid-column:1/-1}
+            .cs-build{grid-template-columns:1fr}
+            .cs-mockwrap{position:static}
           }
           @media (max-width:900px){
-            .cs-hero-grid,.cs-split{grid-template-columns:1fr}
+            .cs-hero-grid,.cs-split,.cs-rcard.count{grid-template-columns:1fr}
+            .cs-rcard.count{grid-template-areas:"top" "dots" "note"}
             .cs-split.sticky > :first-child{position:static}
           }
           @media (max-width:760px){
@@ -305,9 +394,12 @@ export const CASE_STUDY_CSS = `
           @media (max-width:640px){
             .cs-metrics,.cs-audience,.cs-steps,.cs-bento{grid-template-columns:1fr}
             .cs-bento .wide{grid-column:auto}
+            .cs-journey{flex-direction:column;align-items:stretch}
+            .cs-j-arrow{display:none}
           }
           @media (prefers-reduced-motion:reduce){
             .cs *,.cs *::before,.cs *::after{animation:none !important;transition:none !important}
             .cs .draw,.cs-lift .line{stroke-dashoffset:0}
+            .cs-serp-marker{transform:none}
           }
         `;

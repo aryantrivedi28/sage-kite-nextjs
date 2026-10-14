@@ -4,10 +4,20 @@ import type { Metadata } from 'next';
 import { ArrowRight } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { CASE_STUDIES, CASE_STUDIES_PATH, caseStudyPath } from '@/content/case-studies';
+import { CASE_STUDIES, CASE_STUDIES_PATH, caseStudyPath, type CaseStudyResult, type CountResult } from '@/content/case-studies';
 
 const SITE_URL = 'https://www.sagekite.com';
 const PAGE_URL = `${SITE_URL}${CASE_STUDIES_PATH}`;
+/** Small print under a card's results: how the figures are drawn, then their basis. */
+function resultsNote(results: CaseStudyResult[]) {
+  const count = results.find((r): r is CountResult => 'count' in r);
+  return [
+    results.some((r) => !('count' in r)) && 'Bars drawn to scale.',
+    count && `Each dot is one ${count.unit}.`,
+    'Figures as reported for this engagement.',
+  ].filter(Boolean).join(' ');
+}
+
 const DESCRIPTION = 'Case studies from Sage Kite and its delivery specialists: the problem, the work and the results, with the origin of every example stated.';
 
 export const metadata: Metadata = {
@@ -126,6 +136,8 @@ export default function CaseStudiesPage() {
           .csl-fill{display:block;height:100%;width:var(--w);border-radius:5px;background:var(--sage)}
           .csl-fill.after{background:var(--sky)}
           .csl-results .note{margin-top:2px}
+          .csl-dots{display:grid;grid-template-columns:repeat(auto-fill,minmax(7px,1fr));gap:3px}
+          .csl-dots i{aspect-ratio:1;border-radius:50%;background:var(--sky)}
 
           /* how to read */
           .csl-read{padding:clamp(56px,7vw,88px) 0}
@@ -226,11 +238,19 @@ export default function CaseStudiesPage() {
                     {c.results.map((r) => (
                       <div key={r.label} className="csl-result">
                         <div className="csl-result-top"><span>{r.label}</span><b>{r.value}</b></div>
-                        <div className="csl-bar"><span>Before</span><span className="csl-track"><span className="csl-fill" style={{ '--w': `${r.scale}%` } as React.CSSProperties}></span></span><span>{r.before}</span></div>
-                        <div className="csl-bar"><span>After</span><span className="csl-track"><span className="csl-fill after" style={{ '--w': '100%' } as React.CSSProperties}></span></span><span>{r.after}</span></div>
+                        {'count' in r ? (
+                          <span className="csl-dots" role="img" aria-label={`${r.count} dots, one for each ${r.unit}`}>
+                            {Array.from({ length: r.count }, (_, i) => <i key={i}></i>)}
+                          </span>
+                        ) : (
+                          <>
+                            <div className="csl-bar"><span>Before</span><span className="csl-track"><span className="csl-fill" style={{ '--w': `${r.scale}%` } as React.CSSProperties}></span></span><span>{r.before}</span></div>
+                            <div className="csl-bar"><span>After</span><span className="csl-track"><span className="csl-fill after" style={{ '--w': '100%' } as React.CSSProperties}></span></span><span>{r.after}</span></div>
+                          </>
+                        )}
                       </div>
                     ))}
-                    <p className="note">Bars drawn to scale. Figures as reported for this engagement.</p>
+                    <p className="note">{resultsNote(c.results)}</p>
                   </div>
                 </Link>
               ))}

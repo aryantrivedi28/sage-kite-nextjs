@@ -3,14 +3,17 @@ import type { ReactNode } from 'react';
 /** Accent used for a tile, metric or tag. Maps to the brand tokens. */
 export type Tone = 'sky' | 'coral' | 'butter' | 'sage' | 'plain';
 
-/** A before/after figure. Drawn to scale on the listing card and in Results. */
-export interface CaseStudyResult {
+interface CaseStudyResultBase {
   /** Heading for the figure, e.g. "Monthly organic visitors". */
   label: string;
   /** Headline change, e.g. "~6×". */
   value: string;
   /** Screen-reader version of `value`, e.g. "About six times". */
   valueLabel?: string;
+}
+
+/** A before/after figure. Drawn to scale on the listing card and in Results. */
+export interface BeforeAfterResult extends CaseStudyResultBase {
   before: string;
   after: string;
   /** Before as a percentage of after (use the upper figure of a range). */
@@ -18,6 +21,18 @@ export interface CaseStudyResult {
   /** If `before` is a range, the share of the before bar that is solid (lower ÷ upper × 100). */
   rangeSolid?: number;
 }
+
+/** A count with no starting figure, e.g. "120+ keywords into the top 3". Drawn as one dot per item. */
+export interface CountResult extends CaseStudyResultBase {
+  /** Number of dots to draw. Use the reported figure (the lower bound of "120+"). */
+  count: number;
+  /** What one dot stands for, singular, e.g. "keyword". */
+  unit: string;
+  /** Small print under the dots. Defaults to "Each dot is one <unit>." */
+  note?: string;
+}
+
+export type CaseStudyResult = BeforeAfterResult | CountResult;
 
 /**
  * One case study. The data lives in app/case-studies/<slug>/study.tsx and is
@@ -93,8 +108,10 @@ export interface CaseStudy {
   delivered?: {
     label?: string;
     heading: string;
+    /** Short line under the heading. */
+    intro?: string;
     /** Tiles fill a 3-column grid. `size: 'wide'` spans two columns. */
-    tiles: {
+    tiles?: {
       tag: string;
       title: string;
       text: string;
@@ -106,19 +123,24 @@ export interface CaseStudy {
       /** Small print under the visual, e.g. "Illustrative, not the client's site map." */
       note?: string;
     }[];
+    /** Shown after the tiles, or instead of them, e.g. an interactive demo. */
+    content?: ReactNode;
   };
   /** Uses `results` above for the bars. */
   resultsSection?: { label?: string; heading: string; points?: { title: string; text: string }[] };
   changes?: {
     label?: string;
     heading: string;
-    items: { icon: 'ripple' | 'nodes' | 'bars' | 'stack'; title: string; text: string }[];
+    items: { icon: 'ripple' | 'nodes' | 'bars' | 'stack' | 'lift' | 'merge' | 'grid' | 'target'; title: string; text: string }[];
   };
   methods?: { label?: string; heading: string; items: { title: string; text: string }[] };
   takeaway?: {
     heading: string;
-    /** Scattered vs connected dots graphic. */
-    versus?: { before: { title: string; text: string }; after: { title: string; text: string } };
+    /** Before vs after graphic. Without a `visual`, each side shows the scattered vs connected dots. */
+    versus?: {
+      before: { title: string; text: string; visual?: ReactNode };
+      after: { title: string; text: string; visual?: ReactNode };
+    };
     body: string;
     fit?: string[];
   };

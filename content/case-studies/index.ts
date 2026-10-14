@@ -24,12 +24,13 @@
  * ─────────────────────────────────────────────────────────────────────────
  */
 import type { CaseStudy } from './types';
+import jensonUsa from '@/app/case-studies/jenson-usa/study';
 import jivaAyurveda from '@/app/case-studies/jiva-ayurveda/study';
 
 export * from './types';
 
 /** Newest first. */
-export const caseStudies: CaseStudy[] = [jivaAyurveda];
+export const caseStudies: CaseStudy[] = [jensonUsa, jivaAyurveda];
 
 export const CASE_STUDIES_PATH = '/case-studies';
 export const caseStudyPath = (slug: string) => `${CASE_STUDIES_PATH}/${slug}`;

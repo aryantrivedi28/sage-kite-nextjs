@@ -13,8 +13,11 @@ import { Callout, Drivers, PageSketch } from '@/components/case-studies/blocks';
  * Content rules (docs/content-standard.md): British spelling, no em-dashes,
  * no invented figures or quotes, state the origin, label illustrative visuals.
  * Reusable visuals: components/case-studies/blocks.tsx (Drivers, AudienceCards,
- * Callout, VennSketch, PageSketch, TreeSketch), SearchTyper, SearchFlow and
- * LinkingDemo. A one-off visual can be written as JSX right here.
+ * Callout, VennSketch, PageSketch, TreeSketch, RankLadder, Journey, DotGrid,
+ * PageGridSketch), SearchTyper, SearchFlow, LinkingDemo, DuplicateUrlFlow and
+ * CategoryFixes. A one-off visual can be written as JSX right here.
+ * A result with no starting figure (e.g. "120+ keywords into the top 3") uses
+ * { count, unit } instead of before/after; see app/case-studies/jenson-usa.
  */
 const study: CaseStudy = {
   draft: true,

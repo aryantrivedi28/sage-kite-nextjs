@@ -6,6 +6,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { CASE_STUDIES_PATH, caseStudyPath, type CaseStudy } from '@/content/case-studies';
 import { CASE_STUDY_CSS } from './caseStudyStyles';
+import { DotGrid } from './blocks';
 
 const SITE_URL = 'https://www.sagekite.com';
 
@@ -116,6 +117,38 @@ function ChangeIcon({ kind }: { kind: string }) {
       </svg>
     );
   }
+  if (kind === 'lift') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <rect className="i-page" x="9" y="6" width="26" height="32" rx="4" />
+        <g className="hop"><path className="i-arrow" d="M22 28 V14 M16 20 L22 14 L28 20" /></g>
+      </svg>
+    );
+  }
+  if (kind === 'merge') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <g className="i-stroke"><path d="M6 10 H18 C26 10 26 22 34 22" /><path d="M6 34 H18 C26 34 26 22 34 22" /></g>
+        <circle className="blink-node i-coral" cx="37" cy="22" r="5" />
+      </svg>
+    );
+  }
+  if (kind === 'grid') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <g className="i-sage"><rect x="5" y="5" width="15" height="15" rx="3" /><rect x="24" y="5" width="15" height="15" rx="3" /><rect x="5" y="24" width="15" height="15" rx="3" /></g>
+        <rect className="pop-loop i-coral" x="24" y="24" width="15" height="15" rx="3" />
+      </svg>
+    );
+  }
+  if (kind === 'target') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <g className="i-stroke"><circle cx="22" cy="22" r="17" /><circle cx="22" cy="22" r="10" /></g>
+        <circle className="blink-node i-coral" cx="22" cy="22" r="3.5" />
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 44 44" aria-hidden="true">
       <rect className="i-sage" x="5" y="30" width="34" height="9" rx="2" />
@@ -125,11 +158,12 @@ function ChangeIcon({ kind }: { kind: string }) {
   );
 }
 
-function Head({ id, label, heading }: { id: string; label: string; heading: string }) {
+function Head({ id, label, heading, intro }: { id: string; label: string; heading: string; intro?: string }) {
   return (
     <div className="cs-head">
       <p className="label">{label}</p>
       <h2 id={id}>{heading}</h2>
+      {intro && <p className="sub">{intro}</p>}
     </div>
   );
 }
@@ -188,7 +222,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
         {metrics && (
           <section className="cs-metrics-sec" aria-label="Headline results">
             <div className="wrap">
-              <div className="cs-metrics">
+              <div className="cs-metrics" style={cssVars({ '--n': String(metrics.items.length) })}>
                 {metrics.items.map((m) => (
                   <div key={m.label} className={`cs-metric ${m.tone}`}><b>{m.value}</b><span>{m.label}</span></div>
                 ))}
@@ -272,18 +306,21 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
         {delivered && (
           <section className="cs-sky-band" aria-labelledby="delivered-title">
             <div className="wrap">
-              <Head id="delivered-title" label={delivered.label ?? 'What was delivered'} heading={delivered.heading} />
-              <div className="cs-bento">
-                {delivered.tiles.map((t, i) => (
-                  <article key={t.title} className={`cs-tile ${t.tone}${t.size === 'wide' ? ' wide' : ''}`} aria-labelledby={`tile-${i}`}>
-                    <p className="cs-tile-tag">{t.tag}</p>
-                    <h3 id={`tile-${i}`}>{t.title}</h3>
-                    <p>{t.text}</p>
-                    {t.visual && (t.bare ? t.visual : <div className="cs-tile-visual">{t.visual}</div>)}
-                    {t.note && <p className="note">{t.note}</p>}
-                  </article>
-                ))}
-              </div>
+              <Head id="delivered-title" label={delivered.label ?? 'What was delivered'} heading={delivered.heading} intro={delivered.intro} />
+              {delivered.tiles && (
+                <div className="cs-bento">
+                  {delivered.tiles.map((t, i) => (
+                    <article key={t.title} className={`cs-tile ${t.tone}${t.size === 'wide' ? ' wide' : ''}`} aria-labelledby={`tile-${i}`}>
+                      <p className="cs-tile-tag">{t.tag}</p>
+                      <h3 id={`tile-${i}`}>{t.title}</h3>
+                      <p>{t.text}</p>
+                      {t.visual && (t.bare ? t.visual : <div className="cs-tile-visual">{t.visual}</div>)}
+                      {t.note && <p className="note">{t.note}</p>}
+                    </article>
+                  ))}
+                </div>
+              )}
+              {delivered.content}
             </div>
           </section>
         )}
@@ -295,26 +332,35 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
               <Head id="results-title" label={resultsSection.label ?? 'Results'} heading={resultsSection.heading} />
               <div className="cs-results">
                 {study.results.map((r, i) => (
-                  <article key={r.label} className="cs-rcard" aria-labelledby={`r-${i}`}>
+                  <article key={r.label} className={`cs-rcard${'count' in r ? ' count' : ''}`} aria-labelledby={`r-${i}`}>
                     <div className="cs-rcard-top"><h3 id={`r-${i}`}>{r.label}</h3><p className="cs-mult" aria-label={r.valueLabel}>{r.value}</p></div>
-                    <div className="cs-bars">
-                      <div className="cs-bar">
-                        <div className="cs-bar-label"><span>Before</span><span>{r.before}</span></div>
-                        <div className="cs-bar-track">
-                          <div
-                            className={`cs-bar-fill${r.rangeSolid !== undefined ? ' range' : ''}`}
-                            style={cssVars({ '--w': `${r.scale}%`, ...(r.rangeSolid !== undefined && { '--solid': `${r.rangeSolid}%` }) })}
-                          ></div>
+                    {'count' in r ? (
+                      <>
+                        <DotGrid count={r.count} ariaLabel={`A grid of ${r.count} dots, one for each ${r.unit}`} />
+                        <p className="note">{r.note ?? `Each dot is one ${r.unit}.`}</p>
+                      </>
+                    ) : (
+                      <>
+                        <div className="cs-bars">
+                          <div className="cs-bar">
+                            <div className="cs-bar-label"><span>Before</span><span>{r.before}</span></div>
+                            <div className="cs-bar-track">
+                              <div
+                                className={`cs-bar-fill${r.rangeSolid !== undefined ? ' range' : ''}`}
+                                style={cssVars({ '--w': `${r.scale}%`, ...(r.rangeSolid !== undefined && { '--solid': `${r.rangeSolid}%` }) })}
+                              ></div>
+                            </div>
+                          </div>
+                          <div className="cs-bar">
+                            <div className="cs-bar-label"><span>After</span><span>{r.after}</span></div>
+                            <div className="cs-bar-track"><div className="cs-bar-fill after" style={cssVars({ '--w': '100%' })}></div></div>
+                          </div>
                         </div>
-                      </div>
-                      <div className="cs-bar">
-                        <div className="cs-bar-label"><span>After</span><span>{r.after}</span></div>
-                        <div className="cs-bar-track"><div className="cs-bar-fill after" style={cssVars({ '--w': '100%' })}></div></div>
-                      </div>
-                    </div>
-                    <p className="note">
-                      Bars drawn to scale.{r.rangeSolid !== undefined && ' The lighter segment marks the range in the starting figure.'}
-                    </p>
+                        <p className="note">
+                          Bars drawn to scale.{r.rangeSolid !== undefined && ' The lighter segment marks the range in the starting figure.'}
+                        </p>
+                      </>
+                    )}
                   </article>
                 ))}
                 {resultsSection.points && (
@@ -369,16 +415,20 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
                 {takeaway.versus && (
                   <div className="cs-versus">
                     <figure>
-                      <svg viewBox="0 0 300 180" role="img" aria-label="Seven separate dots with no links between them">
-                        {DOTS.map(([x, y]) => <circle key={`${x}-${y}`} className="d-off" cx={x} cy={y} r="10" />)}
-                      </svg>
+                      {takeaway.versus.before.visual ?? (
+                        <svg viewBox="0 0 300 180" role="img" aria-label="Seven separate dots with no links between them">
+                          {DOTS.map(([x, y]) => <circle key={`${x}-${y}`} className="d-off" cx={x} cy={y} r="10" />)}
+                        </svg>
+                      )}
                       <figcaption>{takeaway.versus.before.title}<span>{takeaway.versus.before.text}</span></figcaption>
                     </figure>
                     <figure>
-                      <svg viewBox="0 0 300 180" role="img" aria-label="The same seven dots joined into a connected network">
-                        {DOT_LINKS.map(([a, b]) => <line key={`${a}-${b}`} className="d-link" x1={DOTS[a][0]} y1={DOTS[a][1]} x2={DOTS[b][0]} y2={DOTS[b][1]} />)}
-                        {DOTS.map(([x, y], i) => <circle key={`${x}-${y}`} className="d-on pulse" style={{ animationDelay: `${i * 0.4}s` }} cx={x} cy={y} r="10" />)}
-                      </svg>
+                      {takeaway.versus.after.visual ?? (
+                        <svg viewBox="0 0 300 180" role="img" aria-label="The same seven dots joined into a connected network">
+                          {DOT_LINKS.map(([a, b]) => <line key={`${a}-${b}`} className="d-link" x1={DOTS[a][0]} y1={DOTS[a][1]} x2={DOTS[b][0]} y2={DOTS[b][1]} />)}
+                          {DOTS.map(([x, y], i) => <circle key={`${x}-${y}`} className="d-on pulse" style={{ animationDelay: `${i * 0.4}s` }} cx={x} cy={y} r="10" />)}
+                        </svg>
+                      )}
                       <figcaption>{takeaway.versus.after.title}<span>{takeaway.versus.after.text}</span></figcaption>
                     </figure>
                   </div>

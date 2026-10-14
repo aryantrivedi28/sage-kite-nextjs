@@ -93,3 +93,85 @@ export function TreeSketch({ root, items, ariaLabel }: { root: string; items: { 
     </div>
   );
 }
+
+/**
+ * Page one of a search result, positions 1–10, with a marker that climbs from
+ * the bottom three into the top three. Without motion the marker sits on top.
+ */
+export function RankLadder({ marker, top, stuck, caption, ariaLabel }: { marker: string; top: string; stuck: string; caption: string; ariaLabel: string }) {
+  return (
+    <figure className="cs-serp" aria-label={ariaLabel}>
+      <div className="cs-serp-list" aria-hidden="true">
+        {Array.from({ length: 10 }, (_, i) => (
+          <div key={i} className={`cs-serp-row${i < 3 ? ' top' : i > 6 ? ' stuck' : ''}`}><b>{i + 1}</b><i></i></div>
+        ))}
+        <div className="cs-serp-marker">{marker}</div>
+      </div>
+      <ul className="cs-serp-legend">
+        <li><span className="sw top"></span>{top}</li>
+        <li><span className="sw stuck"></span>{stuck}</li>
+      </ul>
+      <figcaption>{caption}</figcaption>
+    </figure>
+  );
+}
+
+/** A short left-to-right sequence of nodes joined by arrows. The last node is highlighted. */
+export function Journey({ steps, ariaLabel }: { steps: { small: string; text: string }[]; ariaLabel: string }) {
+  return (
+    <figure className="cs-journey" aria-label={ariaLabel}>
+      {steps.map((s, i) => (
+        <React.Fragment key={s.small}>
+          {i > 0 && <span className="cs-j-arrow" aria-hidden="true"></span>}
+          <div className={`cs-j-node${i === steps.length - 1 ? ' hi' : ''}`}><small>{s.small}</small>{s.text}</div>
+        </React.Fragment>
+      ))}
+    </figure>
+  );
+}
+
+/** One dot per item, lit in turn. Used for count results. */
+export function DotGrid({ count, ariaLabel }: { count: number; ariaLabel: string }) {
+  return (
+    <div className="cs-dots" role="img" aria-label={ariaLabel}>
+      {Array.from({ length: count }, (_, i) => <i key={i} style={{ '--i': i } as React.CSSProperties}></i>)}
+    </div>
+  );
+}
+
+const GRID_X = [30, 120, 210];
+
+/**
+ * A grid of pages for a before/after takeaway. `more`: existing pages plus new,
+ * dashed pages still to earn a position. `stronger`: the same pages, each lifted.
+ */
+export function PageGridSketch({ variant }: { variant: 'more' | 'stronger' }) {
+  if (variant === 'more') {
+    return (
+      <svg className="cs-pagegrid" viewBox="0 0 300 180" role="img" aria-label="A grid of pages with several new pages added">
+        <g className="pg-old">
+          {GRID_X.map((x) => <rect key={x} x={x} y="20" width="60" height="40" rx="6" />)}
+          {GRID_X.slice(0, 2).map((x) => <rect key={x} x={x} y="80" width="60" height="40" rx="6" />)}
+        </g>
+        <g className="pg-new">
+          <rect className="pulse" x="210" y="80" width="60" height="40" rx="6" />
+          {GRID_X.map((x, i) => <rect key={x} className="pulse" style={{ animationDelay: `${(i + 1) * 0.6}s` }} x={x} y="140" width="60" height="30" rx="6" />)}
+        </g>
+      </svg>
+    );
+  }
+  return (
+    <svg className="cs-pagegrid" viewBox="0 0 300 180" role="img" aria-label="The same grid of existing pages, each made stronger">
+      <g className="pg-strong">
+        {[20, 80].flatMap((y) => GRID_X.map((x) => <rect key={`${x}-${y}`} x={x} y={y} width="60" height="40" rx="6" />))}
+      </g>
+      <g className="pg-arrow">
+        {[20, 80].flatMap((y, row) =>
+          GRID_X.map((x, i) => (
+            <path key={`${x}-${y}`} className="pulse" style={{ animationDelay: `${(row * 3 + i) * 0.3}s` }} d={`M${x + 30} ${y + 32} V${y + 10} M${x + 22} ${y + 18} L${x + 30} ${y + 10} L${x + 38} ${y + 18}`} />
+          )),
+        )}
+      </g>
+    </svg>
+  );
+}

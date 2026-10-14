@@ -100,10 +100,13 @@ content/platforms.ts      Platform list and industry groups: homepage "Platforms
                           to /platforms/<slug> and is in the sitemap.
 content/case-studies/
   index.ts                Registry of case studies, newest first. Read its header comment.
-  types.ts                CaseStudy type: every section after the hero is optional.
+  types.ts                CaseStudy type: every section after the hero is optional. A result is
+                          either before/after (bars) or a count with no starting figure (dots).
 components/case-studies/  CaseStudyPage (renders every case study + metadata + JSON-LD),
                           caseStudyStyles.ts (shared CSS), blocks.tsx (reusable content and
-                          sketches) and the interactive SearchTyper, SearchFlow, LinkingDemo.
+                          sketches, RankLadder, Journey, DotGrid, PageGridSketch) and the
+                          interactive SearchTyper, SearchFlow, LinkingDemo, DuplicateUrlFlow,
+                          CategoryFixes.
 content/founders-thoughts.ts
                           Founder's Thoughts essays, newest first. Add a new essay here
                           and create app/insights/founders-thoughts/<slug>/page.tsx.
