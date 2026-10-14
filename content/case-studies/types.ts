@@ -141,7 +141,9 @@ export interface CaseStudy {
   changes?: {
     label?: string;
     heading: string;
-    items: { icon: 'ripple' | 'nodes' | 'bars' | 'stack' | 'lift' | 'merge' | 'grid' | 'target' | 'shield' | 'devices' | 'heart' | 'cards'; title: string; text: string }[];
+    /** Cards per row on wide screens. Defaults to 3 for three cards, otherwise 2. */
+    columns?: 2 | 3 | 4;
+    items: { icon: 'ripple' | 'nodes' | 'bars' | 'stack' | 'lift' | 'merge' | 'grid' | 'target' | 'shield' | 'devices' | 'heart' | 'cards' | 'clock' | 'mail'; title: string; text: string }[];
   };
   methods?: { label?: string; heading: string; items: { title: string; text: string }[] };
   takeaway?: {

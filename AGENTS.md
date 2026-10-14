@@ -107,7 +107,8 @@ content/case-studies/
 components/case-studies/  CaseStudyPage (renders every case study + metadata + JSON-LD),
                           caseStudyStyles.ts (shared CSS), blocks.tsx (reusable content and
                           sketches, RankLadder, Journey, DotGrid, PageGridSketch, BrowserFrame,
-                          PurchasePath, Checklist, CountCard, NumberedSteps, LoopSketch) and the
+                          PurchasePath, Checklist, CountCard, NumberedSteps, LoopSketch, PhoneFrame,
+                          ScaleBar, RisingSteps, RateDots) and the
                           interactive SearchTyper, SearchFlow, LinkingDemo, DuplicateUrlFlow,
                           CategoryFixes, MigrationFlow, ScreenshotTabs, DashboardToggle,
                           CheckoutFixFlow, LayerStack, EmailToggle.

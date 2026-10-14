@@ -268,3 +268,76 @@ export function LoopSketch({ stages, centre, sub, ariaLabel }: { stages: [string
     </svg>
   );
 }
+
+/** A screenshot in a phone outline, e.g. the mobile view next to a ScreenshotTabs gallery. */
+export function PhoneFrame({ src, width, height, alt, caption }: { src: string; width: number; height: number; alt: string; caption?: string }) {
+  return (
+    <figure className="cs-phone-wrap">
+      <div className="cs-phone"><Image src={src} width={width} height={height} alt={alt} title={alt} sizes="230px" /></div>
+      {caption && <figcaption className="note">{caption}</figcaption>}
+    </figure>
+  );
+}
+
+/**
+ * A 0–`max` scale drawn to proportion, with the measured value filled in and a
+ * dashed limit marker, e.g. a page load time against a threshold.
+ */
+export function ScaleBar({ max, unit, value, limit, ariaLabel }: {
+  max: number;
+  unit: string;
+  value: { at: number; value: string; label: string };
+  limit: { at: number; value: string; label: string };
+  ariaLabel: string;
+}) {
+  const pct = (n: number) => `${(n / max) * 100}%`;
+  return (
+    <div className="cs-scale" role="img" aria-label={ariaLabel}>
+      <div className="cs-scale-track">
+        <div className="cs-scale-fill" style={{ width: pct(value.at) }}></div>
+        <div className="cs-scale-mark value" style={{ left: pct(value.at) }}><b>{value.value}</b><span>{value.label}</span></div>
+        <div className="cs-scale-mark limit" style={{ left: pct(limit.at) }}><b>{limit.value}</b><span>{limit.label}</span></div>
+      </div>
+      <div className="cs-scale-ticks" aria-hidden="true">
+        {Array.from({ length: max + 1 }, (_, i) => <span key={i}>{i}{unit}</span>)}
+      </div>
+    </div>
+  );
+}
+
+/** Four or so numbered steps in coloured tiles, rising from left to right. */
+export function RisingSteps({ items, ariaLabel }: { items: { title: string; text: string }[]; ariaLabel: string }) {
+  return (
+    <ol className="cs-rise" aria-label={ariaLabel}>
+      {items.map((s, i) => (
+        <li key={s.title} style={{ '--i': i } as React.CSSProperties}><span className="cs-rise-n">{i + 1}</span><b>{s.title}</b><span>{s.text}</span></li>
+      ))}
+    </ol>
+  );
+}
+
+/**
+ * A rate shown as `lit` dots out of 100, next to the headline number. `period`
+ * adds a row of bars, one per day of the measurement window.
+ */
+export function RateDots({ lit, value, label, sub, period }: { lit: number; value: string; label: string; sub?: string; period?: { days: number; label: string } }) {
+  return (
+    <div className="cs-rate">
+      <div className="cs-rate-dots" aria-hidden="true">
+        {Array.from({ length: 100 }, (_, i) => <i key={i} className={i < lit ? 'on' : undefined} style={{ '--i': i } as React.CSSProperties}></i>)}
+      </div>
+      <div>
+        <p className="cs-rate-n"><b>{value}</b><span>{label}</span></p>
+        {sub && <p className="cs-rate-sub">{sub}</p>}
+        {period && (
+          <>
+            <div className="cs-rate-cycle" style={{ '--days': period.days } as React.CSSProperties} aria-hidden="true">
+              {Array.from({ length: period.days }, (_, i) => <i key={i} style={{ '--i': i } as React.CSSProperties}></i>)}
+            </div>
+            <p className="cs-rate-cycle-label">{period.label}</p>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

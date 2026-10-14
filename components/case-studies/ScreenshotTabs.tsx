@@ -14,8 +14,8 @@ export interface Screenshot {
   caption: string;
 }
 
-/** Screenshots of a site in one browser frame, switched by tabs. */
-export function ScreenshotTabs({ title, url, shots, note }: { title?: string; url: string; shots: Screenshot[]; note: ReactNode }) {
+/** Screenshots of a site in one browser frame, switched by tabs. Leave out `note` to place it yourself. */
+export function ScreenshotTabs({ title, url, shots, note }: { title?: string; url: string; shots: Screenshot[]; note?: ReactNode }) {
   const [on, setOn] = useState(0);
 
   return (
@@ -47,7 +47,7 @@ export function ScreenshotTabs({ title, url, shots, note }: { title?: string; ur
         </div>
         <figcaption aria-live="polite">{shots[on].caption}</figcaption>
       </figure>
-      <p className="note">{note}</p>
+      {note && <p className="note">{note}</p>}
     </div>
   );
 }

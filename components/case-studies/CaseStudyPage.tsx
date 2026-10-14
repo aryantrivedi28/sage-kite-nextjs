@@ -174,6 +174,23 @@ function ChangeIcon({ kind }: { kind: string }) {
       </svg>
     );
   }
+  if (kind === 'clock') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <circle className="i-page" cx="22" cy="24" r="15" />
+        <path className="hop i-tick" d="M22 24 L29 14" />
+        <path className="i-stroke" d="M17 6 H27" />
+      </svg>
+    );
+  }
+  if (kind === 'mail') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <path className="i-page" d="M8 12 H36 V32 H8 z" strokeLinejoin="round" />
+        <path className="hop i-tick" d="M8 14 L22 25 L36 14" />
+      </svg>
+    );
+  }
   if (kind === 'target') {
     return (
       <svg viewBox="0 0 44 44" aria-hidden="true">
@@ -429,7 +446,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
           <section className="pale" aria-labelledby="changed-title">
             <div className="wrap">
               <Head id="changed-title" label={changes.label ?? 'What changed for the business'} heading={changes.heading} />
-              <div className="cs-changes" style={cssVars({ '--n': changes.items.length === 3 ? '3' : '2' })}>
+              <div className="cs-changes" style={cssVars({ '--n': String(changes.columns ?? (changes.items.length === 3 ? 3 : 2)) })}>
                 {changes.items.map((c) => (
                   <article key={c.title} className="cs-change">
                     <div className="cs-change-icon"><ChangeIcon kind={c.icon} /></div>

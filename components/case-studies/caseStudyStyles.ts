@@ -517,6 +517,60 @@ export const CASE_STUDY_CSS = `
           .cs-fit{display:flex;flex-wrap:wrap;gap:10px}
           .cs-fit li{padding:8px 16px;border-radius:999px;background:var(--warm-white);color:var(--ink);font-weight:700;font-size:.92rem}
 
+          /* screenshots with a phone view beside them (UI section) */
+          .cs-journey + .cs-ui-wrap{margin-top:clamp(28px,4vw,44px)}
+          .cs-ui-wrap{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:22px 28px;align-items:start}
+          /* the gallery's title and tabs span both columns; the browser frame and the phone share a row */
+          .cs-ui-wrap > .cs-gallery{display:contents}
+          .cs-ui-wrap .cs-gallery-title,.cs-ui-wrap .cs-tabs{grid-column:1/-1}
+          .cs-ui-wrap .cs-frame.big{grid-column:1;grid-row:3}
+          .cs-ui-wrap .cs-phone-wrap{grid-column:2;grid-row:3}
+          .cs-ui-wrap + .note{margin-top:14px}
+          .cs-phone-wrap{margin:0;display:grid;gap:10px;justify-items:center}
+          .cs-phone{width:min(230px,70vw);border:8px solid var(--ink);border-radius:32px;overflow:hidden;background:var(--warm-white);box-shadow:8px 8px 0 var(--butter-soft)}
+          .cs-phone img{display:block;width:100%;height:auto}
+
+          /* scale bar, e.g. load time against a threshold */
+          .cs-scale{position:relative;padding:70px 4px 40px}
+          .cs-scale-track{position:relative;height:30px;background:var(--pale-sage);border:1px solid var(--light-sage);border-radius:999px}
+          .cs-scale-fill{position:absolute;left:0;top:0;bottom:0;background:var(--sky);border-radius:999px;transform-origin:left;animation:cs-fillx 1.4s var(--ease) both}
+          @keyframes cs-fillx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+          .cs-scale-mark{position:absolute;bottom:100%;display:grid;transform:translateX(-50%);text-align:center;padding-bottom:12px;white-space:nowrap}
+          .cs-scale-mark b{font-size:1.7rem;font-weight:800;line-height:1.1;letter-spacing:-.02em;color:var(--ink)}
+          .cs-scale-mark span{font-size:.85rem;font-weight:600;color:var(--sage)}
+          .cs-scale-mark::after{content:"";position:absolute;left:50%;top:calc(100% - 10px);height:48px;width:0;border-left:2px solid var(--ink)}
+          .cs-scale-mark.limit b{color:color-mix(in srgb,var(--coral) 70%,var(--ink))}
+          .cs-scale-mark.limit::after{border-left:2px dashed var(--coral)}
+          .cs-scale-ticks{display:flex;justify-content:space-between;margin-top:12px;font-size:.82rem;font-weight:600;color:var(--sage)}
+
+          /* rising numbered steps */
+          .cs-rise{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:end}
+          .cs-rise li{display:grid;gap:4px;padding:20px;border-radius:8px;color:var(--ink);margin-bottom:calc(var(--i) * 22px)}
+          .cs-rise b{font-size:1.25rem;font-weight:700;line-height:1.15;letter-spacing:-.01em}
+          .cs-rise li > span:not(.cs-rise-n){font-size:.93rem}
+          .cs-rise-n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--warm-white);font-weight:700;margin-bottom:8px}
+          .cs-rise li:nth-child(4n+1){background:var(--sky-soft)}
+          .cs-rise li:nth-child(4n+2){background:var(--butter-soft)}
+          .cs-rise li:nth-child(4n+3){background:var(--coral-soft)}
+          .cs-rise li:nth-child(4n){background:var(--dark-sage);color:var(--warm-white)}
+          .cs-rise li:nth-child(4n) .cs-rise-n{color:var(--ink)}
+          .cs-rise + .cs-frame.strip{margin:clamp(28px,4vw,44px) 0 0}
+
+          /* rate out of 100 */
+          .cs-rate{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:28px;align-items:center}
+          .cs-rate-dots{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:7px}
+          .cs-rate-dots i{aspect-ratio:1;border-radius:50%;background:var(--light-sage)}
+          .cs-rate-dots i.on{background:var(--coral);animation:cs-back 500ms calc(var(--i) * 70ms + 300ms) both}
+          @keyframes cs-back{from{background:var(--light-sage);transform:scale(.6)}to{background:var(--coral);transform:scale(1)}}
+          .cs-rate-n{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;color:var(--ink)}
+          .cs-rate-n b{font-size:clamp(3.6rem,8vw,5.5rem);font-weight:800;line-height:1;letter-spacing:-.04em}
+          .cs-rate-n span{font-weight:700;font-size:1.1rem;max-width:16ch;line-height:1.3}
+          .cs-rate-sub{margin-top:6px}
+          .cs-rate-cycle{display:grid;grid-template-columns:repeat(var(--days),minmax(0,1fr));gap:4px;margin-top:18px}
+          .cs-rate-cycle i{height:14px;border-radius:3px;background:var(--sky);animation:cs-cyc 400ms calc(var(--i) * 45ms + 200ms) both}
+          @keyframes cs-cyc{from{transform:scaleY(.2);opacity:.3}to{transform:scaleY(1);opacity:1}}
+          .cs-rate-cycle-label{font-size:.85rem;font-weight:600;color:var(--sage);margin-top:6px}
+
           /* origin + cta */
           .cs .cs-close{padding-top:0}
           .cs-about{display:grid;gap:16px;padding:clamp(22px,3vw,32px);border:1px solid var(--light-sage);border-radius:10px;background:var(--warm-white)}
@@ -538,6 +592,8 @@ export const CASE_STUDY_CSS = `
             .cs-changes{grid-template-columns:repeat(2,minmax(0,1fr))}
             .cs-build{grid-template-columns:1fr}
             .cs-mockwrap{position:static}
+            .cs-ui-wrap{grid-template-columns:1fr}
+            .cs-ui-wrap .cs-frame.big,.cs-ui-wrap .cs-phone-wrap{grid-column:1;grid-row:auto}
           }
           @media (max-width:900px){
             .cs-hero-grid,.cs-split,.cs-rcard.count{grid-template-columns:1fr}
@@ -548,9 +604,16 @@ export const CASE_STUDY_CSS = `
             .cs-countcard{grid-template-columns:1fr;grid-template-areas:"top" "dots" "note"}
             .cs-countcard-top{flex-direction:row;align-items:baseline;flex-wrap:wrap}
             .cs-countcard .cs-dots{grid-template-columns:repeat(10,minmax(0,1fr))}
+            .cs-rise{grid-template-columns:1fr}
+            .cs-rise li{margin-bottom:0}
           }
           @media (max-width:760px){
-            .cs-problems,.cs-tools,.cs-versus,.cs-changes{grid-template-columns:1fr}
+            .cs-problems,.cs-tools,.cs-versus,.cs-changes,.cs-rate{grid-template-columns:1fr}
+          }
+          @media (max-width:560px){
+            .cs-scale-mark span{font-size:.75rem}
+            .cs-scale-mark.value{transform:translateX(-70%)}
+            .cs-scale-mark.limit{transform:translateX(-30%)}
           }
           @media (max-width:640px){
             .cs-metrics,.cs-audience,.cs-steps,.cs-bento{grid-template-columns:1fr}
