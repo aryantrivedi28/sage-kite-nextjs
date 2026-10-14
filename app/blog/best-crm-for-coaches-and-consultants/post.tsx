@@ -11,7 +11,7 @@ const post: BlogPost = {
   category: 'CRM',
   author: AUTHOR,
   authorImage: AUTHOR_IMAGE,
-  publishedAt: '2026-10-14',
+  publishedAt: '2026-10-06',
   updatedAt: '2026-10-14',
   readingTime: '18 min read',
   // Placeholder from the existing image library; replace with a dedicated image when available.

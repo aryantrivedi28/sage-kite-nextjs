@@ -40,7 +40,6 @@ const study: CaseStudy = {
   ],
 
   hero: {
-    label: 'Case study · Ecommerce SEO',
     dek: 'Existing category pages, made strong enough to win.',
     lede: 'Jenson USA, an online cycling retailer, had valuable category searches such as mountain bikes stuck at positions 8–10: visible, but earning very little traffic. Category page optimisation, internal linking, duplicate URL fixes and review schema moved more than 120 of those keywords into the top 3.',
     visual: (
