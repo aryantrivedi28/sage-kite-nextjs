@@ -20,14 +20,16 @@ export function EmailToggle({ title, captions, note }: { title: string; captions
           ))}
         </div>
       </div>
-      <div className={`cs-mail ${state}`} aria-hidden="true">
-        <div className="cs-mail-head"><span>[Brand]</span><span className="cs-mail-tag">[Email touchpoint]</span></div>
-        <div className="cs-mail-body">
-          <b>[Headline for this message]</b>
-          <i></i><i></i><i className="s"></i>
-          <span className="cs-mail-btn">[Call to action]</span>
+      <div className="cs-mail-stage" aria-hidden="true">
+        <div className={`cs-mail ${state}`}>
+          <div className="cs-mail-head"><span>[Brand]</span><span className="cs-mail-tag">[Email touchpoint]</span></div>
+          <div className="cs-mail-body">
+            <b>[Headline for this message]</b>
+            <i></i><i></i><i className="s"></i>
+            <span className="cs-mail-btn">[Call to action]</span>
+          </div>
+          <div className="cs-mail-foot"><i></i></div>
         </div>
-        <div className="cs-mail-foot"><i></i></div>
       </div>
       <p className="cs-sim-caption" aria-live="polite">{captions[state]}</p>
       <p className="note">{note}</p>

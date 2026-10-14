@@ -24,6 +24,7 @@ export const CASE_STUDY_CSS = `
           .cs-crumbs a:hover{color:var(--ink);text-decoration:underline;text-decoration-color:var(--butter);text-underline-offset:4px}
           .cs-hero-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(36px,6vw,72px);align-items:start}
           .cs-hero-copy{display:grid;gap:22px}
+          .cs-hero-label{justify-self:start;padding:6px 14px;border-radius:999px;background:var(--sky-soft);color:var(--ink);font-size:.85rem;font-weight:600;line-height:1.4}
           .cs-hero h1{font-size:clamp(2.35rem,4.8vw,3.9rem);line-height:1.04;letter-spacing:-.03em}
           .cs-dek{font-size:clamp(1.2rem,2vw,1.5rem);line-height:1.3;font-weight:600;color:var(--sage);max-width:36ch}
           .cs-lede{font-size:clamp(1.1rem,1.4vw,1.2rem);line-height:1.6;max-width:60ch}
@@ -173,6 +174,7 @@ export const CASE_STUDY_CSS = `
           .cs-step.linked h3 a::after{content:"";position:absolute;inset:0}
           .cs .cs-part{scroll-margin-top:96px}
           .cs .cs-part.pale{background:var(--pale-sage)}
+          .cs .pale + .pale{border-top:1px solid var(--light-sage)}
 
           /* parts: migration diagram (MigrationFlow) */
           .cs-mig text{font-family:var(--sans);fill:var(--ink)}
@@ -207,7 +209,7 @@ export const CASE_STUDY_CSS = `
           .cs-gallery-title{font-size:1.4rem}
           .cs-frame.strip{margin-bottom:clamp(28px,4vw,44px)}
           .cs-frame.strip figcaption{min-height:0;padding:12px 18px 14px}
-          .cs-countcard-wrap{margin-top:clamp(28px,4vw,44px);max-width:560px}
+          .cs-countcard-wrap{margin-top:clamp(28px,4vw,44px)}
           .cs-shots{display:grid}
           .cs-shots img{grid-area:1/1;opacity:0;visibility:hidden;transition:opacity 300ms var(--ease),visibility 0s linear 300ms}
           .cs-shots img.on{opacity:1;visibility:visible;transition:opacity 300ms var(--ease)}
@@ -230,10 +232,11 @@ export const CASE_STUDY_CSS = `
           @keyframes cs-travel{from{transform:translateX(0)}to{transform:translateX(600px)}}
 
           /* hero count card (CountCard) */
-          .cs-countcard{margin:0;background:var(--warm-white);border:1px solid var(--light-sage);border-radius:10px;padding:clamp(20px,3vw,30px);display:grid;gap:18px;box-shadow:8px 8px 0 var(--sky-soft)}
-          .cs-countcard-top{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;color:var(--ink);font-weight:600}
+          .cs-countcard{margin:0;background:var(--warm-white);border:1px solid var(--light-sage);border-radius:10px;padding:clamp(20px,3vw,30px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);grid-template-areas:"top dots" "note note";gap:18px clamp(24px,4vw,48px);align-items:center;box-shadow:8px 8px 0 var(--sky-soft)}
+          .cs-countcard-top{grid-area:top;display:flex;flex-direction:column;align-items:flex-start;gap:10px;color:var(--ink);font-weight:600}
           .cs-countcard-top b{font-size:clamp(3rem,6vw,4.5rem);font-weight:800;line-height:1;letter-spacing:-.04em;color:var(--coral)}
-          .cs-countcard .cs-dots{grid-template-columns:repeat(10,minmax(0,1fr));gap:8px}
+          .cs-countcard .cs-dots{grid-area:dots;grid-template-columns:repeat(20,minmax(0,1fr));gap:8px}
+          .cs-countcard figcaption{grid-area:note}
 
           /* parts: checkout before/after (CheckoutFixFlow) */
           .cs-ck[data-state="before"] .pp-flow{stroke:var(--coral)}
@@ -258,12 +261,15 @@ export const CASE_STUDY_CSS = `
           .cs-nsteps p{font-size:.98rem;line-height:1.6}
 
           /* parts: theme layers (LayerStack) */
-          .cs-stack{display:grid;gap:10px;max-width:640px}
+          .cs-stack{display:grid;gap:10px;justify-items:center}
           .cs-slab{display:grid;gap:2px;padding:16px 20px;border-radius:8px;color:var(--ink);transition:opacity 300ms var(--ease),transform 300ms var(--ease)}
           .cs-slab span{font-size:.88rem;color:var(--sage)}
           .cs-slab.l0{background:var(--pale-sage);border:1px solid var(--light-sage)}
           .cs-slab.l1{background:var(--coral-soft);border-left:6px solid var(--coral)}
           .cs-slab.l2{background:var(--sky-soft);border-left:6px solid var(--sky)}
+          .cs-slab{width:100%}
+          .cs-slab.l1{width:92%}
+          .cs-slab.l2{width:84%}
           .cs-slab.off{opacity:.15;transform:translateY(-8px)}
 
           /* parts: loyalty loop (LoopSketch) */
@@ -278,7 +284,8 @@ export const CASE_STUDY_CSS = `
           .cs-loop .n3{fill:var(--pale-sage)}
 
           /* parts: email styles (EmailToggle) */
-          .cs-mail{--m-head:var(--pale-sage);--m-head-fg:var(--ink);--m-btn:var(--light-sage);--m-rule:transparent;max-width:520px;border:1px solid var(--light-sage);border-radius:10px;overflow:hidden;background:var(--warm-white);transition:border-color 300ms var(--ease)}
+          .cs-mail-stage{background:var(--pale-sage);border-radius:8px;padding:clamp(20px,4vw,48px) clamp(12px,3vw,32px)}
+          .cs-mail{margin-inline:auto;box-shadow:0 10px 28px color-mix(in srgb,var(--ink) 10%,transparent);--m-head:var(--pale-sage);--m-head-fg:var(--ink);--m-btn:var(--light-sage);--m-rule:transparent;max-width:560px;border:1px solid var(--light-sage);border-radius:10px;overflow:hidden;background:var(--warm-white);transition:border-color 300ms var(--ease)}
           .cs-mail.custom{--m-head:var(--ink);--m-head-fg:var(--warm-white);--m-btn:var(--coral);--m-rule:var(--butter);border-color:var(--ink)}
           .cs-mail-head{display:flex;justify-content:space-between;gap:12px;padding:14px 18px;background:var(--m-head);color:var(--m-head-fg);border-bottom:4px solid var(--m-rule);font-weight:700;font-size:.9rem;transition:background 300ms var(--ease),color 300ms var(--ease)}
           .cs-mail-tag{font-weight:500;opacity:.8}
@@ -538,6 +545,9 @@ export const CASE_STUDY_CSS = `
             .cs-split.sticky > :first-child{position:static}
             .cs-nsteps{grid-template-columns:1fr}
             .cs-nsteps li:nth-child(n){margin-top:0}
+            .cs-countcard{grid-template-columns:1fr;grid-template-areas:"top" "dots" "note"}
+            .cs-countcard-top{flex-direction:row;align-items:baseline;flex-wrap:wrap}
+            .cs-countcard .cs-dots{grid-template-columns:repeat(10,minmax(0,1fr))}
           }
           @media (max-width:760px){
             .cs-problems,.cs-tools,.cs-versus,.cs-changes{grid-template-columns:1fr}

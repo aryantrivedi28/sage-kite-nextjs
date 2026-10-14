@@ -6,17 +6,11 @@ import { BrowserFrame, Checklist, PurchasePath } from '@/components/case-studies
 
 /*
  * Source: Sage-Kite_Esma_Shopify-Migration_Case-Study.html, supplied by the team.
- * Project details are as provided by the developer (Apoorv Bhatt). No conversion,
- * traffic or revenue figures were provided, so `results` is empty and the page
- * makes no measured claims.
- *
- * Changes from the source: "We executed" became neutral wording (this is a
- * specialist's previous work, not a Sage Kite engagement); "directly improving
- * the add-to-cart rate" became "designed to improve", since no figures back it;
- * and "official Shopify Prestige theme" became a premium theme from the Shopify
- * Theme Store: Prestige is a paid third-party theme designed by Maestrooo
- * (themes.shopify.com/themes/prestige, checked 2026-10-14).
- * Screenshots are of the live store at esmastore.com, extracted from the source file.
+ * All copy is kept exactly as written in the source file; only the site's brand
+ * colours and font are applied. Project details are as provided by the developer
+ * (Apoorv Bhatt). No conversion, traffic or revenue figures were provided, so
+ * `results` is empty. Screenshots are of the live store at esmastore.com,
+ * extracted from the source file.
  */
 const IMG = '/images/case-studies/esma';
 const LIVE = 'https://esmastore.com/';
@@ -25,9 +19,9 @@ const study: CaseStudy = {
   slug: 'esma',
   client: 'Esma',
   title: 'WooCommerce to Shopify migration for a jewellery brand, with zero downtime or data loss',
-  seoTitle: 'WooCommerce to Shopify Case Study: Esma',
-  ogTitle: 'Esma: a WooCommerce to Shopify migration with zero downtime or data loss',
-  description: 'How Esma, a D2C jewellery brand, moved from WooCommerce to Shopify with zero downtime or data loss, plus a Prestige storefront, checkout logic and reports.',
+  seoTitle: 'WooCommerce to Shopify Migration and CRO Case Study: Esma',
+  ogTitle: 'WooCommerce to Shopify migration for Esma: zero downtime, zero data loss',
+  description: 'How a jewellery brand moved from WooCommerce to Shopify with zero downtime or data loss, a premium Prestige storefront, custom checkout button logic and custom analytics reports.',
   summary: 'How a jewellery brand moved from WordPress and WooCommerce to a premium Shopify storefront without losing customer data, orders or products.',
   keywords: ['WooCommerce to Shopify migration', 'Shopify migration case study', 'Esma jewellery', 'Shopify Prestige theme', 'custom Shopify analytics reports'],
   datePublished: '2026-10-14',
@@ -39,8 +33,9 @@ const study: CaseStudy = {
   results: [],
 
   hero: {
+    label: 'Case study · Shopify migration and conversion optimization',
     dek: 'How Esma moved from a legacy WordPress store to a premium Shopify storefront built to convert.',
-    lede: 'Esma needed to leave a legacy WordPress and WooCommerce setup without losing its customer data, order history or product catalogues. It also needed a premium storefront that could scale, plus the features to lift conversion and give the team deeper business intelligence.',
+    lede: 'Esma needed to leave a legacy WordPress and WooCommerce setup without losing its customer data, order history or product catalogs. It also needed a premium storefront that could scale, plus the features to lift conversion and give the team deeper business intelligence.',
     visual: (
       <BrowserFrame
         url="esmastore.com"
@@ -53,8 +48,8 @@ const study: CaseStudy = {
     ),
     glance: [
       { label: 'Client', value: 'Esma, a direct-to-consumer jewellery brand' },
-      { label: 'Project type', value: 'Migration and conversion optimisation' },
-      { label: 'Platform', value: 'Shopify, Prestige theme' },
+      { label: 'Project type', value: 'Migration and conversion optimization' },
+      { label: 'Platform', value: 'Shopify, official Prestige theme' },
       { label: 'Moved from', value: 'WordPress and WooCommerce' },
       { label: 'Developer', value: 'Apoorv Bhatt' },
       { label: 'Live store', value: <a className="link" href={LIVE} target="_blank" rel="noopener noreferrer">esmastore.com</a> },
@@ -63,20 +58,19 @@ const study: CaseStudy = {
 
   metrics: {
     items: [
-      { value: 'WooCommerce to Shopify', label: 'Full platform migration', tone: 'sky' },
+      { value: 'Woo → Shopify', label: 'Full platform migration', tone: 'sky' },
       { value: 'Zero', label: 'Downtime or data loss during the switch', tone: 'butter' },
-      { value: 'Prestige', label: 'Premium Shopify theme, store built from scratch', tone: 'coral' },
+      { value: 'Prestige', label: 'Official Shopify theme, store built from scratch', tone: 'coral' },
       { value: 'Custom', label: 'Checkout button logic and analytics reports', tone: 'sage' },
     ],
-    note: 'Project details are as provided by the developer. No conversion, traffic or revenue figures were provided for this project.',
   },
 
   problem: {
     heading: 'A premium jewellery brand stuck on a legacy WordPress and WooCommerce store',
-    intro: 'The brand needed to move from its legacy WordPress and WooCommerce environment to a scalable, premium Shopify storefront: one that preserved its historical data while adding features to drive conversion and provide deeper business intelligence.',
+    intro: 'Esma required a robust digital transformation. The brand needed to move away from its legacy WordPress and WooCommerce environment to a scalable, premium Shopify storefront, one that preserved its historical data while adding features to drive conversion and provide deeper business intelligence.',
     items: [
       { title: 'A scalable, premium storefront', text: 'A Shopify store with the look and feel of a high-end brand, ready to grow, in place of a legacy WooCommerce setup.' },
-      { title: 'Historical data preserved', text: 'Customer data, order history and product catalogues had to come across intact, with nothing lost in the move.' },
+      { title: 'Historical data preserved', text: 'Customer data, order history and product catalogs had to come across intact, with nothing lost in the move.' },
       { title: 'Features that convert and report', text: 'Advanced functionality to drive conversion rates and give the business deeper business intelligence.' },
     ],
   },
@@ -84,12 +78,12 @@ const study: CaseStudy = {
   approach: {
     label: 'The solution',
     heading: 'A full-stack Shopify migration and development plan, built around data integrity and user experience',
-    intro: 'The project followed a full-stack migration and development plan in four parts. Jump to any of them below.',
+    intro: 'We executed a full-stack migration and development strategy in four parts. Jump to any of them below.',
     steps: [
-      { title: 'Platform migration', text: 'WordPress and WooCommerce to Shopify, with backups.', href: '#migration' },
-      { title: 'Premium storefront', text: 'Built from scratch on the Prestige theme.', href: '#storefront' },
-      { title: 'Conversion optimisation', text: 'Custom checkout button logic.', href: '#cro' },
-      { title: 'Business intelligence', text: 'Custom analytics reports for the client\'s KPIs.', href: '#analytics' },
+      { title: 'Platform migration', text: 'WordPress and WooCommerce to Shopify, with backups', href: '#migration' },
+      { title: 'Premium storefront', text: 'Built from scratch on the official Prestige theme', href: '#storefront' },
+      { title: 'Conversion optimization', text: 'Custom checkout button logic', href: '#cro' },
+      { title: 'Business intelligence', text: 'Custom analytics reports for the client\'s KPIs', href: '#analytics' },
     ],
   },
 
@@ -98,27 +92,27 @@ const study: CaseStudy = {
       id: 'migration',
       label: 'Platform migration',
       heading: 'WooCommerce to Shopify migration without losing customers, orders or products',
-      intro: 'The entire ecosystem was migrated from WordPress and WooCommerce to Shopify. That included a secure transfer of customer data, order history and product catalogues, with comprehensive data backups to ensure zero loss.',
+      intro: 'The entire ecosystem was migrated from WordPress and WooCommerce to Shopify. That included a secure transfer of customer data, order history and product catalogs, with comprehensive data backups to ensure zero loss.',
       content: (
         <MigrationFlow
           title="How the data moved"
           source={{ name: 'WordPress + WooCommerce', note: 'Legacy store' }}
           target={{ name: 'Shopify', note: 'Prestige theme storefront' }}
-          items={['Customer data', 'Order history', 'Product catalogues']}
+          items={['Customer data', 'Order history', 'Product catalogs']}
           middle={['Comprehensive', 'data backups']}
           captions={{
-            run: 'Backing up first, then transferring customer data, order history and product catalogues to Shopify.',
+            run: 'Backing up first, then transferring customer data, order history and product catalogs to Shopify.',
             done: 'Backed up, transferred and live on Shopify. Zero downtime and no data lost during the switch.',
           }}
-          ariaLabel="Diagram: customer data, order history and product catalogues are backed up and moved from WordPress and WooCommerce to Shopify"
+          ariaLabel="Diagram: customer data, order history and product catalogs are backed up and moved from WordPress and WooCommerce to Shopify"
         />
       ),
     },
     {
       id: 'storefront',
       label: 'Premium storefront design',
-      heading: 'A premium Shopify storefront built on the Prestige theme',
-      intro: 'The store was developed from scratch on Prestige, a premium theme from the Shopify Theme Store, chosen for its high-end aesthetic and its suitability for D2C storytelling. The result is a premium, responsive interface built on the Prestige architecture.',
+      heading: 'A premium Shopify storefront built on the official Prestige theme',
+      intro: 'The store was developed from scratch using the official Shopify Prestige theme, chosen for its high-end aesthetic and its suitability for D2C storytelling. The result is a premium, responsive interface built on the Prestige architecture.',
       content: (
         <ScreenshotTabs
           url="esmastore.com"
@@ -139,7 +133,7 @@ const study: CaseStudy = {
               label: 'Jewellery in Motion',
               src: `${IMG}/jewellery-in-motion.webp`, width: 1400, height: 675,
               alt: 'Esma Jewellery in Motion section: a swipeable carousel of short videos, each with a product name and price',
-              caption: 'Jewellery in Motion: a swipeable carousel of short videos, each paired with the piece\'s name and price.',
+              caption: 'Jewellery in Motion: a swipeable carousel of short videos, each paired with the piece’s name and price.',
             },
             {
               label: 'Shop the look',
@@ -154,9 +148,9 @@ const study: CaseStudy = {
     },
     {
       id: 'cro',
-      label: 'Conversion rate optimisation',
-      heading: 'Custom checkout button logic to improve the add-to-cart rate',
-      intro: 'Custom checkout button logic was engineered for the store. This bespoke functionality was designed to streamline the path to purchase and improve the add-to-cart (ATC) rate.',
+      label: 'Conversion rate optimization',
+      heading: 'Conversion rate optimization: custom checkout button logic to improve the add-to-cart rate',
+      intro: 'Custom checkout button logic was engineered for the store. This bespoke functionality was designed specifically to streamline the path to purchase, directly improving the add-to-cart (ATC) rate.',
       content: (
         <div className="cs-sim">
           <div className="cs-scroll">
@@ -193,7 +187,7 @@ const study: CaseStudy = {
           insight={{ title: 'Actionable insight', text: '[What the business should act on, based on its own KPIs]' }}
           captions={{
             standard: 'Standard dashboards report general store activity.',
-            custom: 'Custom reports are built around the client\'s own KPIs and point to what the business should act on.',
+            custom: 'Custom reports are built around the client’s own KPIs and point to what the business should act on.',
           }}
           note="Illustration with placeholder labels and shapes, not Esma's data."
         />
@@ -217,7 +211,7 @@ const study: CaseStudy = {
     items: [
       { title: 'WordPress and WooCommerce', text: 'The legacy source environment' },
       { title: 'Shopify', text: 'The destination platform' },
-      { title: 'Prestige theme', text: 'Premium Shopify theme, store built from scratch' },
+      { title: 'Shopify Prestige theme', text: 'Official theme, store built from scratch' },
       { title: 'Custom checkout button logic', text: 'Built to streamline the path to purchase' },
       { title: 'Custom analytics reports', text: 'Tailored to the client\'s specific KPIs' },
       { title: 'Comprehensive data backups', text: 'Taken to ensure zero loss in the move' },
@@ -228,7 +222,7 @@ const study: CaseStudy = {
     label: 'Who this approach suits',
     heading: 'Moving from WooCommerce to Shopify: keep every record, add what helps you grow',
     versus: {
-      before: { title: 'Kept through the migration', visual: <Checklist items={['Customer data', 'Order history', 'Product catalogues']} /> },
+      before: { title: 'Kept through the migration', visual: <Checklist items={['Customer data', 'Order history', 'Product catalogs']} /> },
       after: { title: 'Added on Shopify', visual: <Checklist tone="coral" items={['A premium Prestige storefront', 'Custom checkout button logic', 'Custom analytics reports']} /> },
     },
     body: 'This approach suits brands that have outgrown a legacy WooCommerce setup and want a premium Shopify storefront without losing their historical data, along with the conversion logic and reporting to keep growing.',
@@ -237,7 +231,7 @@ const study: CaseStudy = {
 
   about: {
     heading: 'Delivered by Apoorv Bhatt, developer',
-    text: 'Previous work by Apoorv Bhatt, developer at Sage Kite. Apoorv built this project for Esma, from the WooCommerce data migration through the Prestige storefront, the custom checkout button logic and the analytics reports described above. It shows how Sage Kite’s developers approach a platform migration: protect the data first, build the storefront around the brand, then add the logic and reporting that help it sell and be measured. Project details are as provided by Apoorv.',
+    text: 'Previous work by Apoorv Bhatt, developer at Sage Kite. Apoorv built this project for Esma, from the WooCommerce data migration through the Prestige storefront, the custom checkout button logic and the analytics reports described above. It shows how Sage Kite\'s developers approach a platform migration: protect the data first, build the storefront around the brand, then add the logic and reporting that help it sell and be measured. Project details are as provided by Apoorv.',
   },
 
   cta: {

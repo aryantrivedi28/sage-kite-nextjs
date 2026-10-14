@@ -228,7 +228,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
             </nav>
             <div className="cs-hero-grid">
               <div className="cs-hero-copy">
-                {hero.label && <p className="label" style={{ marginBottom: 0 }}>{hero.label}</p>}
+                {hero.label && <p className="cs-hero-label">{hero.label}</p>}
                 <h1 id="title">{study.title}</h1>
                 <p className="cs-dek">{hero.dek}</p>
                 <p className="cs-lede">{hero.lede}</p>
@@ -297,17 +297,19 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
         {approach && (
           <section aria-labelledby="approach-title">
             <div className="wrap">
-              <div className="cs-split">
-                <Head id="approach-title" label={approach.label ?? 'How the work was done'} heading={approach.heading} />
-                <div className="cs-prose">
-                  {approach.intro && <p>{approach.intro}</p>}
-                  {approach.diagnosis && (
+              {approach.diagnosis ? (
+                <div className="cs-split">
+                  <Head id="approach-title" label={approach.label ?? 'How the work was done'} heading={approach.heading} />
+                  <div className="cs-prose">
+                    {approach.intro && <p>{approach.intro}</p>}
                     <ul className="cs-diagnosis">
                       {approach.diagnosis.map((d) => <li key={d}>{d}</li>)}
                     </ul>
-                  )}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <Head id="approach-title" label={approach.label ?? 'How the work was done'} heading={approach.heading} intro={approach.intro} />
+              )}
 
               {approach.steps.length === 4 && (
                 <div className="cs-lift" aria-hidden="true">
