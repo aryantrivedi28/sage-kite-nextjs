@@ -116,6 +116,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Google tag (gtag.js): GA4, measurement ID G-QQFH3W77TS. In the root
+            layout so it loads on every page. ContactForm sends generate_lead through it. */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQFH3W77TS" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-QQFH3W77TS');`,
+          }}
+        />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"

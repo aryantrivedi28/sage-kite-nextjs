@@ -13,6 +13,8 @@ Live at `https://www.sagekite.com`.
   no auth. One environment variable: `NEXT_PUBLIC_GHL_WEBHOOK_URL` (contact form
   webhook), set in `.env` locally (not committed) and in Vercel's environment
   variables. It is fixed at build time, so redeploy after changing it. See `.env.example`.
+- Google Analytics 4 (gtag.js, measurement ID `G-QQFH3W77TS`) is loaded once in the
+  `<head>` of `app/layout.tsx`, so it runs on every page. Do not add a second Google tag.
 - Every page is statically generated at build time.
 - Styling is plain CSS. Brand colours, font and spacing tokens are in
   `app/brand.css`; shared classes are in `app/globals.css`.
