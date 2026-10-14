@@ -141,6 +141,39 @@ function ChangeIcon({ kind }: { kind: string }) {
       </svg>
     );
   }
+  if (kind === 'shield') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <path className="i-page" d="M22 5 l15 5 v12 c0 10 -7 16 -15 19 c-8 -3 -15 -9 -15 -19 v-12 z" strokeLinejoin="round" />
+        <path className="hop i-tick" d="M15 22 l5 5 l9 -10" />
+      </svg>
+    );
+  }
+  if (kind === 'devices') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <rect className="i-page" x="3" y="8" width="28" height="20" rx="3" />
+        <line className="i-stroke" x1="10" y1="34" x2="24" y2="34" />
+        <rect className="hop i-phone" x="27" y="16" width="14" height="22" rx="3" />
+      </svg>
+    );
+  }
+  if (kind === 'heart') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <path className="i-page" d="M22 38 C8 28 6 18 12 12 C16 8 21 10 22 15 C23 10 28 8 32 12 C38 18 36 28 22 38 z" strokeLinejoin="round" />
+        <path className="hop i-tick" d="M16 21 H28 M22 15 V27" />
+      </svg>
+    );
+  }
+  if (kind === 'cards') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <rect className="i-page" x="5" y="8" width="24" height="18" rx="3" />
+        <rect className="hop i-phone" x="17" y="18" width="22" height="18" rx="3" />
+      </svg>
+    );
+  }
   if (kind === 'target') {
     return (
       <svg viewBox="0 0 44 44" aria-hidden="true">
@@ -173,7 +206,7 @@ const cssVars = (v: Record<string, string>) => v as React.CSSProperties;
 export function CaseStudyPage({ study }: { study: CaseStudy }) {
   if (study.draft) notFound();
 
-  const { hero, metrics, startingPoint, problem, approach, delivered, resultsSection, changes, methods, takeaway, about, cta } = study;
+  const { hero, metrics, startingPoint, problem, approach, sections, delivered, resultsSection, changes, methods, takeaway, about, cta } = study;
 
   return (
     <>
@@ -246,7 +279,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
         {problem && (
           <section className="pale" aria-labelledby="problem-title">
             <div className="wrap">
-              <Head id="problem-title" label={problem.label ?? 'The problem'} heading={problem.heading} />
+              <Head id="problem-title" label={problem.label ?? 'The problem'} heading={problem.heading} intro={problem.intro} />
               <ul className="cs-problems">
                 {problem.items.map((p) => (
                   <li key={p.title}><h3><i aria-hidden="true"></i>{p.title}</h3><p>{p.text}</p></li>
@@ -291,7 +324,11 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
 
               <ol className="cs-steps" style={cssVars({ '--n': String(approach.steps.length) })} aria-label="The steps of the work, in order">
                 {approach.steps.map((s, i) => (
-                  <li key={s.title} className="cs-step"><span className="cs-step-n" aria-hidden="true">{i + 1}</span><h3>{s.title}</h3><p>{s.text}</p></li>
+                  <li key={s.title} className={`cs-step${s.href ? ' linked' : ''}`} style={cssVars({ '--i': String(i) })}>
+                    <span className="cs-step-n" aria-hidden="true">{i + 1}</span>
+                    <h3>{s.href ? <a href={s.href}>{s.title}</a> : s.title}</h3>
+                    <p>{s.text}</p>
+                  </li>
                 ))}
               </ol>
 
@@ -301,6 +338,16 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
             </div>
           </section>
         )}
+
+        {/* Parts of the work */}
+        {sections?.map((sec, i) => (
+          <section key={sec.id} id={sec.id} className={`cs-part${i % 2 === 0 ? ' pale' : ''}`} aria-labelledby={`${sec.id}-title`}>
+            <div className="wrap">
+              <Head id={`${sec.id}-title`} label={sec.label} heading={sec.heading} intro={sec.intro} />
+              {sec.content}
+            </div>
+          </section>
+        ))}
 
         {/* Delivered */}
         {delivered && (
@@ -380,7 +427,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
           <section className="pale" aria-labelledby="changed-title">
             <div className="wrap">
               <Head id="changed-title" label={changes.label ?? 'What changed for the business'} heading={changes.heading} />
-              <div className="cs-changes">
+              <div className="cs-changes" style={cssVars({ '--n': changes.items.length === 3 ? '3' : '2' })}>
                 {changes.items.map((c) => (
                   <article key={c.title} className="cs-change">
                     <div className="cs-change-icon"><ChangeIcon kind={c.icon} /></div>
@@ -410,7 +457,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
           <section className="cs-takeaway" aria-labelledby="takeaway-title">
             <div className="wrap">
               <div className="cs-panel">
-                <p className="label">Takeaway</p>
+                <p className="label">{takeaway.label ?? 'Takeaway'}</p>
                 <h2 id="takeaway-title">{takeaway.heading}</h2>
                 {takeaway.versus && (
                   <div className="cs-versus">
@@ -420,7 +467,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
                           {DOTS.map(([x, y]) => <circle key={`${x}-${y}`} className="d-off" cx={x} cy={y} r="10" />)}
                         </svg>
                       )}
-                      <figcaption>{takeaway.versus.before.title}<span>{takeaway.versus.before.text}</span></figcaption>
+                      <figcaption>{takeaway.versus.before.title}{takeaway.versus.before.text && <span>{takeaway.versus.before.text}</span>}</figcaption>
                     </figure>
                     <figure>
                       {takeaway.versus.after.visual ?? (
@@ -429,7 +476,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
                           {DOTS.map(([x, y], i) => <circle key={`${x}-${y}`} className="d-on pulse" style={{ animationDelay: `${i * 0.4}s` }} cx={x} cy={y} r="10" />)}
                         </svg>
                       )}
-                      <figcaption>{takeaway.versus.after.title}<span>{takeaway.versus.after.text}</span></figcaption>
+                      <figcaption>{takeaway.versus.after.title}{takeaway.versus.after.text && <span>{takeaway.versus.after.text}</span>}</figcaption>
                     </figure>
                   </div>
                 )}

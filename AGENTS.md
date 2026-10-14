@@ -101,17 +101,22 @@ content/platforms.ts      Platform list and industry groups: homepage "Platforms
 content/case-studies/
   index.ts                Registry of case studies, newest first. Read its header comment.
   types.ts                CaseStudy type: every section after the hero is optional. A result is
-                          either before/after (bars) or a count with no starting figure (dots).
+                          either before/after (bars) or a count with no starting figure (dots);
+                          `results: []` when nothing was measured (the listing shows `metrics`).
+                          `sections` adds one free-form section per part of the work.
 components/case-studies/  CaseStudyPage (renders every case study + metadata + JSON-LD),
                           caseStudyStyles.ts (shared CSS), blocks.tsx (reusable content and
-                          sketches, RankLadder, Journey, DotGrid, PageGridSketch) and the
+                          sketches, RankLadder, Journey, DotGrid, PageGridSketch, BrowserFrame,
+                          PurchasePath, Checklist, CountCard, NumberedSteps, LoopSketch) and the
                           interactive SearchTyper, SearchFlow, LinkingDemo, DuplicateUrlFlow,
-                          CategoryFixes.
+                          CategoryFixes, MigrationFlow, ScreenshotTabs, DashboardToggle,
+                          CheckoutFixFlow, LayerStack, EmailToggle.
 content/founders-thoughts.ts
                           Founder's Thoughts essays, newest first. Add a new essay here
                           and create app/insights/founders-thoughts/<slug>/page.tsx.
 public/                   Static files. Blog images go in public/images/blog/,
-                          essay images in public/images/founders-thoughts/.
+                          essay images in public/images/founders-thoughts/,
+                          case study images in public/images/case-studies/<slug>/.
 ```
 
 ## Writing content

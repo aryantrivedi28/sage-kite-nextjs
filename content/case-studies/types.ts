@@ -67,7 +67,10 @@ export interface CaseStudy {
   practitioner?: { name: string; role: string };
   /** The main pieces of work, shown as chips on the listing card. */
   highlights: string[];
-  /** Headline before/after figures for the listing card and the Results section. */
+  /**
+   * Headline figures for the listing card and the Results section. Leave empty
+   * when nothing was measured: the listing card then shows the `metrics` tiles.
+   */
   results: CaseStudyResult[];
   /** Draft case studies are left out of the listing, sitemap and routes. */
   draft?: boolean;
@@ -81,8 +84,8 @@ export interface CaseStudy {
     lede: string;
     /** Optional graphic above the At a glance card. */
     visual?: ReactNode;
-    /** "At a glance" rows, e.g. Client, Industry, Engagement. */
-    glance: { label: string; value: string }[];
+    /** "At a glance" rows, e.g. Client, Industry, Engagement. A value can be a link. */
+    glance: { label: string; value: ReactNode }[];
   };
   /** Coloured headline tiles under the hero. */
   metrics?: { items: { value: string; label: string; tone: Tone }[]; note?: string };
@@ -91,6 +94,8 @@ export interface CaseStudy {
   problem?: {
     label?: string;
     heading: string;
+    /** Short line under the heading. */
+    intro?: string;
     items: { title: string; text: string }[];
     /** Optional graphic under the list, e.g. <SearchFlow />. */
     visual?: ReactNode;
@@ -101,10 +106,15 @@ export interface CaseStudy {
     heading: string;
     intro?: string;
     diagnosis?: string[];
-    /** Up to four steps reads best. */
-    steps: { title: string; text: string }[];
+    /** Up to four steps reads best. `href` turns a step into a link, e.g. to one of `sections`. */
+    steps: { title: string; text: string; href?: string }[];
     note?: string;
   };
+  /**
+   * Free-form sections shown after the approach, one per part of the work, e.g.
+   * migration, storefront, analytics. `id` is the anchor for an approach step `href`.
+   */
+  sections?: { id: string; label: string; heading: string; intro?: string; content: ReactNode }[];
   delivered?: {
     label?: string;
     heading: string;
@@ -131,15 +141,17 @@ export interface CaseStudy {
   changes?: {
     label?: string;
     heading: string;
-    items: { icon: 'ripple' | 'nodes' | 'bars' | 'stack' | 'lift' | 'merge' | 'grid' | 'target'; title: string; text: string }[];
+    items: { icon: 'ripple' | 'nodes' | 'bars' | 'stack' | 'lift' | 'merge' | 'grid' | 'target' | 'shield' | 'devices' | 'heart' | 'cards'; title: string; text: string }[];
   };
   methods?: { label?: string; heading: string; items: { title: string; text: string }[] };
   takeaway?: {
+    /** Eyebrow above the heading. Defaults to "Takeaway". */
+    label?: string;
     heading: string;
     /** Before vs after graphic. Without a `visual`, each side shows the scattered vs connected dots. */
     versus?: {
-      before: { title: string; text: string; visual?: ReactNode };
-      after: { title: string; text: string; visual?: ReactNode };
+      before: { title: string; text?: string; visual?: ReactNode };
+      after: { title: string; text?: string; visual?: ReactNode };
     };
     body: string;
     fit?: string[];

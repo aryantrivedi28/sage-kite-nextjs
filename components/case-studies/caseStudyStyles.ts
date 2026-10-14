@@ -76,6 +76,14 @@ export const CASE_STUDY_CSS = `
           .cs-j-arrow{flex:none;width:28px;height:2px;background:var(--sky);position:relative}
           .cs-j-arrow::after{content:"";position:absolute;right:-1px;top:-4px;border-left:7px solid var(--sky);border-top:5px solid transparent;border-bottom:5px solid transparent}
 
+          .cs-frame{margin:0;background:var(--warm-white);border:1px solid var(--light-sage);border-radius:10px;overflow:hidden;box-shadow:8px 8px 0 var(--sky-soft)}
+          .cs-frame img{display:block;width:100%;height:auto}
+          .cs-frame-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--pale-sage);border-bottom:1px solid var(--light-sage)}
+          .cs-frame-bar i{width:10px;height:10px;border-radius:50%;background:var(--coral)}
+          .cs-frame-bar i:nth-child(2){background:var(--butter)}
+          .cs-frame-bar i:nth-child(3){background:var(--sage)}
+          .cs-frame-bar span{margin-left:10px;background:var(--warm-white);border:1px solid var(--light-sage);border-radius:999px;padding:2px 14px;font-size:.8rem;font-weight:600;color:var(--sage)}
+
           /* metrics */
           .cs .cs-metrics-sec{padding:0 0 clamp(24px,4vw,40px)}
           .cs-metrics{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:14px}
@@ -150,9 +158,7 @@ export const CASE_STUDY_CSS = `
           .cs-lift .line{stroke:var(--sky);stroke-dasharray:1100;stroke-dashoffset:1100;animation:cs-drawin 2.4s .3s ease-out forwards}
           .cs-lift circle{stroke:var(--warm-white);stroke-width:3}
           .cs-steps{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:16px;align-items:start}
-          .cs-step:nth-child(1){margin-top:64px}
-          .cs-step:nth-child(2){margin-top:42px}
-          .cs-step:nth-child(3){margin-top:20px}
+          .cs-step{margin-top:calc((var(--n,4) - 1 - var(--i,0)) * 20px)}
           .cs-step{background:var(--warm-white);border:1px solid var(--light-sage);border-top:5px solid var(--sky);border-radius:var(--r);padding:24px 22px 26px;display:grid;gap:10px}
           .cs-step:nth-child(2){border-top-color:var(--sage)}
           .cs-step:nth-child(3){border-top-color:var(--butter)}
@@ -161,6 +167,140 @@ export const CASE_STUDY_CSS = `
           .cs-step h3{font-size:1.15rem}
           .cs-step p{font-size:.97rem;line-height:1.6}
           .cs-steps-note{margin-top:36px}
+          .cs-step.linked{position:relative;transition:transform var(--t) var(--ease),box-shadow var(--t) var(--ease)}
+          .cs-step.linked:hover{transform:translateY(-3px);box-shadow:0 6px 0 color-mix(in srgb,var(--ink) 12%,transparent)}
+          .cs-step.linked h3 a{color:inherit;text-decoration:underline;text-decoration-color:var(--butter);text-decoration-thickness:2px;text-underline-offset:4px}
+          .cs-step.linked h3 a::after{content:"";position:absolute;inset:0}
+          .cs .cs-part{scroll-margin-top:96px}
+          .cs .cs-part.pale{background:var(--pale-sage)}
+
+          /* parts: migration diagram (MigrationFlow) */
+          .cs-mig text{font-family:var(--sans);fill:var(--ink)}
+          .cs-mig .m-muted{fill:var(--sage)}
+          .cs-mig .m-accent{fill:color-mix(in srgb,var(--sky) 70%,var(--ink))}
+          .cs-mig .m-src{fill:var(--warm-white);stroke:var(--light-sage);stroke-width:1.5}
+          .cs-mig .m-row{fill:var(--pale-sage);stroke:var(--light-sage);stroke-width:1.5}
+          .cs-mig .m-band{fill:var(--butter-soft)}
+          .cs-mig .m-shield{fill:var(--warm-white);stroke:var(--ink);stroke-width:2.4;stroke-linejoin:round}
+          .cs-mig .m-shield-tick{fill:none;stroke:var(--coral);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+          .cs-mig .m-dst{fill:color-mix(in srgb,var(--sky-soft) 45%,var(--warm-white));stroke:var(--sky);stroke-width:2}
+          .cs-mig .m-tgt{fill:var(--sky-soft);stroke:var(--sky);stroke-width:1.5;transition:fill 400ms var(--ease)}
+          .cs-mig .m-tgt-text,.cs-mig .m-chk{transition:opacity 400ms var(--ease)}
+          .cs-mig .m-chk{fill:none;stroke:color-mix(in srgb,var(--sky) 70%,var(--ink));stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+          .cs-mig .m-pk{fill:var(--coral);opacity:0}
+          .cs-mig[data-state="idle"] .m-tgt,.cs-mig[data-state="run"] .m-tgt{fill:var(--warm-white);stroke:var(--light-sage)}
+          .cs-mig[data-state="idle"] .m-tgt-text,.cs-mig[data-state="run"] .m-tgt-text{opacity:.35}
+          .cs-mig[data-state="idle"] .m-chk,.cs-mig[data-state="run"] .m-chk{opacity:0}
+          .cs-mig[data-state="run"] .m-pk{animation:cs-pk 1.7s ease-in-out 1 both}
+          .cs-mig[data-state="run"] .m-band{animation:cs-band 1.2s ease-in-out 2}
+          @keyframes cs-pk{0%{transform:translateX(0);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translateX(260px);opacity:0}}
+          @keyframes cs-band{50%{fill:color-mix(in srgb,var(--butter) 60%,var(--butter-soft))}}
+          .cs-ghost:disabled{opacity:.5;cursor:default}
+          .cs-ghost:disabled:hover{background:transparent;color:var(--ink)}
+
+          /* parts: storefront screenshots (ScreenshotTabs) */
+          .cs-gallery{display:grid;gap:22px}
+          .cs-tabs{display:flex;flex-wrap:wrap;gap:10px}
+          .cs-tabs .cs-ghost[aria-pressed="true"]{background:var(--ink);color:var(--warm-white)}
+          .cs-frame.big{box-shadow:10px 10px 0 var(--butter-soft)}
+          .cs-sim + .cs-gallery{margin-top:clamp(36px,5vw,56px)}
+          .cs-gallery-title{font-size:1.4rem}
+          .cs-frame.strip{margin-bottom:clamp(28px,4vw,44px)}
+          .cs-frame.strip figcaption{min-height:0;padding:12px 18px 14px}
+          .cs-countcard-wrap{margin-top:clamp(28px,4vw,44px);max-width:560px}
+          .cs-shots{display:grid}
+          .cs-shots img{grid-area:1/1;opacity:0;visibility:hidden;transition:opacity 300ms var(--ease),visibility 0s linear 300ms}
+          .cs-shots img.on{opacity:1;visibility:visible;transition:opacity 300ms var(--ease)}
+          .cs-frame figcaption{padding:16px 20px 20px;border-top:1px solid var(--light-sage);font-size:.98rem;min-height:5.4em}
+
+          /* parts: purchase path (PurchasePath) */
+          .cs-path text{font-family:var(--sans);fill:var(--ink)}
+          .cs-path .pp-track{stroke:var(--light-sage);stroke-width:6;stroke-linecap:round}
+          .cs-path .pp-flow{stroke:var(--sky);stroke-width:3;stroke-dasharray:7 9;animation:cs-dash 1.3s linear infinite}
+          .cs-path .pp-node{stroke:var(--warm-white);stroke-width:4}
+          .cs-path .n0{fill:var(--sky)}
+          .cs-path .n1{fill:var(--sage)}
+          .cs-path .n2{fill:var(--butter)}
+          .cs-path .n3{fill:var(--coral)}
+          .cs-path .pp-ring{fill:none;stroke:var(--sage);stroke-width:2.5;transform-box:fill-box;transform-origin:center;animation:cs-ringp 2.2s ease-in-out infinite}
+          @keyframes cs-ringp{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.25);opacity:.35}}
+          .cs-path .pp-callout{fill:var(--coral-soft);stroke:var(--coral);stroke-width:2}
+          .cs-path .pp-drop{fill:none;stroke:var(--coral);stroke-width:2.5;stroke-dasharray:4 4;stroke-linecap:round;stroke-linejoin:round}
+          .cs-path .pp-dot{fill:var(--ink);animation:cs-travel 5s linear infinite}
+          @keyframes cs-travel{from{transform:translateX(0)}to{transform:translateX(600px)}}
+
+          /* hero count card (CountCard) */
+          .cs-countcard{margin:0;background:var(--warm-white);border:1px solid var(--light-sage);border-radius:10px;padding:clamp(20px,3vw,30px);display:grid;gap:18px;box-shadow:8px 8px 0 var(--sky-soft)}
+          .cs-countcard-top{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;color:var(--ink);font-weight:600}
+          .cs-countcard-top b{font-size:clamp(3rem,6vw,4.5rem);font-weight:800;line-height:1;letter-spacing:-.04em;color:var(--coral)}
+          .cs-countcard .cs-dots{grid-template-columns:repeat(10,minmax(0,1fr));gap:8px}
+
+          /* parts: checkout before/after (CheckoutFixFlow) */
+          .cs-ck[data-state="before"] .pp-flow{stroke:var(--coral)}
+          .cs-ck .ck-bugs,.cs-ck .ck-clear{transition:opacity 350ms var(--ease)}
+          .cs-ck[data-state="before"] .ck-clear{opacity:0}
+          .cs-ck[data-state="after"] .ck-bugs{opacity:0}
+          .cs-ck .ck-bug{fill:var(--coral-soft);stroke:var(--coral);stroke-width:2}
+          .cs-ck .ck-x{stroke:color-mix(in srgb,var(--coral) 70%,var(--ink));stroke-width:3;stroke-linecap:round}
+          .cs-ck .ck-drop{fill:none;stroke:var(--coral);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+          .cs .cs-ck .ck-drop-text{fill:color-mix(in srgb,var(--coral) 70%,var(--ink))}
+          .cs-ck .ck-clear path{fill:none;stroke:color-mix(in srgb,var(--sky) 70%,var(--ink));stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+
+          /* parts: numbered steps (NumberedSteps) */
+          .cs-nsteps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+          .cs-nsteps li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;padding:22px;background:var(--warm-white);border:1px solid var(--light-sage);border-radius:10px}
+          .cs-nsteps li:nth-child(2){margin-top:18px}
+          .cs-nsteps li:nth-child(3){margin-top:36px}
+          .cs-nsteps li > span{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--coral-soft);color:var(--ink);font-weight:700}
+          .cs-nsteps li:nth-child(2) > span{background:var(--butter-soft)}
+          .cs-nsteps li:nth-child(3) > span{background:var(--sky-soft)}
+          .cs-nsteps h3{font-size:1.25rem;margin-bottom:4px}
+          .cs-nsteps p{font-size:.98rem;line-height:1.6}
+
+          /* parts: theme layers (LayerStack) */
+          .cs-stack{display:grid;gap:10px;max-width:640px}
+          .cs-slab{display:grid;gap:2px;padding:16px 20px;border-radius:8px;color:var(--ink);transition:opacity 300ms var(--ease),transform 300ms var(--ease)}
+          .cs-slab span{font-size:.88rem;color:var(--sage)}
+          .cs-slab.l0{background:var(--pale-sage);border:1px solid var(--light-sage)}
+          .cs-slab.l1{background:var(--coral-soft);border-left:6px solid var(--coral)}
+          .cs-slab.l2{background:var(--sky-soft);border-left:6px solid var(--sky)}
+          .cs-slab.off{opacity:.15;transform:translateY(-8px)}
+
+          /* parts: loyalty loop (LoopSketch) */
+          .cs-loop text{font-family:var(--sans);fill:var(--ink)}
+          .cs-loop .lp-muted{fill:var(--sage)}
+          .cs-loop .lp-track{fill:none;stroke:var(--light-sage);stroke-width:6}
+          .cs-loop .lp-flow{fill:none;stroke:var(--sky);stroke-width:3;stroke-dasharray:7 9;animation:cs-dash 1.3s linear infinite}
+          .cs-loop .lp-node{stroke:var(--warm-white);stroke-width:4}
+          .cs-loop .n0{fill:var(--sky-soft)}
+          .cs-loop .n1{fill:var(--butter-soft)}
+          .cs-loop .n2{fill:var(--coral-soft)}
+          .cs-loop .n3{fill:var(--pale-sage)}
+
+          /* parts: email styles (EmailToggle) */
+          .cs-mail{--m-head:var(--pale-sage);--m-head-fg:var(--ink);--m-btn:var(--light-sage);--m-rule:transparent;max-width:520px;border:1px solid var(--light-sage);border-radius:10px;overflow:hidden;background:var(--warm-white);transition:border-color 300ms var(--ease)}
+          .cs-mail.custom{--m-head:var(--ink);--m-head-fg:var(--warm-white);--m-btn:var(--coral);--m-rule:var(--butter);border-color:var(--ink)}
+          .cs-mail-head{display:flex;justify-content:space-between;gap:12px;padding:14px 18px;background:var(--m-head);color:var(--m-head-fg);border-bottom:4px solid var(--m-rule);font-weight:700;font-size:.9rem;transition:background 300ms var(--ease),color 300ms var(--ease)}
+          .cs-mail-tag{font-weight:500;opacity:.8}
+          .cs-mail-body{padding:22px 18px;display:grid;gap:10px;justify-items:start}
+          .cs-mail-body b{font-size:1.4rem;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+          .cs-mail.custom .cs-mail-body b{color:var(--coral)}
+          .cs-mail-body i{display:block;width:100%;height:8px;border-radius:4px;background:var(--light-sage)}
+          .cs-mail-body i.s{width:60%}
+          .cs-mail-btn{margin-top:6px;padding:10px 20px;border-radius:999px;background:var(--m-btn);color:var(--ink);font-weight:700;font-size:.9rem;transition:background 300ms var(--ease)}
+          .cs-mail-foot{padding:12px 18px;background:var(--pale-sage);border-top:1px solid var(--light-sage)}
+          .cs-mail-foot i{display:block;width:45%;height:6px;border-radius:3px;background:var(--light-sage)}
+
+          /* parts: dashboards (DashboardToggle) */
+          .cs-bi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;min-height:250px;align-content:start}
+          .cs-bi-tile{background:var(--pale-sage);border:1px solid var(--light-sage);border-radius:8px;padding:16px;display:grid;gap:14px;align-content:space-between;color:var(--ink);font-size:.92rem}
+          .cs-bi.custom .cs-bi-tile{background:var(--coral-soft);border-color:transparent}
+          .cs-spark{display:flex;align-items:flex-end;gap:6px;height:84px}
+          .cs-spark i{flex:1;background:var(--sky);border-radius:3px 3px 0 0;transform-origin:bottom;animation:cs-sgrow 600ms var(--ease) both}
+          .cs-bi.custom .cs-spark i{background:var(--coral)}
+          @keyframes cs-sgrow{from{transform:scaleY(.1)}to{transform:scaleY(1)}}
+          .cs-bi-insight{grid-column:1/-1;display:grid;gap:4px;padding:16px 18px;border-radius:8px;background:var(--butter-soft);color:var(--ink);border-left:6px solid var(--coral)}
+          .cs-bi-insight span{font-size:.93rem}
           @keyframes cs-drawin{to{stroke-dashoffset:0}}
 
           /* delivered */
@@ -294,7 +434,7 @@ export const CASE_STUDY_CSS = `
           .cs-rtext p{max-width:48ch}
 
           /* changes */
-          .cs-changes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+          .cs-changes{display:grid;grid-template-columns:repeat(var(--n,2),minmax(0,1fr));gap:16px}
           .cs-change{background:var(--warm-white);border:1px solid var(--light-sage);border-radius:10px;padding:clamp(22px,3vw,30px);display:grid;gap:12px;align-content:start}
           .cs-change-icon{width:64px;height:64px;border-radius:12px;display:grid;place-items:center}
           .cs-change:nth-child(1) .cs-change-icon{background:var(--sky-soft)}
@@ -314,6 +454,8 @@ export const CASE_STUDY_CSS = `
           .cs-change .i-sky{fill:var(--sky)}
           .cs-change .i-sage{fill:var(--sage)}
           .cs-change .i-butter{fill:var(--butter)}
+          .cs-change .i-tick{fill:none;stroke:var(--coral);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+          .cs-change .i-phone{fill:var(--butter);stroke:var(--ink);stroke-width:2.4}
           .cs-change .hop{animation:cs-hop 2s ease-in-out infinite alternate}
           @keyframes cs-hop{from{transform:translateY(0)}to{transform:translateY(-5px)}}
           .cs-change .grow-bar{transform-box:fill-box;transform-origin:bottom;animation:cs-pulsebar 2.4s ease-in-out infinite alternate}
@@ -356,6 +498,12 @@ export const CASE_STUDY_CSS = `
           .cs-pagegrid .pg-new rect{fill:none;stroke:var(--sage);stroke-width:2;stroke-dasharray:5 4;opacity:.75}
           .cs-pagegrid .pg-strong rect{fill:var(--sky)}
           .cs-pagegrid .pg-arrow path{fill:none;stroke:var(--warm-white);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+          .cs-versus figure:nth-child(2):has(.cs-check){background:color-mix(in srgb,var(--sky-soft) 45%,var(--warm-white))}
+          .cs-versus figure:has(.cs-check) figcaption{order:-1;font-size:1.1rem}
+          .cs-check{display:grid;gap:8px}
+          .cs-check li{position:relative;padding-left:30px;font-weight:600;color:var(--ink)}
+          .cs-check li::before{content:"";position:absolute;left:4px;top:.45em;width:14px;height:8px;border-left:3px solid var(--sage);border-bottom:3px solid var(--sage);transform:rotate(-45deg)}
+          .cs-check[data-tone="coral"] li::before{border-color:var(--coral)}
           .cs-versus figcaption{font-weight:700;font-size:.95rem}
           .cs-versus figcaption span{display:block;font-weight:500;font-size:.85rem;color:var(--sage)}
           .cs-fit-label{font-weight:600;font-size:.95rem}
@@ -380,6 +528,7 @@ export const CASE_STUDY_CSS = `
             .cs-lift{display:none}
             .cs-bento{grid-template-columns:repeat(2,minmax(0,1fr))}
             .cs-bento .wide{grid-column:1/-1}
+            .cs-changes{grid-template-columns:repeat(2,minmax(0,1fr))}
             .cs-build{grid-template-columns:1fr}
             .cs-mockwrap{position:static}
           }
@@ -387,6 +536,8 @@ export const CASE_STUDY_CSS = `
             .cs-hero-grid,.cs-split,.cs-rcard.count{grid-template-columns:1fr}
             .cs-rcard.count{grid-template-areas:"top" "dots" "note"}
             .cs-split.sticky > :first-child{position:static}
+            .cs-nsteps{grid-template-columns:1fr}
+            .cs-nsteps li:nth-child(n){margin-top:0}
           }
           @media (max-width:760px){
             .cs-problems,.cs-tools,.cs-versus,.cs-changes{grid-template-columns:1fr}
@@ -395,6 +546,8 @@ export const CASE_STUDY_CSS = `
             .cs-metrics,.cs-audience,.cs-steps,.cs-bento{grid-template-columns:1fr}
             .cs-bento .wide{grid-column:auto}
             .cs-journey{flex-direction:column;align-items:stretch}
+            .cs-bi{grid-template-columns:1fr}
+            .cs-spark{height:56px}
             .cs-j-arrow{display:none}
           }
           @media (prefers-reduced-motion:reduce){

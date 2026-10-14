@@ -14,10 +14,15 @@ import { Callout, Drivers, PageSketch } from '@/components/case-studies/blocks';
  * no invented figures or quotes, state the origin, label illustrative visuals.
  * Reusable visuals: components/case-studies/blocks.tsx (Drivers, AudienceCards,
  * Callout, VennSketch, PageSketch, TreeSketch, RankLadder, Journey, DotGrid,
- * PageGridSketch), SearchTyper, SearchFlow, LinkingDemo, DuplicateUrlFlow and
- * CategoryFixes. A one-off visual can be written as JSX right here.
+ * PageGridSketch, BrowserFrame, PurchasePath, Checklist, CountCard, NumberedSteps,
+ * LoopSketch), SearchTyper, SearchFlow, LinkingDemo, DuplicateUrlFlow,
+ * CategoryFixes, MigrationFlow, ScreenshotTabs, DashboardToggle, CheckoutFixFlow,
+ * LayerStack and EmailToggle. A one-off visual can be written as JSX right here.
  * A result with no starting figure (e.g. "120+ keywords into the top 3") uses
  * { count, unit } instead of before/after; see app/case-studies/jenson-usa.
+ * If nothing was measured, set `results: []`; see app/case-studies/esma, which
+ * also uses `sections` for one section per part of the work. Images go in
+ * public/images/case-studies/<slug>/.
  */
 const study: CaseStudy = {
   draft: true,

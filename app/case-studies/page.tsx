@@ -136,6 +136,9 @@ export default function CaseStudiesPage() {
           .csl-fill{display:block;height:100%;width:var(--w);border-radius:5px;background:var(--sage)}
           .csl-fill.after{background:var(--sky)}
           .csl-results .note{margin-top:2px}
+          .csl-highlight{gap:4px;padding:16px 20px}
+          .csl-highlight b{font-size:1.25rem;font-weight:800;line-height:1.15;letter-spacing:-.02em;color:var(--ink)}
+          .csl-highlight span{font-size:.875rem;color:var(--dark-sage)}
           .csl-dots{display:grid;grid-template-columns:repeat(auto-fill,minmax(7px,1fr));gap:3px}
           .csl-dots i{aspect-ratio:1;border-radius:50%;background:var(--sky)}
 
@@ -233,6 +236,17 @@ export default function CaseStudiesPage() {
                     <p className="csl-origin">{c.origin}</p>
                     <span className="csl-more">Read the case study <ArrowRight size={18} aria-hidden="true" /></span>
                   </div>
+                  {c.results.length === 0 ? (
+                  <div className="csl-results" aria-label={`${c.client} project highlights`}>
+                    <p className="csl-results-title">Project highlights</p>
+                    {c.metrics?.items.map((m) => (
+                      <div key={m.label} className="csl-result csl-highlight">
+                        <b>{m.value}</b><span>{m.label}</span>
+                      </div>
+                    ))}
+                    <p className="note">No figures were reported for this project.</p>
+                  </div>
+                  ) : (
                   <div className="csl-results" aria-label={`${c.client} headline results`}>
                     <p className="csl-results-title">Headline results</p>
                     {c.results.map((r) => (
@@ -252,6 +266,7 @@ export default function CaseStudiesPage() {
                     ))}
                     <p className="note">{resultsNote(c.results)}</p>
                   </div>
+                  )}
                 </Link>
               ))}
             </div>

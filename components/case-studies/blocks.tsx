@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import type { Tone } from '@/content/case-studies/types';
 
 /*
@@ -172,6 +173,98 @@ export function PageGridSketch({ variant }: { variant: 'more' | 'stronger' }) {
           )),
         )}
       </g>
+    </svg>
+  );
+}
+
+/**
+ * A screenshot in a browser window, with the site's address in the bar. Leave
+ * out `url` for a bare strip (e.g. a cropped header) and add a `caption` under it.
+ */
+export function BrowserFrame({ url, src, width, height, alt, caption, priority, sizes = '(max-width: 900px) 100vw, 560px' }: { url?: string; src: string; width: number; height: number; alt: string; caption?: string; priority?: boolean; sizes?: string }) {
+  return (
+    <figure className={`cs-frame${url ? '' : ' strip'}`}>
+      {url && <div className="cs-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>{url}</span></div>}
+      <Image src={src} width={width} height={height} alt={alt} title={alt} priority={priority} sizes={sizes} />
+      {caption && <figcaption className="note">{caption}</figcaption>}
+    </figure>
+  );
+}
+
+const PATH_X = [100, 300, 500, 700];
+
+/**
+ * Four steps to purchase on a line, with a callout dropped between `at` and
+ * the next step and a ring on step `at` (0-based). A dot travels the line.
+ */
+export function PurchasePath({ steps, at, callout, ariaLabel }: { steps: [string, string, string, string]; at: 0 | 1 | 2; callout: [string, string]; ariaLabel: string }) {
+  const cx = (PATH_X[at] + PATH_X[at + 1]) / 2;
+  return (
+    <svg className="cs-path" viewBox="0 0 800 230" role="img" aria-label={ariaLabel}>
+      <line className="pp-track" x1="100" y1="140" x2="700" y2="140" />
+      <line className="pp-flow" x1="100" y1="140" x2="700" y2="140" />
+      {PATH_X.map((x, i) => <circle key={x} className={`pp-node n${i}`} cx={x} cy="140" r="22" />)}
+      <circle className="pp-ring" cx={PATH_X[at]} cy="140" r="30" />
+      <g className="pp-text" fontSize="15" fontWeight="700" textAnchor="middle">
+        {steps.map((t, i) => <text key={t} x={PATH_X[i]} y="192">{t}</text>)}
+      </g>
+      <rect className="pp-callout" x={cx - 110} y="22" width="220" height="52" rx="10" />
+      <g className="pp-text" fontSize="14" fontWeight="700" textAnchor="middle">
+        <text x={cx} y="46">{callout[0]}</text>
+        <text x={cx} y="64">{callout[1]}</text>
+      </g>
+      <path className="pp-drop" d={`M${cx} 74 V118 M${cx - 6} 112 L${cx} 120 L${cx + 6} 112`} />
+      <circle className="pp-dot" cx="100" cy="140" r="7" />
+    </svg>
+  );
+}
+
+/** A short list with a tick before each item. `tone` colours the ticks. */
+export function Checklist({ items, tone = 'sage' }: { items: string[]; tone?: 'sage' | 'coral' }) {
+  return (
+    <ul className="cs-check" data-tone={tone}>
+      {items.map((i) => <li key={i}>{i}</li>)}
+    </ul>
+  );
+}
+
+/** A big headline number over one dot per item, e.g. "40+ issues resolved". */
+export function CountCard({ value, label, count, caption }: { value: string; label: string; count: number; caption: string }) {
+  return (
+    <figure className="cs-countcard">
+      <div className="cs-countcard-top"><b>{value}</b><span>{label}</span></div>
+      <DotGrid count={count} ariaLabel={`${count} dots: ${caption}`} />
+      <figcaption className="note">{caption}</figcaption>
+    </figure>
+  );
+}
+
+/** Three or so numbered steps in cards, stepping down from left to right. */
+export function NumberedSteps({ items }: { items: { title: string; text: string }[] }) {
+  return (
+    <ol className="cs-nsteps">
+      {items.map((s, i) => (
+        <li key={s.title}><span aria-hidden="true">{i + 1}</span><div><h3>{s.title}</h3><p>{s.text}</p></div></li>
+      ))}
+    </ol>
+  );
+}
+
+const LOOP = 'M160 150 A240 110 0 0 1 640 150 A240 110 0 0 1 160 150';
+const LOOP_NODES: [number, number][] = [[160, 150], [400, 40], [640, 150], [400, 260]];
+
+/** A four-stage loop (left, top, right, bottom) around a centre label, e.g. a loyalty cycle. */
+export function LoopSketch({ stages, centre, sub, ariaLabel }: { stages: [string, string, string, string]; centre: string; sub: string; ariaLabel: string }) {
+  return (
+    <svg className="cs-loop" viewBox="0 0 800 300" role="img" aria-label={ariaLabel}>
+      <path className="lp-track" d={LOOP} />
+      <path className="lp-flow" d={LOOP} />
+      {LOOP_NODES.map(([x, y], i) => <circle key={i} className={`lp-node n${i}`} cx={x} cy={y} r="38" />)}
+      <g fontSize="14" fontWeight="700" textAnchor="middle">
+        {LOOP_NODES.map(([x, y], i) => <text key={i} x={x} y={y + 5}>{stages[i]}</text>)}
+      </g>
+      <text x="400" y="142" fontSize="20" fontWeight="700" textAnchor="middle">{centre}</text>
+      <text className="lp-muted" x="400" y="164" fontSize="14" textAnchor="middle">{sub}</text>
     </svg>
   );
 }
