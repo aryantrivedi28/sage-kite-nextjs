@@ -444,10 +444,10 @@ export const CASE_STUDY_CSS = `
           .cs-changes{display:grid;grid-template-columns:repeat(var(--n,2),minmax(0,1fr));gap:16px}
           .cs-change{background:var(--warm-white);border:1px solid var(--light-sage);border-radius:10px;padding:clamp(22px,3vw,30px);display:grid;gap:12px;align-content:start}
           .cs-change-icon{width:64px;height:64px;border-radius:12px;display:grid;place-items:center}
-          .cs-change:nth-child(1) .cs-change-icon{background:var(--sky-soft)}
-          .cs-change:nth-child(2) .cs-change-icon{background:var(--butter-soft)}
-          .cs-change:nth-child(3) .cs-change-icon{background:var(--coral-soft)}
-          .cs-change:nth-child(4) .cs-change-icon{background:var(--pale-sage)}
+          .cs-change:nth-child(4n+1) .cs-change-icon{background:var(--sky-soft)}
+          .cs-change:nth-child(4n+2) .cs-change-icon{background:var(--butter-soft)}
+          .cs-change:nth-child(4n+3) .cs-change-icon{background:var(--coral-soft)}
+          .cs-change:nth-child(4n) .cs-change-icon{background:var(--pale-sage)}
           .cs-change-icon svg{width:44px;height:44px}
           .cs-change h3{font-size:1.3rem;line-height:1.2}
           .cs-change p{max-width:52ch}
@@ -653,6 +653,9 @@ export const CASE_STUDY_CSS = `
           .cs-seo-points li{display:grid;gap:2px;padding:14px 18px;background:var(--warm-white);border:1px solid var(--light-sage);border-left:6px solid var(--butter);border-radius:8px}
           .cs-seo-points li:nth-child(2){border-left-color:var(--coral)}
           .cs-seo-points li:nth-child(3){border-left-color:var(--sky)}
+          .cs-seo-points li:nth-child(4){border-left-color:var(--sage)}
+          .cs-seo-points.cols{grid-template-columns:repeat(var(--n),minmax(0,1fr))}
+          .cs-sim + .cs-seo-points{margin-top:clamp(24px,4vw,40px)}
           .cs-seo-points b{color:var(--ink)}
           .cs-seo-points span{font-size:.95rem}
 
@@ -665,6 +668,40 @@ export const CASE_STUDY_CSS = `
           .cs-cd-box b{font-size:clamp(2rem,5vw,3.6rem);font-weight:800;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
           .cs-cd-box span{font-size:.78rem;font-weight:600;opacity:.85}
           .cs-cd-btn{padding:11px 26px;border-radius:999px;background:var(--coral);color:var(--ink);font-weight:700}
+
+          /* parts: a wide screenshot with a narrow one beside it */
+          .cs-shot-row{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:24px;align-items:start;margin-bottom:clamp(28px,4vw,44px)}
+          .cs-shot-row .cs-frame.strip{margin-bottom:0;max-width:260px}
+          .cs-shot-row .cs-frame figcaption{min-height:0;padding:12px 18px 14px}
+
+          /* a short caption under any browser frame except the tabbed gallery */
+          .cs-frame:not(.big) figcaption{min-height:0;padding:12px 18px 14px}
+
+          /* parts: a screenshot, table or list followed by more content, stacked */
+          .cs-stack-grid{display:grid;gap:clamp(24px,4vw,40px)}
+          .cs-stack-grid .cs-frame.strip{margin-bottom:0}
+
+          /* parts: data table in a card (DataTable) */
+          .cs-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+          .cs-table{margin:0;background:var(--warm-white);border:1px solid var(--light-sage);border-radius:10px;padding:clamp(16px,3vw,28px);display:grid;gap:14px;box-shadow:8px 8px 0 var(--sky-soft);overflow-x:auto}
+          .cs-table table{width:100%;border-collapse:collapse;font-size:.95rem}
+          .cs-table th,.cs-table td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--light-sage);vertical-align:top}
+          .cs-table thead th{font-size:.8rem;font-weight:700;color:var(--sage)}
+          .cs-table tbody th{font-size:1.05rem;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+          .cs-table tbody tr:last-child th,.cs-table tbody tr:last-child td{border-bottom:0}
+
+          /* parts: pricing page switches (PricingDemo) */
+          .cs-pp-controls{display:flex;flex-wrap:wrap;gap:12px 20px}
+          .cs-pp-controls .cs-seg{flex-wrap:wrap}
+          .cs-pp-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+          .cs-pp-plan{display:grid;gap:8px;align-content:start;padding:20px;border-radius:10px;background:var(--pale-sage);border:1px solid var(--light-sage);color:var(--ink)}
+          .cs-pp-plan.pop{background:var(--butter-soft);border-color:transparent;box-shadow:0 5px 0 color-mix(in srgb,var(--ink) 12%,transparent)}
+          .cs-pp-plan h4{margin:0;font-size:1.45rem;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+          .cs-pp-for{font-size:.92rem;color:var(--sage)}
+          .cs-pp-link{margin-top:6px;display:grid;gap:4px}
+          .cs-pp-link span{font-size:.78rem;font-weight:700;color:var(--sage)}
+          .cs-pp-link code{font-family:var(--sans);font-size:.85rem;font-weight:600;background:var(--warm-white);padding:8px 10px;border-radius:6px;overflow-wrap:anywhere;line-height:1.4}
+          .cs-pp-plans + .cs-sim-caption{min-height:0}
 
           /* origin + cta */
           .cs .cs-close{padding-top:0}
@@ -691,7 +728,7 @@ export const CASE_STUDY_CSS = `
             .cs-ui-wrap .cs-frame.big,.cs-ui-wrap .cs-phone-wrap{grid-column:1;grid-row:auto}
           }
           @media (max-width:900px){
-            .cs-hero-grid,.cs-split,.cs-rcard.count,.cs-seo-grid{grid-template-columns:1fr}
+            .cs-hero-grid,.cs-split,.cs-rcard.count,.cs-seo-grid,.cs-shot-row{grid-template-columns:1fr}
             .cs-rcard.count{grid-template-areas:"top" "dots" "note"}
             .cs-split.sticky > :first-child{position:static}
             .cs-nsteps{grid-template-columns:1fr}
@@ -703,7 +740,7 @@ export const CASE_STUDY_CSS = `
             .cs-rise li{margin-bottom:0}
           }
           @media (max-width:760px){
-            .cs-problems,.cs-tools,.cs-versus,.cs-changes,.cs-rate,.cs-sc{grid-template-columns:1fr}
+            .cs-problems,.cs-tools,.cs-versus,.cs-changes,.cs-rate,.cs-sc,.cs-pp-plans,.cs-seo-points.cols{grid-template-columns:1fr}
             .cs-sc-col{min-height:0}
           }
           @media (max-width:560px){
@@ -719,7 +756,10 @@ export const CASE_STUDY_CSS = `
             .cs-spark{height:56px}
             .cs-j-arrow{display:none}
             .cs-pdp{grid-template-columns:1fr}
-            .cs-seg.add{flex-wrap:wrap;border-radius:22px}
+            .cs-seg.add,.cs-pp-controls .cs-seg{flex-wrap:wrap;border-radius:22px}
+            .cs-pp-controls .cs-seg button{flex:1 1 auto;padding:9px 12px}
+            .cs-table th,.cs-table td{padding:9px 6px;font-size:.88rem}
+            .cs-table tbody th{font-size:1rem}
             .cs-seg.add button{flex:1 1 auto}
             .cs-g-row{grid-template-columns:minmax(0,1fr) auto}
             .cs-g-track{grid-column:1/-1;order:3}

@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 export type Tone = 'sky' | 'coral' | 'butter' | 'sage' | 'plain';
 
 /** Icons for a "what changed" card (ChangeIcon in components/case-studies/blocks.tsx). */
-export type ChangeIconKind = 'ripple' | 'nodes' | 'bars' | 'stack' | 'lift' | 'merge' | 'grid' | 'target' | 'shield' | 'devices' | 'heart' | 'cards' | 'clock' | 'mail' | 'image' | 'info' | 'search' | 'dial';
+export type ChangeIconKind = 'ripple' | 'nodes' | 'bars' | 'stack' | 'lift' | 'merge' | 'grid' | 'target' | 'shield' | 'devices' | 'heart' | 'cards' | 'clock' | 'mail' | 'image' | 'info' | 'search' | 'dial' | 'lines' | 'phone' | 'calendar' | 'chat' | 'mobile' | 'globe' | 'card' | 'pin' | 'lock' | 'megaphone';
 
 interface CaseStudyResultBase {
   /** Heading for the figure, e.g. "Monthly organic visitors". */

@@ -111,11 +111,11 @@ components/case-studies/  CaseStudyPage (renders every case study + metadata + J
                           sketches, RankLadder, Journey, DotGrid, PageGridSketch, BrowserFrame,
                           PurchasePath, Checklist, CountCard, NumberedSteps, LoopSketch, PhoneFrame,
                           ScaleBar, RisingSteps, RateDots, GrowthBars, ChangeCards, ChangeIcon,
-                          StatCard, SeoSnippet)
+                          StatCard, SeoSnippet, PointList, ToolList, DataTable)
                           and the interactive SearchTyper, SearchFlow, LinkingDemo, DuplicateUrlFlow,
                           CategoryFixes, MigrationFlow, ScreenshotTabs, DashboardToggle,
                           CheckoutFixFlow, LayerStack, EmailToggle, PdpToggle, RtoFlow,
-                          SmartCollections, Countdown.
+                          SmartCollections, Countdown, PricingDemo.
 content/founders-thoughts.ts
                           Founder's Thoughts essays, newest first. Add a new essay here
                           and create app/insights/founders-thoughts/<slug>/page.tsx.

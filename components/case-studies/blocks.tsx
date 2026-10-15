@@ -472,6 +472,88 @@ export function ChangeIcon({ kind }: { kind: ChangeIconKind }) {
       </svg>
     );
   }
+  if (kind === 'lines') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <rect className="i-page" x="6" y="8" width="32" height="28" rx="4" />
+        <path className="hop i-tick" d="M13 18 H31 M13 24 H25" />
+      </svg>
+    );
+  }
+  if (kind === 'phone') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <path className="i-page" d="M10 6 H18 L21 15 L16 18 C18 23 21 26 26 28 L29 23 L38 26 V34 C38 36 36 38 34 38 C18 38 4 24 4 10 C4 8 6 6 8 6 Z" strokeLinejoin="round" />
+        <path className="hop i-tick" d="M28 10 C33 11 36 14 37 19" />
+      </svg>
+    );
+  }
+  if (kind === 'calendar') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <rect className="i-page" x="7" y="9" width="30" height="27" rx="4" />
+        <path className="i-stroke" d="M7 17 H37 M15 6 V12 M29 6 V12" />
+        <circle className="hop i-coral" cx="22" cy="26" r="3.5" />
+      </svg>
+    );
+  }
+  if (kind === 'chat') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <path className="i-page" d="M7 11 H37 V30 H22 L14 37 V30 H7 Z" strokeLinejoin="round" />
+        <g className="hop i-coral"><circle cx="16" cy="20" r="2" /><circle cx="22" cy="20" r="2" /><circle cx="28" cy="20" r="2" /></g>
+      </svg>
+    );
+  }
+  if (kind === 'mobile') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <rect className="i-page" x="12" y="4" width="20" height="36" rx="4" />
+        <path className="hop i-tick" d="M19 34 H25" />
+      </svg>
+    );
+  }
+  if (kind === 'globe') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <circle className="i-page" cx="22" cy="22" r="15" />
+        <path className="hop i-tick" d="M7 22 H37 M22 7 C16 14 16 30 22 37 M22 7 C28 14 28 30 22 37" strokeWidth="2.6" />
+      </svg>
+    );
+  }
+  if (kind === 'card') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <rect className="i-page" x="5" y="9" width="34" height="26" rx="4" />
+        <path className="i-stroke" d="M5 17 H39" />
+        <rect className="hop i-coral" x="10" y="24" width="10" height="5" rx="2" />
+      </svg>
+    );
+  }
+  if (kind === 'pin') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <path className="i-page" d="M22 40 C12 28 8 22 8 16 C8 9 14 5 22 5 C30 5 36 9 36 16 C36 22 32 28 22 40 Z" strokeLinejoin="round" />
+        <circle className="hop i-coral" cx="22" cy="16" r="4.5" />
+      </svg>
+    );
+  }
+  if (kind === 'lock') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <rect className="i-page" x="8" y="19" width="28" height="19" rx="4" />
+        <path className="hop i-tick" d="M14 19 V14 C14 9 18 6 22 6 C26 6 30 9 30 14 V19" />
+      </svg>
+    );
+  }
+  if (kind === 'megaphone') {
+    return (
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <path className="i-page" d="M8 30 L8 14 L30 6 V38 Z" strokeLinejoin="round" />
+        <path className="hop i-tick" d="M34 15 C37 18 37 26 34 29" />
+      </svg>
+    );
+  }
   if (kind === 'dial') {
     return (
       <svg viewBox="0 0 44 44" aria-hidden="true">
@@ -566,9 +648,49 @@ export function SeoSnippet({ url, title, description, caption, points }: {
         <div className="cs-serpcard-desc">{description}</div>
         <figcaption className="note">{caption}</figcaption>
       </figure>
-      <ul className="cs-seo-points">
-        {points.map((p) => <li key={p.title}><b>{p.title}</b><span>{p.text}</span></li>)}
-      </ul>
+      <PointList items={points} />
     </div>
+  );
+}
+
+/** Short points with a coloured left edge. `columns` lays them out side by side on wide screens. */
+export function PointList({ items, columns }: { items: { title: string; text: string }[]; columns?: 2 | 3 }) {
+  return (
+    <ul className={`cs-seo-points${columns ? ' cols' : ''}`} style={columns ? ({ '--n': String(columns) } as React.CSSProperties) : undefined}>
+      {items.map((p) => <li key={p.title}><b>{p.title}</b><span>{p.text}</span></li>)}
+    </ul>
+  );
+}
+
+/** A plain two-column list of bold names with a line each, e.g. domains or tools. */
+export function ToolList({ items }: { items: { title: string; text: string }[] }) {
+  return (
+    <ul className="cs-tools">
+      {items.map((i) => <li key={i.title}><b>{i.title}</b><span>{i.text}</span></li>)}
+    </ul>
+  );
+}
+
+/**
+ * A small data table in a card. The first cell of each row is its header.
+ * `caption` is read by screen readers; `note` is the small print under the table.
+ */
+export function DataTable({ caption, columns, rows, note }: { caption: string; columns: string[]; rows: string[][]; note?: string }) {
+  return (
+    <figure className="cs-table">
+      <table>
+        <caption className="cs-sr">{caption}</caption>
+        <thead><tr>{columns.map((c) => <th key={c} scope="col">{c}</th>)}</tr></thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r[0]}>
+              <th scope="row">{r[0]}</th>
+              {r.slice(1).map((c, i) => <td key={i}>{c}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {note && <figcaption className="note">{note}</figcaption>}
+    </figure>
   );
 }
