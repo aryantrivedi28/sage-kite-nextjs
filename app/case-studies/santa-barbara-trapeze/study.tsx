@@ -31,7 +31,6 @@ const study: CaseStudy = {
   results: [],
 
   hero: {
-    label: 'Case study · Shopify store upgrade and automation',
     dek: 'Automated merchandising, cleaner data and urgency for event sales.',
     lede: 'Santa Barbara Trapeze Co. needed its Shopify store to handle a growing catalog. We upgraded the store infrastructure, automated its merchandising with smart collections, fixed its data and SEO metadata, and added countdown timers to drive faster purchases during sale events.',
     visual: (

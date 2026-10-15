@@ -35,7 +35,6 @@ const study: CaseStudy = {
   results: [],
 
   hero: {
-    label: 'Case study · Shopify CRO and PDP redesign',
     dek: 'A new product page UI, SEO-friendly content and targeted payment methods to cut COD returns.',
     lede: 'LabTheory is a men\'s skincare brand. We revamped its product page (PDP) UI using conversion rate optimization strategies, and orders jumped by over 5x with the new UI. We also implemented targeted payment methods to reduce RTO on cash on delivery orders.',
     visual: (

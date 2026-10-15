@@ -572,7 +572,7 @@ export const CASE_STUDY_CSS = `
           .cs-rate-cycle-label{font-size:.85rem;font-weight:600;color:var(--sage);margin-top:6px}
 
           /* parts: product page wireframe (PdpToggle) */
-          .cs-pdp{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;padding:22px;border:1px solid var(--light-sage);border-radius:10px;background:var(--warm-white);max-width:760px}
+          .cs-pdp{position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(20px,3vw,36px);padding:clamp(18px,2.6vw,28px);border:1px solid var(--light-sage);border-radius:10px;background:var(--warm-white)}
           .cs-pdp-hero{aspect-ratio:1/1;background:var(--pale-sage);border-radius:8px;display:grid;place-items:center;color:var(--sage);font-weight:600;font-size:.9rem}
           .cs-pdp-thumbs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
           .cs-pdp-thumbs i{aspect-ratio:1;border-radius:6px;background:var(--sky-soft)}
@@ -586,10 +586,11 @@ export const CASE_STUDY_CSS = `
           .cs-pdp-block i.s{width:55%}
           .cs-pdp-block.info{background:var(--butter-soft)}
           .cs-pdp-block.seo{background:var(--sky-soft)}
-          .cs-pdp-tag{position:absolute;left:22px;top:22px;padding:5px 12px;border-radius:999px;background:var(--coral-soft);color:var(--ink);font-weight:700;font-size:.8rem;border:1.5px solid var(--coral)}
+          .cs-pdp-tag{position:absolute;left:calc(clamp(18px,2.6vw,28px) + 10px);top:calc(clamp(18px,2.6vw,28px) + 10px);padding:5px 12px;border-radius:999px;background:var(--coral-soft);color:var(--ink);font-weight:700;font-size:.8rem;border:1.5px solid var(--coral)}
           .cs-pdp.before .cs-pdp-more{display:none}
           .cs-pdp.after .cs-pdp-more{animation:cs-pdpin 350ms var(--ease) both}
           @keyframes cs-pdpin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+          .cs-pdp + .cs-sim-caption{min-height:0}
           .cs-sim + .cs-changes{margin-top:clamp(28px,4vw,44px)}
 
           /* parts: cash on delivery order flow (RtoFlow) */
@@ -656,11 +657,12 @@ export const CASE_STUDY_CSS = `
           .cs-seo-points span{font-size:.95rem}
 
           /* parts: sale countdown (Countdown) */
-          .cs-cd{display:grid;gap:16px;justify-items:start;padding:clamp(20px,3vw,32px);background:var(--ink);color:var(--warm-white);border-radius:10px;max-width:620px}
+          .cs-cd{display:grid;gap:clamp(16px,2vw,22px);justify-items:start;padding:clamp(20px,3vw,36px);background:var(--ink);color:var(--warm-white);border-radius:10px}
+          .cs-cd + .cs-sim-caption{min-height:0}
           .cs-cd-label{font-weight:700;font-size:1rem}
           .cs-cd-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:100%}
-          .cs-cd-box{display:grid;gap:2px;justify-items:center;padding:14px 6px;border-radius:8px;background:color-mix(in srgb,var(--warm-white) 12%,transparent)}
-          .cs-cd-box b{font-size:clamp(2rem,6vw,3rem);font-weight:800;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+          .cs-cd-box{display:grid;gap:4px;justify-items:center;padding:clamp(14px,2vw,22px) 6px;border-radius:8px;background:color-mix(in srgb,var(--warm-white) 12%,transparent)}
+          .cs-cd-box b{font-size:clamp(2rem,5vw,3.6rem);font-weight:800;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
           .cs-cd-box span{font-size:.78rem;font-weight:600;opacity:.85}
           .cs-cd-btn{padding:11px 26px;border-radius:999px;background:var(--coral);color:var(--ink);font-weight:700}
 
