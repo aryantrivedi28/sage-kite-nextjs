@@ -132,7 +132,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
                 <p className="cs-badge">{study.origin}</p>
               </div>
               <div className="cs-hero-visual">
-                {hero.visual}
+                {!hero.visualBelow && hero.visual}
                 <aside className="cs-glance" aria-labelledby="glance-title">
                   <div className="cs-glance-card">
                     <h2 id="glance-title">At a glance</h2>
@@ -145,6 +145,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
                 </aside>
               </div>
             </div>
+            {hero.visualBelow && <div className="cs-hero-below">{hero.visual}</div>}
           </div>
         </section>
 

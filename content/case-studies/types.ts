@@ -87,6 +87,12 @@ export interface CaseStudy {
     lede: string;
     /** Optional graphic above the At a glance card. */
     visual?: ReactNode;
+    /**
+     * Show `visual` full width under the hero text and At a glance card instead
+     * of above the card. Use for a tall or detailed screenshot that would leave
+     * the right column much longer than the text.
+     */
+    visualBelow?: boolean;
     /** "At a glance" rows, e.g. Client, Industry, Engagement. A value can be a link. */
     glance: { label: string; value: ReactNode }[];
   };

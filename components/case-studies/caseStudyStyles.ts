@@ -32,6 +32,7 @@ export const CASE_STUDY_CSS = `
           .cs-badge::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--sky);flex:none}
           .cs-hero-visual{display:grid;gap:28px}
           .cs-hero-visual .cs-glance{margin-right:12px}
+          .cs-hero-below{margin-top:clamp(36px,5vw,56px);margin-right:12px}
 
           .cs-search{background:color-mix(in srgb,var(--sky-soft) 45%,var(--warm-white));border:1px solid var(--sky-soft);border-radius:10px;padding:20px;display:grid;gap:14px}
           .cs-search-bar{display:flex;align-items:center;gap:12px;background:var(--warm-white);border:1.5px solid var(--sky);border-radius:999px;padding:12px 18px;min-height:52px;color:var(--ink)}

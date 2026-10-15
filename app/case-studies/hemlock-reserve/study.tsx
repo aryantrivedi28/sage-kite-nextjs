@@ -43,8 +43,10 @@ const study: CaseStudy = {
         alt="The Hemlock Reserve cabin collection page: four cabins shown as photo cards, Hemlock and Jades, Hemlock and Jasper, Hemlock and Sapphire, and Hemlock and Pines, each with its location, sleeps 2, 1 bed, and Featured or New badges, under a dark header with a Book Now button"
         caption="The Our Luxury Cabins collection on the live site."
         priority
+        sizes="(max-width: 1180px) 100vw, 1100px"
       />
     ),
+    visualBelow: true,
     glance: [
       { label: 'Client', value: 'Hemlock Reserve, owned by Eric and Audra Thomas' },
       { label: 'Project type', value: 'Vacation rental website for direct bookings' },
