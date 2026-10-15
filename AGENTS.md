@@ -110,10 +110,12 @@ components/case-studies/  CaseStudyPage (renders every case study + metadata + J
                           caseStudyStyles.ts (shared CSS), blocks.tsx (reusable content and
                           sketches, RankLadder, Journey, DotGrid, PageGridSketch, BrowserFrame,
                           PurchasePath, Checklist, CountCard, NumberedSteps, LoopSketch, PhoneFrame,
-                          ScaleBar, RisingSteps, RateDots) and the
-                          interactive SearchTyper, SearchFlow, LinkingDemo, DuplicateUrlFlow,
+                          ScaleBar, RisingSteps, RateDots, GrowthBars, ChangeCards, ChangeIcon,
+                          StatCard, SeoSnippet)
+                          and the interactive SearchTyper, SearchFlow, LinkingDemo, DuplicateUrlFlow,
                           CategoryFixes, MigrationFlow, ScreenshotTabs, DashboardToggle,
-                          CheckoutFixFlow, LayerStack, EmailToggle.
+                          CheckoutFixFlow, LayerStack, EmailToggle, PdpToggle, RtoFlow,
+                          SmartCollections, Countdown.
 content/founders-thoughts.ts
                           Founder's Thoughts essays, newest first. Add a new essay here
                           and create app/insights/founders-thoughts/<slug>/page.tsx.

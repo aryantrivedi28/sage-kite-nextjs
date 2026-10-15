@@ -6,7 +6,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { CASE_STUDIES_PATH, caseStudyPath, type CaseStudy } from '@/content/case-studies';
 import { CASE_STUDY_CSS } from './caseStudyStyles';
-import { DotGrid } from './blocks';
+import { ChangeCards, DotGrid } from './blocks';
 
 const SITE_URL = 'https://www.sagekite.com';
 
@@ -87,126 +87,6 @@ function caseStudyJsonLd(study: CaseStudy) {
 
 const DOTS: [number, number][] = [[40, 40], [120, 30], [210, 50], [270, 30], [70, 120], [170, 130], [256, 116]];
 const DOT_LINKS: [number, number][] = [[0, 1], [1, 2], [2, 3], [0, 4], [1, 5], [2, 5], [3, 6], [4, 5], [5, 6], [2, 6]];
-
-function ChangeIcon({ kind }: { kind: string }) {
-  if (kind === 'ripple') {
-    return (
-      <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
-        <circle className="ripple" cx="22" cy="22" r="19" />
-        <circle className="ripple" cx="22" cy="22" r="19" />
-        <circle className="ripple" cx="22" cy="22" r="19" />
-        <circle className="i-ink" cx="22" cy="22" r="4" />
-      </svg>
-    );
-  }
-  if (kind === 'nodes') {
-    return (
-      <svg viewBox="0 0 44 44" aria-hidden="true">
-        <g className="i-line"><line x1="22" y1="9" x2="9" y2="33" /><line x1="22" y1="9" x2="35" y2="33" /><line x1="9" y1="33" x2="35" y2="33" /></g>
-        <circle className="blink-node i-coral" cx="22" cy="9" r="5" />
-        <circle className="blink-node i-sky" cx="9" cy="33" r="5" />
-        <circle className="blink-node i-sage" cx="35" cy="33" r="5" />
-      </svg>
-    );
-  }
-  if (kind === 'bars') {
-    return (
-      <svg viewBox="0 0 44 44" aria-hidden="true">
-        <g className="i-coral"><rect className="grow-bar" x="6" y="26" width="9" height="12" rx="2" /><rect className="grow-bar" x="18" y="16" width="9" height="22" rx="2" /><rect className="grow-bar" x="30" y="6" width="9" height="32" rx="2" /></g>
-        <line className="i-line" x1="4" y1="40" x2="41" y2="40" strokeWidth="2.5" strokeLinecap="round" />
-      </svg>
-    );
-  }
-  if (kind === 'lift') {
-    return (
-      <svg viewBox="0 0 44 44" aria-hidden="true">
-        <rect className="i-page" x="9" y="6" width="26" height="32" rx="4" />
-        <g className="hop"><path className="i-arrow" d="M22 28 V14 M16 20 L22 14 L28 20" /></g>
-      </svg>
-    );
-  }
-  if (kind === 'merge') {
-    return (
-      <svg viewBox="0 0 44 44" aria-hidden="true">
-        <g className="i-stroke"><path d="M6 10 H18 C26 10 26 22 34 22" /><path d="M6 34 H18 C26 34 26 22 34 22" /></g>
-        <circle className="blink-node i-coral" cx="37" cy="22" r="5" />
-      </svg>
-    );
-  }
-  if (kind === 'grid') {
-    return (
-      <svg viewBox="0 0 44 44" aria-hidden="true">
-        <g className="i-sage"><rect x="5" y="5" width="15" height="15" rx="3" /><rect x="24" y="5" width="15" height="15" rx="3" /><rect x="5" y="24" width="15" height="15" rx="3" /></g>
-        <rect className="pop-loop i-coral" x="24" y="24" width="15" height="15" rx="3" />
-      </svg>
-    );
-  }
-  if (kind === 'shield') {
-    return (
-      <svg viewBox="0 0 44 44" aria-hidden="true">
-        <path className="i-page" d="M22 5 l15 5 v12 c0 10 -7 16 -15 19 c-8 -3 -15 -9 -15 -19 v-12 z" strokeLinejoin="round" />
-        <path className="hop i-tick" d="M15 22 l5 5 l9 -10" />
-      </svg>
-    );
-  }
-  if (kind === 'devices') {
-    return (
-      <svg viewBox="0 0 44 44" aria-hidden="true">
-        <rect className="i-page" x="3" y="8" width="28" height="20" rx="3" />
-        <line className="i-stroke" x1="10" y1="34" x2="24" y2="34" />
-        <rect className="hop i-phone" x="27" y="16" width="14" height="22" rx="3" />
-      </svg>
-    );
-  }
-  if (kind === 'heart') {
-    return (
-      <svg viewBox="0 0 44 44" aria-hidden="true">
-        <path className="i-page" d="M22 38 C8 28 6 18 12 12 C16 8 21 10 22 15 C23 10 28 8 32 12 C38 18 36 28 22 38 z" strokeLinejoin="round" />
-        <path className="hop i-tick" d="M16 21 H28 M22 15 V27" />
-      </svg>
-    );
-  }
-  if (kind === 'cards') {
-    return (
-      <svg viewBox="0 0 44 44" aria-hidden="true">
-        <rect className="i-page" x="5" y="8" width="24" height="18" rx="3" />
-        <rect className="hop i-phone" x="17" y="18" width="22" height="18" rx="3" />
-      </svg>
-    );
-  }
-  if (kind === 'clock') {
-    return (
-      <svg viewBox="0 0 44 44" aria-hidden="true">
-        <circle className="i-page" cx="22" cy="24" r="15" />
-        <path className="hop i-tick" d="M22 24 L29 14" />
-        <path className="i-stroke" d="M17 6 H27" />
-      </svg>
-    );
-  }
-  if (kind === 'mail') {
-    return (
-      <svg viewBox="0 0 44 44" aria-hidden="true">
-        <path className="i-page" d="M8 12 H36 V32 H8 z" strokeLinejoin="round" />
-        <path className="hop i-tick" d="M8 14 L22 25 L36 14" />
-      </svg>
-    );
-  }
-  if (kind === 'target') {
-    return (
-      <svg viewBox="0 0 44 44" aria-hidden="true">
-        <g className="i-stroke"><circle cx="22" cy="22" r="17" /><circle cx="22" cy="22" r="10" /></g>
-        <circle className="blink-node i-coral" cx="22" cy="22" r="3.5" />
-      </svg>
-    );
-  }
-  return (
-    <svg viewBox="0 0 44 44" aria-hidden="true">
-      <rect className="i-sage" x="5" y="30" width="34" height="9" rx="2" />
-      <rect className="i-sage" x="9" y="21" width="26" height="9" rx="2" opacity=".6" />
-      <rect className="hop i-butter" x="13" y="8" width="18" height="9" rx="2" />
-    </svg>
-  );
-}
 
 function Head({ id, label, heading, intro }: { id: string; label: string; heading: string; intro?: string }) {
   return (
@@ -446,15 +326,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
           <section className="pale" aria-labelledby="changed-title">
             <div className="wrap">
               <Head id="changed-title" label={changes.label ?? 'What changed for the business'} heading={changes.heading} />
-              <div className="cs-changes" style={cssVars({ '--n': String(changes.columns ?? (changes.items.length === 3 ? 3 : 2)) })}>
-                {changes.items.map((c) => (
-                  <article key={c.title} className="cs-change">
-                    <div className="cs-change-icon"><ChangeIcon kind={c.icon} /></div>
-                    <h3>{c.title}</h3>
-                    <p>{c.text}</p>
-                  </article>
-                ))}
-              </div>
+              <ChangeCards items={changes.items} columns={changes.columns} />
             </div>
           </section>
         )}

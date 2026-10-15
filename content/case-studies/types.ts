@@ -3,6 +3,9 @@ import type { ReactNode } from 'react';
 /** Accent used for a tile, metric or tag. Maps to the brand tokens. */
 export type Tone = 'sky' | 'coral' | 'butter' | 'sage' | 'plain';
 
+/** Icons for a "what changed" card (ChangeIcon in components/case-studies/blocks.tsx). */
+export type ChangeIconKind = 'ripple' | 'nodes' | 'bars' | 'stack' | 'lift' | 'merge' | 'grid' | 'target' | 'shield' | 'devices' | 'heart' | 'cards' | 'clock' | 'mail' | 'image' | 'info' | 'search' | 'dial';
+
 interface CaseStudyResultBase {
   /** Heading for the figure, e.g. "Monthly organic visitors". */
   label: string;
@@ -143,7 +146,7 @@ export interface CaseStudy {
     heading: string;
     /** Cards per row on wide screens. Defaults to 3 for three cards, otherwise 2. */
     columns?: 2 | 3 | 4;
-    items: { icon: 'ripple' | 'nodes' | 'bars' | 'stack' | 'lift' | 'merge' | 'grid' | 'target' | 'shield' | 'devices' | 'heart' | 'cards' | 'clock' | 'mail'; title: string; text: string }[];
+    items: { icon: ChangeIconKind; title: string; text: string }[];
   };
   methods?: { label?: string; heading: string; items: { title: string; text: string }[] };
   takeaway?: {

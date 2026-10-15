@@ -1,0 +1,997 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shopify Store Upgrade and Automation Case Study: Smart Collections, SEO and Countdown Timers | Sage Kite</title>
+<meta name="description" content="How Santa Barbara Trapeze Co. upgraded its Shopify store: a move to the Impulse theme, smart collections that automate merchandising, data and SEO metadata fixes, and countdown timers that create urgency for sale events.">
+<meta property="og:title" content="Shopify store upgrade and automation for Santa Barbara Trapeze: smart collections, SEO and countdown timers">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap">
+<style>
+/* Layout concept: a light editorial case study where every section carries one working graphic.
+   Hero typed-search demo, before/after search-flow diagram, rising process line, add-a-page linking demo, scale-true results. */
+:root {
+  --bg: #F7F5EE;
+  --fg: #344033;
+  --muted: #566456;
+  --line: #D5DDD2;
+  --pale: #E9EEE7;
+  --sage: #596B57;
+  --ink: #243746;
+  --coral: #D96F4F;
+  --coral-hover: #c75f40;
+  --on-coral: #1d2b36;
+  --sky: #4F82A3;
+  --sky-text: #2f5f80;
+  --butter: #EFC75E;
+  --coral-soft: #F5D6CA;
+  --sky-soft: #C9E0EB;
+  --sky-wash: #E4EFF5;
+  --butter-soft: #F7E6A8;
+  --card: #FFFFFF;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Manrope", Arial, Helvetica, sans-serif;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 1.0625rem/1.7 var(--font-body); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p, ul, ol, dl, dd, figure, blockquote { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; border-radius: 4px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.wrap { width: 100%; max-width: 1180px; margin-inline: auto; padding-inline: clamp(16px, 4vw, 40px); }
+.band { padding-block: clamp(56px, 8vw, 104px); }
+.band--pale { background: var(--pale); }
+.band--sky { background: var(--sky-wash); }
+
+.display { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; text-wrap: balance; color: var(--ink); }
+h1.display { font-size: clamp(2.35rem, 5.2vw, 4.1rem); line-height: 1.04; }
+h2.display { font-size: clamp(1.9rem, 3.6vw, 2.9rem); line-height: 1.1; }
+h3 { font-weight: 700; font-size: 1.1rem; line-height: 1.35; color: var(--ink); }
+.lede { font-size: clamp(1.1rem, 1.6vw, 1.25rem); line-height: 1.65; color: var(--muted); max-width: 60ch; }
+.kicker { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 0.9rem; color: var(--sky-text); }
+.ribbon { display: inline-flex; gap: 3px; }
+.ribbon i { display: block; width: 18px; height: 6px; border-radius: 2px; transform-origin: left; animation: ribbon 700ms cubic-bezier(.2,.7,.2,1) both; }
+.ribbon i:nth-child(1) { background: var(--coral); }
+.ribbon i:nth-child(2) { background: var(--butter); animation-delay: 90ms; }
+.ribbon i:nth-child(3) { background: var(--sky); animation-delay: 180ms; }
+@keyframes ribbon { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.section-head { display: grid; gap: 18px; margin-bottom: clamp(32px, 5vw, 56px); }
+.section-head--tight { margin-bottom: 0; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 24px; border-radius: 999px; border: 0; font: 700 0.98rem/1 var(--font-body); text-decoration: none; background: var(--coral); color: var(--on-coral); transition: background 180ms ease, transform 180ms ease; }
+.btn:hover { background: var(--coral-hover); transform: translateY(-1px); }
+.btn--ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); min-height: 42px; padding: 9px 18px; font-size: 0.9rem; }
+.btn--ghost:hover { background: var(--ink); color: var(--bg); }
+.link-quiet { font-weight: 600; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
+.link-quiet:hover { color: var(--coral); }
+
+.progress { position: fixed; inset: 0 0 auto 0; height: 4px; background: var(--coral); transform: scaleX(0); transform-origin: left; z-index: 50; }
+
+/* header */
+.site-header { border-top: 5px solid var(--butter); border-bottom: 1px solid var(--line); background: var(--bg); }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 72px; }
+.wordmark { font-family: var(--font-display); font-weight: 500; font-size: 1.65rem; letter-spacing: -0.02em; color: var(--sage); text-decoration: none; }
+.nav { display: none; gap: 28px; font-weight: 600; font-size: 0.95rem; }
+.nav a { text-decoration: none; }
+.nav a:hover { color: var(--coral); }
+@media (min-width: 960px) { .nav { display: flex; } }
+.site-header .btn { min-height: 44px; padding: 10px 20px; font-size: 0.92rem; }
+
+/* hero */
+.hero { padding-block: clamp(36px, 6vw, 80px) clamp(48px, 7vw, 88px); }
+.crumbs { font-size: 0.9rem; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.hero-grid { display: grid; gap: clamp(36px, 6vw, 72px); align-items: start; }
+@media (min-width: 960px) { .hero-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
+.hero-copy { display: grid; gap: 24px; }
+.hero-sub { font-family: var(--font-display); font-style: italic; font-size: clamp(1.25rem, 2.2vw, 1.6rem); line-height: 1.3; color: var(--sage); max-width: 36ch; }
+.badge { display: inline-flex; align-items: center; gap: 10px; align-self: start; padding: 8px 14px; border-radius: 999px; background: var(--sky-soft); color: var(--ink); font-weight: 600; font-size: 0.86rem; line-height: 1.3; }
+.badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--sky); flex: none; }
+.hero-visual { display: grid; gap: 28px; }
+
+.search { background: var(--sky-wash); border: 1px solid var(--sky-soft); border-radius: 10px; padding: 20px; display: grid; gap: 14px; }
+.search-bar { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1.5px solid var(--sky); border-radius: 999px; padding: 12px 18px; min-height: 52px; box-shadow: 0 2px 0 var(--sky-soft); }
+.search-bar svg { flex: none; }
+.typed { font-weight: 600; color: var(--ink); font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.caret { width: 2px; height: 1.2em; background: var(--coral); margin-left: -8px; animation: blink 1s steps(1) infinite; flex: none; }
+@keyframes blink { 50% { opacity: 0; } }
+.search-result { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; min-height: 2.6em; font-size: 0.93rem; line-height: 1.4; }
+.tag { padding: 3px 12px; border-radius: 999px; font-weight: 700; font-size: 0.8rem; background: var(--butter-soft); color: var(--ink); transition: background 200ms ease; }
+.tag[data-kind="disease"] { background: var(--coral-soft); }
+.tag[data-kind="city"] { background: var(--sky-soft); }
+.search figcaption { font-size: 0.8rem; color: var(--muted); }
+
+.glance { position: relative; isolation: isolate; }
+.glance::before { content: ""; position: absolute; inset: 12px -12px -12px 12px; background: var(--butter-soft); border-radius: 6px; z-index: -1; }
+.glance-card { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: clamp(20px, 3vw, 28px); overflow: hidden; position: relative; }
+.glance-card::after { content: ""; position: absolute; top: 0; right: 0; width: 56px; height: 56px; background: var(--coral-soft); clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.glance h2 { font-family: var(--font-display); font-weight: 500; font-size: 1.4rem; letter-spacing: -0.01em; margin-bottom: 10px; color: var(--ink); }
+.glance .row { display: grid; grid-template-columns: 7.2rem minmax(0, 1fr); gap: 12px; padding-block: 11px; border-top: 1px solid var(--line); font-size: 0.95rem; line-height: 1.45; }
+.glance dt { color: var(--muted); font-weight: 500; }
+.glance dd { font-weight: 600; }
+
+/* metrics */
+.metrics { display: grid; gap: 14px; }
+@media (min-width: 640px) { .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1040px) { .metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.metric { padding: 26px 24px 24px; border-radius: 6px; color: var(--ink); display: grid; gap: 10px; align-content: space-between; min-height: 164px; }
+.metric--sky { background: var(--sky-soft); }
+.metric--butter { background: var(--butter-soft); }
+.metric--coral { background: var(--coral-soft); }
+.metric--sage { background: var(--pale); border: 1px solid var(--line); }
+.metric b { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 3.2vw, 2.7rem); line-height: 1.05; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.metric span.lab { font-weight: 600; font-size: 0.92rem; line-height: 1.4; }
+.footnote { margin-top: 18px; font-size: 0.88rem; color: var(--muted); max-width: 80ch; }
+
+/* split */
+.split { display: grid; gap: clamp(28px, 5vw, 72px); }
+@media (min-width: 900px) { .split { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); } .split--sticky > :first-child { position: sticky; top: 24px; align-self: start; } }
+.prose { display: grid; gap: 20px; }
+.prose p { max-width: 62ch; }
+.drivers { display: grid; gap: 10px; }
+.drivers li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 14px; align-items: baseline; font-weight: 600; }
+.drivers li::before { content: ""; width: 14px; height: 14px; border-radius: 3px; background: var(--sky); transform: translateY(2px); }
+.drivers li:nth-child(2)::before { background: var(--butter); }
+.drivers li:nth-child(3)::before { background: var(--coral); }
+.audience { display: grid; gap: 14px; }
+@media (min-width: 640px) { .audience { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.audience li { display: grid; gap: 10px; align-content: start; padding: 18px; border-radius: 6px; background: var(--card); border: 1px solid var(--line); font-weight: 500; line-height: 1.5; }
+.audience svg { width: 40px; height: 40px; }
+.callout { background: var(--butter-soft); color: var(--ink); border-radius: 6px; padding: clamp(22px, 3vw, 32px); display: grid; gap: 8px; }
+.callout .display { font-size: clamp(1.4rem, 2.4vw, 1.8rem); line-height: 1.25; }
+.callout p { max-width: 58ch; }
+
+/* problem */
+.problems { display: grid; gap: 0 clamp(28px, 4vw, 56px); }
+@media (min-width: 760px) { .problems { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.problems li { padding-block: 22px; border-top: 1px solid var(--line); display: grid; gap: 6px; align-content: start; }
+.problems h3 { display: flex; align-items: center; gap: 12px; }
+.problems h3 i { width: 12px; height: 12px; border-radius: 3px; background: var(--coral); flex: none; }
+.problems li:nth-child(2) h3 i { background: var(--butter); }
+.problems li:nth-child(3) h3 i { background: var(--sky); }
+.problems li:nth-child(4) h3 i { background: var(--sage); }
+.problems p { color: var(--muted); max-width: 52ch; }
+
+.sim { margin-top: clamp(36px, 5vw, 56px); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: clamp(18px, 3vw, 32px); display: grid; gap: 20px; }
+.sim-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; }
+.sim-top h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.5rem; letter-spacing: -0.01em; }
+.seg { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: transparent; color: var(--ink); border-radius: 999px; padding: 9px 18px; font-weight: 700; font-size: 0.9rem; min-height: 40px; transition: background 180ms ease, color 180ms ease; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.scroll { overflow-x: auto; }
+.scroll svg { display: block; width: 100%; min-width: 620px; height: auto; }
+.sim-caption { font-size: 0.95rem; color: var(--muted); max-width: 70ch; min-height: 3.4em; }
+.note { font-size: 0.82rem; color: var(--muted); }
+
+.flow-ok { stroke: var(--sky); stroke-width: 3; fill: none; stroke-dasharray: 7 9; animation: dash 1.3s linear infinite; }
+.flow-lost { stroke: var(--coral); stroke-width: 3; fill: none; stroke-dasharray: 3 10; animation: dash 1.8s linear infinite; opacity: .85; }
+@keyframes dash { to { stroke-dashoffset: -64; } }
+#flow[data-state="before"] .s-after { display: none; }
+#flow[data-state="after"] .s-before { display: none; }
+#flow[data-state="after"] .comp-box { opacity: .35; }
+.fl-text { font-family: var(--font-body); fill: var(--ink); }
+
+.pull { margin-top: clamp(40px, 6vw, 72px); }
+.pull p { font-family: var(--font-display); font-style: italic; font-size: clamp(1.6rem, 3.2vw, 2.5rem); line-height: 1.2; letter-spacing: -0.015em; max-width: 30ch; text-wrap: balance; color: var(--ink); }
+.pull p::before { content: ""; display: block; width: 56px; height: 5px; background: var(--butter); margin-bottom: 22px; border-radius: 2px; }
+
+/* approach */
+.diagnosis { display: grid; gap: 12px; }
+.diagnosis li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; }
+.diagnosis li::before { content: ""; width: 22px; height: 2px; background: var(--sky); margin-top: 0.85em; }
+.lift { display: none; margin-top: clamp(32px, 5vw, 56px); }
+@media (min-width: 1040px) { .lift { display: block; } }
+.lift svg { width: 100%; height: auto; display: block; }
+.steps { display: grid; gap: 16px; margin-top: 8px; }
+@media (min-width: 640px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1040px) { .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; margin-top: 0; } .step:nth-child(1) { margin-top: 64px; } .step:nth-child(2) { margin-top: 42px; } .step:nth-child(3) { margin-top: 20px; } }
+.step { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 24px 22px 26px; display: grid; gap: 10px; border-top: 5px solid var(--sky); }
+.step:nth-child(2) { border-top-color: var(--sage); }
+.step:nth-child(3) { border-top-color: var(--butter); }
+.step:nth-child(4) { border-top-color: var(--coral); }
+.step-n { font-family: var(--font-display); font-size: 3rem; line-height: 1; color: var(--sage); letter-spacing: -0.03em; }
+.step p { font-size: 0.97rem; line-height: 1.6; color: var(--muted); }
+
+/* delivered */
+.bento { display: grid; gap: 16px; }
+@media (min-width: 720px) { .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1040px) { .bento { grid-template-columns: repeat(6, minmax(0, 1fr)); } .b-a, .b-b, .b-c { grid-column: span 2; } .b-d { grid-column: span 4; } .b-e { grid-column: span 2; } }
+.tile { border-radius: 8px; padding: clamp(22px, 3vw, 30px); color: var(--ink); display: grid; gap: 12px; align-content: start; }
+.tile--sky { background: var(--sky-soft); }
+.tile--coral { background: var(--coral-soft); }
+.tile--butter { background: var(--butter-soft); }
+.tile--sage { background: var(--pale); border: 1px solid var(--line); }
+.tile--white { background: var(--card); border: 1px solid var(--line); }
+.tile h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.5rem; letter-spacing: -0.01em; line-height: 1.15; }
+.tile p { font-size: 0.99rem; line-height: 1.6; }
+.tile-tag { font-weight: 700; font-size: 0.82rem; opacity: 0.85; }
+.venn { width: 100%; max-width: 220px; height: auto; justify-self: center; }
+.venn circle { animation: drift 6s ease-in-out infinite alternate; }
+.venn circle:nth-child(2) { animation-delay: -2s; }
+.venn circle:nth-child(3) { animation-delay: -4s; }
+@keyframes drift { from { transform: translate(0, 0); } to { transform: translate(3px, -3px); } }
+.pagecard { display: grid; gap: 10px; padding: 12px 14px; background: var(--card); border-radius: 6px; font-size: 0.95rem; }
+.pagecard b { font-weight: 700; }
+.pagecard span { color: var(--muted); font-size: 0.85rem; }
+.pagecard i { display: block; height: 6px; border-radius: 3px; background: var(--coral-soft); }
+.pagecard i:nth-of-type(2) { width: 70%; }
+.pagecard i:nth-of-type(3) { width: 85%; }
+
+.arch { grid-column: 1 / -1; }
+.arch-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.arch-status { font-size: 0.95rem; min-height: 3.2em; max-width: 72ch; }
+.arch-svg text { font-family: var(--font-body); }
+.draw { stroke-dasharray: 400; stroke-dashoffset: 400; animation: drawin 700ms ease-out forwards; }
+@keyframes drawin { to { stroke-dashoffset: 0; } }
+.pop { transform-box: fill-box; transform-origin: center; animation: pop 450ms cubic-bezier(.2,1.4,.4,1) both; }
+@keyframes pop { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.tree { font-size: 0.93rem; line-height: 1.5; display: grid; gap: 4px; }
+.tree ul { margin-left: 10px; padding-left: 18px; border-left: 2px solid var(--sage); display: grid; gap: 6px; margin-top: 6px; }
+.tree li { position: relative; }
+.tree ul > li::before { content: ""; position: absolute; left: -18px; top: 0.8em; width: 14px; height: 2px; background: var(--sage); }
+.tree b { background: var(--card); padding: 2px 10px; border-radius: 4px; border: 1px solid var(--line); font-weight: 700; display: inline-block; }
+.tree em { font-style: normal; color: var(--muted); font-size: 0.85rem; }
+
+/* results */
+.results { display: grid; gap: 18px; }
+@media (min-width: 900px) { .results { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.rcard { background: var(--card); border: 1px solid var(--sky-soft); border-radius: 10px; padding: clamp(22px, 3vw, 32px); display: grid; gap: 22px; align-content: start; }
+.rcard-top { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.mult { font-family: var(--font-display); font-size: clamp(3rem, 6vw, 4.6rem); line-height: 1; letter-spacing: -0.03em; color: var(--coral); font-variant-numeric: tabular-nums; }
+.bars { display: grid; gap: 14px; }
+.bar { display: grid; gap: 6px; }
+.bar-label { display: flex; justify-content: space-between; gap: 12px; font-size: 0.92rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
+.bar-label span:first-child { color: var(--muted); font-weight: 500; }
+.bar-track { height: 20px; border-radius: 4px; background: var(--pale); overflow: hidden; }
+.bar-fill { height: 100%; width: var(--w); background: #98AA97; transform-origin: left center; animation: grow 1000ms 200ms cubic-bezier(.2,.7,.2,1) both; }
+.bar-fill--after { background: var(--sky); }
+.bar-fill--range { background: linear-gradient(90deg, #98AA97 0 var(--solid), #C4D0C3 var(--solid) 100%); }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.rtexts { display: grid; gap: 18px; }
+@media (min-width: 900px) { .rtexts { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.rtext { background: var(--card); border-radius: 10px; padding: clamp(20px, 3vw, 28px); border-left: 6px solid var(--sky); display: grid; gap: 8px; align-content: start; }
+.rtext:nth-child(2) { border-left-color: var(--coral); }
+.rtext h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.35rem; line-height: 1.2; }
+.rtext p { color: var(--muted); max-width: 48ch; }
+
+/* changes */
+.changes { display: grid; gap: 16px; }
+@media (min-width: 720px) { .changes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.change { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: clamp(22px, 3vw, 30px); display: grid; gap: 12px; align-content: start; }
+.change-icon { width: 64px; height: 64px; border-radius: 12px; display: grid; place-items: center; }
+.change:nth-child(1) .change-icon { background: var(--sky-soft); }
+.change:nth-child(2) .change-icon { background: var(--butter-soft); }
+.change:nth-child(3) .change-icon { background: var(--coral-soft); }
+.change:nth-child(4) .change-icon { background: var(--pale); }
+.change-icon svg { width: 44px; height: 44px; }
+.change h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.45rem; line-height: 1.2; letter-spacing: -0.01em; }
+.change p { color: var(--muted); max-width: 52ch; }
+.ripple { transform-box: fill-box; transform-origin: center; animation: ripple 2.4s ease-out infinite; }
+.ripple:nth-child(2) { animation-delay: .8s; }
+.ripple:nth-child(3) { animation-delay: 1.6s; }
+@keyframes ripple { from { transform: scale(.3); opacity: 1; } to { transform: scale(1); opacity: 0; } }
+.hop { animation: hop 2s ease-in-out infinite alternate; }
+@keyframes hop { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+.grow-bar { transform-box: fill-box; transform-origin: bottom; animation: pulsebar 2.4s ease-in-out infinite alternate; }
+.grow-bar:nth-child(2) { animation-delay: .3s; }
+.grow-bar:nth-child(3) { animation-delay: .6s; }
+@keyframes pulsebar { from { transform: scaleY(.8); } to { transform: scaleY(1); } }
+.blink-node { animation: nodepulse 2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.blink-node:nth-of-type(2) { animation-delay: .5s; }
+.blink-node:nth-of-type(3) { animation-delay: 1s; }
+@keyframes nodepulse { 50% { transform: scale(1.35); } }
+
+/* tools */
+.tools { display: grid; gap: 12px; }
+@media (min-width: 760px) { .tools { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tools li { display: grid; gap: 2px; padding: 16px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; border-left: 6px solid var(--sky); transition: transform 180ms ease; }
+.tools li:nth-child(2) { border-left-color: var(--butter); }
+.tools li:nth-child(3) { border-left-color: var(--coral); }
+.tools li:nth-child(4) { border-left-color: var(--sage); }
+.tools li:hover { transform: translateX(4px); }
+.tools b { font-weight: 700; color: var(--ink); }
+.tools span { color: var(--muted); font-size: 0.95rem; }
+
+/* takeaway */
+.takeaway-panel { background: var(--butter-soft); border-radius: 12px; padding: clamp(28px, 5vw, 64px); display: grid; gap: clamp(28px, 4vw, 44px); color: var(--ink); }
+.takeaway-panel h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.9rem, 4vw, 3.1rem); line-height: 1.12; letter-spacing: -0.02em; max-width: 24ch; text-wrap: balance; }
+.takeaway-panel p.body { max-width: 62ch; }
+.versus { display: grid; gap: 16px; }
+@media (min-width: 760px) { .versus { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.versus figure { background: var(--card); border-radius: 8px; padding: 18px; display: grid; gap: 10px; }
+.versus svg { width: 100%; height: auto; max-height: 220px; }
+.versus figcaption { font-weight: 700; font-size: 0.95rem; }
+.versus figcaption span { display: block; font-weight: 500; font-size: 0.85rem; color: var(--muted); }
+.pulse { animation: nodepulse 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.fit { display: flex; flex-wrap: wrap; gap: 10px; }
+.fit li { padding: 8px 16px; border-radius: 999px; background: var(--card); color: var(--ink); font-weight: 700; font-size: 0.92rem; }
+.fit-label { font-weight: 600; font-size: 0.95rem; }
+
+/* about + cta */
+.about { display: grid; gap: 16px; padding: clamp(22px, 3vw, 32px); border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+.about .display { font-size: 1.5rem; line-height: 1.2; }
+.about p { color: var(--muted); max-width: 64ch; }
+.cta { background: var(--coral-soft); color: var(--ink); border-radius: 12px; padding: clamp(28px, 5vw, 56px); display: grid; gap: 20px; margin-top: 28px; position: relative; overflow: hidden; }
+.cta::after { content: ""; position: absolute; right: 0; bottom: 0; width: clamp(80px, 14vw, 180px); height: clamp(80px, 14vw, 180px); background: var(--butter); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+.cta .display { font-size: clamp(1.8rem, 3.4vw, 2.7rem); line-height: 1.12; max-width: 24ch; }
+.cta p { max-width: 54ch; }
+.cta-actions { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: center; position: relative; z-index: 1; }
+.cta .btn { background: var(--ink); color: #F7F5EE; }
+.cta .btn:hover { background: #344c5e; }
+.footer { padding-block: 40px; border-top: 1px solid var(--line); margin-top: clamp(48px, 7vw, 88px); font-size: 0.9rem; color: var(--muted); }
+.footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.footer strong { font-family: var(--font-display); font-weight: 500; font-size: 1.1rem; color: var(--sage); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .draw { stroke-dashoffset: 0; }
+}
+
+/* ---- Esma additions ---- */
+.hero-visual .frame { box-shadow: 8px 8px 0 var(--sky-soft); }
+.frame { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; box-shadow: 8px 8px 0 var(--butter-soft); }
+.frame img { display: block; width: 100%; height: auto; }
+.frame-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: var(--pale); border-bottom: 1px solid var(--line); }
+.frame-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--coral); }
+.frame-bar i:nth-child(2) { background: var(--butter); }
+.frame-bar i:nth-child(3) { background: var(--sage); }
+.frame-url { margin-left: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 2px 14px; font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+
+.metrics .metric b { font-size: clamp(1.7rem, 2.6vw, 2.3rem); }
+
+.needs { display: grid; gap: 16px; }
+@media (min-width: 900px) { .needs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.needs svg { width: 48px; height: 48px; }
+
+.jumps { display: grid; gap: 14px; }
+@media (min-width: 640px) { .jumps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1040px) { .jumps { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.jump { display: grid; gap: 6px; height: 100%; padding: 20px; border-radius: 8px; color: var(--ink); text-decoration: none; transition: transform 180ms ease, box-shadow 180ms ease; }
+.jump:hover { transform: translateY(-3px); box-shadow: 0 6px 0 rgba(36, 55, 70, 0.12); }
+.jump b { font-family: var(--font-display); font-weight: 500; font-size: 1.35rem; line-height: 1.15; }
+.jump span { font-size: 0.93rem; line-height: 1.5; }
+.jump--sky { background: var(--sky-soft); }
+.jump--butter { background: var(--butter-soft); }
+.jump--coral { background: var(--coral-soft); }
+.jump--sage { background: var(--card); border: 1px solid var(--line); }
+:target { scroll-margin-top: 24px; }
+
+/* migration diagram: finished state is the default; JS replays it */
+#mig .pk { opacity: 0; }
+#mig .tgt { fill: var(--sky-soft); stroke: var(--sky); stroke-width: 1.5; transition: fill 400ms ease, opacity 400ms ease; }
+#mig .tgt-text { transition: opacity 400ms ease; }
+#mig .chk { transition: opacity 400ms ease; }
+#mig[data-state="idle"] .tgt, #mig[data-state="run"] .tgt { fill: #fff; stroke: var(--line); }
+#mig[data-state="idle"] .tgt-text, #mig[data-state="run"] .tgt-text { opacity: 0.35; }
+#mig[data-state="idle"] .chk, #mig[data-state="run"] .chk { opacity: 0; }
+#mig[data-state="run"] .pk { animation: pkmove 1.7s var(--d) ease-in-out 1 both; }
+#mig[data-state="run"] .band-box { animation: bandpulse 1.2s ease-in-out 2; }
+@keyframes pkmove { 0% { transform: translateX(0); opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { transform: translateX(260px); opacity: 0; } }
+@keyframes bandpulse { 50% { fill: #F0D77C; } }
+.ring { transform-box: fill-box; transform-origin: center; animation: ringp 2.2s ease-in-out infinite; }
+@keyframes ringp { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.25); opacity: 0.35; } }
+
+/* storefront gallery */
+.gallery { display: grid; gap: 22px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 10px; }
+.tab { border: 1.5px solid var(--ink); background: transparent; color: var(--ink); border-radius: 999px; padding: 9px 18px; min-height: 42px; font-weight: 700; font-size: 0.92rem; transition: background 180ms ease, color 180ms ease; }
+.tab:hover { background: var(--card); }
+.tab[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.frame--big { box-shadow: 10px 10px 0 var(--sky-soft); background: var(--card); }
+.shots { display: grid; }
+.shot { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity 300ms ease, visibility 0s linear 300ms; }
+.shot.is-on { opacity: 1; visibility: visible; transition: opacity 300ms ease; }
+.shot-caption { padding: 16px 20px 20px; border-top: 1px solid var(--line); font-size: 0.98rem; color: var(--muted); min-height: 5.4em; max-width: 90ch; }
+
+/* analytics toggle */
+.bi { min-height: 250px; }
+.bi-grid { display: none; gap: 14px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.bi[data-state="std"] .bi-std, .bi[data-state="custom"] .bi-custom { display: grid; }
+.bi-tile { background: var(--pale); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: grid; gap: 14px; align-content: space-between; color: var(--ink); font-size: 0.92rem; }
+.bi-tile--hi { background: var(--coral-soft); border-color: transparent; }
+.spark { display: flex; align-items: flex-end; gap: 6px; height: 84px; }
+.spark i { flex: 1; height: var(--h); background: var(--sky); border-radius: 3px 3px 0 0; transform-origin: bottom; animation: sgrow 600ms ease both; }
+.spark i:nth-child(2) { animation-delay: 60ms; } .spark i:nth-child(3) { animation-delay: 120ms; } .spark i:nth-child(4) { animation-delay: 180ms; } .spark i:nth-child(5) { animation-delay: 240ms; } .spark i:nth-child(6) { animation-delay: 300ms; }
+.spark--hi i { background: var(--coral); }
+@keyframes sgrow { from { transform: scaleY(0.1); } to { transform: scaleY(1); } }
+.bi-insight { grid-column: 1 / -1; display: grid; gap: 4px; padding: 16px 18px; border-radius: 8px; background: var(--butter-soft); color: var(--ink); border-left: 6px solid var(--coral); }
+.bi-insight span { font-size: 0.93rem; }
+@media (max-width: 560px) { .bi-grid { grid-template-columns: 1fr; } .spark { height: 56px; } }
+
+/* who it suits */
+.versus { margin-block: 4px; }
+@media (min-width: 720px) { .versus { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.versus h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.35rem; color: var(--ink); }
+.versus .figure-add { background: var(--sky-wash); }
+.kept { display: grid; gap: 8px; }
+.kept li { position: relative; padding-left: 30px; font-weight: 600; }
+.kept li::before { content: ""; position: absolute; left: 4px; top: 0.45em; width: 14px; height: 8px; border-left: 3px solid var(--sage); border-bottom: 3px solid var(--sage); transform: rotate(-45deg); }
+.kept--add li::before { border-color: var(--coral); }
+.changes { }
+@media (min-width: 900px) { .changes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (prefers-reduced-motion: reduce) { .ring, .pk, .spark i { animation: none !important; } }
+
+/* ---- 260 Sample Sale additions ---- */
+.bugcard { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: clamp(20px, 3vw, 30px); display: grid; gap: 18px; box-shadow: 8px 8px 0 var(--sky-soft); }
+.bugcard-top { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; color: var(--ink); font-weight: 600; }
+.bugcard-n { font-family: var(--font-display); font-weight: 400; font-size: clamp(3rem, 6vw, 4.5rem); line-height: 1; letter-spacing: -0.03em; }
+.dots40 { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 8px; }
+.dots40 i { aspect-ratio: 1; border-radius: 50%; background: var(--sky); animation: fixd 500ms calc(var(--i) * 40ms + 300ms) both; }
+@keyframes fixd { from { background: #E7A58F; transform: scale(0.6); } to { background: var(--sky); transform: scale(1); } }
+
+.jumps--5 { }
+@media (min-width: 1040px) { .jumps--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+@media (min-width: 640px) and (max-width: 1039px) { .jumps--5 li:last-child { grid-column: 1 / -1; } }
+
+/* checkout before / after */
+#ck .ck-bugs, #ck .ck-clear { transition: opacity 350ms ease; }
+#ck[data-state="before"] .ck-clear { opacity: 0; }
+#ck[data-state="after"] .ck-bugs { opacity: 0; }
+#ck .ck-ok { transition: stroke 350ms ease; animation: dash 1.3s linear infinite; }
+#ck[data-state="before"] .ck-ok { stroke: #D96F4F; }
+
+.steps3 { display: grid; gap: 16px; counter-reset: s; }
+@media (min-width: 860px) { .steps3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.step3 { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; padding: 22px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+.step3:nth-child(2) { margin-top: 0; }
+@media (min-width: 860px) { .step3:nth-child(2) { margin-top: 18px; } .step3:nth-child(3) { margin-top: 36px; } }
+.step3 .step-n { font: 700 1.05rem/1 var(--font-body); width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--coral-soft); color: var(--ink); font-weight: 700; }
+.step3:nth-child(2) .step-n { background: var(--butter-soft); }
+.step3:nth-child(3) .step-n { background: var(--sky-soft); }
+.step3 h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.4rem; line-height: 1.2; color: var(--ink); margin-bottom: 4px; }
+.step3 p { color: var(--muted); font-size: 0.98rem; line-height: 1.6; }
+
+/* theme layers */
+.stack { display: grid; gap: 10px; max-width: 640px; }
+.slab { display: grid; gap: 2px; padding: 16px 20px; border-radius: 8px; color: var(--ink); transition: opacity 300ms ease, transform 300ms ease; }
+.slab b { font-size: 1rem; }
+.slab span { font-size: 0.88rem; color: var(--muted); }
+.slab--dawn { background: var(--pale); border: 1px solid var(--line); }
+.slab--liquid { background: var(--coral-soft); border-left: 6px solid var(--coral); }
+.slab--ui { background: var(--sky-soft); border-left: 6px solid var(--sky); }
+.stack[data-step="1"] .slab--liquid, .stack[data-step="1"] .slab--ui { opacity: 0.15; transform: translateY(-8px); }
+.stack[data-step="2"] .slab--ui { opacity: 0.15; transform: translateY(-8px); }
+
+/* screenshots */
+.bugwrap { margin-top: clamp(28px, 4vw, 44px); max-width: 560px; }
+.gal-title { font-family: var(--font-display); font-weight: 500; font-size: 1.5rem; letter-spacing: -0.01em; color: var(--ink); }
+.strip { margin-bottom: clamp(28px, 4vw, 44px); }
+.strip figcaption { padding: 12px 18px 14px; border-top: 1px solid var(--line); }
+/* loyalty loop */
+.loop-dash { animation: dash 1.3s linear infinite; }
+
+/* email mock */
+.mail { --m-head: var(--pale); --m-head-fg: var(--ink); --m-btn: #C4D0C3; --m-btn-fg: var(--ink); --m-rule: transparent; max-width: 520px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card); transition: border-color 300ms ease; }
+.mail[data-state="cus"] { --m-head: var(--ink); --m-head-fg: #F7F5EE; --m-btn: var(--coral); --m-btn-fg: var(--on-coral); --m-rule: var(--butter); border-color: var(--ink); }
+.mail-head { display: flex; justify-content: space-between; gap: 12px; padding: 14px 18px; background: var(--m-head); color: var(--m-head-fg); border-bottom: 4px solid var(--m-rule); font-weight: 700; font-size: 0.9rem; transition: background 300ms ease, color 300ms ease; }
+.mail-tag { font-weight: 500; opacity: 0.8; }
+.mail-body { padding: 22px 18px; display: grid; gap: 10px; justify-items: start; }
+.mail-title { font-family: var(--font-display); font-weight: 500; font-size: 1.5rem; color: var(--ink); }
+.mail[data-state="cus"] .mail-title { color: var(--coral); }
+.mail-body i { display: block; width: 100%; height: 8px; border-radius: 4px; background: var(--line); }
+.mail-body i.s { width: 60%; }
+.mail-btn { margin-top: 6px; padding: 10px 20px; border-radius: 999px; background: var(--m-btn); color: var(--m-btn-fg); font-weight: 700; font-size: 0.9rem; transition: background 300ms ease; }
+.mail-foot { padding: 12px 18px; background: var(--bg); border-top: 1px solid var(--line); }
+.mail-foot i { display: block; width: 45%; height: 6px; border-radius: 3px; background: var(--line); }
+
+/* support lane */
+.lane { display: grid; gap: 10px; align-items: center; }
+@media (min-width: 760px) { .lane { grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr) 40px minmax(0, 1fr); } }
+.lane-node { display: grid; gap: 4px; padding: 20px; border-radius: 8px; color: var(--ink); }
+.lane-node b { font-family: var(--font-display); font-weight: 500; font-size: 1.35rem; line-height: 1.15; }
+.lane-node span { font-size: 0.93rem; }
+.lane-node--a { background: var(--butter-soft); }
+.lane-node--b { background: var(--coral-soft); }
+.lane-node--c { background: var(--sky-soft); }
+.lane-arrow { display: none; height: 2px; background: var(--ink); position: relative; overflow: visible; }
+.lane-arrow::after { content: ""; position: absolute; right: -1px; top: -4px; border-left: 8px solid var(--ink); border-block: 5px solid transparent; }
+@media (min-width: 760px) { .lane-arrow { display: block; } }
+@media (prefers-reduced-motion: reduce) { .dots40 i, .loop-dash, #ck .ck-ok { animation: none !important; } }
+
+/* ---- Get Daily additions ---- */
+.changes--4 { }
+@media (min-width: 640px) and (max-width: 1039px) { .changes--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1040px) { .changes--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.fig-flow { display: grid; gap: 10px; align-items: center; margin-bottom: clamp(28px, 4vw, 44px); }
+@media (min-width: 760px) { .fig-flow { grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr) 40px minmax(0, 1fr); } }
+.fig-node { display: grid; gap: 4px; padding: 18px 20px; border-radius: 8px; color: var(--ink); }
+.fig-node b { font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; line-height: 1.15; }
+.fig-node span { font-size: 0.92rem; }
+.fig-node--a { background: var(--butter-soft); }
+.fig-node--b { background: var(--coral-soft); }
+.fig-node--c { background: var(--sky-soft); }
+.fig-arrow { display: none; height: 2px; background: var(--ink); position: relative; }
+.fig-arrow::after { content: ""; position: absolute; right: -1px; top: -4px; border-left: 8px solid var(--ink); border-block: 5px solid transparent; }
+@media (min-width: 760px) { .fig-arrow { display: block; } }
+
+.ui-wrap { display: grid; gap: 28px; align-items: start; }
+@media (min-width: 1000px) { .ui-wrap { grid-template-columns: minmax(0, 1fr) 230px; } }
+.phone-wrap { display: grid; gap: 10px; justify-items: center; }
+.phone { width: min(230px, 70vw); border: 8px solid var(--ink); border-radius: 32px; overflow: hidden; background: #fff; box-shadow: 8px 8px 0 var(--butter-soft); }
+.phone img { display: block; width: 100%; height: auto; }
+
+/* speed scale */
+.speed { position: relative; padding: 70px 4px 40px; }
+.speed-track { position: relative; height: 30px; background: var(--pale); border: 1px solid var(--line); border-radius: 999px; }
+.speed-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 50%; background: var(--sky); border-radius: 999px; transform-origin: left; animation: fillx 1.4s ease-out both; }
+@keyframes fillx { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.speed-mark { position: absolute; bottom: 100%; display: grid; gap: 0; transform: translateX(-50%); text-align: center; padding-bottom: 12px; white-space: nowrap; }
+.speed-mark b { font-family: var(--font-display); font-weight: 400; font-size: 1.7rem; line-height: 1.1; color: var(--ink); }
+.speed-mark span { font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+.speed-mark::after { content: ""; position: absolute; left: 50%; top: calc(100% - 10px); height: 48px; width: 0; border-left: 2px solid var(--ink); }
+.speed-mark--ours { left: 50%; }
+.speed-mark--limit { left: 83.333%; }
+.speed-mark--limit b { color: #a8472b; }
+.speed-mark--limit::after { border-left: 2px dashed var(--coral); }
+.speed-scale { display: flex; justify-content: space-between; margin-top: 12px; font-size: 0.82rem; font-weight: 600; color: var(--muted); }
+@media (max-width: 560px) { .speed-mark span { font-size: 0.75rem; } .speed-mark--ours { transform: translateX(-70%); } .speed-mark--limit { transform: translateX(-30%); } }
+
+/* pre-launch runway */
+.runway { display: grid; gap: 14px; }
+@media (min-width: 900px) { .runway { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: end; } .rw--1 { margin-bottom: 0; } .rw--2 { margin-bottom: 22px; } .rw--3 { margin-bottom: 44px; } .rw--4 { margin-bottom: 66px; } }
+.rw { display: grid; gap: 4px; padding: 20px; border-radius: 8px; color: var(--ink); }
+.rw b { font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; line-height: 1.15; }
+.rw span:not(.rw-n) { font-size: 0.93rem; }
+.rw-n { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--card); font-weight: 700; margin-bottom: 8px; }
+.rw--1 { background: var(--sky-soft); } .rw--2 { background: var(--butter-soft); } .rw--3 { background: var(--coral-soft); } .rw--4 { background: var(--pale); border: 1px solid var(--line); }
+
+/* loyalty dots */
+.loyal { display: grid; gap: 28px; align-items: center; }
+@media (min-width: 760px) { .loyal { grid-template-columns: minmax(0, 340px) minmax(0, 1fr); } }
+.hundred { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 7px; }
+.hundred i { aspect-ratio: 1; border-radius: 50%; background: #D5DDD2; }
+.hundred i:nth-child(-n+12) { background: var(--coral); animation: back 500ms calc(var(--i) * 70ms + 300ms) both; }
+@keyframes back { from { background: #D5DDD2; transform: scale(0.6); } to { background: var(--coral); transform: scale(1); } }
+.loyal-n { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; color: var(--ink); }
+.loyal-n b { font-family: var(--font-display); font-weight: 400; font-size: clamp(3.6rem, 8vw, 5.5rem); line-height: 1; letter-spacing: -0.03em; }
+.loyal-n span { font-weight: 700; font-size: 1.1rem; max-width: 16ch; line-height: 1.3; }
+.loyal-sub { color: var(--muted); margin-top: 6px; }
+.cycle { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 4px; margin-top: 18px; }
+.cycle i { height: 14px; border-radius: 3px; background: var(--sky); transform-origin: left; animation: cyc 400ms calc(var(--i) * 45ms + 200ms) both; }
+@keyframes cyc { from { transform: scaleY(0.2); opacity: 0.3; } to { transform: scaleY(1); opacity: 1; } }
+.cycle-lab { font-size: 0.85rem; font-weight: 600; color: var(--muted); margin-top: 6px; }
+@media (prefers-reduced-motion: reduce) { .speed-fill, .hundred i, .cycle i { animation: none !important; } }
+
+/* ---- LabTheory additions ---- */
+.pdp { position: relative; display: grid; gap: 20px; padding: 22px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); max-width: 760px; }
+@media (min-width: 640px) { .pdp { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.pdp-hero { aspect-ratio: 1 / 1; background: var(--pale); border-radius: 8px; display: grid; place-items: center; color: var(--muted); font-weight: 600; font-size: 0.9rem; }
+.pdp-thumbs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.pdp-thumbs i { aspect-ratio: 1; border-radius: 6px; background: var(--sky-soft); }
+.pdp-info { display: grid; gap: 12px; align-content: start; }
+.pdp-title { font-family: var(--font-display); font-weight: 500; font-size: 1.6rem; color: var(--ink); }
+.pdp-price { font-weight: 700; color: var(--ink); }
+.pdp-cta { justify-self: start; padding: 11px 26px; border-radius: 999px; background: var(--coral); color: var(--on-coral); font-weight: 700; }
+.pdp-block { display: grid; gap: 6px; padding: 14px; border-radius: 8px; color: var(--ink); }
+.pdp-block b { font-size: 0.85rem; }
+.pdp-block i { display: block; height: 7px; border-radius: 4px; background: rgba(36, 55, 70, 0.22); }
+.pdp-block i.s { width: 55%; }
+.pdp-block--info { background: var(--butter-soft); }
+.pdp-block--seo { background: var(--sky-soft); }
+.pdp-tag { position: absolute; left: 22px; top: 22px; padding: 5px 12px; border-radius: 999px; background: var(--coral-soft); color: var(--ink); font-weight: 700; font-size: 0.8rem; border: 1.5px solid var(--coral); }
+.pdp[data-state="before"] .pdp-more { display: none; }
+.pdp:not([data-state="before"]) .pdp-more { animation: pdpin 350ms ease both; }
+@keyframes pdpin { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* RTO flow */
+#rto-svg .tpm { transition: opacity 350ms ease; }
+#rto-svg .rto-box { fill: var(--coral-soft); stroke: var(--coral); stroke-width: 2; transition: fill 350ms ease; }
+#rto-svg .rto-goal { transition: opacity 350ms ease; }
+#rto-svg[data-state="before"] .tpm, #rto-svg[data-state="before"] .rto-goal { opacity: 0; }
+#rto-svg[data-state="after"] .rto-box { fill: #fff; stroke-dasharray: 6 5; }
+
+/* growth bars */
+.growth { display: grid; gap: 14px; }
+.g-row { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr) 9.5rem; gap: 14px; align-items: center; }
+@media (max-width: 640px) { .g-row { grid-template-columns: minmax(0, 1fr) auto; } .g-track { grid-column: 1 / -1; order: 3; } }
+.g-lab { font-weight: 700; color: var(--ink); }
+.g-track { position: relative; height: 26px; background: var(--pale); border-radius: 999px; }
+.g-track::after { content: ""; position: absolute; left: 16.667%; top: -4px; bottom: -4px; border-left: 2px dashed var(--coral); }
+.g-bar { height: 100%; width: var(--w); background: var(--sky); border-radius: 999px; transform-origin: left; animation: fillx 1.2s ease-out both; }
+.g-val { font-size: 0.95rem; color: var(--muted); text-align: right; white-space: nowrap; }
+.g-val b { color: var(--ink); }
+.g-axis { display: flex; justify-content: space-between; padding-left: calc(8.5rem + 14px); padding-right: 9.5rem; font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+@media (max-width: 640px) { .g-axis { padding: 0; } }
+@media (prefers-reduced-motion: reduce) { .g-bar, .pdp .pdp-more { animation: none !important; } }
+
+/* ---- SB Trapeze additions ---- */
+.snap { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.snap-n { display: grid; gap: 4px; color: var(--ink); }
+.snap-n b { font-family: var(--font-display); font-weight: 400; font-size: clamp(3rem, 6vw, 4.5rem); line-height: 1; letter-spacing: -0.03em; }
+.snap-n span { font-weight: 600; font-size: 0.95rem; }
+
+.sc { display: grid; gap: 14px; }
+@media (min-width: 760px) { .sc { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; } }
+.sc-col { border-radius: 8px; padding: 16px; display: grid; gap: 8px; color: var(--ink); align-content: start; min-height: 260px; }
+.sc-col--camp { background: var(--butter-soft); }
+.sc-col--parkour { background: var(--coral-soft); }
+.sc-col--member { background: var(--sky-soft); }
+.sc-col h4 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; }
+.sc-rule { margin: 0; font-size: 0.82rem; font-weight: 600; color: var(--muted); }
+.sc-col ul { display: grid; gap: 8px; margin-top: 4px; }
+.sc-col li { background: var(--card); border-radius: 6px; padding: 9px 12px; font-size: 0.9rem; font-weight: 600; }
+.sc-col li.sc-new { animation: scin 450ms ease both; box-shadow: inset 4px 0 0 var(--coral); }
+@keyframes scin { from { opacity: 0; transform: translateY(-10px) scale(0.96); } to { opacity: 1; transform: none; } }
+.seg .sc-add { white-space: normal; }
+@media (max-width: 640px) { .sim-top .seg { flex-wrap: wrap; border-radius: 22px; } .seg .sc-add { flex: 1 1 auto; } }
+
+.seo-grid { display: grid; gap: 24px; align-items: center; }
+@media (min-width: 900px) { .seo-grid { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); } }
+.serp-card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: clamp(20px, 3vw, 30px); display: grid; gap: 6px; box-shadow: 8px 8px 0 var(--sky-soft); }
+.serp-card .serp-url { font-size: 0.85rem; color: var(--muted); }
+.serp-card .serp-title { color: #1a4f8a; font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
+.serp-card .serp-desc { font-size: 0.95rem; color: var(--fg); line-height: 1.55; }
+.serp-card figcaption { margin-top: 10px; }
+.seo-points { display: grid; gap: 12px; }
+.seo-points li { display: grid; gap: 2px; padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--butter); border-radius: 8px; }
+.seo-points li:nth-child(2) { border-left-color: var(--coral); }
+.seo-points li:nth-child(3) { border-left-color: var(--sky); }
+.seo-points b { color: var(--ink); }
+.seo-points span { color: var(--muted); font-size: 0.95rem; }
+
+.cd { display: grid; gap: 16px; justify-items: start; padding: clamp(20px, 3vw, 32px); background: var(--ink); color: #F7F5EE; border-radius: 10px; max-width: 620px; }
+.cd-label { margin: 0; font-weight: 700; font-size: 1rem; }
+.cd-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; width: 100%; }
+.cd-box { display: grid; gap: 2px; justify-items: center; padding: 14px 6px; border-radius: 8px; background: rgba(247, 245, 238, 0.12); }
+.cd-box b { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 6vw, 3rem); line-height: 1; font-variant-numeric: tabular-nums; }
+.cd-box span { font-size: 0.78rem; font-weight: 600; opacity: 0.85; }
+.cd-btn { padding: 11px 26px; border-radius: 999px; background: var(--coral); color: var(--on-coral); font-weight: 700; }
+</style>
+</head>
+<body><div class="progress" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="/" aria-label="Sage Kite home">Sage Kite</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/services">Services</a>
+      <a href="/platforms">Platforms</a>
+      <a href="/industries">Industries</a>
+      <a href="/for-agencies">For agencies</a>
+      <a href="/insights">Insights</a>
+      <a href="/about">About</a>
+    </nav>
+    <a class="btn" href="/contact">Book a discovery call</a>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="title">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/work">Work</a><span aria-hidden="true">/</span><span>Santa Barbara Trapeze</span></nav>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Case study · Shopify store upgrade and automation</p>
+          <h1 id="title" class="display">Shopify store upgrade and automation for a Santa Barbara trapeze studio: Impulse theme, smart collections, SEO and countdown timers</h1>
+          <p class="hero-sub">Automated merchandising, cleaner data and urgency for event sales.</p>
+          <p class="lede">Santa Barbara Trapeze Co. needed its Shopify store to handle a growing catalog. We upgraded the store infrastructure, automated its merchandising with smart collections, fixed its data and SEO metadata, and added countdown timers to drive faster purchases during sale events.</p>
+          <p class="badge">A Sage Kite client project</p>
+        </div>
+
+        <div class="hero-visual">
+          <figure class="bugcard" aria-labelledby="snap-cap">
+            <div class="snap">
+              <div class="snap-n"><b>115</b><span>published products</span></div>
+              <div class="snap-n"><b>26</b><span>collections</span></div>
+            </div>
+            <figcaption id="snap-cap" class="note">The store's catalog today, counted from the live storefront in October 2026: flying trapeze, parkour, trampoline and acrobatics classes, camps, memberships and merchandise.</figcaption>
+          </figure>
+          <aside class="glance" aria-labelledby="glance-title">
+            <div class="glance-card">
+              <h2 id="glance-title">At a glance</h2>
+              <dl>
+                <div class="row"><dt>Client</dt><dd>Santa Barbara Trapeze Co. (SB Trapeze), a US brand</dd></div>
+                <div class="row"><dt>Project type</dt><dd>Store upgrade and automation</dd></div>
+                <div class="row"><dt>Platform</dt><dd>Shopify, Impulse theme</dd></div>
+                <div class="row"><dt>Scope</dt><dd>Theme upgrade, smart collections, data and SEO, countdown timers</dd></div>
+                <div class="row"><dt>Our role</dt><dd>Sage Kite client engagement</dd></div>
+                <div class="row"><dt>Live store</dt><dd><a class="link-quiet" href="https://sbtrapeze.com/" target="_blank" rel="noopener">sbtrapeze.com</a></dd></div>
+              </dl>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS -->
+  <section aria-label="Project highlights">
+    <div class="wrap">
+      <div class="metrics">
+        <div class="metric metric--sky"><b>Impulse</b><span class="lab">Theme the store was migrated to, for its merchandising features</span></div>
+        <div class="metric metric--butter"><b>Smart</b><span class="lab">Collections that fill themselves from logic rules</span></div>
+        <div class="metric metric--coral"><b>Countdown</b><span class="lab">Timers that highlight sale events</span></div>
+        <div class="metric metric--sage"><b>SEO</b><span class="lab">Data fixed and metadata updated for new products</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="band" aria-labelledby="problem-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>The challenge</p>
+        <h2 id="problem-title" class="display">A growing Shopify catalog needed automation, clean data and urgency to convert event sales</h2>
+        <p class="lede">Santa Barbara Trapeze needed to upgrade its existing digital presence to handle a growing catalog. The focus was on automation, data integrity, and creating a sense of urgency to drive conversions for specific events.</p>
+      </div>
+      <div class="needs">
+        <article class="tile tile--coral">
+          <svg viewBox="0 0 44 44" aria-hidden="true"><rect x="6" y="6" width="14" height="14" rx="3" fill="none" stroke="#243746" stroke-width="2.4"/><rect x="24" y="6" width="14" height="14" rx="3" fill="none" stroke="#243746" stroke-width="2.4"/><rect x="6" y="24" width="14" height="14" rx="3" fill="none" stroke="#243746" stroke-width="2.4"/><rect class="hop" x="24" y="24" width="14" height="14" rx="3" fill="#EFC75E" stroke="#243746" stroke-width="2.4"/></svg>
+          <h3>A catalog that keeps growing</h3>
+          <p>More classes, camps, memberships and merchandise meant more products to list, sort and keep current by hand.</p>
+        </article>
+        <article class="tile tile--butter">
+          <svg viewBox="0 0 44 44" aria-hidden="true"><ellipse cx="22" cy="11" rx="14" ry="5" fill="none" stroke="#243746" stroke-width="2.4"/><path d="M8 11 V33 C8 36 14 39 22 39 C30 39 36 36 36 33 V11" fill="none" stroke="#243746" stroke-width="2.4"/><path class="hop" d="M8 22 C8 25 14 28 22 28 C30 28 36 25 36 22" fill="none" stroke="#D96F4F" stroke-width="2.6"/></svg>
+          <h3>Data integrity and discoverability</h3>
+          <p>Underlying data issues needed fixing, and new products needed SEO metadata so people could find them in search.</p>
+        </article>
+        <article class="tile tile--sky">
+          <svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="24" r="15" fill="none" stroke="#243746" stroke-width="2.4"/><path class="hop" d="M22 24 V14 M22 24 L29 28" stroke="#D96F4F" stroke-width="3" stroke-linecap="round"/><path d="M17 6 H27" stroke="#243746" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <h3>Urgency for specific events</h3>
+          <p>Sale events needed a visible cue to prompt faster buying decisions and convert more of the traffic.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section class="band band--pale" aria-labelledby="solution-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>The solution</p>
+        <h2 id="solution-title" class="display">A Shopify theme upgrade, smart collections, SEO fixes and countdown timers: what we added</h2>
+        <p class="lede">We upgraded the store infrastructure to support a larger inventory and automated merchandising. Four features were added. Jump to any of them below.</p>
+      </div>
+      <ul class="jumps">
+        <li><a class="jump jump--sky" href="#theme"><b>Theme upgrade</b><span>Migrated to Impulse for stronger merchandising</span></a></li>
+        <li><a class="jump jump--butter" href="#smart"><b>Smart collections</b><span>Automated listings from logic rules</span></a></li>
+        <li><a class="jump jump--sage" href="#seo"><b>Data and SEO</b><span>Data fixed, metadata updated</span></a></li>
+        <li><a class="jump jump--coral" href="#timers"><b>Countdown timers</b><span>Urgency for sale events</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- THEME -->
+  <section class="band" id="theme" aria-labelledby="theme-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Theme upgrade</p>
+        <h2 id="theme-title" class="display">Shopify theme upgrade to Impulse: stronger merchandising for a larger catalog</h2>
+        <p class="lede">We migrated the store to the Impulse theme to leverage its superior merchandising features. A larger inventory needs a theme built to present many products clearly, and the upgrade gave the store that foundation.</p>
+      </div>
+      <ol class="fig-flow" aria-label="Theme upgrade path">
+        <li class="fig-node fig-node--a"><b>Existing store</b><span>A growing catalog to present</span></li>
+        <li class="fig-arrow" aria-hidden="true"></li>
+        <li class="fig-node fig-node--b"><b>Migrated to Impulse</b><span>Theme upgrade on Shopify</span></li>
+        <li class="fig-arrow" aria-hidden="true"></li>
+        <li class="fig-node fig-node--c"><b>Better merchandising</b><span>Built to support a larger inventory</span></li>
+      </ol>
+      <p class="note" style="margin-top:14px">The live store's theme data confirms it runs Impulse.</p>
+    </div>
+  </section>
+
+  <!-- SMART COLLECTIONS -->
+  <section class="band band--sky" id="smart" aria-labelledby="smart-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Automated merchandising</p>
+        <h2 id="smart-title" class="display">Shopify smart collections: automated merchandising that cuts manual work</h2>
+        <p class="lede">We created Smart Collections based on logic rules, so product listings update automatically. A new product that matches a rule lands in the right collection without anyone adding it by hand, which reduces manual work for the client.</p>
+      </div>
+
+      <div class="sim">
+        <div class="sim-top">
+          <h3>Add a product and watch it sort itself</h3>
+          <div class="seg" role="group" aria-label="Add a product">
+            <button type="button" class="sc-add" data-t="camp">Add a camp</button>
+            <button type="button" class="sc-add" data-t="parkour">Add a parkour class</button>
+            <button type="button" class="sc-add" data-t="member">Add a membership</button>
+          </div>
+        </div>
+        <div class="sc" id="sc">
+          <div class="sc-col sc-col--camp"><h4>Camps</h4><p class="sc-rule">Rule: product type is Camp</p><ul id="sc-camp"><li>[Product]</li><li>[Product]</li></ul></div>
+          <div class="sc-col sc-col--parkour"><h4>Parkour classes</h4><p class="sc-rule">Rule: product type is Parkour Class</p><ul id="sc-parkour"><li>[Product]</li><li>[Product]</li></ul></div>
+          <div class="sc-col sc-col--member"><h4>Memberships</h4><p class="sc-rule">Rule: product type is Membership</p><ul id="sc-member"><li>[Product]</li><li>[Product]</li></ul></div>
+        </div>
+        <p class="sim-caption" id="sc-caption" aria-live="polite">Each collection fills itself from its rule. Add a product to see it.</p>
+        <p class="note">Illustration with example rules, not the store's actual rules. Today the live store organizes 115 products across 26 collections.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATA + SEO -->
+  <section class="band" id="seo" aria-labelledby="seo-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Data and SEO</p>
+        <h2 id="seo-title" class="display">Shopify SEO metadata and data integrity fixes so new products get discovered in search</h2>
+        <p class="lede">We fixed underlying data integrity issues and updated SEO metadata, so new products were discoverable in search engines. Clean data keeps the catalog reliable, and clear titles and descriptions help search engines and shoppers understand each page.</p>
+      </div>
+      <div class="seo-grid">
+        <figure class="serp-card" aria-labelledby="serp-cap">
+          <div class="serp-url">sbtrapeze.com › collections › camps</div>
+          <div class="serp-title">Kids Camps in Santa Barbara | Fall &amp; Winter Break | SBTC</div>
+          <div class="serp-desc">Fall and winter break camps in Santa Barbara. Trapeze and parkour ages 6 to 14, Tiny Flyers ages 3 to 5. Nov 23 to 27 and Dec 21 to 31. From $215.</div>
+          <figcaption id="serp-cap" class="note">A collection page as it reads in search on the live store today (October 2026).</figcaption>
+        </figure>
+        <ul class="seo-points">
+          <li><b>Descriptive titles</b><span>Say what the page is, for whom and where.</span></li>
+          <li><b>Useful descriptions</b><span>Include ages, dates and a starting price, which are the details a searcher is looking for.</span></li>
+          <li><b>Reliable data underneath</b><span>Fixed data integrity issues keep products, collections and metadata consistent.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMERS -->
+  <section class="band band--pale" id="timers" aria-labelledby="timers-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Conversion tactics</p>
+        <h2 id="timers-title" class="display">Countdown timers on Shopify to create urgency for sale events and prompt faster purchasing decisions</h2>
+        <p class="lede">We implemented urgency indicators, specifically countdown timers, to highlight sale events and prompt faster purchasing decisions. For an event with a fixed date, a visible clock makes the deadline concrete.</p>
+      </div>
+      <div class="sim">
+        <div class="sim-top"><h3>A countdown for a sale event</h3></div>
+        <div class="cd" role="timer" aria-label="Example countdown to a sample sale event">
+          <p class="cd-label">[Sale event] ends in</p>
+          <div class="cd-row">
+            <div class="cd-box"><b id="cd-d">02</b><span>days</span></div>
+            <div class="cd-box"><b id="cd-h">04</b><span>hours</span></div>
+            <div class="cd-box"><b id="cd-m">36</b><span>minutes</span></div>
+            <div class="cd-box"><b id="cd-s">12</b><span>seconds</span></div>
+          </div>
+          <span class="cd-btn">[Call to action]</span>
+        </div>
+        <p class="sim-caption">A countdown ties a sale to a real end date, so shoppers know how long they have to decide.</p>
+        <p class="note">Illustration with placeholder text and a sample time, not a live event. The timers appear when a sale event is being promoted.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DELIVERABLES -->
+  <section class="band" aria-labelledby="deliver-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Key deliverables</p>
+        <h2 id="deliver-title" class="display">What Santa Barbara Trapeze received: automation, discovery and urgency</h2>
+      </div>
+      <div class="changes">
+        <article class="change">
+          <div class="change-icon"><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="14" fill="#fff" stroke="#243746" stroke-width="2.4"/><path class="hop" d="M22 12 V22 L29 26" fill="none" stroke="#D96F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Automation</h3>
+          <p>Self-updating product collections that save operational time.</p>
+        </article>
+        <article class="change">
+          <div class="change-icon"><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="19" cy="19" r="11" fill="#fff" stroke="#243746" stroke-width="2.4"/><path class="hop" d="M27 27 L37 37" stroke="#D96F4F" stroke-width="3.2" stroke-linecap="round"/></svg></div>
+          <h3>Discovery</h3>
+          <p>Improved search engine visibility for new inventory.</p>
+        </article>
+        <article class="change">
+          <div class="change-icon"><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="24" r="14" fill="#fff" stroke="#243746" stroke-width="2.4"/><path d="M17 6 H27" stroke="#243746" stroke-width="2.4" stroke-linecap="round"/><path class="hop" d="M22 24 L28 16" stroke="#D96F4F" stroke-width="3" stroke-linecap="round"/></svg></div>
+          <h3>Urgency</h3>
+          <p>Visual cues designed to accelerate the customer's buying decision.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="band band--pale" aria-labelledby="tools-title">
+    <div class="wrap split">
+      <div class="section-head section-head--tight">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Platforms and tools</p>
+        <h2 id="tools-title" class="display">Platforms and tools used in the project</h2>
+      </div>
+      <ul class="tools">
+        <li><b>Shopify</b><span>The store platform</span></li>
+        <li><b>Impulse theme</b><span>Chosen for its merchandising features</span></li>
+        <li><b>Smart Collections</b><span>Logic rules for automated listings</span></li>
+        <li><b>SEO metadata</b><span>Updated so new products are discoverable</span></li>
+        <li><b>Data integrity fixes</b><span>Underlying catalog data corrected</span></li>
+        <li><b>Countdown timers</b><span>Urgency indicators for sale events</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- WHO IT SUITS -->
+  <section class="band" aria-labelledby="suits-title" style="padding-top:clamp(56px,8vw,104px)">
+    <div class="wrap">
+      <div class="takeaway-panel">
+        <p class="kicker" style="color:#243746"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Who this approach suits</p>
+        <h2 id="suits-title">Shopify store upgrades for growing catalogs: automate the merchandising, fix the data, add urgency</h2>
+        <div class="versus">
+          <figure>
+            <h3>Behind the scenes</h3>
+            <ul class="kept"><li>Smart collections that update themselves</li><li>Data integrity issues fixed</li><li>SEO metadata kept current</li></ul>
+          </figure>
+          <figure class="figure-add">
+            <h3>In front of the customer</h3>
+            <ul class="kept kept--add"><li>A theme built for merchandising</li><li>New products that can be found</li><li>Countdown timers on sale events</li></ul>
+          </figure>
+        </div>
+        <p class="body">This approach suits Shopify stores whose catalog is growing faster than the team can maintain it, and that run dated events or sales where timing drives the purchase.</p>
+        <ul class="fit" aria-label="Where the same approach applies">
+          <li>Stores with a growing catalog</li>
+          <li>Brands running dated events and sales</li>
+          <li>Teams tired of manual collection updates</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT + CTA -->
+  <section aria-labelledby="about-title">
+    <div class="wrap">
+      <div class="about">
+        <p class="badge" style="justify-self:start">A Sage Kite client project</p>
+        <h2 id="about-title" class="display">Delivered by Sage Kite for Santa Barbara Trapeze Co.</h2>
+        <p>Santa Barbara Trapeze Co. is a Sage Kite client. We acted as the technical partner behind its store upgrade, from the Impulse theme migration and the smart collections to the data and SEO fixes and the countdown timers described above. The pattern is one we use for any growing store: put the structure and the data right first, then add the cues that help customers decide.</p>
+        <p><a class="link-quiet" href="/work">See more work</a></p>
+      </div>
+      <div class="cta">
+        <h2 class="display">Is your Shopify catalog growing faster than your team can keep up?</h2>
+        <p>Book a discovery call and we'll look at what can be automated, what the data needs, and where urgency could help your sales events.</p>
+        <div class="cta-actions">
+          <a class="btn" href="/contact">Book a discovery call</a>
+          <a class="link-quiet" href="/services">Explore services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap"><strong>Sage Kite</strong><span>Make selling easier.</span></div>
+</footer>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var bar = document.querySelector('.progress');
+  function onScroll() {
+    var h = document.documentElement, max = h.scrollHeight - window.innerHeight;
+    bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, window.scrollY / max) : 0) + ')';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  /* smart collection demo */
+  var names = { camp: 'camp', parkour: 'parkour class', member: 'membership' };
+  var counts = { camp: 0, parkour: 0, member: 0 };
+  var cap = document.getElementById('sc-caption');
+  document.querySelectorAll('.sc-add').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-t'), ul = document.getElementById('sc-' + t);
+      counts[t]++;
+      var li = document.createElement('li'); li.className = 'sc-new'; li.textContent = '[New ' + names[t] + ' ' + counts[t] + ']';
+      ul.appendChild(li);
+      while (ul.children.length > 6) ul.removeChild(ul.firstChild);
+      cap.textContent = 'A new ' + names[t] + ' matched its rule and joined the collection automatically. Nothing was added by hand.';
+    });
+  });
+
+  /* countdown demo: placeholder time, loops */
+  var t0 = 2 * 86400 + 4 * 3600 + 36 * 60 + 12, left = t0;
+  var ids = ['cd-d', 'cd-h', 'cd-m', 'cd-s'];
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function paint() {
+    var d = Math.floor(left / 86400), h = Math.floor(left % 86400 / 3600), m = Math.floor(left % 3600 / 60), s = left % 60;
+    [d, h, m, s].forEach(function (v, i) { document.getElementById(ids[i]).textContent = pad(v); });
+  }
+  if (!reduce) setInterval(function () { left = left > 0 ? left - 1 : t0; paint(); }, 1000);
+})();
+</script>
+
+</body>
+</html>

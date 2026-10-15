@@ -24,6 +24,8 @@
  * ─────────────────────────────────────────────────────────────────────────
  */
 import type { CaseStudy } from './types';
+import santaBarbaraTrapeze from '@/app/case-studies/santa-barbara-trapeze/study';
+import labTheory from '@/app/case-studies/labtheory/study';
 import getDaily from '@/app/case-studies/get-daily/study';
 import sampleSale260 from '@/app/case-studies/260-sample-sale/study';
 import esma from '@/app/case-studies/esma/study';
@@ -33,7 +35,7 @@ import jivaAyurveda from '@/app/case-studies/jiva-ayurveda/study';
 export * from './types';
 
 /** Newest first. */
-export const caseStudies: CaseStudy[] = [getDaily, sampleSale260, esma, jensonUsa, jivaAyurveda];
+export const caseStudies: CaseStudy[] = [santaBarbaraTrapeze, labTheory, getDaily, sampleSale260, esma, jensonUsa, jivaAyurveda];
 
 export const CASE_STUDIES_PATH = '/case-studies';
 export const caseStudyPath = (slug: string) => `${CASE_STUDIES_PATH}/${slug}`;
