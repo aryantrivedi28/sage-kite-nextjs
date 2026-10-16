@@ -5,3 +5,6 @@ out
 .DS_Store
 *.log
 !.env.example
+
+# Local working document, not part of the site
+/Sage Kite audit - Sheet1.pdf
