@@ -186,7 +186,9 @@ Past approval records below describe only what the supplied reports establish.
 
 ## D008 — Verify and improve the existing sitemap
 
-- **Status:** Existing sitemap confirmed; improvements remain pending.
+- **Status:** Existing sitemap confirmed. The modification-date fix is implemented
+  in D012; the Search Console submission and access check remain pending.
+- **Status at the time:** Existing sitemap confirmed; improvements remain pending.
 - **Why proposed:** Audit item #2 says the reviewer could not fetch the sitemap.
   It does not establish that the sitemap is missing.
 - **What exists:** [sitemap.ts](app/sitemap.ts) generates the sitemap and
@@ -331,11 +333,81 @@ Past approval records below describe only what the supplied reports establish.
     behaviour) passed at both widths.
 - **Delivery:** Not committed, pushed or deployed.
 
+## D012 — Use only reliable sitemap modification dates
+
+- **Date:** 17 October 2026.
+- **Status:** Implemented locally. Not committed, pushed or deployed (the user will
+  commit manually).
+- **Why:** [app/sitemap.ts](app/sitemap.ts) gave 39 of 57 URLs `lastModified:
+  new Date()`, so every build stamped them with the build time (for example
+  `2026-10-16T20:45:17.666Z`) whether or not they had changed. The sitemap protocol
+  says `lastmod` is when the page was last modified, not when the sitemap was
+  generated, and Google uses it only when it is consistently accurate. Separately,
+  the essay's month-only date `'2026-09'` was turned into `2026-09-01T00:00:00.000Z`,
+  a day that is not recorded anywhere.
+- **Request:** The user asked to use reliable content modification dates where
+  available, omit dates where no reliable source exists rather than inventing them,
+  preserve accurate blog, essay and case-study dates, and keep sitemap URLs, website
+  content, design and other metadata unchanged. This is a technical metadata fix
+  within that request; no wording or design was changed.
+- **Approach:** A date is used only when the content records it, and it is output
+  exactly as authored. A helper accepts only full `YYYY-MM-DD` values, so a partial
+  date is left out rather than padded. Git commit dates were not used: hosted
+  builds often use shallow clones (not verified for this project's Vercel
+  setup), and commits also record changes that are not content changes (shared
+  header/footer, metadata, styling).
+- **What changed:**
+  - **Kept, with the same dates:** 8 blog posts (`updatedAt ?? publishedAt`) and
+    9 case studies (`dateModified ?? datePublished`). They are now written as
+    `2026-10-14` instead of `2026-10-14T00:00:00.000Z`, dropping an implied
+    midnight UTC time that the source does not record.
+  - **Privacy policy and Terms of service:** `2026-09-18`, the "Last Updated" and
+    "Effective Date" each page displays. Git history shows the policy text is
+    unchanged since it was added on that date; later commits (24 September and
+    1 October) changed only the shared header, navigation, footer and logo
+    markup. These dates are kept as constants in the sitemap and must be updated
+    together with the dates shown on those pages.
+  - **No `<lastmod>`:** 37 URLs with no recorded content date (homepage, About,
+    Services and its 5 pages, Platforms and its 14 pages, Industries and its 8
+    pages, the Founder's Thoughts, Case studies and Blog indexes, Contact, Book).
+    The protocol allows omitting `lastmod`.
+  - **Essay "When everyone has AI":** no `<lastmod>`. Its date is month-only
+    (`'2026-09'`), and the sitemaps.org schema allows only a full date or
+    date-time. The essay's own date, its visible "September 2026" label and its
+    JSON-LD `datePublished` are unchanged.
+  - URLs, their order, `changeFrequency` and `priority` are unchanged.
+  - Docs: [new-page-checklist.md](docs/new-page-checklist.md) gained the
+    `lastModified` rule.
+- **For the user to decide:** The essay was first added to this repository on
+  1 October 2026, although it is dated September 2026. If a full publication date
+  is confirmed (for example the day it went live), it can be recorded as a full
+  `YYYY-MM-DD` value and it will appear in the sitemap again.
+- **Expected effects (not measured):** Search engines no longer see every page
+  claiming to change on every deployment, which makes the remaining dates more
+  trustworthy signals. Pages without `lastmod` are still listed and crawled.
+  Sitemap dates do not guarantee crawling, indexing or rankings.
+- **Limitations:** Pages without a recorded date give crawlers no modification
+  signal until a reliable per-page date is introduced. Blog and case-study dates
+  are only as accurate as their authors keep `updatedAt` / `dateModified`. The two
+  legal-page dates are duplicated between the page text and the sitemap.
+- **Validation (run by Claude in this task):** `npx tsc --noEmit` passed and
+  `npm run build` passed (61 routes). The generated sitemap was compared URL by
+  URL with the previous build: 57 URLs in both, with identical `loc`, order,
+  `changefreq` and `priority`. 17 dates were unchanged in value, 2 legal dates
+  were set, and 37 build-time dates plus the essay's padded date were removed.
+  Every remaining `lastmod` matches `YYYY-MM-DD`. The new sitemap validates
+  against the official sitemaps.org XSD (`xmllint --schema`) and is well-formed.
+  On a local production server, `/sitemap.xml` returned 200 `application/xml`,
+  byte-identical to the build output, and all 57 listed URLs returned 200.
+  `robots.txt` still references the sitemap. Only `app/sitemap.ts` changed in the
+  application code.
+- **Delivery:** Not committed, pushed or deployed.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
 
-### D012 — [Short description]
+### D013 — [Short description]
 
 - **Date:** [Date recorded; implementation date if different.]
 - **Status:** [Proposed / approved / implemented / verified.]

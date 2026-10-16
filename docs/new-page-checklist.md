@@ -21,7 +21,9 @@ Site URL: `https://www.sagekite.com`, no trailing slash anywhere.
       from `content/share-image.ts` unless the page has its own image), and
       `twitter.card` is `summary_large_image`. [§2]
 - [ ] **Sitemap**: page added to `app/sitemap.ts` with the same URL as the
-      canonical. Blog posts are added automatically. [§2]
+      canonical. Blog posts are added automatically. [§2] Give `lastModified`
+      only a full `YYYY-MM-DD` date the content records; never `new Date()`
+      (the build time). With no reliable date, leave it out.
 - [ ] **Robots.txt**: `app/robots.ts` does not block the page, and `/_next/`
       is not disallowed. Usually nothing to change.
 - [ ] **FAQ schema**: if the page shows FAQs, it has `FAQPage` JSON-LD, and
