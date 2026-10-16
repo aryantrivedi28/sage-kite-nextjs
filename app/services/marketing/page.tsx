@@ -9,8 +9,8 @@ const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services/marketing`;
 
 export const metadata: Metadata = {
-  title: "Marketing Services: SEO, AI SEO, Ads & Email | Sage Kite",
-  description: "Sage Kite marketing services: SEO, AI SEO, Google, Meta and LinkedIn Ads, social media and email, connected to your CRM so you see what each channel returns.",
+  title: "Digital Marketing Services: SEO, AI SEO & Ads | Sage Kite",
+  description: "Digital marketing services: SEO, AI SEO, Google, Meta and LinkedIn Ads, social and email, connected to your CRM so you can see what each channel returns.",
   keywords: ["marketing services", "SEO services", "AI SEO", "Google Ads management", "Meta Ads management", "email marketing services"],
   alternates: {
     canonical: PAGE_URL,
@@ -19,12 +19,12 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "Marketing services: SEO, AI SEO, ads and email | Sage Kite",
+    title: "Digital Marketing Services: SEO, AI SEO & Ads | Sage Kite",
     description: "SEO, AI SEO, paid media, social and email marketing, planned around your priorities and connected to your CRM.",
   },
   twitter: {
     card: "summary",
-    title: "Marketing services: SEO, AI SEO, ads and email | Sage Kite",
+    title: "Digital Marketing Services: SEO, AI SEO & Ads | Sage Kite",
     description: "SEO, AI SEO, paid media, social and email marketing, planned around your priorities and connected to your CRM.",
   },
 };
@@ -102,7 +102,7 @@ export default function MarketingPage() {
         "@type": "WebPage",
         "@id": `${PAGE_URL}/#webpage`,
         "url": PAGE_URL,
-        "name": "Marketing services: SEO, AI SEO, ads and email | Sage Kite",
+        "name": "Digital Marketing Services: SEO, AI SEO & Ads | Sage Kite",
         "description": "Sage Kite marketing services: SEO, AI SEO, Google, Meta and LinkedIn Ads, social media and email, connected to your CRM so you see what each channel returns.",
         "isPartOf": { "@id": `${SITE_URL}/#website` },
         "about": { "@id": `${PAGE_URL}/#service` },
@@ -271,7 +271,7 @@ export default function MarketingPage() {
                 <span style={{ background: 'var(--sky)' }}></span>
               </div>
               <p className="label">Services / Marketing</p>
-              <h1 id="hero-title">Marketing services connected to how you sell</h1>
+              <h1 id="hero-title">Digital marketing services connected to how you sell</h1>
               <p className="sub">
                 Sage Kite plans and runs SEO, AI SEO, paid media, social and email marketing around your priorities, and connects it to your CRM, so you can see which channels bring in customers, not just clicks.
               </p>

@@ -10,8 +10,8 @@ const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services/crm-implementation`;
 
 export const metadata: Metadata = {
-  title: "CRM Implementation Services | Sage Kite",
-  description: "CRM implementation services from Sage Kite: setup, pipeline design, data cleanup and migration, automation, training and handover, built around how you sell.",
+  title: "CRM Implementation Services: Setup & Migration | Sage Kite",
+  description: "CRM implementation services: setup, pipeline design, data cleanup and migration, automation, training and handover, built around how your team sells.",
   keywords: ["CRM implementation services", "CRM implementation consultant", "CRM setup services", "CRM migration", "CRM optimisation", "custom CRM development"],
   alternates: {
     canonical: PAGE_URL,
@@ -20,12 +20,12 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "CRM implementation services | Sage Kite",
+    title: "CRM Implementation Services: Setup & Migration | Sage Kite",
     description: "A CRM your team uses, where every lead has an owner and a next step. Setup, cleanup, migration, automation, training and handover.",
   },
   twitter: {
     card: "summary",
-    title: "CRM implementation services | Sage Kite",
+    title: "CRM Implementation Services: Setup & Migration | Sage Kite",
     description: "A CRM your team uses, where every lead has an owner and a next step. Setup, cleanup, migration, automation, training and handover.",
   },
 };
@@ -108,7 +108,7 @@ export default function CrmImplementationPage() {
         "@type": "WebPage",
         "@id": `${PAGE_URL}/#webpage`,
         "url": PAGE_URL,
-        "name": "CRM implementation services | Sage Kite",
+        "name": "CRM Implementation Services: Setup & Migration | Sage Kite",
         "description": "CRM implementation services from Sage Kite: setup, pipeline design, data cleanup and migration, automation, training and handover, built around how you sell.",
         "isPartOf": { "@id": `${SITE_URL}/#website` },
         "about": { "@id": `${PAGE_URL}/#service` },

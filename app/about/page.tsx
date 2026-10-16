@@ -1,9 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import founderPhoto from "@/public/aryan_t.jpeg";
+import rishabhPhoto from "@/public/rishabh.jpg";
+import radhikaPhoto from "@/public/radhika.jpg";
+import kunalPhoto from "@/public/kunal.png";
+import bipulPhoto from "@/public/Bipul.jpg";
+import { coverSizes } from "@/components/coverSizes";
 
 export default function About() {
   const [perspectiveHover, setPerspectiveHover] = useState<string | null>(null);
@@ -509,6 +516,7 @@ export default function About() {
             }
             .team-card-img-wrap img {
               width: 100%;
+              height: auto;
               aspect-ratio: 4 / 5;
               object-fit: cover;
               display: block;
@@ -589,6 +597,7 @@ export default function About() {
             }
             .founder-feature-img-wrap img {
               width: 100%;
+              height: auto;
               aspect-ratio: 4 / 5;
               object-fit: cover;
               display: block;
@@ -700,10 +709,11 @@ export default function About() {
 
             <div className="founder-feature-grid" style={{marginTop: "40px"}}>
               <div className="founder-feature-img-wrap">
-                <img
-                  src="/aryan_t.jpeg"
+                {/* 4:5 frame, up to ~386px wide; capped at 360px (1040px and below) and 300px (680px and below). */}
+                <Image
+                  src={founderPhoto}
                   alt="Aryan Trivedi, Founder of Sage Kite" title="Aryan Trivedi, Founder of Sage Kite"
-                  loading="lazy"
+                  sizes={coverSizes(founderPhoto, 4 / 5, [['(max-width: 680px)', '300px'], ['(max-width: 1040px)', '360px'], [null, '390px']])}
                 />
               </div>
               <div className="founder-feature-info">
@@ -744,38 +754,39 @@ export default function About() {
                   {
                     name: "Rishabh Shukla",
                     role: "Project Manager",
-                    image: "/rishabh.jpg",
+                    image: rishabhPhoto,
                     description: "Rishabh is part of the Founder\u2019s Office and Project Management team at Sage Kite, where he manages communication between clients and the execution team. He ensures smooth coordination, keeps clients informed with timely project updates, tracks ongoing deliverables, and helps ensure projects stay aligned with client expectations, timelines, and requirements.",
                     linkedin: "https://www.linkedin.com/in/rishabhshukla18",
                   },
                   {
                     name: "Radhika",
                     role: "VP Growth",
-                    image: "/radhika.jpg",
+                    image: radhikaPhoto,
                     description: "Drives client acquisition, partnerships, and brand growth for Sage Kite. Radhika connects the dots between what clients need and what we deliver, handling outreach, onboarding coordination, and making sure every project starts with clear goals and ends with measurable outcomes. She is the first person most clients speak with.",
                     linkedin: "https://www.linkedin.com/in/radhika-agrawal-22238a201",
                   },
                   {
                     name: "Kunal Sharma",
                     role: "Tech Specialist",
-                    image: "/kunal.png",
+                    image: kunalPhoto,
                     description: "Kunal is the technical brain behind Sage Kite. He owns the architecture decisions, internal tooling, system design, and engineering standards across the organization. He does not work on client projects directly; instead, he builds the frameworks, templates, and processes that every client project is built on top of.",
                     linkedin: null,
                   },
                   {
                     name: "Bipul",
                     role: "Web Developer",
-                    image: "/Bipul.jpg",
+                    image: bipulPhoto,
                     description: "Bipul translates complex business requirements into robust web architectures and seamless digital experiences at Sage Kite. With a strong focus on performance and scalable code, he ensures our technical implementations are as robust under the hood as they are engaging for the end user.",
                     linkedin: null,
                   },
                 ] as const).map((member) => (
                   <article key={member.name} className="team-card">
                     <div className="team-card-img-wrap">
-                      <img
+                      {/* 4:5 frame: ~250px wide in the 4-column grid, half the width in 2 columns, up to 420px in 1 column. */}
+                      <Image
                         src={member.image}
                         alt={`${member.name}, ${member.role} at Sage Kite`} title={`${member.name}, ${member.role} at Sage Kite`}
-                        loading="lazy"
+                        sizes={coverSizes(member.image, 4 / 5, [['(max-width: 460px)', 'calc(100vw - 40px)'], ['(max-width: 680px)', '420px'], ['(max-width: 1040px)', '50vw'], [null, '250px']])}
                       />
                     </div>
                     <div className="team-card-body">

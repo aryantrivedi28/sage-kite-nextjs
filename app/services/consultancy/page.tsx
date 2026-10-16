@@ -9,8 +9,8 @@ const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services/consultancy`;
 
 export const metadata: Metadata = {
-  title: "Growth Consulting: GTM, AI & Fractional CMO | Sage Kite",
-  description: "Business growth consulting from Sage Kite: GTM consultancy, AI consultancy and fractional CMO support, with a diagnosis, priorities and a roadmap to act on.",
+  title: "Business Growth Consulting & Fractional CMO | Sage Kite",
+  description: "Business growth consulting for SMEs: go-to-market strategy, AI consulting and fractional CMO support, with a clear diagnosis and a roadmap to act on.",
   keywords: ["business growth consulting", "growth consultancy", "GTM consultancy", "go-to-market consulting", "fractional CMO", "AI consultancy"],
   alternates: {
     canonical: PAGE_URL,
@@ -19,12 +19,12 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "Business growth consulting: GTM, AI and fractional CMO | Sage Kite",
+    title: "Business Growth Consulting & Fractional CMO | Sage Kite",
     description: "Find what is holding growth back and what to fix first, with GTM consultancy, AI consultancy and fractional CMO support from Sage Kite.",
   },
   twitter: {
     card: "summary",
-    title: "Business growth consulting: GTM, AI and fractional CMO | Sage Kite",
+    title: "Business Growth Consulting & Fractional CMO | Sage Kite",
     description: "Find what is holding growth back and what to fix first, with GTM consultancy, AI consultancy and fractional CMO support.",
   },
 };
@@ -121,7 +121,7 @@ export default function ConsultancyPage() {
         "@type": "WebPage",
         "@id": `${PAGE_URL}/#webpage`,
         "url": PAGE_URL,
-        "name": "Business growth consulting: GTM, AI and fractional CMO | Sage Kite",
+        "name": "Business Growth Consulting & Fractional CMO | Sage Kite",
         "description": "Business growth consulting from Sage Kite: GTM consultancy, AI consultancy and fractional CMO support, with a diagnosis, priorities and a roadmap to act on.",
         "isPartOf": { "@id": `${SITE_URL}/#website` },
         "about": { "@id": `${PAGE_URL}/#service` },

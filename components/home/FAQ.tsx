@@ -1,18 +1,52 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState, useSyncExternalStore } from 'react';
 import { HOME_FAQ_GROUPS } from './faqData';
 
-function FAQItem({ question, children }: { question: string, children: React.ReactNode }) {
+// Matches the 680px breakpoint in globals.css. Below it the answers collapse;
+// above it every answer is always shown, so there is nothing to toggle.
+const ACCORDION_QUERY = '(max-width: 680px)';
+
+function subscribe(onChange: () => void) {
+  const mql = window.matchMedia(ACCORDION_QUERY);
+  mql.addEventListener('change', onChange);
+  return () => mql.removeEventListener('change', onChange);
+}
+
+function useIsAccordion() {
+  return useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(ACCORDION_QUERY).matches,
+    () => false,
+  );
+}
+
+function FAQItem({ question, isAccordion, children }: { question: string, isAccordion: boolean, children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
-  
+  const contentId = useId();
+
   return (
     <div className={`faq-item ${open ? 'is-open' : ''}`}>
-      <h3 onClick={() => setOpen(!open)}>
-        {question}
-        <span className="toggle-icon">{open ? '−' : '+'}</span>
+      <h3>
+        {isAccordion ? (
+          <button
+            type="button"
+            className="faq-toggle"
+            aria-expanded={open}
+            aria-controls={contentId}
+            onClick={() => setOpen(!open)}
+          >
+            {question}
+            <span className="toggle-icon" aria-hidden="true">{open ? '−' : '+'}</span>
+          </button>
+        ) : (
+          <>
+            {question}
+            <span className="toggle-icon" aria-hidden="true">+</span>
+          </>
+        )}
       </h3>
-      <div className="faq-content">
+      <div className="faq-content" id={contentId}>
         {children}
       </div>
     </div>
@@ -20,6 +54,8 @@ function FAQItem({ question, children }: { question: string, children: React.Rea
 }
 
 export function FAQ() {
+  const isAccordion = useIsAccordion();
+
   return (
     <section className="brief" style={{ borderTop: '1px solid var(--light-sage)' }}>
       <div className="wrap reveal">
@@ -36,7 +72,7 @@ export function FAQ() {
             <p className="label">{group.label}</p>
             <div className="brief-grid faq-grid">
               {group.items.map((item) => (
-                <FAQItem key={item.q} question={item.q}>
+                <FAQItem key={item.q} question={item.q} isAccordion={isAccordion}>
                   <p>{item.a}</p>
                 </FAQItem>
               ))}

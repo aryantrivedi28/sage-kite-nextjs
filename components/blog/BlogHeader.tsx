@@ -10,12 +10,10 @@ export function BlogHeader() {
       <div className="wrap">
         <div className="head">
           <span className="label">Sage Kite Blog</span>
-          <h1 className="blog-hero-title">Insights for Smarter Business Growth</h1>
+          <h1 className="blog-hero-title">Insights on CRM, marketing and business growth</h1>
           <p className="sub blog-hero-sub">
-            Practical thinking on the systems, people and execution behind growth —
-            spanning business growth, CRM, marketing, automation, operations, people,
-            strategy and technology. Written from the work we do with growing businesses,
-            not from theory.
+            Practical guides and perspectives on CRM, marketing, automation, operations,
+            people and the systems behind business growth.
           </p>
         </div>
       </div>

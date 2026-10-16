@@ -1,8 +1,10 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import logo from '@/public/sage-kite-logo-transparent.png';
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -11,7 +13,15 @@ export function Header() {
     <header className="site-header">
       <div className="wrap header-inner">
         <Link href="/" className="logo">
-          <img src="/sage-kite-logo-transparent.png" alt="Sage Kite" title="Sage Kite" />
+          {/* Displayed at --w (135px, 140px at 420px and below) in globals.css. The fixed
+              aspect-ratio keeps the original's proportions; a resized file rounds its height. */}
+          <Image
+            src={logo}
+            alt="Sage Kite" title="Sage Kite"
+            sizes="(max-width: 420px) 140px, 135px"
+            loading="eager"
+            style={{ aspectRatio: `${logo.width} / ${logo.height}` }}
+          />
         </Link>
         
         <button 

@@ -1,5 +1,8 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { FOUNDER_ESSAYS, FOUNDERS_THOUGHTS_PATH, essayPath } from '@/content/founders-thoughts';
+import founderPhoto from '@/public/aryan_t.jpeg';
+import { coverSizes } from '@/components/coverSizes';
 
 export function Founder() {
   const latest = FOUNDER_ESSAYS[0];
@@ -9,10 +12,12 @@ export function Founder() {
         <div className="founder-grid">
           
           <div className="founder-photo" style={{ padding: 0, border: 'none', overflow: 'hidden' }}>
-            <img 
-              src="/aryan_t.jpeg" 
-              alt="Aryan - Founder of Sage Kite" title="Aryan - Founder of Sage Kite" 
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+            {/* .founder-photo is a 4:5 frame, 240px wide (220px at 680px and below). Below the fold, so lazy. */}
+            <Image
+              src={founderPhoto}
+              alt="Aryan - Founder of Sage Kite" title="Aryan - Founder of Sage Kite"
+              sizes={coverSizes(founderPhoto, 4 / 5, [['(max-width: 680px)', '220px'], [null, '240px']])}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>
 

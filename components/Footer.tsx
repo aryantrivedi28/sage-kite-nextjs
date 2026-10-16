@@ -1,4 +1,6 @@
+import Image from 'next/image';
 import Link from 'next/link';
+import logo from '@/public/sage-kite-logo-transparent.png';
 
 export function Footer() {
   return (
@@ -8,7 +10,7 @@ export function Footer() {
           
           <div className="foot-brand">
             <Link href="/" className="logo" style={{ '--w': '160px' } as React.CSSProperties}>
-              <img src="/sage-kite-logo-transparent.png" alt="Sage Kite" title="Sage Kite" />
+              <Image src={logo} alt="Sage Kite" title="Sage Kite" sizes="160px" style={{ aspectRatio: `${logo.width} / ${logo.height}` }} />
             </Link>
             <p>
               Sage Kite is a business growth consultancy building growth operations and systems that scale, for SMEs and agencies.
@@ -30,7 +32,7 @@ export function Footer() {
             <Link href="/platforms">Platforms</Link><br />
             <Link href="/industries">Industries</Link><br />
             <Link href="/case-studies">Case studies</Link><br />
-            <Link href="#insights">Insights</Link><br />
+            <Link href="/blog">Insights</Link><br />
             <Link href="/insights/founders-thoughts">Founder's Thoughts</Link>
           </div>
 

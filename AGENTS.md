@@ -122,6 +122,11 @@ content/founders-thoughts.ts
 public/                   Static files. Blog images go in public/images/blog/,
                           essay images in public/images/founders-thoughts/,
                           case study images in public/images/case-studies/<slug>/.
+                          The header/footer logo and the homepage and About photos are
+                          statically imported into next/image (resized WebP). Keep the
+                          originals: other pages still reference them by path. Photos
+                          cropped with object-fit: cover get `sizes` from
+                          components/coverSizes.ts, which allows for the crop.
 ```
 
 ## Writing content
@@ -191,8 +196,8 @@ The essentials:
   webhook (temporary handler from the team lead). `CONTACT_WEBHOOK_URL` in
   `content/contact.ts` reads `NEXT_PUBLIC_GHL_WEBHOOK_URL`; while it is empty the
   form validates but tells visitors to email instead.
-- `components/Footer.tsx`: the Insights link is a placeholder until that page exists.
-  (The old Work link now points to `/case-studies`.)
+- `components/Footer.tsx`: the Insights link points to `/blog` until an `/insights`
+  index exists. (The old Work link now points to `/case-studies`.)
 - No `og:image` share image yet, except blog posts (they use their featured image).
 - `app/home-interactions.tsx` and `app/site-content.ts` are not used by any page.
   `components/home/Work.tsx` is imported in `app/page.tsx` but not rendered.

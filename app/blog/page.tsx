@@ -10,9 +10,9 @@ import { getFeaturedPost, getPublishedPosts } from '@/content/blog';
 const SITE_URL = 'https://www.sagekite.com';
 
 export const metadata: Metadata = {
-  title: 'Blog | Sage Kite',
+  title: 'Business Growth, CRM & Marketing Insights | Sage Kite',
   description:
-    'Insights for smarter business growth — practical thinking on CRM, marketing, automation, operations, people and the systems behind sustainable growth.',
+    'Practical guides to CRM platforms, marketing automation and the systems behind business growth, written for small and medium-sized businesses.',
   keywords: ["business growth insights", "CRM blog", "marketing automation guides", "growth operations", "Sage Kite blog"],
   alternates: {
     canonical: `${SITE_URL}/blog`,
@@ -21,13 +21,13 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'Sage Kite',
     url: `${SITE_URL}/blog`,
-    title: 'Insights for Smarter Business Growth | Sage Kite',
+    title: 'Business Growth, CRM & Marketing Insights | Sage Kite',
     description:
       'Practical thinking on CRM, marketing, automation and the systems behind sustainable business growth.',
   },
   twitter: {
     card: 'summary',
-    title: 'Insights for Smarter Business Growth | Sage Kite',
+    title: 'Business Growth, CRM & Marketing Insights | Sage Kite',
     description:
       'Practical thinking on CRM, marketing, automation and the systems behind sustainable business growth.',
   },

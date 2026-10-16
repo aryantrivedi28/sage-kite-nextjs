@@ -34,8 +34,8 @@ export function MarketingEngine() {
         </div>
         
         <div className="engine-note" style={{ display: 'flex', gap: '16px' }}>
-          <Link href="#seo" className="u" style={{ color: 'inherit', fontWeight: 500 }}>SEO</Link>
-          <Link href="#ai-seo" className="u" style={{ color: 'inherit', fontWeight: 500 }}>AI SEO</Link>
+          <Link href="/services/marketing#channels" className="u" style={{ color: 'inherit', fontWeight: 500 }}>SEO</Link>
+          <Link href="/services/marketing#channels" className="u" style={{ color: 'inherit', fontWeight: 500 }}>AI SEO</Link>
           <Link href="/services/marketing" className="u" style={{ color: 'inherit', fontWeight: 500 }}>All marketing services</Link>
         </div>
       </div>

@@ -9,8 +9,8 @@ const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services/specialist-staffing`;
 
 export const metadata: Metadata = {
-  title: "Specialist Staffing: CRM, Marketing & Sales VAs | Sage Kite",
-  description: "Specialist staffing from Sage Kite: Tier 1 virtual assistants for CRM and automation, marketing operations, email, social media and lead generation.",
+  title: "Virtual Assistant Services: CRM & Marketing VAs | Sage Kite",
+  description: "Virtual assistant services: Tier 1 VAs for CRM and automation, marketing operations, email, social media and lead generation, working inside your systems.",
   keywords: ["specialist staffing", "virtual assistant services", "CRM virtual assistant", "marketing operations VA", "email marketing VA", "lead generation VA"],
   alternates: {
     canonical: PAGE_URL,
@@ -19,12 +19,12 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "Specialist staffing: CRM, marketing and sales VAs | Sage Kite",
+    title: "Virtual Assistant Services: CRM & Marketing VAs | Sage Kite",
     description: "Tier 1 virtual assistants who run your CRM, campaigns and follow-up day to day, inside your systems, to a scope agreed before they start.",
   },
   twitter: {
     card: "summary",
-    title: "Specialist staffing: CRM, marketing and sales VAs | Sage Kite",
+    title: "Virtual Assistant Services: CRM & Marketing VAs | Sage Kite",
     description: "Tier 1 virtual assistants who run your CRM, campaigns and follow-up day to day, inside your systems, to a scope agreed before they start.",
   },
 };
@@ -106,7 +106,7 @@ export default function SpecialistStaffingPage() {
         "@type": "WebPage",
         "@id": `${PAGE_URL}/#webpage`,
         "url": PAGE_URL,
-        "name": "Specialist staffing: CRM, marketing and sales VAs | Sage Kite",
+        "name": "Virtual Assistant Services: CRM & Marketing VAs | Sage Kite",
         "description": "Specialist staffing from Sage Kite: Tier 1 virtual assistants for CRM and automation, marketing operations, email, social media and lead generation.",
         "isPartOf": { "@id": `${SITE_URL}/#website` },
         "about": { "@id": `${PAGE_URL}/#service` },
@@ -289,7 +289,7 @@ export default function SpecialistStaffingPage() {
                 <span style={{ background: 'var(--sky)' }}></span>
               </div>
               <p className="label">Services / Specialist staffing</p>
-              <h1 id="hero-title">Specialist staff who keep your growth systems running</h1>
+              <h1 id="hero-title">Specialist virtual assistants who keep your growth systems running</h1>
               <p className="sub">
                 Sage Kite provides Tier 1 virtual assistants for CRM and automation, marketing operations, email, social media, and lead generation and sales support. They work inside your systems and processes, to a role scope agreed before anyone starts.
               </p>

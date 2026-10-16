@@ -9,8 +9,8 @@ const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services/white-label`;
 
 export const metadata: Metadata = {
-  title: "White-Label Delivery for Marketing Agencies | Sage Kite",
-  description: "White-label delivery for marketing agencies: CRM implementation, automation, marketing and specialist support for your clients, delivered under your brand.",
+  title: "White-Label CRM & Marketing for Agencies | Sage Kite",
+  description: "White-label CRM implementation, marketing and specialist VA support for agencies, delivered under your brand, with scope agreed before work begins.",
   keywords: ["white-label services for agencies", "white-label CRM implementation", "white-label marketing fulfilment", "agency delivery partner", "white-label automation"],
   alternates: {
     canonical: PAGE_URL,
@@ -19,12 +19,12 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "White-label delivery for marketing agencies | Sage Kite",
+    title: "White-Label CRM & Marketing for Agencies | Sage Kite",
     description: "More delivery capacity for your agency, under your brand, with scope, client communication, ownership and handover agreed before work begins.",
   },
   twitter: {
     card: "summary",
-    title: "White-label delivery for marketing agencies | Sage Kite",
+    title: "White-Label CRM & Marketing for Agencies | Sage Kite",
     description: "More delivery capacity for your agency, under your brand, with scope, client communication, ownership and handover agreed before work begins.",
   },
 };
@@ -105,7 +105,7 @@ export default function WhiteLabelPage() {
         "@type": "WebPage",
         "@id": `${PAGE_URL}/#webpage`,
         "url": PAGE_URL,
-        "name": "White-label delivery for marketing agencies | Sage Kite",
+        "name": "White-Label CRM & Marketing for Agencies | Sage Kite",
         "description": "White-label delivery for marketing agencies: CRM implementation, automation, marketing and specialist support for your clients, delivered under your brand.",
         "isPartOf": { "@id": `${SITE_URL}/#website` },
         "about": { "@id": `${PAGE_URL}/#service` },
