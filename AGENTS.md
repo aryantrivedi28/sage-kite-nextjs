@@ -129,6 +129,22 @@ public/                   Static files. Blog images go in public/images/blog/,
                           components/coverSizes.ts, which allows for the crop.
 ```
 
+## Content and design approval; decision log
+
+- Ask the user before changing website content or design. Show the exact proposed
+  wording or design preview, affected pages, reason and likely effects, then wait
+  for explicit approval. Content includes SEO/social metadata, headings, body
+  copy, labels, FAQs and text in structured data. Design includes layout, colours,
+  typography, visible imagery and social share artwork.
+- Approval covers the specific proposal accepted by the user; ask again if its
+  scope changes. An audit recommendation alone is not approval. Technical work
+  that preserves content and appearance may proceed within the authorized task.
+- Maintain [deciosn.md](deciosn.md) for project changes: record why, what changed
+  (including before/after wording where applicable), affected files, approval,
+  effects, limitations and validation. Distinguish proposed work from implemented
+  work, expected effects from measured results, and reported checks from checks
+  independently run. Do not invent past approvals or deployment status.
+
 ## Writing content
 
 **Read [docs/content-standard.md](docs/content-standard.md) before writing or
@@ -184,6 +200,7 @@ The essentials:
 - Change a heading or FAQ answer without updating `guide` / `faqs` to match.
 - Add Tailwind, CSS frameworks or component libraries.
 - Commit build output (`.next/`).
+- Commit TypeScript build caches (`*.tsbuildinfo`) or macOS `.DS_Store` files.
 
 ## Known gaps (do not "fix" these without asking)
 
@@ -203,8 +220,10 @@ The essentials:
   `components/home/Work.tsx` is imported in `app/page.tsx` but not rendered.
 - Platform pages keep page-specific CSS in an inline `<style>` block.
   `honeybook` uses `honeybook.module.css`.
-- `transform.js`, `transform_jobber.js`, `jobber-source.html` and `scratch/` are
-  one-off HTML→TSX conversion leftovers, not part of the site. Ignore them.
+- One-off conversion scripts (`transform.js`, `transform_jobber.js`, `scratch/`),
+  `jobber-source.html`, root case-study HTML originals and blog DOCX originals
+  were removed after conversion. They remain recoverable from Git history;
+  source filenames in comments record provenance, not runtime dependencies.
 
 ## Keeping this file useful
 
