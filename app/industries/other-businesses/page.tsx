@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/industries/other-businesses`;
@@ -22,11 +23,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "CRM setup for B2B firms, agencies and clinics | Sage Kite",
     description: "A general CRM shaped around how your business actually sells, with a pipeline, data and automation your team will keep using.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "CRM setup for B2B firms, agencies and clinics | Sage Kite",
     description: "A general CRM shaped around how your business actually sells, with a pipeline, data and automation your team will keep using.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

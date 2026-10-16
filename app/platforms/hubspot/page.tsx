@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -23,12 +24,14 @@ export const metadata: Metadata = {
     title: 'HubSpot implementation and consulting services | Sage Kite',
     description:
       'Sage Kite implements HubSpot around your sales and marketing process: CRM architecture, pipelines, workflows, reporting, migration and integrations.',
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'HubSpot implementation and consulting services | Sage Kite',
     description:
       'Process-first HubSpot implementation: CRM architecture, pipelines, workflows, reporting, migration and integrations, tested and handed over.',
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

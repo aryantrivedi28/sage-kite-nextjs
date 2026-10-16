@@ -17,6 +17,9 @@ Site URL: `https://www.sagekite.com`, no trailing slash anywhere.
       trailing slash. [§2]
 - [ ] **Open Graph / Twitter**: `openGraph.url` equals the canonical, and
       `type`, `siteName`, `title` and `description` are all set. [§2]
+- [ ] **Share image**: `openGraph.images` and `twitter.images` set (the default
+      from `content/share-image.ts` unless the page has its own image), and
+      `twitter.card` is `summary_large_image`. [§2]
 - [ ] **Sitemap**: page added to `app/sitemap.ts` with the same URL as the
       canonical. Blog posts are added automatically. [§2]
 - [ ] **Robots.txt**: `app/robots.ts` does not block the page, and `/_next/`

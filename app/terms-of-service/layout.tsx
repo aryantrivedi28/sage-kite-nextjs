@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DEFAULT_OG_IMAGES } from "@/content/share-image";
 
 export const metadata: Metadata = {
   title: "Terms of Service | Sage Kite",
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
     title: "Terms of Service | Sage Kite",
     description:
       "The terms that govern your use of Sage Kite's website and services: consultancy, CRM implementation, marketing, specialist staffing and white-label delivery.",
+    images: DEFAULT_OG_IMAGES,
   },
 };
 

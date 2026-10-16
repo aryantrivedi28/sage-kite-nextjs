@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { BlogHeader } from '@/components/blog/BlogHeader';
@@ -24,12 +25,14 @@ export const metadata: Metadata = {
     title: 'Business Growth, CRM & Marketing Insights | Sage Kite',
     description:
       'Practical thinking on CRM, marketing, automation and the systems behind sustainable business growth.',
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'Business Growth, CRM & Marketing Insights | Sage Kite',
     description:
       'Practical thinking on CRM, marketing, automation and the systems behind sustainable business growth.',
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

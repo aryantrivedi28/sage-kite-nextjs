@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/industries/real-estate`;
@@ -22,11 +23,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Real estate CRM setup and automation | Sage Kite",
     description: "A CRM built for fast replies, slow decisions and the past clients who send your next deal. For agents, teams and brokerages.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Real estate CRM setup and automation | Sage Kite",
     description: "A CRM built for fast replies, slow decisions and the past clients who send your next deal. For agents, teams and brokerages.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

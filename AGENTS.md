@@ -119,6 +119,11 @@ components/case-studies/  CaseStudyPage (renders every case study + metadata + J
 content/founders-thoughts.ts
                           Founder's Thoughts essays, newest first. Add a new essay here
                           and create app/insights/founders-thoughts/<slug>/page.tsx.
+content/share-image.ts    Default social share image (public/images/share/sage-kite-default.png,
+                          approved design, deciosn.md D011). The root layout uses it, but a
+                          page that sets its own openGraph or twitter block replaces the
+                          root's, so it must list DEFAULT_OG_IMAGES / DEFAULT_TWITTER_IMAGES
+                          itself, with twitter card 'summary_large_image'.
 public/                   Static files. Blog images go in public/images/blog/,
                           essay images in public/images/founders-thoughts/,
                           case study images in public/images/case-studies/<slug>/.
@@ -215,7 +220,8 @@ The essentials:
   form validates but tells visitors to email instead.
 - `components/Footer.tsx`: the Insights link points to `/blog` until an `/insights`
   index exists. (The old Work link now points to `/case-studies`.)
-- No `og:image` share image yet, except blog posts (they use their featured image).
+- Share images: blog posts use their featured image and the essay sets its own; every
+  other page uses the default in `content/share-image.ts` (see "Where things live").
 - `app/home-interactions.tsx` and `app/site-content.ts` are not used by any page.
   `components/home/Work.tsx` is imported in `app/page.tsx` but not rendered.
 - Platform pages keep page-specific CSS in an inline `<style>` block.

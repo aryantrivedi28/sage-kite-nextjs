@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from "@/content/share-image";
 
 import "./brand.css";
 import "./globals.css";
@@ -41,15 +42,16 @@ export const metadata: Metadata = {
     title: "Sage Kite: business growth through systems, people and execution",
     description:
       "A business growth consultancy that advises, implements and executes: consultancy, CRM, marketing automation, marketing and specialist VA support, working as one system.",
-    // Add og:image here when an approved share image is available.
+    // Default share image. Pages that set their own openGraph must list it too (see content/share-image.ts).
+    images: DEFAULT_OG_IMAGES,
   },
 
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Sage Kite: business growth consulting",
     description:
       "Sage Kite improves the systems, people and execution behind growth for small and medium-sized businesses.",
-    // Add images here when an approved share image is available.
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

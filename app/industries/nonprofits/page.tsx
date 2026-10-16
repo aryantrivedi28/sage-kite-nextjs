@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/industries/nonprofits`;
@@ -22,11 +23,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Nonprofit CRM setup and donor automation | Sage Kite",
     description: "A donor database built for prompt thank-yous, the second gift and the supporters who quietly lapse. For charities and nonprofits.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Nonprofit CRM setup and donor automation | Sage Kite",
     description: "A donor database built for prompt thank-yous, the second gift and the supporters who quietly lapse. For charities and nonprofits.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

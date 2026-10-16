@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const PAGE_URL = "https://www.sagekite.com/platforms/mindbody";
 
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Mindbody setup and consulting services | Sage Kite",
     description: "Sage Kite sets up Mindbody around how studios turn first visits into members who stay: pricing, intro offers, leads, campaigns and retention.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Mindbody setup and consulting services | Sage Kite",
     description: "Mindbody setup for fitness and wellness businesses: pricing options, intro offer follow-up, lead management, campaigns and retention reporting.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

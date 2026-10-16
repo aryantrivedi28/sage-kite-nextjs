@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const PAGE_URL = "https://www.sagekite.com/platforms/bloomerang";
 
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Bloomerang CRM setup and consulting services | Sage Kite",
     description: "Sage Kite sets up Bloomerang around how your nonprofit raises money and keeps donors: clean records, gift entry, acknowledgements, automation and reporting.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Bloomerang CRM setup and consulting services | Sage Kite",
     description: "Bloomerang setup for nonprofits: donor data cleanup, gift entry, acknowledgements, Journey Automation, dashboards and staff training.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

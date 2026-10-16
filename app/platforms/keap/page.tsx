@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const PAGE_URL = "https://www.sagekite.com/platforms/keap";
 
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Keap CRM consulting and automation services | Sage Kite",
     description: "Sage Kite sets up Keap around how you sell: clean contacts and tags, follow-up automation, sales pipeline, appointments, quotes, payments and reporting.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Keap CRM consulting and automation services | Sage Kite",
     description: "Keap setup and cleanup for small businesses: tags, automations, pipeline, appointments, payments, reporting and training.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services/consultancy`;
@@ -21,11 +22,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Business Growth Consulting & Fractional CMO | Sage Kite",
     description: "Find what is holding growth back and what to fix first, with GTM consultancy, AI consultancy and fractional CMO support from Sage Kite.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Business Growth Consulting & Fractional CMO | Sage Kite",
     description: "Find what is holding growth back and what to fix first, with GTM consultancy, AI consultancy and fractional CMO support.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

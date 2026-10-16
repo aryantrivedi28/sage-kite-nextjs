@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const PAGE_URL = "https://www.sagekite.com/platforms/kajabi";
 
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Kajabi setup and implementation services | Sage Kite",
     description: "Sage Kite sets up Kajabi around the enquiry, enrolment and student journey: offers, checkout, funnels, tags, email automations and migrations.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Kajabi setup and implementation services | Sage Kite",
     description: "Kajabi setup for coaches and course businesses: offers, checkout, funnels, tags, email automations, student onboarding and migrations.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

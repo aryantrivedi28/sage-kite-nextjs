@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 export const metadata: Metadata = {
   title: "ActiveCampaign Implementation Services | Sage Kite",
@@ -17,11 +18,13 @@ export const metadata: Metadata = {
     url: "https://www.sagekite.com/platforms/activecampaign",
     title: "ActiveCampaign Implementation & Automation Services | Sage Kite",
     description: "ActiveCampaign implementation from Sage Kite: we map your customer journey, then build contacts, segments, email, automations and sales CRM around it.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "ActiveCampaign Implementation & Automation Services | Sage Kite",
     description: "ActiveCampaign implementation from Sage Kite: we map your customer journey, then build contacts, segments, email, automations and sales CRM around it.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

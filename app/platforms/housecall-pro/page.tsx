@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const PAGE_URL = "https://www.sagekite.com/platforms/housecall-pro";
 
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Housecall Pro setup and consulting services | Sage Kite",
     description: "Sage Kite sets up Housecall Pro around how home service businesses win and keep customers: booking, estimates, follow-up, service plans and campaigns.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Housecall Pro setup and consulting services | Sage Kite",
     description: "Housecall Pro setup for home service businesses: booking, dispatch, price book, estimate follow-up, service plans, reviews and campaigns.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

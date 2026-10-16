@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const PAGE_URL = "https://www.sagekite.com/platforms/follow-up-boss";
 
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Follow Up Boss setup and consulting services | Sage Kite",
     description: "Sage Kite sets up Follow Up Boss around how your real estate team works: lead sources, routing, Action Plans, Ponds, Smart Lists, deals and reporting.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Follow Up Boss setup and consulting services | Sage Kite",
     description: "Follow Up Boss setup for agents, teams and brokerages: lead flow, routing, Action Plans, Ponds, Smart Lists, deals and agent accountability.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

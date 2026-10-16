@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DEFAULT_OG_IMAGES } from "@/content/share-image";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Sage Kite",
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
     title: "Privacy Policy | Sage Kite",
     description:
       "How Sage Kite collects, uses and protects your personal information when you use our website and services, and the choices and rights you have over your data.",
+    images: DEFAULT_OG_IMAGES,
   },
 };
 

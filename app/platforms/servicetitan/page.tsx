@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const PAGE_URL = "https://www.sagekite.com/platforms/servicetitan";
 
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "ServiceTitan setup and consulting services | Sage Kite",
     description: "Sage Kite sets up ServiceTitan around how trade businesses book, sell and keep customers: pricebook, dispatch, memberships, marketing and reporting.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "ServiceTitan setup and consulting services | Sage Kite",
     description: "ServiceTitan consulting for trade businesses: pricebook, dispatch, estimates, memberships, marketing tracking, reporting and training.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

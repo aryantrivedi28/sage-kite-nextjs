@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BookingEmbedScript } from "@/components/book/BookingEmbedScript";
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Book a discovery call | Sage Kite",
     description: "Pick a time for a discovery call with Sage Kite to talk through your CRM, marketing, automation and growth goals.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Book a discovery call | Sage Kite",
     description: "Pick a time for a discovery call with Sage Kite to talk through your CRM, marketing, automation and growth goals.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

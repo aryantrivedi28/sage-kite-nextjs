@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services/specialist-staffing`;
@@ -21,11 +22,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Virtual Assistant Services: CRM & Marketing VAs | Sage Kite",
     description: "Tier 1 virtual assistants who run your CRM, campaigns and follow-up day to day, inside your systems, to a scope agreed before they start.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Virtual Assistant Services: CRM & Marketing VAs | Sage Kite",
     description: "Tier 1 virtual assistants who run your CRM, campaigns and follow-up day to day, inside your systems, to a scope agreed before they start.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

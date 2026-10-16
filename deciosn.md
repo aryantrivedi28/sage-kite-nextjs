@@ -170,7 +170,9 @@ Past approval records below describe only what the supplied reports establish.
 
 ## D007 — Social share image remains a proposal
 
-- **Status:** Preview reported by Claude; final design approval and integration
+- **Status:** Superseded by D011: the centred design was approved and implemented
+  locally on 17 October 2026. The text below records the proposal stage.
+- **Status at the time:** Preview reported by Claude; final design approval and integration
   remain pending. No default site share image has been added to the project.
 - **Why proposed:** Provide a branded image when website links are shared.
 - **Proposed change:** Review a centred version that remains readable in wide
@@ -243,11 +245,97 @@ Past approval records below describe only what the supplied reports establish.
   validation. Subagent read-only audits confirmed all 11 HTML originals map to
   nine registered case studies and the three DOCX originals map to blog posts.
 
+## D011 — Default social share image
+
+- **Date:** 17 October 2026.
+- **Status:** Implemented locally. Not committed, pushed or deployed.
+- **Why:** Audit item #6: apart from blog posts and one essay, no page had an
+  `og:image`, and `twitter:card` was `summary` on those pages, so shared links
+  showed no image or a small square crop.
+- **Approval:** The user approved "this centred share-image design and its exact
+  tagline" and asked for it to be the default image for pages without an existing
+  share image, using `summary_large_image`, while preserving blog and essay images,
+  titles, descriptions, canonical URLs, JSON-LD and visible content. An earlier
+  left-aligned preview was not approved; the user asked for a centred version that
+  stays readable in wide and square crops.
+- **Design (as approved):** 1200×630 PNG, 45.4 KB. Warm-white background, butter
+  top rule, the existing transparent logo (which supplies "Sage Kite"), the
+  coral/butter/sky dash motif and the tagline "Business growth through systems,
+  people and execution." in Manrope 800 ink, with the butter underline under
+  "systems, people and execution." Colours come from `app/brand.css`. All content
+  sits inside the centre 630×630 square with a 30px margin (widest line measured
+  at x 372–828 against a safe zone of 315–885).
+- **Why this approach:** A local build with `app/opengraph-image.png` and
+  `app/twitter-image.png` (the Next.js file convention) was tested first. The image
+  reached the homepage, and only the Twitter image reached Privacy and Terms; pages
+  that set their own `openGraph` or `twitter` block (services, platforms, About,
+  case studies and others) got no image, and their card stayed `summary`. Next.js
+  replaces a parent's `openGraph`/`twitter` object instead of merging it. The test
+  files were removed. Instead, one shared definition,
+  [content/share-image.ts](content/share-image.ts), is referenced by the root layout
+  and by every page that sets its own blocks. It statically imports the PNG, so the
+  URL is content-hashed (a future image gets a new URL) and the dimensions come
+  from the file.
+- **What changed:**
+  - Added [sage-kite-default.png](public/images/share/sage-kite-default.png)
+    (byte-identical to the approved preview) and `content/share-image.ts`.
+  - [app/layout.tsx](app/layout.tsx): default `openGraph.images`, `twitter.images`
+    and `twitter.card` `summary` → `summary_large_image`. This covers the homepage,
+    Privacy and Terms Twitter tags, which inherit the root `twitter` block.
+  - 39 page or layout files that set their own `openGraph`: `images` added; where
+    they also set `twitter` (36 files), `images` added and card `summary` →
+    `summary_large_image`. These are: the homepage, About, Privacy, Terms, Blog
+    index, Book, Contact, Case studies index, Founder's Thoughts index, Services
+    and its 5 pages, Platforms and its 14 pages, Industries and its 8 pages.
+  - [CaseStudyPage.tsx](components/case-studies/CaseStudyPage.tsx): the same for
+    all 9 case studies.
+  - Docs: [AGENTS.md](AGENTS.md), [blog-seo-schema.md](docs/blog-seo-schema.md)
+    (metadata template and rule) and [new-page-checklist.md](docs/new-page-checklist.md).
+- **Not changed:** blog posts ([blogMetadata.ts](components/blog/blogMetadata.ts))
+  and the essay "When everyone has AI" keep their own images and cards. Titles,
+  descriptions, canonical URLs, JSON-LD and visible text are unchanged (verified
+  below).
+- **Image alt text:** "Sage Kite logo with the tagline: Business growth through
+  systems, people and execution.", output as `og:image:alt` and `twitter:image:alt`.
+  It was added during implementation and first recorded here as needing
+  confirmation. On 17 October 2026 the user approved this exact wording and asked
+  for it to be kept. No other content or layout changed with this confirmation.
+- **Observed effects (local production build):** 49 generated pages now output the
+  default image (48 shareable pages plus the 404 page, which inherits the root
+  default): one `og:image` with width 1200, height 630, type `image/png` and alt,
+  one matching `twitter:image`, and `twitter:card` `summary_large_image`. The 8
+  blog posts and the essay output the same images as before. `/_global-error` has
+  no share image, as before. Locally the image is served as a 1200×630 PNG with
+  `Cache-Control: public, max-age=31536000, immutable`.
+- **Expected effects (not measured):** branded large previews when non-blog pages
+  are shared on LinkedIn, X, Slack, Facebook and messaging apps.
+- **Limitations:** Platforms cache previews; after deployment, links already
+  shared may need refreshing in each platform's inspector or debugger tool. Real
+  platform rendering and square crops inside apps were not tested. Every
+  non-blog page shares one image, and case studies use it rather than
+  study-specific images. The PNG is also reachable unhashed at its `public/` path,
+  which nothing references. Production cache headers on Vercel were not checked.
+- **Validation (run by Claude in this task):**
+  - `npx tsc --noEmit` passed; `npm run build` passed with 61 routes.
+  - Compared all 59 generated HTML pages with a build of the last commit
+    (`8ee6464`): no differences outside `og:image*`, `twitter:image*` and
+    `twitter:card`. Titles, other meta tags, canonical URLs, JSON-LD and visible
+    text were identical.
+  - Browser checks in Chrome at 1280px and 390px on 57 pages (114 loads): every
+    page returned 200 with no console errors. Each had exactly one `og:image` and
+    one `twitter:image` at the same absolute URL with a large card. The default
+    image fetched as a 1200×630 PNG matching its declared size. Blog and essay
+    images matched their previous URLs.
+  - The Step 1–3 regression check (titles, descriptions, H1s, social titles and
+    descriptions, canonical URLs, JSON-LD, GA4, links and FAQ keyboard
+    behaviour) passed at both widths.
+- **Delivery:** Not committed, pushed or deployed.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
 
-### D011 — [Short description]
+### D012 — [Short description]
 
 - **Date:** [Date recorded; implementation date if different.]
 - **Status:** [Proposed / approved / implemented / verified.]

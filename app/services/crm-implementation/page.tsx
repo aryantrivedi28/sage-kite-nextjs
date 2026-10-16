@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 import { PLATFORMS, PLATFORM_GROUPS } from '@/content/platforms';
 
 const SITE_URL = "https://www.sagekite.com";
@@ -22,11 +23,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "CRM Implementation Services: Setup & Migration | Sage Kite",
     description: "A CRM your team uses, where every lead has an owner and a next step. Setup, cleanup, migration, automation, training and handover.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "CRM Implementation Services: Setup & Migration | Sage Kite",
     description: "A CRM your team uses, where every lead has an owner and a next step. Setup, cleanup, migration, automation, training and handover.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

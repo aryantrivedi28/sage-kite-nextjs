@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check, ArrowRight } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 import styles from './honeybook.module.css';
 
 export const metadata: Metadata = {
@@ -19,11 +20,13 @@ export const metadata: Metadata = {
     url: "https://www.sagekite.com/platforms/honeybook",
     title: "HoneyBook setup and implementation services | Sage Kite",
     description: "Sage Kite maps your clientflow, then configures HoneyBook around it: Smart Files, contracts, payments, scheduling and automations.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "HoneyBook setup and implementation services | Sage Kite",
     description: "Process-first HoneyBook implementation: Smart Files, contracts, payments, scheduling and automations, tested and handed over.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

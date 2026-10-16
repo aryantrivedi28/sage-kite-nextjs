@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 import { notFound } from 'next/navigation';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -33,8 +34,9 @@ export function caseStudyMetadata(study: CaseStudy): Metadata {
       description: study.description,
       publishedTime: study.datePublished,
       modifiedTime: study.dateModified ?? study.datePublished,
+      images: DEFAULT_OG_IMAGES,
     },
-    twitter: { card: 'summary', title: ogTitle, description: study.description },
+    twitter: { card: 'summary_large_image', title: ogTitle, description: study.description, images: DEFAULT_TWITTER_IMAGES },
   };
 }
 

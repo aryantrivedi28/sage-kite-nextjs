@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/industries/fitness-wellness`;
@@ -22,11 +23,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Fitness and wellness CRM setup and automation | Sage Kite",
     description: "A system built for the first class, the members who start to drift, and the payments that quietly fail. For studios, gyms and wellness businesses.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Fitness and wellness CRM setup and automation | Sage Kite",
     description: "A system built for the first class, the members who start to drift, and the payments that quietly fail. For studios, gyms and wellness businesses.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

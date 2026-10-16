@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 export const metadata: Metadata = {
   title: "Jobber CRM Services & Setup | Sage Kite",
@@ -17,11 +18,13 @@ export const metadata: Metadata = {
     url: "https://www.sagekite.com/platforms/jobber",
     title: "Jobber CRM Services & Setup | Sage Kite",
     description: "Jobber setup from Sage Kite: we map how your home-service business works, then set up requests, quotes, scheduling, jobs, invoicing and recurring work.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Jobber CRM Services & Setup | Sage Kite",
     description: "Jobber setup from Sage Kite: we map how your home-service business works, then set up requests, quotes, scheduling, jobs, invoicing and recurring work.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

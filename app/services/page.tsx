@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services`;
@@ -21,11 +22,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Business growth consulting services | Sage Kite",
     description: "Consultancy, CRM implementation, marketing, specialist staffing and white-label delivery, brought together around one growth goal.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Business growth consulting services | Sage Kite",
     description: "Consultancy, CRM implementation, marketing, specialist staffing and white-label delivery, brought together around one growth goal.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

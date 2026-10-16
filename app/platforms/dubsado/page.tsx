@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check, ArrowRight } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 export const metadata: Metadata = {
   title: "Dubsado Setup & Implementation Services | Sage Kite",
@@ -18,11 +19,13 @@ export const metadata: Metadata = {
     url: "https://www.sagekite.com/platforms/dubsado",
     title: "Dubsado setup and implementation services | Sage Kite",
     description: "Process mapped first, then Dubsado built around it: forms, proposals, contracts, payments, scheduling and workflows, tested before launch.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Dubsado setup and implementation services | Sage Kite",
     description: "Sage Kite maps your client process, then configures Dubsado around it, tests it and hands it over.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

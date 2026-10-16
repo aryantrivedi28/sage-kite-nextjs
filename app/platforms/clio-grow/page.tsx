@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const PAGE_URL = "https://www.sagekite.com/platforms/clio-grow";
 
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Clio Grow setup and legal intake consulting | Sage Kite",
     description: "Sage Kite sets up Clio Grow around how your firm turns enquiries into clients: intake forms, pipeline, automated follow-up, booking and the hand-off to Clio Manage.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Clio Grow setup and legal intake consulting | Sage Kite",
     description: "Clio Grow setup for law firms: Lead Inbox, intake forms, Matter Pipeline, automated workflows, Clio Scheduler and the Clio Manage hand-off.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

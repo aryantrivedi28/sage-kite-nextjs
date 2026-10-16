@@ -107,11 +107,13 @@ export const metadata: Metadata = {
     url: 'https://www.sagekite.com/<path>',           // same as canonical
     title: 'Page Title | Sage Kite',
     description: '...',
+    images: DEFAULT_OG_IMAGES,                        // from '@/content/share-image'
   },
   twitter: {
-    card: 'summary',                                  // 'summary_large_image' when there is an image
+    card: 'summary_large_image',
     title: 'Page Title | Sage Kite',
     description: '...',
+    images: DEFAULT_TWITTER_IMAGES,                   // from '@/content/share-image'
   },
 };
 ```
@@ -130,6 +132,12 @@ Rules:
   Search engines give this tag little or no weight; it is kept for audit tools.
 - Next.js merges `openGraph` shallowly: a page that sets `openGraph` must set
   every field it needs (`type`, `siteName`, `url`, `title`, `description`).
+- The same applies to share images: the root layout's default image does not
+  reach a page that sets its own `openGraph` or `twitter`. Such a page lists
+  `DEFAULT_OG_IMAGES` / `DEFAULT_TWITTER_IMAGES` from `content/share-image.ts`
+  (as above), unless it has its own image. Blog posts get their featured image
+  from `blogMetadata.ts`. Do not add an `app/opengraph-image.*` file: it only
+  reached pages without their own metadata when tested.
 - Pages in `about/`, `privacy-policy/`, `terms-of-service/` keep metadata in
   their `layout.tsx` because their `page.tsx` is a client component.
 - A new route must also be added to `app/sitemap.ts` unless it is a blog post.

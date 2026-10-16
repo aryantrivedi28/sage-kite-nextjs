@@ -17,6 +17,7 @@ import { FAQ } from '../components/home/FAQ';
 import { HOME_FAQ_GROUPS } from '../components/home/faqData';
 import { FinalCTA } from '../components/home/FinalCTA';
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES } from '@/content/share-image';
 
 export const metadata: Metadata = {
   title: 'Business Growth Consulting for SMEs | Sage Kite',
@@ -29,6 +30,7 @@ export const metadata: Metadata = {
     title: 'Sage Kite: business growth through systems, people and execution',
     description:
       'A business growth consultancy that advises, implements and executes: consultancy, CRM, marketing automation, marketing and specialist VA support, working as one system.',
+    images: DEFAULT_OG_IMAGES,
   },
 };
 

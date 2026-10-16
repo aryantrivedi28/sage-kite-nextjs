@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const PAGE_URL = "https://www.sagekite.com/platforms/lofty";
 
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Lofty CRM services for real estate | Sage Kite",
     description: "Sage Kite implements Lofty around how agents, teams and brokerages generate and convert leads: database, routing, Smart Plans, AI and reporting.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Lofty CRM services for real estate | Sage Kite",
     description: "Process-first Lofty implementation for real estate: database, lead routing, Smart Plans, AI Workforce, transactions and reporting.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

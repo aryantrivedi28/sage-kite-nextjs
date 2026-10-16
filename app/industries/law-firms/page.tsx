@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check } from "lucide-react";
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/industries/law-firms`;
@@ -22,11 +23,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Law firm client intake and CRM setup | Sage Kite",
     description: "Answer the enquiry before another firm does: intake forms, consultation booking, follow-up and a clean hand-off, with judgement left to your lawyers.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Law firm client intake and CRM setup | Sage Kite",
     description: "Answer the enquiry before another firm does: intake forms, consultation booking, follow-up and a clean hand-off, with judgement left to your lawyers.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -23,11 +24,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Contact Sage Kite | Book a discovery call",
     description: "Tell us where growth is getting stuck. Send an enquiry and we reply within 24 hours on business days.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Contact Sage Kite | Book a discovery call",
     description: "Tell us where growth is getting stuck. Send an enquiry and we reply within 24 hours on business days.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

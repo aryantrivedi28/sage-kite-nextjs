@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from "@/content/share-image";
 
 export const metadata: Metadata = {
   title: "About Sage Kite | Business Growth Consultancy",
@@ -13,12 +14,14 @@ export const metadata: Metadata = {
     title: "About Sage Kite | Business Growth Consultancy",
     description:
       "Meet Sage Kite, a business growth consultancy helping growing businesses make sense of technology, marketing, automation, AI and people through better systems.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "About Sage Kite | Business Growth Consultancy",
     description:
       "Sage Kite improves the systems, people and execution behind growth for small and medium-sized businesses.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 

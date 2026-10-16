@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 import { ArrowRight } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -21,11 +22,13 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     title: "Founder's Thoughts | Sage Kite",
     description: "Occasional essays by Aryan Trivedi, Sage Kite's founder, on growth, systems, AI and how selling and work are changing.",
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: "Founder's Thoughts | Sage Kite",
     description: "Occasional essays by Aryan Trivedi, Sage Kite's founder, on growth, systems, AI and how work is changing.",
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 
