@@ -535,11 +535,82 @@ Past approval records below describe only what the supplied reports establish.
   no horizontal overflow.
 - **Delivery:** No commit, push or deployment performed.
 
+## D017 — Update the Platforms SEO title to the approved audit wording
+
+- **Date:** 19 October 2026.
+- **Status:** Implemented and verified locally.
+- **Why:** Audit item #58 recommends explicitly naming GoHighLevel and HubSpot
+  in the Platforms directory's SEO title. The user requested this exact rewrite.
+- **What changed:** [app/platforms/page.tsx](app/platforms/page.tsx), `/platforms`,
+  `metadata.title`:
+  - Before: "CRM & Business Platforms We Implement | Sage Kite" (49 characters).
+  - After: "GoHighLevel, HubSpot & CRM Platforms We Implement | Sage Kite"
+    (61 characters).
+- **Approval:** The user supplied the exact current title and instructed
+  "Rewrite to" the replacement above. Approval covers this page's SEO title only.
+- **Scope:** Meta description, Open Graph/Twitter titles and descriptions,
+  canonical, JSON-LD, platform links, headings, body content and layout are
+  unchanged. No new GoHighLevel page is created by this title update.
+- **Expected effects:** The Platforms browser tab uses the approved title;
+  search engines can read it after deployment and recrawling.
+- **Limitations:** Search engines may shorten or rewrite the 61-character title.
+  No ranking effect is measured or guaranteed. Social titles keep their existing
+  wording within this approved scope.
+- **Observed effects:** The local production Platforms page outputs exactly one
+  title with the approved wording (61 characters, with a single decoded `&`).
+- **Validation (run by Codex in this task):**
+  - `npx tsc --noEmit --incremental false` passed; `npm run build` passed
+    (61 generated routes).
+  - Compared all meta tags and parsed JSON-LD in the generated Platforms HTML
+    before and after this change: unchanged.
+  - Opened `/platforms` from the production server in Chrome and confirmed the
+    exact document title. The sole H1, meta description, Open Graph/Twitter
+    titles and canonical remain unchanged.
+  - Application diff contains only the approved `metadata.title` replacement.
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+
+## D018 — Set the approved Platforms meta description
+
+- **Date:** 19 October 2026.
+- **Status:** Implemented and verified locally.
+- **Why:** Audit item #59 proposes a Platforms directory description that
+  explicitly names GoHighLevel and connects implementation to how a business sells.
+- **What changed:** [app/platforms/page.tsx](app/platforms/page.tsx), `/platforms`,
+  `metadata.description`:
+  - Before (146 characters): "Sage Kite implements CRM and business platforms for
+    SMEs, including HubSpot, Keap, Follow Up Boss, ServiceTitan, Kajabi, Clio Grow
+    and Bloomerang."
+  - After (151 characters): "We implement GoHighLevel, HubSpot, Keap, Follow Up
+    Boss, ServiceTitan, Kajabi, Clio Grow and more, each set up around how your
+    business actually sells."
+- **Approval:** The exact current and suggested descriptions were shown in chat.
+  The user approved the suggested text with "go with suggested". Approval covers
+  this page's SEO meta description only.
+- **Scope:** The approved D017 title is preserved. Social titles/descriptions,
+  share images, canonical, JSON-LD, headings, visible content and layout are
+  unchanged. No new platform page is created. Existing uncommitted work remains.
+- **Expected effects:** The Platforms meta description contains the approved
+  wording, available to search engines after deployment and recrawling.
+- **Limitations:** Google can choose another snippet or shorten it. No search
+  ranking or traffic improvement has been measured or guaranteed.
+- **Observed effects:** The local production Platforms page outputs exactly one
+  meta description with the approved 151-character text.
+- **Validation (run by Codex in this task):**
+  - `npx tsc --noEmit --incremental false` passed; `npm run build` passed
+    (61 generated routes).
+  - Compared the generated Platforms title, all other meta tags and parsed
+    JSON-LD against the preceding build: unchanged.
+  - Opened `/platforms` from the production server in Chrome and confirmed the
+    exact description, its 151-character length and a single description tag.
+    The approved D017 title, sole H1, canonical and social descriptions are
+    preserved.
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
 
-### D017 — [Short description]
+### D019 — [Short description]
 
 - **Date:** [Date recorded; implementation date if different.]
 - **Status:** [Proposed / approved / implemented / verified.]

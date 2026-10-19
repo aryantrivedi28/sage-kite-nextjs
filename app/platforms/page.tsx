@@ -10,8 +10,8 @@ import { PLATFORMS, PLATFORM_GROUPS } from '@/content/platforms';
 const PAGE_URL = "https://www.sagekite.com/platforms";
 
 export const metadata: Metadata = {
-  title: "CRM & Business Platforms We Implement | Sage Kite",
-  description: "Sage Kite implements CRM and business platforms for SMEs, including HubSpot, Keap, Follow Up Boss, ServiceTitan, Kajabi, Clio Grow and Bloomerang.",
+  title: "GoHighLevel, HubSpot & CRM Platforms We Implement | Sage Kite",
+  description: "We implement GoHighLevel, HubSpot, Keap, Follow Up Boss, ServiceTitan, Kajabi, Clio Grow and more, each set up around how your business actually sells.",
   keywords: ["CRM implementation services", "CRM consultant", "CRM setup services", "industry CRM", "CRM platforms for small business"],
   alternates: {
     canonical: PAGE_URL,
