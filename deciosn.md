@@ -403,11 +403,104 @@ Past approval records below describe only what the supplied reports establish.
   application code.
 - **Delivery:** Not committed, pushed or deployed.
 
+## D013 — Do not add Case studies to the navbar
+
+- **Date:** 17 October 2026.
+- **Status:** Proposal declined by the user; not implemented.
+- **Proposal:** Add a "Case studies" link between Industries and Blogs in the
+  desktop header and mobile menu, pointing to `/case-studies`.
+- **Decision and reason:** The user explicitly said they do not want Case studies
+  added to the navbar. Respect that preference; the preview is not approval.
+- **What changed:** Recorded this decision here and in [AGENTS.md](AGENTS.md).
+  [Header.tsx](components/Header.tsx) was checked and remains unchanged.
+- **Effects:** No extra desktop navigation link or mobile menu row. The existing
+  case-studies page and footer link remain as they were. Any different placement
+  would need a separate proposal and user approval.
+- **Validation:** Confirmed the header source contains no case-studies link.
+  Documentation diff checked. No application tests were run for this
+  documentation-only update.
+- **Delivery:** Documentation changes only; no commit or push performed. The user
+  will commit manually.
+
+## D014 — Update the homepage SEO title to the approved audit wording
+
+- **Date:** 19 October 2026.
+- **Status:** Implemented and verified locally.
+- **Why:** Audit item #18 recommends explicitly including both "Business Growth
+  Consulting" and "Consultancy" in the homepage title. The user requested the
+  exact replacement in this conversation.
+- **What changed:** [app/page.tsx](app/page.tsx), homepage `/`, `metadata.title`:
+  - Before: "Business Growth Consulting for SMEs | Sage Kite" (47 characters).
+  - After: "Business Growth Consulting & Consultancy for SMEs | Sage Kite"
+    (61 characters).
+- **Approval:** The user supplied the exact before/after title and instructed
+  "change this to this". Approval covers this homepage SEO title only.
+- **Scope:** Homepage headings, body text, layout, meta description, social
+  titles, share images and JSON-LD are unchanged. No other page title changes.
+  Existing uncommitted documentation changes, including D013, are preserved.
+- **Expected effects:** The browser tab uses the approved title. Search engines
+  can read the new title after deployment and recrawling; their displayed title
+  and any ranking effect are not guaranteed. The visible page layout is unchanged.
+- **Limitations:** The approved title is 61 characters; search-result display
+  depends on available width and may shorten or rewrite it. Social titles and
+  the structured-data page name retain their existing wording within this scope.
+- **Observed effects:** A local production browser load shows exactly one
+  document title, with the approved wording and a single decoded `&`.
+- **Validation (run by Codex in this task):**
+  - `npx tsc --noEmit --incremental false` passed; incremental output was
+    disabled to avoid rewriting TypeScript build caches.
+  - `npm run build` passed (61 generated routes).
+  - Opened `/` from the production server in Chrome and confirmed the exact
+    document title. The sole H1, inherited meta description, Open Graph title,
+    inherited Twitter title and JSON-LD `WebPage.name` retain their prior text.
+  - Application diff contains only the approved `metadata.title` replacement.
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+
+## D015 — Set the approved homepage meta description
+
+- **Date:** 19 October 2026.
+- **Status:** Implemented and verified locally.
+- **Why:** Audit item #19 proposes a homepage description that explicitly names
+  SMEs, growth consulting, CRM implementation, digital marketing, AI SEO and
+  virtual assistants. The user requested this exact replacement.
+- **What changed:** Added `metadata.description` to the homepage in
+  [app/page.tsx](app/page.tsx):
+  - Before (inherited from the root layout, 158 characters): "Sage Kite is a
+    business growth consultancy. We fix the systems, people and execution behind
+    growth, from CRM and automation to marketing and specialist staff."
+  - After (160 characters): "Sage Kite is a business growth consultancy for SMEs.
+    Growth consulting, CRM implementation, digital marketing, AI SEO and virtual
+    assistants, run as one system."
+- **Approval:** The user supplied the exact before/after description and
+  instructed "do this", requesting a commit message and tracker update text.
+  Approval covers the homepage SEO meta description only.
+- **Approach and scope:** The homepage previously inherited its description from
+  `app/layout.tsx`. A page-level override applies the approved text only to `/`
+  and preserves the root default for other routes. The approved D014 title,
+  social descriptions, JSON-LD, visible copy, headings and layout are unchanged.
+  Existing uncommitted work is preserved.
+- **Expected effects:** The homepage's `<meta name="description">` contains the
+  approved text. Search engines can read it after deployment and recrawling.
+- **Limitations:** Search engines may choose another snippet or shorten this
+  description. No ranking improvement is measured or guaranteed.
+- **Observed effects:** The local production homepage outputs exactly one
+  description tag containing the approved 160-character text.
+- **Validation (run by Codex in this task):**
+  - `npx tsc --noEmit --incremental false` passed; `npm run build` passed
+    (61 generated routes).
+  - Compared title/meta-tag fingerprints across all 59 generated HTML pages
+    against the build immediately before this change: only `index.html` changed,
+    with no added or removed HTML pages.
+  - Opened the production homepage in Chrome and confirmed the exact description
+    and its 160-character length. The approved D014 title, sole H1, canonical,
+    Open Graph/Twitter descriptions and JSON-LD page description are preserved.
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
 
-### D013 — [Short description]
+### D016 — [Short description]
 
 - **Date:** [Date recorded; implementation date if different.]
 - **Status:** [Proposed / approved / implemented / verified.]

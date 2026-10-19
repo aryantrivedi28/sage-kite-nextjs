@@ -20,7 +20,9 @@ import type { Metadata } from 'next';
 import { DEFAULT_OG_IMAGES } from '@/content/share-image';
 
 export const metadata: Metadata = {
-  title: 'Business Growth Consulting for SMEs | Sage Kite',
+  title: 'Business Growth Consulting & Consultancy for SMEs | Sage Kite',
+  description:
+    'Sage Kite is a business growth consultancy for SMEs. Growth consulting, CRM implementation, digital marketing, AI SEO and virtual assistants, run as one system.',
   keywords: ["business growth consultancy", "business growth consulting", "CRM implementation", "marketing automation", "growth operations", "SME growth consulting"],
   alternates: { canonical: '/' },
   openGraph: {

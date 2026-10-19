@@ -144,6 +144,9 @@ public/                   Static files. Blog images go in public/images/blog/,
 - Approval covers the specific proposal accepted by the user; ask again if its
   scope changes. An audit recommendation alone is not approval. Technical work
   that preserves content and appearance may proceed within the authorized task.
+- The user declined adding Case studies to the desktop header or mobile menu on
+  17 October 2026 (decision D013). Keep that navigation as it is unless the user
+  explicitly revises this decision. The existing footer link remains in place.
 - Maintain [deciosn.md](deciosn.md) for project changes: record why, what changed
   (including before/after wording where applicable), affected files, approval,
   effects, limitations and validation. Distinguish proposed work from implemented
