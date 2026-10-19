@@ -1,47 +1,62 @@
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { CASE_STUDIES, CASE_STUDIES_PATH, caseStudyPath, type CaseStudy } from '@/content/case-studies';
+
+const FEATURED: { slug: string; accent: string }[] = [
+  { slug: 'santa-barbara-trapeze', accent: 'var(--coral)' },
+  { slug: 'get-daily', accent: 'var(--butter)' },
+  { slug: '260-sample-sale', accent: 'var(--sky)' },
+];
 
 export function Work() {
+  const featured = FEATURED.flatMap(({ slug, accent }) => {
+    const study = CASE_STUDIES.find((c) => c.slug === slug);
+    return study ? [{ study, accent }] : [];
+  });
+
+  if (featured.length === 0) return null;
+
   return (
-    <section className="work">
+    <section id="case-studies" className="work" aria-labelledby="work-title">
       <div className="wrap reveal">
-        <div className="work-grid">
-          
+        <div className="work-top">
           <div>
             <p className="label">Selected work</p>
-            <h2 style={{ marginBottom: '16px' }}>Evidence, with its context.</h2>
-            <p style={{ color: 'var(--dark-sage)', fontSize: '0.9rem', maxWidth: '36ch' }}>
-              Every example states its origin and the basis for any result.
-            </p>
+            <h2 id="work-title">Evidence, with its context.</h2>
+            <p className="sub">Every example states its origin and the basis for any result.</p>
           </div>
-
-          <ul className="work-list" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-            <li>
-              <Link href="#work-1" style={{ display: 'contents', textDecoration: 'none', color: 'inherit' }}>
-                <div className="tag" style={{ '--bg': 'var(--sky-soft)' } as React.CSSProperties}>Systems</div>
-                <strong style={{ borderBottom: '1.5px dashed var(--sage)', paddingBottom: '2px', display: 'inline-block', justifySelf: 'start' }}>[Verified work example]</strong>
-                <div style={{ fontSize: '0.75rem', color: 'var(--sage)' }}>[Origin label]</div>
-              </Link>
-            </li>
-            
-            <li>
-              <Link href="#work-2" style={{ display: 'contents', textDecoration: 'none', color: 'inherit' }}>
-                <div className="tag" style={{ '--bg': 'var(--coral-soft)' } as React.CSSProperties}>Marketing</div>
-                <strong style={{ borderBottom: '1.5px dashed var(--sage)', paddingBottom: '2px', display: 'inline-block', justifySelf: 'start' }}>[Verified work example]</strong>
-                <div style={{ fontSize: '0.75rem', color: 'var(--sage)' }}>[Origin label]</div>
-              </Link>
-            </li>
-            
-            <li>
-              <Link href="#work-3" style={{ display: 'contents', textDecoration: 'none', color: 'inherit' }}>
-                <div className="tag" style={{ '--bg': 'var(--butter-soft)' } as React.CSSProperties}>Growth operations</div>
-                <strong style={{ borderBottom: '1.5px dashed var(--sage)', paddingBottom: '2px', display: 'inline-block', justifySelf: 'start' }}>[Verified work example]</strong>
-                <div style={{ fontSize: '0.75rem', color: 'var(--sage)' }}>[Origin label]</div>
-              </Link>
-            </li>
-          </ul>
-
+          <Link href={CASE_STUDIES_PATH} className="link">All case studies</Link>
         </div>
+
+        <ul className="work-cards">
+          {featured.map(({ study, accent }) => (
+            <li key={study.slug}>
+              <WorkCard study={study} accent={accent} />
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
+  );
+}
+
+function WorkCard({ study, accent }: { study: CaseStudy; accent: string }) {
+  return (
+    <Link href={caseStudyPath(study.slug)} className="work-card" style={{ '--c': accent } as CSSProperties}>
+      <span className="work-tag">{study.discipline}</span>
+      <h3>{study.client}</h3>
+      <p className="work-industry">{study.industry}</p>
+      <p className="work-sum">{study.summary}</p>
+      <ul className="work-chips" aria-label="What was built">
+        {study.highlights.map((h) => (
+          <li key={h} className="chip">{h}</li>
+        ))}
+      </ul>
+      <p className="work-origin">{study.origin}</p>
+      <span className="work-more">
+        Read the case study <ArrowRight size={18} aria-hidden="true" />
+      </span>
+    </Link>
   );
 }

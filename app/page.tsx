@@ -83,7 +83,7 @@ export default function Home() {
         <SpecialistCapability />
         <MarketingEngine />
         <PlatformsAndIndustries />
-        
+        <Work />
         <Founder />
         <Library />
         <Agency />

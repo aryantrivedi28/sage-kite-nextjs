@@ -88,7 +88,9 @@ app/
   sitemap.ts, robots.ts, not-found.tsx
 components/
   Header.tsx, Footer.tsx  Shared header/footer.
-  home/                   Homepage sections.
+  home/                   Homepage sections. Work.tsx is the featured case studies
+                          section (Santa Barbara Trapeze, Get Daily, 260 Sample Sale),
+                          read from content/case-studies; change its FEATURED list to swap them.
   blog/                   Blog UI + BlogPostPage (used by every post's page.tsx),
                           BlogArticleLayout (page shell), blogMetadata.ts
                           (metadata), blogJsonLd.ts (schema), FieldDiagram
@@ -144,9 +146,10 @@ public/                   Static files. Blog images go in public/images/blog/,
 - Approval covers the specific proposal accepted by the user; ask again if its
   scope changes. An audit recommendation alone is not approval. Technical work
   that preserves content and appearance may proceed within the authorized task.
-- The user declined adding Case studies to the desktop header or mobile menu on
-  17 October 2026 (decision D013). Keep that navigation as it is unless the user
-  explicitly revises this decision. The existing footer link remains in place.
+- The user declined adding Case studies to the header on 17 October 2026 (D013),
+  then explicitly reversed that on 19 October 2026 (D016): "Case studies" is now in
+  the desktop header and mobile menu between Industries and Blogs. Keep it unless
+  the user revises this again. The footer link remains in place.
 - Maintain [deciosn.md](deciosn.md) for project changes: record why, what changed
   (including before/after wording where applicable), affected files, approval,
   effects, limitations and validation. Distinguish proposed work from implemented
@@ -226,7 +229,6 @@ The essentials:
 - Share images: blog posts use their featured image and the essay sets its own; every
   other page uses the default in `content/share-image.ts` (see "Where things live").
 - `app/home-interactions.tsx` and `app/site-content.ts` are not used by any page.
-  `components/home/Work.tsx` is imported in `app/page.tsx` but not rendered.
 - Platform pages keep page-specific CSS in an inline `<style>` block.
   `honeybook` uses `honeybook.module.css`.
 - One-off conversion scripts (`transform.js`, `transform_jobber.js`, `scratch/`),

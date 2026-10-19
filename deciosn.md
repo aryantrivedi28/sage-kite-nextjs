@@ -406,7 +406,7 @@ Past approval records below describe only what the supplied reports establish.
 ## D013 — Do not add Case studies to the navbar
 
 - **Date:** 17 October 2026.
-- **Status:** Proposal declined by the user; not implemented.
+- **Status:** Proposal declined by the user; not implemented. **Superseded by D016** (19 October 2026).
 - **Proposal:** Add a "Case studies" link between Industries and Blogs in the
   desktop header and mobile menu, pointing to `/case-studies`.
 - **Decision and reason:** The user explicitly said they do not want Case studies
@@ -496,11 +496,50 @@ Past approval records below describe only what the supplied reports establish.
     Open Graph/Twitter descriptions and JSON-LD page description are preserved.
 - **Delivery:** No commit, push or deployment performed. The user commits manually.
 
+## D016 — Add Case studies to the navbar and a featured case studies section to the homepage
+
+- **Date:** 19 October 2026.
+- **Status:** Implemented and verified locally.
+- **Why:** The user explicitly asked for a "Case studies" button in the navbar and a
+  homepage section featuring the Santa Barbara Trapeze, Get Daily and 260 Sample
+  Sale case studies. This reverses D013, which the user declined on 17 October 2026.
+- **What changed:**
+  - [components/Header.tsx](components/Header.tsx): added "Case studies"
+    (`/case-studies`) between Industries and Blogs, in the desktop nav and the mobile menu.
+  - [components/home/Work.tsx](components/home/Work.tsx): the unused placeholder
+    (dashed "[Verified work example]" rows) is now the real featured section, rendered
+    in [app/page.tsx](app/page.tsx) after Platforms and industries and before
+    Founder's Thoughts. Heading, eyebrow and sub text reuse the placeholder's existing
+    wording ("Selected work", "Evidence, with its context.", "Every example states its
+    origin and the basis for any result."). Each card's tag, client, industry, summary,
+    highlights and origin are read from `content/case-studies`; no new case study copy
+    was written. A "Read the case study" link and an "All case studies" link point to
+    the case study pages and `/case-studies`.
+  - [app/globals.css](app/globals.css): replaced the unused `.work-grid` / `.work-list`
+    rules with `.work-top`, `.work-cards` and `.work-card` styles using brand tokens
+    only; cards stack to one column at 1040px and below.
+  - [AGENTS.md](AGENTS.md): updated the navigation rule, the `home/` entry and removed
+    the "Work.tsx not rendered" known gap.
+- **Approval:** The user requested both changes in chat. The section's design and
+  wording were not previewed first; the user may ask for changes.
+- **Expected effects:** Case studies are reachable from every page's header and
+  from the homepage; three more internal links to case study pages on `/`.
+- **Limitations:** The homepage `WebPage`/`FAQPage` JSON-LD was not changed. The three
+  featured studies are a fixed list in `Work.tsx`; they are skipped if a slug is
+  drafted or removed. The Santa Barbara Trapeze study has no screenshot, so cards
+  are text only for consistency.
+- **Validation (run in this task):** `npx tsc --noEmit --incremental false` and
+  `npm run build` passed. In the dev server: the desktop nav shows the link on one
+  line at 1280px and 1041px with no overlap or horizontal overflow; the mobile menu
+  lists it; the section renders three cards at 1280px and one column at 375px with
+  no horizontal overflow.
+- **Delivery:** No commit, push or deployment performed.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
 
-### D016 — [Short description]
+### D017 — [Short description]
 
 - **Date:** [Date recorded; implementation date if different.]
 - **Status:** [Proposed / approved / implemented / verified.]
