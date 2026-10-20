@@ -606,11 +606,94 @@ Past approval records below describe only what the supplied reports establish.
     preserved.
 - **Delivery:** No commit, push or deployment performed. The user commits manually.
 
+## D019 — Add an unlisted, frontend-only blog studio for the SEO team
+
+- **Date:** 20 October 2026.
+- **Status:** Implemented and verified locally. Frontend only; it does not publish.
+- **Why:** The user wants the hired SEO team to write and upload blog posts without
+  editing code, based on the supplied prototype (`index (1).html`, a "GHL Scale Up"
+  blog CMS demo) and three reference screenshots of another admin panel.
+- **Decisions by the user (asked in chat):**
+  - Storage: undecided between Supabase and Sanity; "leave it for now make the whole
+    frontend". Posts are therefore saved in the browser behind a `StudioStore`
+    interface so a backend can replace it in one file.
+  - Protection: "Hidden URL only", after being told that anyone with the link could
+    create, edit and delete posts once a backend exists. No login was added.
+- **What changed:**
+  - New unlisted route [app/sk-studio-ufn5xdafhll7/page.tsx](app/sk-studio-ufn5xdafhll7/page.tsx)
+    (random path): metadata `robots` noindex/nofollow/nocache and `referrer: no-referrer`;
+    not in `sitemap.ts`; not in `robots.ts`, because robots.txt is public and would
+    reveal the path. Nothing links to it.
+  - New [components/blog-studio/](components/blog-studio/): post list (status tabs,
+    search, category and source filters, the 8 existing code posts shown read-only),
+    editor drawer (Content / SEO / Settings), block builder (heading H2/H3, paragraphs
+    with **bold** / *italic* / [links], list, image, quote, table, YouTube video, FAQ,
+    divider), Google and social previews, a publishing checklist built from
+    docs/blog-seo-schema.md and docs/new-page-checklist.md, a full-page preview using
+    the live `.article` classes and `BlogGuide`, JSON export/import, image upload
+    (resized to WebP in the browser).
+  - Prototype features adapted to site rules: one excerpt field doubles as meta
+    description (as `blogMetadata.ts` does); canonical is derived from the slug, not
+    editable; the slug locks after first publish; categories come from `CATEGORIES`.
+    Left out: the prototype's CTA block (every post already ends with the booking CTA),
+    image+text float layout, template and TOC selectors, OG image override and the
+    placeholder sidebar sections (dashboard, team, settings).
+  - Styling: brand tokens only, Manrope via `var(--sans)`, coral primary buttons with
+    ink text. The prototype's own colours and the "GHL Scale Up" branding were not used.
+  - [AGENTS.md](AGENTS.md): studio added to "Where things live", "Known gaps" and "Do not".
+  - [docs/blog-studio.md](docs/blog-studio.md) (requested by the user): file map, data
+    model, features and saving rules as built, plus untested integration sketches for
+    authentication and admin access, Supabase, Sanity and rendering studio posts on
+    the live site. The sketches are marked untested; the integration is not built.
+- **Approval:** The user asked for the studio and supplied the prototype. No public
+  page content, metadata or design changed; the live blog is unaffected.
+- **Expected effects:** The SEO team can draft posts and check them against the site's
+  SEO rules. Nothing they save reaches sagekite.com.
+- **Limitations:**
+  - Posts and uploaded images live in one browser's localStorage (about 5 MB). They are
+    not shared between people or devices and are lost if browser data is cleared;
+    export is the only backup.
+  - "Published" and "Scheduled" are labels only; studio posts are not rendered on
+    /blog, in the sitemap or in JSON-LD. Going live needs a backend store and a
+    `/blog/[slug]` route that renders `StudioArticle` inside `BlogArticleLayout`.
+  - The Google Analytics tag in the root layout still loads on this page, so its
+    path is recorded in GA.
+  - Before any backend can write to the live site, authentication is needed.
+- **Validation (run by Claude in this task):**
+  - `npx tsc --noEmit --incremental false` passed; `npm run build` passed, with
+    `/sk-studio-ufn5xdafhll7` statically generated.
+  - Drove the production build in headless Chrome: created a post, added every block
+    type, published through the recommendations dialog, previewed, reloaded and found
+    it persisted. Checked: meta robots `noindex, nofollow, nocache`, referrer
+    `no-referrer`, no canonical, one `<h1>` in the preview, heading ids match the
+    guide, the FAQ heading is added automatically, `javascript:` links render as
+    text, a URL with parentheses links correctly, no horizontal scroll at 390px, no
+    console errors.
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+
+## D020 — Rename the decision log back to decision.md
+
+- **Date:** 20 October 2026.
+- **Status:** Implemented locally.
+- **Why:** The user asked to "correct the name of the file deciosn.md to
+  decision.md". This reverses the D009 rename (`decision.md` → `deciosn.md`); the
+  D009 entry is kept unchanged as history.
+- **What changed:** `deciosn.md` renamed to `decision.md` (plain `mv`, not
+  `git mv`, so nothing was staged). References updated in [AGENTS.md](AGENTS.md),
+  [app/sitemap.ts](app/sitemap.ts), [app/sk-studio-ufn5xdafhll7/page.tsx](app/sk-studio-ufn5xdafhll7/page.tsx),
+  [content/share-image.ts](content/share-image.ts) and [docs/blog-studio.md](docs/blog-studio.md)
+  (comments and documentation only; no runtime code changed).
+- **Approval:** Explicitly requested by the user.
+- **Validation:** Searched the repository (excluding `node_modules`, `.next`, `.git`):
+  the only remaining "deciosn.md" is the historical D009 line.
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+  Git will show `deciosn.md` as deleted and `decision.md` as new until both are staged.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
 
-### D019 — [Short description]
+### D021 — [Short description]
 
 - **Date:** [Date recorded; implementation date if different.]
 - **Status:** [Proposed / approved / implemented / verified.]

@@ -85,8 +85,19 @@ app/
                         as supplied. Every "Book a discovery call" button links here.
                         form_embed.js is loaded by components/book/BookingEmbedScript.tsx, not
                         next/script: it must re-run on every visit or the iframe is not resized.
+  sk-studio-ufn5xdafhll7/
+                        Unlisted blog studio for the SEO team (decision.md D019). No login.
+                        Frontend only: posts are saved in the visitor's browser through
+                        components/blog-studio/store.ts and never reach the live site. noindex,
+                        no-referrer, not in sitemap.ts and deliberately not in robots.ts.
+                        Read docs/blog-studio.md before changing it or adding a backend/auth.
   sitemap.ts, robots.ts, not-found.tsx
 components/
+  blog-studio/            The studio UI (BlogStudio.tsx + BlogStudio.module.css). store.ts is the
+                          StudioStore interface (swap localStorage for Supabase/Sanity there only);
+                          StudioArticle renders blocks as plain .article-content HTML (no hooks, so
+                          a future live route can reuse it); postUtils derives guide, faqs,
+                          readingTime and the publishing checklist from docs/blog-seo-schema.md.
   Header.tsx, Footer.tsx  Shared header/footer.
   home/                   Homepage sections. Work.tsx is the featured case studies
                           section (Santa Barbara Trapeze, Get Daily, 260 Sample Sale),
@@ -122,7 +133,7 @@ content/founders-thoughts.ts
                           Founder's Thoughts essays, newest first. Add a new essay here
                           and create app/insights/founders-thoughts/<slug>/page.tsx.
 content/share-image.ts    Default social share image (public/images/share/sage-kite-default.png,
-                          approved design, deciosn.md D011). The root layout uses it, but a
+                          approved design, decision.md D011). The root layout uses it, but a
                           page that sets its own openGraph or twitter block replaces the
                           root's, so it must list DEFAULT_OG_IMAGES / DEFAULT_TWITTER_IMAGES
                           itself, with twitter card 'summary_large_image'.
@@ -150,7 +161,7 @@ public/                   Static files. Blog images go in public/images/blog/,
   then explicitly reversed that on 19 October 2026 (D016): "Case studies" is now in
   the desktop header and mobile menu between Industries and Blogs. Keep it unless
   the user revises this again. The footer link remains in place.
-- Maintain [deciosn.md](deciosn.md) for project changes: record why, what changed
+- Maintain [decision.md](decision.md) for project changes: record why, what changed
   (including before/after wording where applicable), affected files, approval,
   effects, limitations and validation. Distinguish proposed work from implemented
   work, expected effects from measured results, and reported checks from checks
@@ -212,6 +223,8 @@ The essentials:
 - Add Tailwind, CSS frameworks or component libraries.
 - Commit build output (`.next/`).
 - Commit TypeScript build caches (`*.tsbuildinfo`) or macOS `.DS_Store` files.
+- Add the blog studio path to `robots.ts` or `sitemap.ts`, or link to it from any page.
+  robots.txt is public and would advertise the unlisted URL.
 
 ## Known gaps (do not "fix" these without asking)
 
@@ -229,6 +242,9 @@ The essentials:
 - Share images: blog posts use their featured image and the essay sets its own; every
   other page uses the default in `content/share-image.ts` (see "Where things live").
 - `app/home-interactions.tsx` and `app/site-content.ts` are not used by any page.
+- The blog studio cannot publish: there is no backend and no login yet. Studio posts are
+  not rendered on /blog, in the sitemap or in schema. Add authentication before connecting
+  any store that can write to the live site; an unlisted URL is not protection.
 - Platform pages keep page-specific CSS in an inline `<style>` block.
   `honeybook` uses `honeybook.module.css`.
 - One-off conversion scripts (`transform.js`, `transform_jobber.js`, `scratch/`),

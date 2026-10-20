@@ -2,7 +2,7 @@ import shareImage from '@/public/images/share/sage-kite-default.png';
 
 /**
  * Default social share image for pages that have no image of their own (approved design,
- * see deciosn.md D011). Blog posts and Founder's Thoughts essays set their own image and
+ * see decision.md D011). Blog posts and Founder's Thoughts essays set their own image and
  * must not use this.
  *
  * Next.js replaces a parent's `openGraph` / `twitter` object instead of merging it, so a page

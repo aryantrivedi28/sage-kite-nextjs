@@ -7,7 +7,7 @@ import { CASE_STUDIES, CASE_STUDIES_PATH, caseStudyPath } from '@/content/case-s
 const BASE_URL = 'https://www.sagekite.com'
 
 /*
- * lastModified rule (see deciosn.md D012): give a date only when the content itself records
+ * lastModified rule (see decision.md D012): give a date only when the content itself records
  * when it last changed, and output it exactly as authored. Never use the build time: it
  * would claim every page changed on every deploy. Pages with no reliable date get no
  * <lastmod>, which the sitemap protocol allows.
