@@ -11,6 +11,10 @@ import {
   tableRows,
   youtubeId,
 } from './postUtils';
+import { isSanityImage, sanityImageSize, sanityImageUrl } from '@/lib/sanity/image';
+
+/** Widths offered for article images (the article column is 720px wide). */
+const ARTICLE_IMAGE_WIDTHS = [720, 1080, 1440];
 
 /*
  * Renders studio blocks as the plain HTML elements a blog post's `content`
@@ -64,14 +68,33 @@ function Block({ block, anchor }: { block: StudioBlock; anchor?: string }) {
       const L = block.ordered ? 'ol' : 'ul';
       return <L>{items.map((t, i) => <li key={i}><Inline text={t} /></li>)}</L>;
     }
-    case 'image':
+    case 'image': {
       if (!block.src) return null;
+      // Sanity uploads are resized by Sanity's CDN (format chosen per browser); other sources render as given.
+      const size = isSanityImage(block.src) ? sanityImageSize(block.src) : null;
+      const src = block.src;
       return (
         <figure>
-          <img src={block.src} alt={block.alt} title={block.alt} loading="lazy" />
+          {size ? (
+            <img
+              src={sanityImageUrl(src, { w: 1440, fit: 'max' })}
+              srcSet={ARTICLE_IMAGE_WIDTHS.map((w) => `${sanityImageUrl(src, { w, fit: 'max' })} ${w}w`).join(', ')}
+              sizes="(max-width: 760px) 100vw, 720px"
+              width={size.width}
+              height={size.height}
+              style={{ height: 'auto' }}
+              alt={block.alt}
+              title={block.alt}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <img src={src} alt={block.alt} title={block.alt} loading="lazy" />
+          )}
           {block.caption.trim() && <figcaption><Inline text={block.caption} /></figcaption>}
         </figure>
       );
+    }
     case 'quote':
       if (!block.text.trim()) return null;
       return (

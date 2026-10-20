@@ -88,6 +88,10 @@ by hand in a post folder.
 | `/blog` listing and category filter | `app/blog/page.tsx` |
 | Sitemap entry | `app/sitemap.ts` |
 
+Posts published from the blog studio (Sanity, see `docs/blog-studio.md` §10) use the
+same metadata, JSON-LD and layout builders; they are rendered by `app/blog/[slug]/page.tsx`
+and merged into the listing, related posts and sitemap by `content/blog/live.tsx`.
+
 ---
 
 ## 2. SEO metadata (all pages)

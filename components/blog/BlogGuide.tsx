@@ -3,7 +3,7 @@
 import React, { useEffect, useId, useState, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import { BookOpen, ChevronDown } from 'lucide-react';
-import { BlogGuideItem } from '@/content/blog';
+import type { BlogGuideItem } from '@/content/blog/types';
 
 interface BlogGuideProps {
   items: BlogGuideItem[];

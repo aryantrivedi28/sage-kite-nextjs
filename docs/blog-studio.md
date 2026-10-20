@@ -12,21 +12,21 @@ code wins; fix this doc in the same change.
 
 ## 1. Status at a glance
 
-The studio is a **frontend only** admin panel. It was built on 20 October 2026
-from a prototype the user supplied (a "GHL Scale Up" blog CMS demo), restyled
-with Sage Kite brand tokens and adapted to this site's blog rules.
+The studio is an admin panel built on 20 October 2026 from a prototype the user
+supplied (a "GHL Scale Up" blog CMS demo), restyled with Sage Kite brand tokens
+and adapted to this site's blog rules. The same day it was connected to Sanity
+for local use (decision.md D022, [sanity.md](sanity.md)).
 
 | Area | State today |
 |---|---|
 | Writing, editing, previewing, checking posts | Works |
-| Saving | Browser `localStorage` only (one browser, one device) |
-| Images | Uploaded images are stored inside the post as WebP data URLs |
-| Publishing to sagekite.com | **Not built.** "Published" and "Scheduled" are labels only |
-| Studio posts on `/blog`, sitemap, JSON-LD | **Not built** |
-| Authentication / admin accounts | **None.** Protected only by an unlisted URL |
-| Backend (Supabase / Sanity) | **None.** The user has not chosen one yet |
+| Saving under `npm run dev` with the Sanity env vars set | **Sanity** (project `lk42drbi`, dataset from `NEXT_PUBLIC_SANITY_DATASET`) |
+| Saving on the deployed site, or without the env vars | Browser `localStorage` only (one browser, one device) |
+| Images | Sanity mode: uploaded to Sanity's asset store (CDN URL). Browser mode: stored inside the post as WebP data URLs |
+| Publishing to sagekite.com | Works where the Sanity env vars are set (locally today): published posts appear on `/blog/<slug>`, `/blog`, "Keep reading", the sitemap and in JSON-LD within 60 s (section 10). This work did not change Vercel's environment variables (not verified what they contain). "Scheduled" is still a label only |
+| Authentication / admin accounts | **None.** Protected only by an unlisted URL; that is why Sanity is disabled in production |
 
-Nothing saved in the studio can change the live site today.
+The deployed studio cannot change the site: it uses browser storage. The deployed blog shows Sanity posts only if the Sanity env vars are set in Vercel, which this work did not do.
 
 ---
 
@@ -55,17 +55,32 @@ any backend that publishes.
 
 ```
 app/sk-studio-ufn5xdafhll7/
-  page.tsx                  Server component. Sets the noindex/no-referrer metadata, reads the
-                            code-based posts from content/blog (non-draft only) and passes
-                            summaries, CATEGORIES, PLATFORM_PAGE_SLUGS, AUTHOR and AUTHOR_IMAGE
-                            to <BlogStudio>. The comment at the top records why it is unlisted.
+  page.tsx                  Server component. Sets the noindex/no-referrer metadata and passes
+                            the storage mode (getStudioStorage), code-post summaries
+                            (getSitePostSummaries), CATEGORIES, PLATFORM_PAGE_SLUGS, AUTHOR and
+                            AUTHOR_IMAGE to <BlogStudio>. The comment at the top records why it
+                            is unlisted.
 
 components/blog-studio/
   types.ts                  StudioPost, StudioBlock (union of block types), StudioStatus,
-                            SitePostSummary. The data model (section 4).
-  store.ts                  StudioStore interface + localStudioStore (localStorage) +
-                            the exported `studioStore` the UI uses. The ONLY file to change
-                            when a backend is added (section 9).
+                            SitePostSummary, StudioStorage, ActionResult. The data model (section 4).
+  server.ts                 Server-only. getSitePostSummaries() and getStudioStorage(): Sanity
+                            when the env vars are set AND NODE_ENV is not production; otherwise
+                            browser storage, with the reason shown in the sidebar.
+  store.ts                  StudioStore interface, localStudioStore (localStorage),
+                            sanityStudioStore (calls actions.ts) and getStudioStore(storage).
+                            Images are resized to 1600px WebP in the browser in both stores.
+  actions.ts                'use server'. list / save / delete / upload-image for Sanity. Each
+                            re-checks the storage mode and validates input (id format, block
+                            types, no data: images, required checklist items before publishing,
+                            slug not used by a code post or another Sanity post). Returns
+                            ActionResult values instead of throwing.
+
+lib/sanity/
+  client.ts                 Server-only write client (token, useCdn false, perspective 'raw',
+                            apiVersion pinned to 2026-10-20) and isSanityWritable().
+  blogPosts.ts              StudioPost <-> `blogPost` document mapping: published = `<id>`,
+                            draft/scheduled = `drafts.<id>`; block `id` <-> `_key`.
   postUtils.ts              Pure helpers, no React: slugify, ids, today(), emptyPost, newBlock,
                             BLOCK_LABELS, inline-format regexes (INLINE_PATTERN, LINK_PATTERN,
                             stripInline, safeHref), list/table parsing, youtubeId,
@@ -96,8 +111,10 @@ The studio reuses, and does not modify:
 | `components/blog/formatDate.ts` | Dates in the list and preview |
 | `app/globals.css` `.article-*` classes | Preview looks like a live post |
 
-No other files were changed for the studio, apart from the docs:
-[AGENTS.md](../AGENTS.md), [decision.md](../decision.md) and this file.
+Other files changed for the studio: `next.config.ts` (Server Action
+`bodySizeLimit: "4mb"` for image uploads), `package.json` (`@sanity/client` ^7.27.0),
+`.env.example`, and the docs ([AGENTS.md](../AGENTS.md), [decision.md](../decision.md),
+[sanity.md](sanity.md) and this file).
 
 ---
 
@@ -252,13 +269,38 @@ like `&amp;` in title, SEO title, excerpt, alt text or tags; no `glasspane.pages
 
 ## 6. How saving works today
 
+`getStudioStorage()` in `components/blog-studio/server.ts` picks the store on every
+request and the sidebar says which one is active:
+
+| Condition | Store | Sidebar says |
+|---|---|---|
+| `NODE_ENV` is production (deployed site, `next start`) | Browser | "Saved in this browser only" + why Sanity is off |
+| Development, any of the three Sanity env vars missing | Browser | "Saved in this browser only" + which vars to set |
+| Development, all three set | Sanity | "Saved in Sanity" + dataset name |
+
+### Browser store (`localStudioStore`)
 - Key: `localStorage['sk-blog-studio:v1']`, a JSON array of `StudioPost`.
-- `list()` returns the array; `save()` replaces by `id` or adds at the front;
-  `remove()` filters by `id`. All methods are `async` so a network store fits the same interface.
+- `list()` returns the array; `save()` replaces by `id` or adds at the front and returns
+  the post; `remove()` filters by `id`. All methods are `async`.
 - Browsers allow roughly 5 MB per site for localStorage. Uploaded images use most of it.
   When storage is full, the save fails with a message suggesting image paths and an export.
 - Posts are visible only in the browser that saved them. Clearing site data deletes
   them. **Export is the only backup.**
+
+### Sanity store (`sanityStudioStore` → `actions.ts`)
+- `list()` fetches every `blogPost` document (drafts included) with the token.
+- `save()` first uploads any inline `data:` images (from browser storage or an import)
+  and swaps in their CDN URLs, then the action writes the document under `<id>` (published)
+  or `drafts.<id>` (draft, scheduled) and deletes the other copy in one transaction.
+  Featuring a post unfeatures other Sanity posts in the same transaction.
+- `remove()` deletes both `<id>` and `drafts.<id>`. Image assets are not deleted.
+- `uploadImage()` resizes in the browser, then uploads the WebP to Sanity's asset store
+  (largest accepted after resizing: 3.5 MB) and returns its `cdn.sanity.io` URL.
+- **Migrating browser posts:** in a browser that has posts, Export; then, running locally
+  with Sanity configured, Import that file. Each post is saved to Sanity and its images uploaded.
+- Tested end to end on the `development` dataset on 20 October 2026 (D023): 20/20
+  checks passed, covering upload, draft, reload in a fresh browser, publish, unpublish and
+  delete, plus draft privacy without a token. Test data was removed afterwards.
 
 ---
 
@@ -412,9 +454,10 @@ The UI calls only the `StudioStore` interface in `components/blog-studio/store.t
 
 ```ts
 interface StudioStore {
-  readonly label: string;               // shown in the UI, e.g. 'Supabase'
+  readonly label: string;               // shown in the UI, e.g. 'Sanity'
+  readonly savedIn: string;             // end of save messages, e.g. 'to Sanity'
   list(): Promise<StudioPost[]>;
-  save(post: StudioPost): Promise<void>;
+  save(post: StudioPost): Promise<StudioPost>; // returns the post as stored
   remove(id: string): Promise<void>;
   uploadImage(file: File): Promise<string>; // returns the URL to store in src
 }
@@ -534,6 +577,10 @@ create policy "public reads live posts" on public.studio_posts
 
 ### 9.3 Sanity
 
+**The user has chosen Sanity with this dashboard moved to `/admin/blogs` behind
+sign-in. The full plan is [sanity.md](sanity.md); it supersedes this section where
+they differ.**
+
 Two possible approaches:
 
 - **A. Keep this UI, store in Sanity.** Define a `studioPost` document type whose fields
@@ -571,56 +618,29 @@ Cautions:
 
 ---
 
-## 10. Showing studio posts on the live site (not built)
+## 10. Showing studio posts on the live site (built, D024)
 
-What has to change. None of this exists yet.
+Published Sanity posts are rendered with the same components as code posts.
 
-1. **Map a studio post to a `BlogPost`:**
-   ```tsx
-   // sketch
-   import { StudioArticle } from '@/components/blog-studio/StudioArticle';
-   import { toBlogFields } from '@/components/blog-studio/postUtils';
+| Piece | File | What it does |
+|---|---|---|
+| Selectors | `content/blog/live.tsx` (server-only) | `getPublishedPosts()` merges code posts with published Sanity posts, newest first; `getFeaturedPost()`, `getSanityPostBySlug()`, `getSanityPostSlugs()`. Sanity results are deduplicated per request with React `cache` |
+| Mapping | `toBlogPost()` in `content/blog/live.tsx` | Rejects anything not `published`, with an invalid slug, no title/excerpt/category, no `YYYY-MM-DD` publish date, or a featured image that is neither a `/public` path nor this project's Sanity CDN. Adds `guide`, `faqs`, `readingTime` via `toBlogFields()`; body = `<StudioArticle>` |
+| Route | `app/blog/[slug]/page.tsx` | `generateStaticParams` (published slugs), `generateMetadata` (`buildBlogMetadata`), `notFound()` for unknown slugs. Code post folders win over the dynamic route; a Sanity post reusing a code slug is ignored |
+| Listing, related, sitemap | `app/blog/page.tsx`, `components/blog/BlogArticleLayout.tsx`, `app/sitemap.ts` | Now `async`, reading `content/blog/live.tsx` |
+| Images | `next.config.ts` (`images.remotePatterns`: `cdn.sanity.io/images/<project>/**`, no query), `lib/sanity/image.ts` | Hero and cards use `next/image`; article images get a Sanity CDN `srcSet` (720/1080/1440, `auto=format`) with width/height; og/twitter image is a 1200x675 crop |
+| Metadata, JSON-LD | `components/blog/blogMetadata.ts`, `blogJsonLd.ts` | Image URLs via `shareImageUrl` / `absoluteImageUrl`: unchanged for `/public` paths |
+| Freshness | `app/blog/layout.tsx`, `app/sitemap.ts` (`revalidate = 60`); `revalidatePath('/blog', 'layout')` + `revalidatePath('/sitemap.xml')` in `actions.ts` | Pages regenerate at most every 60 s; saves and deletes in the studio refresh them on demand. New slugs render on first request |
 
-   function toBlogPost(p: StudioPost): BlogPost {
-     return {
-       slug: p.slug, title: p.title, seoTitle: p.seoTitle || undefined, excerpt: p.excerpt,
-       category: p.category, author: p.author, authorImage: p.authorImage || undefined,
-       publishedAt: p.publishedAt, updatedAt: p.updatedAt || undefined,
-       featuredImage: p.featuredImage, imageAlt: p.imageAlt, tags: p.tags,
-       relatedPlatform: p.relatedPlatform || undefined, featured: p.featured,
-       ...toBlogFields(p),
-       content: () => <StudioArticle blocks={p.blocks} />,
-     };
-   }
-   ```
-2. **Merge with code posts.** The selectors in `content/blog/index.tsx`
-   (`getPublishedPosts`, `getFeaturedPost`, `getRestPosts`, `getPostBySlug`,
-   `getUsedCategories`) are synchronous today. They are used by `app/blog/page.tsx`,
-   `app/sitemap.ts` and `components/blog/BlogArticleLayout.tsx` (related posts). Fetching
-   studio posts makes them async, so update every caller.
-3. **Route:** add `app/blog/[slug]/page.tsx` that loads the studio post and renders
-   `<BlogArticleLayout post={toBlogPost(p)}><StudioArticle blocks={p.blocks} /></BlogArticleLayout>`,
-   with `generateMetadata` using `buildBlogMetadata`. In Next 16 `params` is a Promise
-   (`const { slug } = await params`). Use `generateStaticParams` and `dynamicParams` as
-   needed. Code posts keep their own folders. Static folders are expected to take
-   precedence over `[slug]`; this is not confirmed in the bundled App Router docs, so
-   test it. The studio already refuses slugs used by code posts.
-4. **External images break three places that assume a `/public` path:**
-   `components/blog/blogMetadata.ts` (`${SITE_URL}${post.featuredImage}` for og:image),
-   `components/blog/blogJsonLd.ts` (Article `image` and author `image`), and `next/image`
-   in `BlogArticleLayout.tsx`, `BlogCard.tsx` and `FeaturedBlog.tsx`, which needs the host
-   in `images.remotePatterns` in `next.config.ts`. Prefix `SITE_URL` only when the path
-   starts with `/`.
-5. **Freshness:** call `revalidatePath` from the save action (9.1) so `/blog`, the post and
-   `/sitemap.xml` update without a redeploy. Scheduled posts also need the read query to
-   filter on `scheduled_for <= now()` plus a periodic revalidation (for example a Vercel
-   Cron hitting a protected route handler), because nothing triggers a rebuild at the
-   scheduled time.
-6. **Content approval:** AGENTS.md requires user approval for website content changes.
-   Agree with the user how studio publishing fits that rule (for example, editors save
-   drafts and only `admin` accounts publish) before enabling it.
-7. Run `docs/new-page-checklist.md` against a published studio post: one `<h1>`,
-   canonical equals og:url, valid Article/FAQPage JSON-LD, listed in `/sitemap.xml`.
+Draft safety: the public read client has **no token** (drafts are unreadable), the query
+filters `status == "published"` outside `drafts.**`, and `toBlogPost()` checks again.
+If Sanity is not configured, only code posts are shown; if a Sanity request fails, the
+error is thrown so that Next.js keeps serving the last good page during revalidation
+(a failing build if Sanity is down during `next build` with the env vars set).
+
+Still open: scheduled posts are never published automatically (they stay drafts until
+saved as published); content approval for studio publishing (AGENTS.md) must be agreed
+before the SEO team publishes; the Sanity env vars have not been added to Vercel as part of this work.
 
 ---
 
@@ -628,7 +648,7 @@ What has to change. None of this exists yet.
 
 - No authentication; the unlisted URL is the only barrier, and GA records it.
 - Browser-only storage (about 5 MB), not shared, lost with browser data; export to back up.
-- "Published" / "Scheduled" do not publish; studio posts never reach `/blog`.
+- "Scheduled" does not publish at the scheduled time; the deployed studio cannot publish (no sign-in).
 - No roles; anyone with the URL has every action.
 - No autosave and no version history; edits are saved only with Save, Publish or `Cmd/Ctrl+S`.
 - Two people cannot work on the same post: there is no shared store and no conflict handling.

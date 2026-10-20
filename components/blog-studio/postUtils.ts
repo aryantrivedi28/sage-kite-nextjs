@@ -1,9 +1,16 @@
 import type { BlogFaq, BlogGuideItem } from '@/content/blog/types';
+import { isUsableFeaturedImage } from '@/lib/sanity/image';
 import type { SitePostSummary, StudioBlock, StudioBlockType, StudioPost } from './types';
 
 export const SITE_URL = 'https://www.sagekite.com';
 export const TITLE_SUFFIX = ' | Sage Kite';
 const WORDS_PER_MINUTE = 225;
+
+export const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+/** Largest file a writer may pick; it is resized in the browser before saving. */
+export const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
+/** Largest resized image sent to the server (Server Action limit is set to 4mb in next.config.ts). */
+export const MAX_RESIZED_BYTES = 3.5 * 1024 * 1024;
 
 export function slugify(s: string): string {
   return s
@@ -243,6 +250,12 @@ export function checklist(
     { label: 'Excerpt / meta description', ok: excerptLength > 0, required: true },
     { label: 'Category', ok: !!post.category, required: true },
     { label: 'Featured image', ok: !!post.featuredImage.trim(), required: true },
+    {
+      // The live site shows featured images with next/image, which accepts only these sources.
+      label: 'Featured image is uploaded or a site path (/images/…)',
+      ok: !post.featuredImage || post.featuredImage.startsWith('data:') || isUsableFeaturedImage(post.featuredImage),
+      required: true,
+    },
     { label: 'Featured image alt text', ok: !!post.imageAlt.trim(), required: true },
     { label: 'Article has content', ok: contentBlocks.length > 0, required: true },
   ];

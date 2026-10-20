@@ -1,4 +1,5 @@
 import type { BlogPost } from '@/content/blog';
+import { absoluteImageUrl } from '@/lib/sanity/image';
 
 const SITE_URL = 'https://www.sagekite.com';
 
@@ -17,13 +18,13 @@ export function buildBlogJsonLd(post: BlogPost) {
       '@id': `${url}#article`,
       headline: post.title,
       description: post.excerpt,
-      image: [`${SITE_URL}${post.featuredImage}`],
+      image: [absoluteImageUrl(post.featuredImage)],
       datePublished: post.publishedAt,
       dateModified: post.updatedAt ?? post.publishedAt,
       author: {
         '@type': 'Person',
         name: post.author,
-        ...(post.authorImage ? { image: `${SITE_URL}${post.authorImage}` } : {}),
+        ...(post.authorImage ? { image: absoluteImageUrl(post.authorImage) } : {}),
       },
       publisher: { '@id': `${SITE_URL}/#organization` },
       mainEntityOfPage: {

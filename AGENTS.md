@@ -9,13 +9,17 @@ mistakes that have already happened once.
 Marketing website for **Sage Kite**, a business growth consultancy.
 Live at `https://www.sagekite.com`.
 
-- Next.js 16 (App Router), React 19, TypeScript. No database, no API routes,
-  no auth. One environment variable: `NEXT_PUBLIC_GHL_WEBHOOK_URL` (contact form
-  webhook), set in `.env` locally (not committed) and in Vercel's environment
-  variables. It is fixed at build time, so redeploy after changing it. See `.env.example`.
+- Next.js 16 (App Router), React 19, TypeScript. No database for the site itself, no
+  API routes, no auth. `NEXT_PUBLIC_GHL_WEBHOOK_URL` (contact form webhook) is set in
+  `.env` locally (not committed) and in Vercel's environment variables; it is fixed at
+  build time, so redeploy after changing it. The blog studio's Sanity connection uses
+  `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET` and the server-only
+  `SANITY_API_WRITE_TOKEN` (docs/sanity.md). See `.env.example`.
 - Google Analytics 4 (gtag.js, measurement ID `G-QQFH3W77TS`) is loaded once in the
   `<head>` of `app/layout.tsx`, so it runs on every page. Do not add a second Google tag.
-- Every page is statically generated at build time.
+- Every page is statically generated at build time. Pages under `/blog` and the sitemap
+  are also regenerated at most every 60 seconds (`app/blog/layout.tsx`, `app/sitemap.ts`),
+  so posts published to Sanity appear without a redeploy.
 - Styling is plain CSS. Brand colours, font and spacing tokens are in
   `app/brand.css`; shared classes are in `app/globals.css`.
   **Read [docs/brand.md](docs/brand.md) before building a page or section.**
@@ -75,7 +79,10 @@ app/
                         content/case-studies/types.ts) and a page.tsx identical in every folder.
                         case-studies/_template/ is the starter. Metadata, Article JSON-LD and
                         sitemap are generated. Register the study in content/case-studies/index.ts.
-  blog/page.tsx         Blog listing.
+  blog/page.tsx         Blog listing (code posts + published Sanity posts, from content/blog/live.tsx).
+  blog/layout.tsx       Only sets `revalidate = 60` for every page under /blog. No markup.
+  blog/[slug]/page.tsx  Posts published to Sanity from the blog studio. Code post folders take
+                        precedence; unknown, draft and unpublished slugs return 404.
   blog/<slug>/          One folder per blog post: post.tsx (data + article)
                         and a 3-line page.tsx. blog/_template/ is the starter.
   contact/page.tsx      /contact: details, enquiry form (components/contact/ContactForm.tsx),
@@ -86,15 +93,19 @@ app/
                         form_embed.js is loaded by components/book/BookingEmbedScript.tsx, not
                         next/script: it must re-run on every visit or the iframe is not resized.
   sk-studio-ufn5xdafhll7/
-                        Unlisted blog studio for the SEO team (decision.md D019). No login.
-                        Frontend only: posts are saved in the visitor's browser through
-                        components/blog-studio/store.ts and never reach the live site. noindex,
-                        no-referrer, not in sitemap.ts and deliberately not in robots.ts.
-                        Read docs/blog-studio.md before changing it or adding a backend/auth.
+                        Unlisted blog studio for the SEO team (decision.md D019, D022). No login.
+                        Saves to Sanity under `npm run dev` when the Sanity env vars are set;
+                        on the deployed site it saves in the visitor's browser only
+                        (components/blog-studio/server.ts decides). Studio posts never reach
+                        the live site yet. noindex, no-referrer, not in sitemap.ts and
+                        deliberately not in robots.ts. Read docs/blog-studio.md and
+                        docs/sanity.md before changing it. Planned: /admin/blogs with sign-in.
   sitemap.ts, robots.ts, not-found.tsx
 components/
   blog-studio/            The studio UI (BlogStudio.tsx + BlogStudio.module.css). store.ts is the
-                          StudioStore interface (swap localStorage for Supabase/Sanity there only);
+                          StudioStore interface with a browser store and a Sanity store;
+                          actions.ts holds the Sanity Server Actions (validate, then write);
+                          server.ts decides the storage mode (Sanity only in development);
                           StudioArticle renders blocks as plain .article-content HTML (no hooks, so
                           a future live route can reuse it); postUtils derives guide, faqs,
                           readingTime and the publishing checklist from docs/blog-seo-schema.md.
@@ -106,8 +117,14 @@ components/
                           BlogArticleLayout (page shell), blogMetadata.ts
                           (metadata), blogJsonLd.ts (schema), FieldDiagram
                           (HTML/CSS diagrams inside articles).
+lib/sanity/               Server-only Sanity connection: client.ts (read client without token, write
+                          client with token, pinned apiVersion), blogPosts.ts (StudioPost <-> `blogPost`
+                          document; drafts as drafts.<id>; queries) and image.ts (Sanity CDN URLs,
+                          absolute image URLs for metadata/JSON-LD, 1200x675 share crop).
 content/blog/
-  index.tsx               Registry of posts + selectors. Read its header comment.
+  index.tsx               Registry of code posts (`posts`). Read its header comment.
+  live.tsx                Server-only selectors for the site: code posts + published Sanity posts
+                          (getPublishedPosts, getFeaturedPost, getSanityPostBySlug, getSanityPostSlugs).
   types.ts                BlogPost type + CATEGORIES.
   authors.ts              Author name/avatar.
 content/platforms.ts      Platform list and industry groups: homepage "Platforms" grid,
@@ -225,6 +242,11 @@ The essentials:
 - Commit TypeScript build caches (`*.tsbuildinfo`) or macOS `.DS_Store` files.
 - Add the blog studio path to `robots.ts` or `sitemap.ts`, or link to it from any page.
   robots.txt is public and would advertise the unlisted URL.
+- Read live blog posts from `posts` in `content/blog/index.tsx`: it has only code posts. Use
+  `content/blog/live.tsx`, which adds published Sanity posts.
+- Prefix `SITE_URL` onto an image path by hand in metadata or JSON-LD. Sanity images are
+  absolute URLs; use `absoluteImageUrl` / `shareImageUrl` from `lib/sanity/image.ts`.
+- Give the public site's Sanity client a token. Without one, drafts cannot be read.
 
 ## Known gaps (do not "fix" these without asking)
 
@@ -242,9 +264,12 @@ The essentials:
 - Share images: blog posts use their featured image and the essay sets its own; every
   other page uses the default in `content/share-image.ts` (see "Where things live").
 - `app/home-interactions.tsx` and `app/site-content.ts` are not used by any page.
-- The blog studio cannot publish: there is no backend and no login yet. Studio posts are
-  not rendered on /blog, in the sitemap or in schema. Add authentication before connecting
-  any store that can write to the live site; an unlisted URL is not protection.
+- Published Sanity posts render on /blog, /blog/[slug], "Keep reading" and the sitemap
+  wherever `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` are set. Adding them
+  to Vercel was not part of D024; without them the site shows only code posts. Publishing from the studio
+  works only under `npm run dev`: the Sanity store is deliberately disabled when `NODE_ENV`
+  is production (components/blog-studio/server.ts). Do not remove that check until
+  authentication exists; an unlisted URL is not protection.
 - Platform pages keep page-specific CSS in an inline `<style>` block.
   `honeybook` uses `honeybook.module.css`.
 - One-off conversion scripts (`transform.js`, `transform_jobber.js`, `scratch/`),

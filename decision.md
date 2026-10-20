@@ -689,11 +689,176 @@ Past approval records below describe only what the supplied reports establish.
 - **Delivery:** No commit, push or deployment performed. The user commits manually.
   Git will show `deciosn.md` as deleted and `decision.md` as new until both are staged.
 
+## D021 — Plan: Sanity storage and a signed-in dashboard at /admin/blogs
+
+- **Date:** 20 October 2026.
+- **Status:** Proposed (plan written). Nothing is implemented.
+- **Why:** The user asked to set up Sanity first and for a written plan, without
+  code yet. For the editor, the user chose: "Build your custom blog dashboard in
+  Next.js at a route such as /admin/blogs. The client signs in there and manages
+  blogs. Your server securely communicates with Sanity."
+- **What changed:** Added [docs/sanity.md](docs/sanity.md) (architecture, decisions
+  needed, prerequisites, data design, file list, phases, pitfalls, sources). Pointers
+  added in [AGENTS.md](AGENTS.md) and [docs/blog-studio.md](docs/blog-studio.md).
+- **Key findings recorded in the plan (checked 20 October 2026):** `@sanity/client` 8
+  needs Node ≥22.12 (this machine runs 22.11.0); `next-sanity` 13.3.4 requires the
+  `sanity` Studio and `styled-components` as peers, so the plan uses `@sanity/client`
+  only; Sanity's Free plan allows public datasets only, but `drafts.*` documents are
+  not readable without a token; Vercel Function request bodies are capped at 4.5 MB;
+  Vercel Hobby cron jobs run once per day.
+- **Decisions still open:** sign-in method (recommended: Auth.js v4 with Google),
+  admin vs editor roles, Sanity and Vercel plans, project ownership, scheduled
+  publishing at launch, migration of posts from the hidden studio.
+- **Approval:** Plan requested by the user; implementation not yet approved.
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+
+## D022 — Connect the blog studio to Sanity, for local use only
+
+- **Date:** 20 October 2026.
+- **Status:** Implemented. Typecheck and build pass; Sanity writes not yet tested (no token).
+- **Why:** The user said "leave the auth for now focus on setting up the sanity for now",
+  after sharing the team lead's reference chats (custom dashboard, server talks to Sanity).
+- **Safety choice (made by Claude, explained to the user):** without sign-in, a deployed
+  studio using the Sanity token would let anyone with the URL read every draft and edit
+  or delete posts. So `getStudioStorage()` returns Sanity only when `NODE_ENV` is not
+  production and all three env vars are set; the deployed studio keeps browser storage.
+  Every Server Action re-checks this. Remove the check only when authentication exists.
+- **What changed:**
+  - Added `@sanity/client` ^7.27.0 (7.x supports Node ≥20; this machine has 22.11.0,
+    while 8.x needs ≥22.12).
+  - New [lib/sanity/client.ts](lib/sanity/client.ts) and [lib/sanity/blogPosts.ts](lib/sanity/blogPosts.ts)
+    (server-only client; drafts and scheduled posts as `drafts.<id>`, published as `<id>`).
+  - New [components/blog-studio/actions.ts](components/blog-studio/actions.ts) (list, save,
+    delete, image upload, with server-side validation) and
+    [components/blog-studio/server.ts](components/blog-studio/server.ts) (storage mode).
+  - [store.ts](components/blog-studio/store.ts): `sanityStudioStore` beside the browser store;
+    `save()` now returns the stored post; inline images are uploaded on save, so importing
+    an export migrates browser posts and their images.
+  - [BlogStudio.tsx](components/blog-studio/BlogStudio.tsx): takes the storage mode;
+    sidebar and messages name the active store; load and delete errors are shown.
+  - [page.tsx](app/sk-studio-ufn5xdafhll7/page.tsx): passes the storage mode.
+  - [next.config.ts](next.config.ts): `experimental.serverActions.bodySizeLimit: "4mb"`.
+  - `.env.example`, [AGENTS.md](AGENTS.md), [docs/blog-studio.md](docs/blog-studio.md),
+    [docs/sanity.md](docs/sanity.md) updated. Env names follow the user's `.env`:
+    `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `SANITY_API_WRITE_TOKEN`.
+- **Not changed:** the live blog, sitemap and schema; no public page content or design.
+- **Validation (run by Claude):** `npx tsc --noEmit --incremental false` and `npm run build`
+  passed. Production build in headless Chrome: studio uses browser storage and shows why,
+  full create/publish/preview/reload flow passes, no console errors, no horizontal scroll
+  at 390px; no `SANITY_API_WRITE_TOKEN` or Sanity server code in `.next/static`. The
+  user's running dev server shows the "Sanity is not configured" reason (no token).
+  `ALL_BLOG_POSTS_QUERY` and the `_id in $ids` query run without error against project
+  `lk42drbi` / `production` at API version 2026-10-20 (both returned `[]`).
+- **Limitations:** Sanity writes, transactions and asset upload are untested until a
+  token is added; `scheduledFor` is still stored without a time zone; deleted posts leave
+  their image assets in Sanity; no `development` dataset exists yet.
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+
+## D023 — Sanity connection tested end to end on the development dataset
+
+- **Date:** 20 October 2026.
+- **Status:** Verified.
+- **Setup by the user:** added an Editor `SANITY_API_WRITE_TOKEN` to `.env`, created the
+  `development` dataset in project `lk42drbi`, and set `NEXT_PUBLIC_SANITY_DATASET=development`.
+  The user chose the development dataset over testing on production.
+- **Test (run by Claude):** headless Chrome against the user's `npm run dev` server,
+  with Sanity's public API (no token) used to check what anyone can read. **20/20 passed:**
+  - Sidebar showed "Saved in Sanity" / "development"; no load error.
+  - Featured and block images uploaded to `cdn.sanity.io/images/lk42drbi/development/…`;
+    the CDN served the image.
+  - Draft saved; **not readable without a token**; loaded again in a fresh browser
+    (empty localStorage), with formatting text and image URLs intact.
+  - Publish: one public document under the plain id, `status: published`, `publishedAt`
+    set, no leftover `drafts.` copy.
+  - Unpublish (status → Draft): no longer public; slug stayed locked.
+  - Delete: gone after reload.
+  - CORS: loading the studio made no browser requests to `*.sanity.io` and logged no CORS
+    errors; only `lib/sanity/client.ts` (server-only) imports `@sanity/client`. Documented
+    in docs/sanity.md §3.3 after the team lead raised CORS.
+- **Clean-up:** the test post was already deleted by the test; its one image asset (both
+  uploads were the same file, so Sanity stored it once) was deleted with the token. The
+  dataset now holds only Sanity's 12 system documents (permission groups, retention).
+- **Not tested:** server-side rejection when the browser checklist is bypassed, featured
+  unfeaturing across posts, scheduled posts, import of a browser export.
+- **Delivery:** No code changed in this step; no commit, push or deployment performed.
+
+## D024 — Show published Sanity posts on the public blog
+
+- **Date:** 20 October 2026.
+- **Status:** Implemented and verified locally on the `development` dataset. Not deployed.
+- **Why / approval:** The user asked to "integrate Sanity with the existing public blog":
+  `/blog` and `/blog/[slug]` on the `development` dataset, published posts only, sitemap and
+  related posts, existing design/URLs/SEO preserved, metadata, canonical, OG images, image
+  optimisation, invalid slugs and revalidation verified, nothing written to `production`,
+  no sign-in or deployment yet.
+- **What changed:**
+  - New `content/blog/live.tsx` (server-only): code posts + published Sanity posts;
+    `toBlogPost()` rejects unpublished or incomplete posts and slugs used by code posts.
+    The sync selectors were removed from `content/blog/index.tsx` (registry unchanged).
+  - New `app/blog/[slug]/page.tsx` (Sanity posts; 404 otherwise) and `app/blog/layout.tsx`
+    (`revalidate = 60` for every page under /blog, no markup).
+  - `app/blog/page.tsx`, `components/blog/BlogArticleLayout.tsx`, `app/sitemap.ts`: async,
+    read `content/blog/live.tsx`; sitemap `revalidate = 60`.
+  - New `lib/sanity/image.ts`; `blogMetadata.ts` / `blogJsonLd.ts` use it (output unchanged
+    for `/public` images; Sanity share image is a 1200x675 crop).
+  - `lib/sanity/client.ts`: public read client without token. `lib/sanity/blogPosts.ts`:
+    `PUBLISHED_BLOG_POSTS_QUERY`.
+  - `next.config.ts`: `images.remotePatterns` for this project's `cdn.sanity.io` images.
+  - `components/blog-studio/actions.ts`: `revalidatePath('/blog', 'layout')` and
+    `revalidatePath('/sitemap.xml')` after save and delete.
+  - `components/blog-studio/StudioArticle.tsx`: Sanity article images get a CDN `srcSet`
+    (720/1080/1440, `auto=format`) and width/height; other images unchanged.
+  - `components/blog-studio/postUtils.ts`: new required checklist item, featured image must
+    be an upload or a `/images/…` path (next/image rejects other hosts).
+  - `components/blog/BlogGuide.tsx`: type-only import from `content/blog/types` (keeps
+    server-only code out of the client bundle).
+  - Docs: AGENTS.md, docs/blog-studio.md §1/§10/§11, docs/sanity.md, docs/blog-seo-schema.md.
+- **No content or design change** to existing pages: verified against a build of the last
+  commit (below). The only visible difference is that published Sanity posts appear as
+  cards in the listing and "Keep reading", as requested.
+- **Validation (run by Claude):**
+  - `npx tsc --noEmit --incremental false` and `npm run build` pass. Build output: only the
+    valid published fixture prerendered under `/blog/[slug]`; all /blog routes and the sitemap
+    report Revalidate 1m.
+  - Fixtures in `development`: published, draft (`drafts.`), scheduled, published without
+    excerpt, published with an external image, status "draft" on a public id, and a
+    published post reusing the code slug `what-is-dubsado`.
+  - **132/132 checks** against `next start`: for `/blog` and all 8 code posts, status, title,
+    canonical, every meta tag, JSON-LD and h1 are identical to a build of HEAD (`c03bae6`);
+    hero images identical; listing keeps every code card in order with the Sanity card
+    added; "Keep reading" shows the 3 newest same-category posts. Sanity post: 200, ISR
+    cache header, title, one description, canonical = og:url (no trailing slash), og:type
+    article, og/twitter image = 1200x675 crop served as JPEG, keywords, indexable, one h1,
+    Article/Breadcrumb/FAQPage JSON-LD with absolute image URLs and dubsado Service link,
+    hero via next/image returned as WebP/AVIF, article image srcset served as WebP/AVIF,
+    loads in Chrome with no console errors, no horizontal scroll at 390px. 404 (noindex)
+    for the draft, scheduled, incomplete, external-image and mismatched fixtures, an unknown
+    slug and malformed slugs. Collision post ignored; `/blog/what-is-dubsado` unchanged;
+    featured post unchanged. Sitemap = previous URLs + the Sanity post only.
+  - **Revalidation:** after publishing a new post and unpublishing one with the server
+    running, the new slug rendered immediately (on demand); the cached listing and the
+    unpublished page stayed until the 60 s window, then the listing showed the new post and
+    dropped the old one, the unpublished page returned 404, and the sitemap updated.
+  - Build and serve with the Sanity env vars empty: builds; only the 8 code posts; Sanity
+    slugs 404.
+  - Studio flow on the dev server (Sanity mode): **23/23**, including the published post
+    rendering at `/blog/<slug>` and in `/blog`, and 404 after unpublishing.
+  - Clean-up: all fixtures and test images deleted from `development` (only Sanity system
+    documents remain). `production` public document count 0 before and after.
+- **Not verified:** the on-demand `revalidatePath` calls in a production build: Sanity
+  writes from the studio are disabled when `NODE_ENV` is production (D022), so in
+  production they can only run once sign-in exists. Time-based revalidation (60 s) was
+  verified instead. Vercel's environment variables were not inspected or changed.
+- **Limitations:** scheduled posts never go live automatically; if Sanity is unreachable
+  during `next build` with the env vars set, the build fails (by design, so posts are not
+  silently dropped); image assets of deleted posts stay in Sanity.
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
 
-### D021 — [Short description]
+### D025 — [Short description]
 
 - **Date:** [Date recorded; implementation date if different.]
 - **Status:** [Proposed / approved / implemented / verified.]

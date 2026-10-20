@@ -6,7 +6,7 @@ import { Footer } from '@/components/Footer';
 import { BlogHeader } from '@/components/blog/BlogHeader';
 import { FeaturedBlog } from '@/components/blog/FeaturedBlog';
 import { BlogCard } from '@/components/blog/BlogCard';
-import { getFeaturedPost, getPublishedPosts } from '@/content/blog';
+import { getFeaturedPost, getPublishedPosts } from '@/content/blog/live';
 
 const SITE_URL = 'https://www.sagekite.com';
 
@@ -36,10 +36,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BlogIndexPage() {
-  const featured = getFeaturedPost();
+export default async function BlogIndexPage() {
+  const featured = await getFeaturedPost();
   // For now the featured post is also listed in the grid.
-  const gridPosts = getPublishedPosts();
+  const gridPosts = await getPublishedPosts();
 
   return (
     <>

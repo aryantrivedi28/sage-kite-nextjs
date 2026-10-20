@@ -34,10 +34,13 @@
  *    static params while you work on it.
  *  • The listing, category filter, individual pages, metadata, JSON-LD and
  *    sitemap all read from `posts` — you never touch the pages to publish.
+ *  • Posts published from the blog studio live in Sanity, not here. The
+ *    listing, "Keep reading" and sitemap merge both through ./live.tsx; a
+ *    Sanity post with the same slug as a post here is ignored.
  * ─────────────────────────────────────────────────────────────────────────
  */
 
-import { CATEGORIES, type BlogPost } from './types';
+import type { BlogPost } from './types';
 
 /* Posts – one folder per post in app/blog/<slug>/. Import its post.tsx here and add it to `posts`. */
 import whatIsDubsado from '@/app/blog/what-is-dubsado/post';
@@ -53,37 +56,9 @@ export * from './types';
 
 export const posts: BlogPost[] = [whatIsDubsado, whatIsHoneyBook, dubsadoVsHoneyBook, aiMarketingAutomationMistakes, dubsadoSetupServices, dubsadoForInteriorDesigners, automateServiceBusinessHoneyBook, bestCrmForCoachesAndConsultants];
 
-/* ─────────────────────────── Selectors ─────────────────────────────────── */
-
-/** All live (non-draft) posts, newest first. */
-export function getPublishedPosts(): BlogPost[] {
-  return posts
-    .filter((p) => !p.draft)
-    .sort(
-      (a, b) =>
-        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
-    );
-}
-
-/** The post to headline the listing: the `featured` one, else the newest. */
-export function getFeaturedPost(): BlogPost | undefined {
-  const live = getPublishedPosts();
-  return live.find((p) => p.featured) ?? live[0];
-}
-
-/** Live posts excluding the featured one, newest first. */
-export function getRestPosts(): BlogPost[] {
-  const featured = getFeaturedPost();
-  return getPublishedPosts().filter((p) => p.slug !== featured?.slug);
-}
-
-/** Look up a single live post by slug. */
-export function getPostBySlug(slug: string): BlogPost | undefined {
-  return posts.find((p) => p.slug === slug && !p.draft);
-}
-
-/** Categories that actually have at least one live post. */
-export function getUsedCategories(): string[] {
-  const used = new Set(getPublishedPosts().map((p) => p.category));
-  return CATEGORIES.filter((c) => used.has(c));
-}
+/* ─────────────────────────── Selectors ───────────────────────────────────
+ * The listing, sitemap and related posts also show posts published from the
+ * blog studio to Sanity, so their selectors (getPublishedPosts, getFeaturedPost,
+ * getSanityPostBySlug, getSanityPostSlugs) live in ./live.tsx, which is
+ * server-only. Import them from '@/content/blog/live'.
+ */

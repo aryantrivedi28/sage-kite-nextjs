@@ -35,9 +35,10 @@ import {
 } from 'lucide-react';
 import { BlogGuide } from '@/components/blog/BlogGuide';
 import { formatDate } from '@/components/blog/formatDate';
-import { ACCEPTED_IMAGE_TYPES, studioStore } from './store';
+import { getStudioStore, type StudioStore } from './store';
 import { StudioArticle } from './StudioArticle';
 import {
+  ACCEPTED_IMAGE_TYPES,
   BLOCK_LABELS,
   SLUG_PATTERN,
   TITLE_SUFFIX,
@@ -58,16 +59,18 @@ import {
   youtubeId,
   type CheckItem,
 } from './postUtils';
-import type { SitePostSummary, StudioBlock, StudioBlockType, StudioPost, StudioStatus } from './types';
+import type { SitePostSummary, StudioBlock, StudioBlockType, StudioPost, StudioStatus, StudioStorage } from './types';
 import styles from './BlogStudio.module.css';
 
 /*
  * Blog studio: list, editor and preview for blog posts written outside the
- * codebase. Saving goes through `studioStore` (store.ts); for now that is
- * browser storage, so nothing here changes the live site.
+ * codebase. Saving goes through a StudioStore (store.ts): Sanity when the
+ * server allows it (server.ts), otherwise browser storage. Studio posts are not
+ * rendered on the live site yet.
  */
 
 interface BlogStudioProps {
+  storage: StudioStorage;
   sitePosts: SitePostSummary[];
   categories: string[];
   platforms: string[];
@@ -138,7 +141,8 @@ function isStudioPost(v: unknown): v is StudioPost {
   return !!p && typeof p.id === 'string' && typeof p.title === 'string' && Array.isArray(p.blocks);
 }
 
-export function BlogStudio({ sitePosts, categories, platforms, author, authorImage }: BlogStudioProps) {
+export function BlogStudio({ storage, sitePosts, categories, platforms, author, authorImage }: BlogStudioProps) {
+  const studioStore = getStudioStore(storage);
   const [posts, setPosts] = useState<StudioPost[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [draft, setDraft] = useState<StudioPost | null>(null);
@@ -153,10 +157,12 @@ export function BlogStudio({ sitePosts, categories, platforms, author, authorIma
   const dirty = !!draft && JSON.stringify(draft) !== snapshot;
 
   useEffect(() => {
-    studioStore.list().then((p) => {
-      setPosts(p);
-      setLoaded(true);
-    });
+    studioStore
+      .list()
+      .then(setPosts)
+      .catch((e: unknown) => notify(e instanceof Error ? e.message : 'Could not load posts.'))
+      .finally(() => setLoaded(true));
+    // Runs once: the store is fixed for the page's lifetime.
   }, []);
 
   useEffect(() => {
@@ -204,9 +210,10 @@ export function BlogStudio({ sitePosts, categories, platforms, author, authorIma
       const unfeatured = saved.featured
         ? posts.filter((p) => p.id !== saved.id && p.featured).map((p) => ({ ...p, featured: false }))
         : [];
-      for (const p of [saved, ...unfeatured]) await studioStore.save(p);
+      const stored = await studioStore.save(saved);
+      for (const p of unfeatured) await studioStore.save(p);
       await refresh();
-      openPost(saved);
+      openPost(stored);
       notify(message);
     } catch (e) {
       notify(e instanceof Error ? e.message : 'Could not save this post.');
@@ -217,7 +224,7 @@ export function BlogStudio({ sitePosts, categories, platforms, author, authorIma
     if (!draft) return;
     const next = { ...draft, status };
     if (!next.title.trim()) return notify('Add a title before saving.');
-    if (status === 'draft') return persist(next, 'Draft saved in this browser.');
+    if (status === 'draft') return persist(next, `Draft saved ${studioStore.savedIn}.`);
 
     const checks = checklist(next, { studio: posts, site: sitePosts });
     const missing = checks.filter((c) => c.required && !c.ok);
@@ -226,8 +233,8 @@ export function BlogStudio({ sitePosts, categories, platforms, author, authorIma
     }
     const message =
       status === 'scheduled'
-        ? 'Schedule saved in this browser. The live site has not changed.'
-        : 'Saved as published in this browser. The live site has not changed.';
+        ? `Schedule saved ${studioStore.savedIn}. The live site has not changed.`
+        : `Saved as published ${studioStore.savedIn}. The live site has not changed.`;
     const go = () => persist(stampDates(next), message);
     const warnings = checks.filter((c) => !c.required && !c.ok);
     if (warnings.length && draft.status !== status) {
@@ -255,14 +262,18 @@ export function BlogStudio({ sitePosts, categories, platforms, author, authorIma
       confirmLabel: 'Delete post',
       danger: true,
       onConfirm: async () => {
-        await studioStore.remove(post.id);
-        await refresh();
-        if (draft?.id === post.id) {
-          setDraft(null);
-          setSnapshot('');
-          setPreviewing(false);
+        try {
+          await studioStore.remove(post.id);
+          await refresh();
+          if (draft?.id === post.id) {
+            setDraft(null);
+            setSnapshot('');
+            setPreviewing(false);
+          }
+          notify('Post deleted.');
+        } catch (e) {
+          notify(e instanceof Error ? e.message : 'Could not delete this post.');
         }
-        notify('Post deleted.');
       },
     });
   }
@@ -349,10 +360,17 @@ export function BlogStudio({ sitePosts, categories, platforms, author, authorIma
         </nav>
         <div className={styles.storageNote}>
           <strong><Info size={15} /> Saved in {studioStore.label}</strong>
-          <p>
-            Posts here are not on sagekite.com yet, and other people cannot see them.
-            Export a backup regularly; clearing browser data deletes them.
-          </p>
+          {storage.kind === 'sanity' ? (
+            <p>
+              Dataset “{storage.dataset}”. Posts are not shown on sagekite.com yet. Sanity is used only when running
+              locally, until sign-in is added.
+            </p>
+          ) : (
+            <p>
+              Posts here are not on sagekite.com yet, and other people cannot see them.
+              Export a backup regularly; clearing browser data deletes them. {storage.reason}
+            </p>
+          )}
         </div>
       </aside>
 
@@ -399,6 +417,7 @@ export function BlogStudio({ sitePosts, categories, platforms, author, authorIma
           onCommit={commit}
           onPreview={() => setPreviewing(true)}
           onDelete={() => (posts.some((p) => p.id === draft.id) ? askDelete(draft) : closeEditor())}
+          store={studioStore}
           notify={notify}
         />
       )}
@@ -708,6 +727,7 @@ function Editor({
   onCommit,
   onPreview,
   onDelete,
+  store,
   notify,
 }: {
   draft: StudioPost;
@@ -721,6 +741,7 @@ function Editor({
   onCommit: (status: StudioStatus) => void;
   onPreview: () => void;
   onDelete: () => void;
+  store: StudioStore;
   notify: (m: string) => void;
 }) {
   const [pane, setPane] = useState<Pane>('content');
@@ -747,7 +768,7 @@ function Editor({
 
   async function upload(file: File) {
     try {
-      return await studioStore.uploadImage(file);
+      return await store.uploadImage(file);
     } catch (e) {
       notify(e instanceof Error ? e.message : 'Upload failed.');
       return null;
@@ -1184,7 +1205,7 @@ function ImageField({
         <input
           className={styles.input}
           value={uploaded ? '' : value}
-          placeholder={uploaded ? 'Uploaded image (saved in this browser)' : '/images/blog/your-image.jpg or https://…'}
+          placeholder={uploaded ? 'Uploaded image (stored inside the post)' : '/images/blog/your-image.jpg or https://…'}
           onChange={(e) => onChange(e.target.value.trim())}
           aria-label="Image path or URL"
         />

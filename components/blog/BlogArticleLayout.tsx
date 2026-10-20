@@ -7,13 +7,14 @@ import { BlogCard } from '@/components/blog/BlogCard';
 import { BlogGuide } from '@/components/blog/BlogGuide';
 import { formatDate } from '@/components/blog/formatDate';
 import { buildBlogJsonLd } from '@/components/blog/blogJsonLd';
-import { getPublishedPosts, type BlogPost } from '@/content/blog';
+import type { BlogPost } from '@/content/blog';
+import { getPublishedPosts } from '@/content/blog/live';
 
 /**
- * Page shell shared by every blog post: header, hero, guide sidebar, tags,
- * related posts, CTA and JSON-LD. The article body is passed as children.
+ * Page shell shared by every blog post (code and Sanity): header, hero, guide
+ * sidebar, tags, related posts, CTA and JSON-LD. The article body is passed as children.
  */
-export function BlogArticleLayout({
+export async function BlogArticleLayout({
   post,
   children,
 }: {
@@ -22,7 +23,7 @@ export function BlogArticleLayout({
 }) {
   const published = formatDate(post.publishedAt);
 
-  const related = getPublishedPosts()
+  const related = (await getPublishedPosts())
     .filter((p) => p.slug !== post.slug && p.category === post.category)
     .slice(0, 3);
 

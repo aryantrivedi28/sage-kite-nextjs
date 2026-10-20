@@ -58,6 +58,17 @@ export interface StudioPost {
   savedAt: string;
 }
 
+/**
+ * Where the studio saves, decided on the server (components/blog-studio/server.ts).
+ * Sanity is used only when running locally until sign-in exists.
+ */
+export type StudioStorage =
+  | { kind: 'sanity'; dataset: string }
+  | { kind: 'local'; reason: string };
+
+/** Server Actions return errors as values: thrown messages are hidden in production. */
+export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string };
+
 /** A post that already lives in code (app/blog/<slug>/post.tsx). Read-only in the studio. */
 export interface SitePostSummary {
   slug: string;

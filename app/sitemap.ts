@@ -1,10 +1,14 @@
 import type { MetadataRoute } from 'next'
-import { getPublishedPosts } from '@/content/blog'
+import { getPublishedPosts } from '@/content/blog/live'
 import { PLATFORM_PAGE_SLUGS } from '@/content/platforms'
 import { FOUNDER_ESSAYS, FOUNDERS_THOUGHTS_PATH, essayPath } from '@/content/founders-thoughts'
 import { CASE_STUDIES, CASE_STUDIES_PATH, caseStudyPath } from '@/content/case-studies'
 
 const BASE_URL = 'https://www.sagekite.com'
+
+// Blog posts published from the blog studio (Sanity) appear without a redeploy:
+// regenerated at most every 60 seconds, and on demand when a post is saved.
+export const revalidate = 60
 
 /*
  * lastModified rule (see decision.md D012): give a date only when the content itself records
@@ -22,7 +26,7 @@ const fullDate = (date: string | undefined) => (date && /^\d{4}-\d{2}-\d{2}$/.te
 const PRIVACY_POLICY_UPDATED = '2026-09-18'
 const TERMS_OF_SERVICE_UPDATED = '2026-09-18'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
@@ -170,7 +174,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]
 
-  const blogRoutes: MetadataRoute.Sitemap = getPublishedPosts().map((post) => ({
+  const blogRoutes: MetadataRoute.Sitemap = (await getPublishedPosts()).map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
     lastModified: fullDate(post.updatedAt ?? post.publishedAt),
     changeFrequency: 'monthly',
