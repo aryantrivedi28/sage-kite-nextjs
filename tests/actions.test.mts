@@ -109,37 +109,85 @@ test('production refuses when the project ID or write token is missing or wrong'
 test('Vercel Preview cannot write, and does not offer sign-in, even with every secret present', async () => {
   setup({ ...productionEnv, VERCEL_ENV: 'preview' }, { signedIn: true });
   const storage = await getStudioStorage();
-  assert.equal(storage.kind, 'local');
-  assert.equal(storage.kind === 'local' && storage.signIn, false);
+  assert.deepEqual(storage, { kind: 'locked', why: 'unavailable' });
   assert.equal((await actions.saveStudioPostAction(validPost() as never)).ok, false);
   assert.equal((await actions.deleteStudioPostAction(UUID)).ok, false);
   assert.equal(calls().length, 0);
 });
 
-test('storage states: signed in and valid is sanity; signed out is local with sign-in; production without sign-in set up stays browser-only', async () => {
-  assert.deepEqual(await getStudioStorage(), { kind: 'sanity', dataset: 'production', signedIn: true });
+test('storage states: signed in is sanity; signed out is locked with sign-in; missing or invalid sign-in settings stay locked (fail closed)', async () => {
+  assert.deepEqual(await getStudioStorage(), { kind: 'sanity', dataset: 'production' });
   setup(productionEnv);
-  const out = await getStudioStorage();
-  assert.equal(out.kind === 'local' && out.signIn, true);
+  assert.deepEqual(await getStudioStorage(), { kind: 'locked', why: 'signin' });
+  const closed = { kind: 'locked', why: 'unavailable' };
   setup({ ...productionEnv, STUDIO_PASSWORD: undefined, STUDIO_SESSION_SECRET: undefined });
-  const off = await getStudioStorage();
-  assert.equal(off.kind === 'local' && off.signIn, false);
+  assert.deepEqual(await getStudioStorage(), closed);
+  setup({ ...productionEnv, STUDIO_SESSION_SECRET: undefined });
+  assert.deepEqual(await getStudioStorage(), closed, 'no session secret');
+  setup({ ...productionEnv, STUDIO_SESSION_SECRET: 'too-short' }, { signedIn: true });
+  assert.deepEqual(await getStudioStorage(), closed, 'secret under 32 characters');
   setup({ ...productionEnv, STUDIO_PASSWORD: 'too short' }, { signedIn: true });
-  assert.equal((await getStudioStorage()).kind, 'local', 'a weak passphrase means sign-in is not set up');
+  assert.deepEqual(await getStudioStorage(), closed, 'a weak password means sign-in is not set up');
+  setup({ ...productionEnv, STUDIO_PASSWORD: 'Welcome12345' }, { signedIn: true });
+  assert.deepEqual(await getStudioStorage(), closed, 'a guessable 12-character password is still refused');
+  // Nothing about the settings reaches a visitor: the locked state carries no reason text.
+  assert.ok(!JSON.stringify(closed).match(/STUDIO|env|secret|password/i));
+});
+
+test('a 12-character password is accepted in Production and in local development', async () => {
+  const twelve = 'k8Q-mv2Lx9Zr';
+  const token = (await import('@/components/blog-studio/auth-core')).createSessionValue(SECRET, twelve);
+  setup({ ...productionEnv, STUDIO_PASSWORD: twelve }, { cookie: token });
+  assert.deepEqual(await getStudioStorage(), { kind: 'sanity', dataset: 'production' });
+  setup({ ...devEnv, STUDIO_PASSWORD: twelve, STUDIO_SESSION_SECRET: SECRET }, { cookie: token });
+  assert.deepEqual(await getStudioStorage(), { kind: 'sanity', dataset: 'development' });
+  const { isStudioAuthConfigured } = await import('@/components/blog-studio/auth');
+  setup({ ...devEnv, STUDIO_PASSWORD: twelve, STUDIO_SESSION_SECRET: SECRET });
+  assert.equal(isStudioAuthConfigured(), true, 'development, 12 characters');
+  setup({ ...productionEnv, STUDIO_PASSWORD: twelve });
+  assert.equal(isStudioAuthConfigured(), true, 'production, 12 characters');
+  setup({ ...devEnv, STUDIO_PASSWORD: 'k8Q-mv2Lx9Z', STUDIO_SESSION_SECRET: SECRET });
+  assert.equal(isStudioAuthConfigured(), false, 'development, 11 characters');
+  setup({ ...productionEnv, STUDIO_PASSWORD: 'k8Q-mv2Lx9Z' });
+  assert.equal(isStudioAuthConfigured(), false, 'production, 11 characters');
 });
 
 test('a blocked misconfiguration does not leak to signed-out visitors', async () => {
   setup({ ...productionEnv, NEXT_PUBLIC_SANITY_DATASET: 'development' });
   const storage = await getStudioStorage();
-  assert.equal(storage.kind, 'local');
+  assert.deepEqual(storage, { kind: 'locked', why: 'signin' });
   assert.ok(!JSON.stringify(storage).includes('development'));
 });
 
-test('development without team sign-in keeps working for local use', async () => {
+test('development without team sign-in is locked too: no unauthenticated writes anywhere', async () => {
   setup(devEnv);
-  assert.deepEqual(await getStudioStorage(), { kind: 'sanity', dataset: 'development', signedIn: false });
-  assert.equal((await actions.saveStudioPostAction(validPost() as never)).ok, true);
-  assert.equal(writes().length, 1);
+  assert.deepEqual(await getStudioStorage(), { kind: 'locked', why: 'unavailable' });
+  for (const r of [await actions.saveStudioPostAction(validPost() as never), await actions.listStudioPostsAction(), await actions.deleteStudioPostAction(UUID)]) {
+    assert.equal(r.ok, false);
+    assert.ok(!r.ok && !('signIn' in r), 'unavailable is not a "sign in again" prompt');
+  }
+  assert.equal(calls().length, 0);
+});
+
+test('without a session the actions say "sign in again" (the UI puts its sign-in dialog back); config problems say nothing specific', async () => {
+  setup(productionEnv);
+  for (const r of [await actions.saveStudioPostAction(validPost() as never), await actions.listStudioPostsAction(), await actions.deleteStudioPostAction(UUID), await actions.uploadStudioImageAction(formWith('image/webp'))]) {
+    assert.deepEqual(r, { ok: false, error: 'Your session has ended. Sign in again.', signIn: true });
+  }
+  setup({ ...productionEnv, STUDIO_PASSWORD: undefined, STUDIO_SESSION_SECRET: undefined });
+  const r = await actions.listStudioPostsAction();
+  assert.deepEqual(r, { ok: false, error: 'The blog studio is not available.' });
+  assert.equal(calls().length, 0);
+});
+
+test('a session that expires or is invalidated is refused again (expired cookie, changed password)', async () => {
+  const expired = createSessionValue(SECRET, PASSWORD, Date.now() - (8 * 24 * 60 * 60 * 1000));
+  setup(productionEnv, { cookie: expired });
+  assert.deepEqual(await getStudioStorage(), { kind: 'locked', why: 'signin' });
+  // Same cookie, but the team password was changed since it was issued.
+  setup({ ...productionEnv, STUDIO_PASSWORD: 'a-brand-new-pass-1' }, { signedIn: true });
+  assert.deepEqual(await getStudioStorage(), { kind: 'locked', why: 'signin' });
+  assert.equal(calls().length, 0);
 });
 
 /* ── ids and document types (I2) ────────────────────────────────────────── */
@@ -391,7 +439,7 @@ test('our own messages (guard, sign-in, validation) still reach the user unchang
   assert.match(!blocked.ok ? blocked.error : '', /Production can only publish to the "production" dataset/);
   setup(productionEnv);
   const out = await actions.listStudioPostsAction();
-  assert.match(!out.ok ? out.error : '', /Sign in with the team password/);
+  assert.match(!out.ok ? out.error : '', /Sign in again/);
 });
 
 test('crafted requests cannot plant tracking pixels or foreign images: featured, author and inline images are checked', async () => {

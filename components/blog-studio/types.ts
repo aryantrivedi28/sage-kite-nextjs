@@ -60,21 +60,24 @@ export interface StudioPost {
 
 /**
  * Where the studio saves, decided on the server (components/blog-studio/server.ts).
- * - sanity: signed in (or, with no team sign-in set up, running locally) and the write
- *   guard passes. `signedIn` says whether a session cookie got the visitor there.
- * - local: browser storage. Used before sign-in (`signIn`: signing in would unlock Sanity),
- *   on Vercel Preview, and wherever Sanity cannot be used locally.
- * - blocked: the visitor is signed in on production but the write guard refuses (wrong
- *   dataset, project or token). Nothing is saved anywhere: it never falls back to browser
- *   storage or another dataset.
+ * - sanity: signed in with the team password and the write guard passes.
+ * - locked: no valid session. The studio is covered by a blocking dialog and nothing works
+ *   behind it. `signin`: the team password would unlock it. `unavailable`: team sign-in is not
+ *   set up (or is not allowed here, e.g. Vercel Preview), so it stays locked; the visitor is
+ *   told nothing about why. There is no browser-only mode.
+ * - blocked: signed in but the write guard refuses (wrong dataset, project or token). Nothing
+ *   is saved anywhere: it never falls back to another dataset.
  */
 export type StudioStorage =
-  | { kind: 'sanity'; dataset: string; signedIn: boolean }
-  | { kind: 'local'; reason: string; signIn: boolean }
+  | { kind: 'sanity'; dataset: string }
+  | { kind: 'locked'; why: 'signin' | 'unavailable' }
   | { kind: 'blocked'; reason: string };
 
-/** Server Actions return errors as values: thrown messages are hidden in production. */
-export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string };
+/**
+ * Server Actions return errors as values: thrown messages are hidden in production.
+ * `signIn` is set when the session is missing or has ended, so the UI asks for the password again.
+ */
+export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string; signIn?: true };
 
 /** A post that already lives in code (app/blog/<slug>/post.tsx). Read-only in the studio. */
 export interface SitePostSummary {

@@ -9,7 +9,7 @@ const secret = 'x'.repeat(40);
 const now = 1_800_000_000_000;
 
 test('passphrase rule: strong values are accepted', () => {
-  for (const ok of ['maple orbit canyon pelican', 'qT9v-Lm2x-Rk8p-Zw4n-Hs6d', 'X7f2Kq9mLp4Zr8Tn1VbC']) {
+  for (const ok of ['maple orbit canyon pelican', 'qT9v-Lm2x-Rk8p-Zw4n-Hs6d', 'X7f2Kq9mLp4Zr8Tn1VbC', 'k8Q-mv2Lx9Zr', 'orbit-maple7']) {
     assert.equal(core.passphraseProblem(ok), null, ok);
   }
 });
@@ -17,9 +17,17 @@ test('passphrase rule: strong values are accepted', () => {
 test('passphrase rule: short, repetitive and guessable values are rejected', () => {
   assert.ok(core.passphraseProblem(undefined));
   assert.ok(core.passphraseProblem(''));
-  assert.ok(core.passphraseProblem('short12chars'), 'under 20 characters');
+  assert.equal(core.MIN_PASSWORD_LENGTH, 12);
+  assert.equal(core.passphraseProblem('k8Q-mv2Lx9Zr'), null, 'exactly 12 characters is accepted');
+  assert.ok(core.passphraseProblem('k8Q-mv2Lx9Z'), '11 characters');
+  assert.ok(core.passphraseProblem('short'), 'well under 12 characters');
   assert.ok(core.passphraseProblem('a'.repeat(30)), 'one repeated character');
   assert.ok(core.passphraseProblem('abababababababababababab'), 'too few different characters');
+  assert.ok(core.passphraseProblem('abcdabcdabcd'), '12 characters but a repeating pattern');
+  assert.ok(core.passphraseProblem('aaaaaaaaaaaz'), '12 characters, 2 different');
+  for (const weak of ['Welcome12345', 'Passw0rd-2026', 'Admin-Panel-77', 'SageKite-2026', 'letmein-12345', 'qwertyuiop12', 'Studio-Access1', 'MyPassword-For-The-Blog-2026', 'sagekite-blog-publishing-team', 'The-Studio-Is-Open-Today-9', 'qwerty-asdfgh-zxcvbn-poiuy', 'letmein-letmein-letmein-1']) {
+    assert.ok(core.passphraseProblem(weak), weak);
+  }
   for (const weak of ['MyPassword-For-The-Blog-2026', 'sagekite-blog-publishing-team', 'The-Studio-Is-Open-Today-9', 'qwerty-asdfgh-zxcvbn-poiuy', 'letmein-letmein-letmein-1']) {
     assert.ok(core.passphraseProblem(weak), weak);
   }
@@ -28,7 +36,10 @@ test('passphrase rule: short, repetitive and guessable values are rejected', () 
 test('config: strong password and a long, different secret are required', () => {
   assert.equal(core.isAuthConfigured(pw, secret), true);
   assert.equal(core.isAuthConfigured('short', secret), false);
-  assert.equal(core.isAuthConfigured('a-twelve-chars', secret), false, 'the old 12-character minimum no longer passes');
+  assert.equal(core.isAuthConfigured('k8Q-mv2Lx9Zr', secret), true, 'a 12-character password is accepted');
+  assert.equal(core.isAuthConfigured('k8Q-mv2Lx9Z', secret), false, '11 characters is not');
+  assert.equal(core.isAuthConfigured('k8Q-mv2Lx9Zr', 'x'.repeat(31)), false, 'the secret rule is unchanged: 32+');
+  assert.equal(core.isAuthConfigured('k8Q-mv2Lx9Zr', 'x'.repeat(32)), true);
   assert.equal(core.isAuthConfigured(pw, 'short'), false);
   assert.equal(core.isAuthConfigured(pw, pw.padEnd(40, '!')), true);
   assert.equal(core.isAuthConfigured(secret, secret), false, 'secret must differ from the password');

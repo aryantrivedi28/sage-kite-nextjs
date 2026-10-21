@@ -416,3 +416,42 @@ textarea.input { resize: vertical; line-height: 1.55; }
   .card { padding: 16px; }
   .formatHint { display: none; }
 }
+
+/* ── Mandatory sign-in dialog (LoginGate.tsx). Brand tokens only; it sits outside .app, so it sets its own font. ── */
+
+.gate {
+  position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 16px; overflow-y: auto;
+  background: color-mix(in srgb, var(--ink) 72%, transparent);
+  backdrop-filter: blur(3px);
+  font-family: var(--sans);
+  font-size: 0.9375rem; line-height: 1.5; color: var(--dark-sage);
+}
+.gate button, .gate input { font: inherit; }
+.gate button { cursor: pointer; }
+.gate button:disabled { cursor: not-allowed; opacity: 0.5; }
+.gateBox {
+  width: min(420px, 100%); background: var(--warm-white); border-radius: var(--r); padding: 28px;
+  box-shadow: 0 18px 60px color-mix(in srgb, var(--ink) 35%, transparent);
+  --studio-line: var(--light-sage);
+}
+.gateBox:focus { outline: none; }
+.gateBox:focus-visible { outline: none; }
+.gateBrand { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+.gateBrand img { border-radius: var(--r); }
+.gateBrand span { font-weight: 800; color: var(--ink); line-height: 1.15; }
+.gateBrand small { display: block; font-weight: 600; font-size: 0.8125rem; color: var(--sage); }
+.gateTitle { display: flex; align-items: center; gap: 8px; font-size: 1.35rem; line-height: 1.2; letter-spacing: -0.01em; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.gateText { color: var(--dark-sage); font-size: 0.9375rem; margin-bottom: 18px; }
+.gateLabel { display: block; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.gatePassword { position: relative; }
+.gatePassword .input { padding-right: 46px; }
+.gateToggle {
+  position: absolute; top: 50%; right: 4px; transform: translateY(-50%); display: grid; place-items: center;
+  width: 36px; height: 36px; border: 0; border-radius: var(--r); background: transparent; color: var(--sage);
+  transition: background-color var(--t) var(--ease), color var(--t) var(--ease);
+}
+.gateToggle:hover { background: var(--pale-sage); color: var(--ink); }
+.gate :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.gateError { min-height: 1.5em; margin: 8px 0 12px; font-weight: 700; color: var(--ink); }
+.gateError:not(:empty) { padding: 8px 10px; background: var(--coral-soft); border-radius: var(--r); }
+.gateSubmit { width: 100%; justify-content: center; }

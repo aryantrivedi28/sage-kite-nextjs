@@ -14,8 +14,8 @@ import { STUDIO_PATH } from './paths';
 /*
  * Shared-password sign-in for the blog studio (decision.md D030). One team
  * password (STUDIO_PASSWORD) and a signing secret (STUDIO_SESSION_SECRET), both
- * server-only. Until both are set (a strong passphrase of 20+ characters, secret 32+),
- * the deployed studio stays browser-only and cannot write to Sanity. Vercel Preview
+ * server-only. Until both are set (a password of 12+ characters that is not guessable, secret 32+),
+ * the studio stays locked ("unavailable") and nothing can be saved. Vercel Preview
  * never offers sign-in, even if the variables are present there.
  *
  * Every Server Action re-checks the session through server.ts; the page alone is

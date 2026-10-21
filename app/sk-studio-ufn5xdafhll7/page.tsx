@@ -12,7 +12,8 @@ import { PLATFORM_PAGE_SLUGS } from '@/content/platforms';
  * sitemap. It is deliberately NOT in robots.ts, because robots.txt is public
  * and would advertise the path. Storage is chosen in
  * components/blog-studio/server.ts: Sanity once the shared team password is set
- * up and the visitor has signed in (D030), browser storage otherwise.
+ * up and the visitor has signed in (D030). Without a session, or without sign-in set up, the
+ * studio is locked behind a sign-in dialog and no browser-only mode exists (D035).
  */
 
 export const metadata: Metadata = {
@@ -24,10 +25,13 @@ export const metadata: Metadata = {
 export default async function BlogStudioPage() {
   // The sign-in state and storage mode differ per visitor: never prerender this page at build time.
   await connection();
+  const storage = await getStudioStorage();
+  const locked = storage.kind === 'locked';
   return (
     <BlogStudio
-      storage={await getStudioStorage()}
-      sitePosts={getSitePostSummaries()}
+      storage={storage}
+      // A locked studio is rendered as an empty inert shell behind the dialog: nothing is sent to a visitor who has not signed in.
+      sitePosts={locked ? [] : getSitePostSummaries()}
       categories={[...CATEGORIES]}
       platforms={PLATFORM_PAGE_SLUGS}
       author={AUTHOR}

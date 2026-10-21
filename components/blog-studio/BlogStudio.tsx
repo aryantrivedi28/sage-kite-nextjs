@@ -36,8 +36,8 @@ import {
 import { BlogGuide } from '@/components/blog/BlogGuide';
 import { formatDate } from '@/components/blog/formatDate';
 import { signOutStudioAction } from './auth-actions';
-import { STUDIO_LOGIN_PATH } from './paths';
-import { getStudioStore, type StudioStore } from './store';
+import { LoginGate } from './LoginGate';
+import { getStudioStore, onSessionEnded, type StudioStore } from './store';
 import { StudioArticle } from './StudioArticle';
 import {
   ACCEPTED_IMAGE_TYPES,
@@ -66,9 +66,9 @@ import styles from './BlogStudio.module.css';
 
 /*
  * Blog studio: list, editor and preview for blog posts written outside the
- * codebase. Saving goes through a StudioStore (store.ts): Sanity when the
- * server allows it (server.ts), otherwise browser storage. Studio posts are not
- * rendered on the live site yet.
+ * codebase. Saving goes through a StudioStore (store.ts): Sanity once the
+ * server allows it (server.ts: signed in with the team password). Without a
+ * session the whole studio sits behind LoginGate, a dialog that cannot be dismissed.
  */
 
 interface BlogStudioProps {
@@ -143,7 +143,38 @@ function isStudioPost(v: unknown): v is StudioPost {
   return !!p && typeof p.id === 'string' && typeof p.title === 'string' && Array.isArray(p.blocks);
 }
 
-export function BlogStudio({ storage, sitePosts, categories, platforms, author, authorImage }: BlogStudioProps) {
+/**
+ * The studio behind its mandatory sign-in dialog (decision.md D035). While there is no valid session
+ * the studio is `inert` (not clickable, not reachable with Tab, hidden from screen readers) and the
+ * dialog cannot be dismissed. A session that ends while the page is open (a Server Action reports it)
+ * puts the dialog back without losing the post being edited. The server re-checks the session on every
+ * Server Action; this is the visible half of the gate.
+ */
+export function BlogStudio(props: BlogStudioProps) {
+  const [sessionEnded, setSessionEnded] = useState(false);
+  useEffect(() => onSessionEnded(() => setSessionEnded(true)), []);
+
+  const startedLocked = props.storage.kind === 'locked';
+  const gate = props.storage.kind === 'locked' ? props.storage.why : sessionEnded ? 'signin' : null;
+
+  return (
+    <>
+      <div inert={!!gate} aria-hidden={gate ? true : undefined}>
+        <StudioApp {...props} />
+      </div>
+      {gate && (
+        <LoginGate
+          mode={gate}
+          // Locked from the start: reload so the server renders the signed-in studio. Session ended
+          // while editing: just continue, so an unsaved post is not lost.
+          onSignedIn={() => (startedLocked ? window.location.reload() : setSessionEnded(false))}
+        />
+      )}
+    </>
+  );
+}
+
+function StudioApp({ storage, sitePosts, categories, platforms, author, authorImage }: BlogStudioProps) {
   const studioStore = getStudioStore(storage);
   const [posts, setPosts] = useState<StudioPost[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -155,9 +186,6 @@ export function BlogStudio({ storage, sitePosts, categories, platforms, author, 
   const [toast, setToast] = useState('');
   const toastTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const importRef = useRef<HTMLInputElement>(null);
-  const [password, setPassword] = useState('');
-  const [signInError, setSignInError] = useState('');
-  const [signingIn, setSigningIn] = useState(false);
 
   const dirty = !!draft && JSON.stringify(draft) !== snapshot;
 
@@ -176,31 +204,6 @@ export function BlogStudio({ storage, sitePosts, categories, platforms, author, 
     window.addEventListener('beforeunload', warn);
     return () => window.removeEventListener('beforeunload', warn);
   }, [dirty]);
-
-  async function signIn(e: React.FormEvent) {
-    e.preventDefault();
-    if (!password || signingIn) return;
-    setSigningIn(true);
-    setSignInError('');
-    try {
-      const response = await fetch(STUDIO_LOGIN_PATH, {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      });
-      const result = (await response.json()) as { ok: boolean; error?: string };
-      if (response.ok && result.ok) {
-        // The storage mode is fixed for the page's lifetime, so reload to pick up the new one.
-        window.location.reload();
-        return;
-      }
-      setSignInError(result.error ?? 'Could not sign in. Try again.');
-    } catch {
-      setSignInError('Could not sign in. Check your connection and try again.');
-    }
-    setSigningIn(false);
-  }
 
   async function signOut() {
     const result = await signOutStudioAction();
@@ -268,13 +271,9 @@ export function BlogStudio({ storage, sitePosts, categories, platforms, author, 
       return notify(`Before ${status === 'scheduled' ? 'scheduling' : 'publishing'}, complete: ${missing.map((m) => m.label.toLowerCase()).join('; ')}.`);
     }
     const message =
-      storage.kind === 'sanity'
-        ? status === 'scheduled'
-          ? 'Schedule saved to Sanity. Automatic publishing is not built yet: publish the post yourself on that date.'
-          : 'Published to Sanity. It appears on the blog within a minute.'
-        : status === 'scheduled'
-          ? `Schedule saved ${studioStore.savedIn}. The live site has not changed.`
-          : `Saved as published ${studioStore.savedIn}. The live site has not changed.`;
+      status === 'scheduled'
+        ? 'Schedule saved to Sanity. Automatic publishing is not built yet: publish the post yourself on that date.'
+        : 'Published to Sanity. It appears on the blog within a minute.';
     const go = () => persist(stampDates(next), message);
     const warnings = checks.filter((c) => !c.required && !c.ok);
     if (warnings.length && draft.status !== status) {
@@ -400,7 +399,7 @@ export function BlogStudio({ storage, sitePosts, categories, platforms, author, 
         </nav>
         <div className={styles.storageNote}>
           <strong>
-            <Info size={15} /> {storage.kind === 'blocked' ? 'Publishing is blocked' : `Saved in ${studioStore.label}`}
+            <Info size={15} /> {storage.kind === 'blocked' ? 'Publishing is blocked' : storage.kind === 'locked' ? 'Locked' : `Saved in ${studioStore.label}`}
           </strong>
           {storage.kind === 'sanity' ? (
             <p>
@@ -412,30 +411,9 @@ export function BlogStudio({ storage, sitePosts, categories, platforms, author, 
               browser, so no post is lost silently.
             </p>
           ) : (
-            <p>
-              Posts here are not on sagekite.com yet, and other people cannot see them.
-              Export a backup regularly; clearing browser data deletes them. {storage.reason}
-            </p>
+            <p>Sign in to use the studio.</p>
           )}
-          {storage.kind === 'local' && storage.signIn && (
-            <form className={styles.signIn} onSubmit={signIn}>
-              <p>Posts saved in this browser are not copied when you sign in: Export them first, then Import after signing in.</p>
-              <label htmlFor="studio-password">Team password</label>
-              <input
-                id="studio-password"
-                className={styles.input}
-                type="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {signInError && <p className={styles.signInError} role="alert">{signInError}</p>}
-              <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={!password || signingIn}>
-                {signingIn ? 'Signing in…' : 'Sign in'}
-              </button>
-            </form>
-          )}
-          {((storage.kind === 'sanity' && storage.signedIn) || storage.kind === 'blocked') && (
+          {(storage.kind === 'sanity' || storage.kind === 'blocked') && (
             <div className={styles.signIn}>
               <button type="button" className={styles.btn} onClick={signOut}>Sign out</button>
             </div>

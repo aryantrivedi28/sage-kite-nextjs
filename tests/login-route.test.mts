@@ -76,12 +76,29 @@ test('behind Vercel the forwarded host is what the Origin must match', async () 
 });
 
 test('not set up, or a weak passphrase: 503 and no cookie; Preview never offers sign-in', async () => {
-  for (const over of [{ STUDIO_PASSWORD: undefined }, { STUDIO_PASSWORD: 'short-password-12' }, { STUDIO_SESSION_SECRET: undefined }, { VERCEL_ENV: 'preview' }]) {
+  for (const over of [{ STUDIO_PASSWORD: undefined }, { STUDIO_PASSWORD: 'short-pw-1' }, { STUDIO_PASSWORD: 'Welcome12345' }, { STUDIO_PASSWORD: 'abcdabcdabcd' }, { STUDIO_SESSION_SECRET: undefined }, { VERCEL_ENV: 'preview' }]) {
     env(over);
     const r = await login({ password: over.STUDIO_PASSWORD ?? PASSWORD });
     assert.equal(r.status, 503, JSON.stringify(over));
   }
   assert.equal(cookieSets().length, 0);
+});
+
+test('a 12-character password signs in in Production and in local development; 11 characters or a weak one does not', async () => {
+  const twelve = 'k8Q-mv2Lx9Zr';
+  for (const where of [{}, { VERCEL_ENV: undefined, NODE_ENV: 'development' }]) {
+    env({ ...where, STUDIO_PASSWORD: twelve });
+    const r = await login({ password: twelve });
+    assert.equal(r.status, 200, JSON.stringify(where));
+    assert.equal(cookieSets().at(-1)!.name, 'sk_studio_session');
+  }
+  for (const where of [{}, { VERCEL_ENV: undefined, NODE_ENV: 'development' }]) {
+    for (const bad of ['k8Q-mv2Lx9Z', 'Welcome12345', 'abcdabcdabcd']) {
+      env({ ...where, STUDIO_PASSWORD: bad });
+      assert.equal((await login({ password: bad })).status, 503, `${bad} ${JSON.stringify(where)}`);
+      assert.equal(cookieSets().length, 0);
+    }
+  }
 });
 
 test('the sign-in endpoint is rate-limited, but that never blocks an editor who is already signed in', async () => {

@@ -72,7 +72,7 @@ repeats the studio's unguessable segment, so the endpoint cannot be found withou
 no sign-in Server Action any more, so there is no second way to guess the password.
 
 In-app protection stays as defence in depth: a 700 ms delay on a wrong password, 8 wrong passwords per client and
-40 in total per 15 minutes per server instance (then HTTP 429 with `Retry-After`), a 20+ character passphrase, an
+40 in total per 15 minutes per server instance (then HTTP 429 with `Retry-After`), a password of 12+ characters that is not guessable (same rule in development and Production), an
 Origin check and a 1 KB body limit. Clients are counted by the address Vercel supplies: Vercel overwrites
 `X-Forwarded-For` and does not forward external values to prevent spoofing (Vercel docs, "Request headers",
 checked 21 October 2026); anywhere else no header is trusted. Serverless instances do not share memory, so the

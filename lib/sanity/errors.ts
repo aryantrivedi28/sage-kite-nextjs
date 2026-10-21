@@ -5,8 +5,12 @@
  * the browser, because those messages can carry request details.
  */
 export class SafeError extends Error {
-  constructor(message: string) {
+  /** True when the visitor has no valid session (the studio shows its sign-in dialog again). */
+  readonly signIn: boolean;
+
+  constructor(message: string, options: { signIn?: boolean } = {}) {
     super(message);
     this.name = 'SafeError';
+    this.signIn = !!options.signIn;
   }
 }

@@ -1244,6 +1244,90 @@ Past approval records below describe only what the supplied reports establish.
   still reads `file.type`, but the server no longer depends on it.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D034 — Studio password minimum lowered from 20 to 12 characters
+
+- **Date:** 21 October 2026.
+- **Status:** Implemented and verified locally (unit tests, typecheck, production build). Not committed, pushed or
+  deployed. No Vercel setting, secret value or Sanity dataset was read or changed.
+- **Why:** the user asked that a 12-character `STUDIO_PASSWORD` be accepted in local development and in Production.
+  This supersedes the 20-character minimum of D031/D032 (and returns to D030's 12, with the guessability checks kept).
+- **Approval:** User instruction of 21 October 2026. No content or design change.
+- **Change:** [auth-core.ts](components/blog-studio/auth-core.ts): `MIN_PASSWORD_LENGTH` 20 → 12. The distinct-character
+  minimum went 12 → 8, because 12 different characters would have made every 12-character password with one repeated
+  letter fail; 8 still rejects repeated and patterned strings (`aaaaaaaaaaaz`, `abcdabcdabcd`). The guessable-word list is
+  unchanged but is now also checked after common symbol swaps (`0→o`, `3→e`, `4→a`, `5→s`, `@→a`, `$→s`, `!→i`, `1→i/l`), so `Passw0rd-2026`
+  is refused. The rule is one function used by both environments, so development and Production behave identically.
+  `STUDIO_SESSION_SECRET` rules are unchanged (32+, different from the password). Comments, AGENTS.md,
+  `.env.example` and docs/sanity.md updated.
+- **Tests (run by Claude):** `npm test` 77/77. [tests/auth-core.test.mts](tests/auth-core.test.mts): exactly 12
+  characters accepted, 11 refused, repeated, patterned and guessable 12+ character values refused, secret rule still 32+.
+  [tests/login-route.test.mts](tests/login-route.test.mts): a 12-character password signs in under both Production and
+  development settings; 11 characters and weak ones give 503 and set no cookie in both.
+  [tests/actions.test.mts](tests/actions.test.mts): sign-in configured with 12 characters in both environments, not with 11.
+  `npx tsc --noEmit` and `npm run build` pass. Test passwords are made-up values, not real secrets.
+- **Limitations / remaining risks:** a 12-character password is easier to guess than a 20-character one. Offline
+  guessing is not possible here (the password is never exposed to the browser), so the online brake (8 wrong passwords
+  per client and 40 in total per 15 minutes per instance, plus the Vercel WAF rule in docs/sanity.md) now carries more
+  of the protection. The word list cannot catch every weak password; a longer random password is still recommended.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D035 — Mandatory full-screen sign-in dialog for the blog studio; no browser-only mode
+
+- **Date:** 21 October 2026.
+- **Status:** Implemented and verified locally (unit tests, typecheck, production build, browser checks on localhost).
+  Not committed, pushed or deployed. No Vercel setting was read or changed. Nothing was written to Sanity.
+- **Why:** the user asked that nobody can use the studio without signing in. Until now a visitor without a session
+  got a browser-only studio (and on Preview, or with sign-in settings missing, an open one), which D022 and D030 had
+  kept so editors could draft before signing in.
+- **Approval:** User instruction of 21 October 2026 (12 numbered requirements); the user also asked for the brand
+  colours and font (docs/brand.md). This replaces the browser-only mode of D022 and D030, and the in-sidebar sign-in
+  form of D030.
+- **Change:**
+  - New [LoginGate.tsx](components/blog-studio/LoginGate.tsx): a full-screen dialog (`role="dialog"`, `aria-modal`,
+    labelled and described, focus on the password field, focus kept inside it, previous focus restored on close, page
+    scroll locked). It cannot be dismissed: no close button, and the backdrop, Escape and Tab do nothing outside it.
+    Brand logo and "Blog Studio" name, password field with a show/hide toggle (`aria-pressed`), a coral Sign in button
+    (`--coral`, `--ink` text), a loading state and a fixed generic error ("That password is not right."). Brand tokens
+    and Manrope only (`BlogStudio.module.css`, new `.gate*` rules at the end). It posts to the existing login Route
+    Handler (D032); on success the studio reloads.
+  - [BlogStudio.tsx](components/blog-studio/BlogStudio.tsx): the studio is wrapped in an `inert` container while
+    locked, so it cannot be clicked, tabbed to or read by a screen reader. A session that ends while the page is open
+    (a Server Action returns `signIn: true`) puts the dialog back over the studio without losing the post being edited;
+    signing in again continues without a reload. The sidebar sign-in form and every browser-only message are gone.
+  - [server.ts](components/blog-studio/server.ts): `getStudioStorage()` is now `sanity` | `blocked` | `locked`
+    (`signin` or `unavailable`). Missing, weak or invalid `STUDIO_PASSWORD` / `STUDIO_SESSION_SECRET`, or Vercel Preview,
+    is `locked: unavailable` (fail closed), in development as well. The dev shortcut that allowed Sanity writes without
+    sign-in is removed. [store.ts](components/blog-studio/store.ts) loses `localStudioStore`.
+  - [actions.ts](components/blog-studio/actions.ts): unchanged protections (every action still calls
+    `getStudioStorage()` first, post validation, id and type checks, upload checks, the dataset guard). A locked
+    visitor now gets "Your session has ended. Sign in again." with `signIn: true`, or "The blog studio is not
+    available." when sign-in is not set up, which says nothing about configuration. `SafeError` carries a `signIn` flag.
+  - [page.tsx](app/sk-studio-ufn5xdafhll7/page.tsx): a locked studio is rendered with no posts, so nothing about the
+    studio is sent to a visitor who has not signed in.
+  - Docs: AGENTS.md, docs/blog-studio.md (section 6 table, file list), `.env.example`, comments.
+- **Expected effects:** on localhost and in Production the studio opens only after the team password is entered;
+  editors can no longer draft in the browser before signing in (there is no browser-only mode, so the
+  Export/Import-before-sign-in note is gone). Local development now needs `STUDIO_PASSWORD` and
+  `STUDIO_SESSION_SECRET` in `.env.local` to open the studio at all. Public pages are untouched.
+- **Tests (run by Claude):** `npm test` 79/79: storage states (signed in, signed out, no settings, no secret, short
+  secret, weak and guessable passwords all locked), development without settings is locked and no action touches Sanity,
+  locked actions say "sign in again" / "not available" with no configuration detail, expired cookie and a changed
+  password lock the studio again. `npx tsc --noEmit` and `npm run build` pass. In the browser on a local production
+  server with throwaway credentials: the dialog is centred over a translucent ink backdrop in Manrope with the coral
+  button; clicks on New post and the sidebar hit the backdrop; Escape and six Tabs keep focus in the dialog; a wrong
+  password shows the generic error and keeps it open; the right password unlocks and a refresh keeps the session
+  (HttpOnly cookie); the show/hide toggle works; Sign out brings the dialog back after reload; a restart with a
+  different password made the next save put the dialog back over the open editor with the draft kept, and signing in
+  continued the edit; with empty settings the page shows "Blog Studio unavailable" and its HTML contains no env names
+  or post titles; with a weak password the same, and the login endpoint answers 503.
+- **Not tested / assumptions:** a keyboard-only or screen-reader run (focus order checked by script and key presses
+  only); mobile layout beyond the shared responsive CSS; behaviour on Vercel itself; the positive Sanity path against
+  real Sanity (the throwaway test token cannot read, so the post list showed the generic load error after sign-in).
+- **Limitations / remaining risks:** the gate is a UI layer: removing `inert` or the dialog in the browser's dev tools
+  unlocks nothing, because every Server Action refuses without a session. The page HTML still contains the studio's
+  empty shell. One shared password and stateless 7-day sessions remain (D030).
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

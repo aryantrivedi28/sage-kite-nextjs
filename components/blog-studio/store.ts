@@ -12,12 +12,11 @@ import {
  * interface; getStudioStore() picks the implementation from the storage mode
  * decided on the server (server.ts).
  *
- * - localStudioStore: this browser's localStorage. Nothing reaches Sanity or
- *   sagekite.com, and another browser or device will not see it.
  * - sanityStudioStore: Sanity, through the Server Actions in actions.ts. Used when signed
- *   in (or in development without team sign-in) and the write guard passes.
- * - blockedStudioStore: production, signed in, but the write guard refuses. Saves nothing
- *   anywhere and says why: it never falls back to browser storage or another dataset.
+ *   in with the team password and the write guard passes.
+ * - blockedStudioStore: signed in, but the write guard refuses; or not signed in at all (the
+ *   studio is locked behind its sign-in dialog). Saves nothing anywhere and says why: there is no
+ *   browser-only mode and no fallback to another dataset.
  */
 export interface StudioStore {
   /** Where posts are kept, e.g. "this browser only". */
@@ -32,28 +31,7 @@ export interface StudioStore {
   uploadImage(file: File): Promise<string>;
 }
 
-const STORAGE_KEY = 'sk-blog-studio:v1';
 const MAX_IMAGE_WIDTH = 1600;
-
-function readAll(): StudioPost[] {
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    const parsed: unknown = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? (parsed as StudioPost[]) : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeAll(posts: StudioPost[]) {
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
-  } catch {
-    throw new Error(
-      'Browser storage is full or blocked. Remove some uploaded images (or use image paths instead), export a backup, then try again.',
-    );
-  }
-}
 
 function checkImageFile(file: File) {
   if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) throw new Error('Use a JPG, PNG or WebP image.');
@@ -76,40 +54,18 @@ async function toWebpBlob(file: Blob): Promise<Blob> {
   );
 }
 
-function blobToDataUrl(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(new Error('Could not read this image.'));
-    reader.readAsDataURL(blob);
-  });
+/* Called when a Server Action says the session is missing or has ended, so the UI can ask for the password again. */
+const sessionEndedListeners = new Set<() => void>();
+export function onSessionEnded(listener: () => void): () => void {
+  sessionEndedListeners.add(listener);
+  return () => sessionEndedListeners.delete(listener);
 }
 
-export const localStudioStore: StudioStore = {
-  label: 'this browser only',
-  savedIn: 'in this browser',
-  async list() {
-    return readAll();
-  },
-  async save(post) {
-    const posts = readAll();
-    const i = posts.findIndex((p) => p.id === post.id);
-    if (i === -1) posts.unshift(post);
-    else posts[i] = post;
-    writeAll(posts);
-    return post;
-  },
-  async remove(id) {
-    writeAll(readAll().filter((p) => p.id !== id));
-  },
-  async uploadImage(file) {
-    checkImageFile(file);
-    return blobToDataUrl(await toWebpBlob(file));
-  },
-};
-
 function unwrap<T>(result: ActionResult<T>): T {
-  if (!result.ok) throw new Error(result.error);
+  if (!result.ok) {
+    if (result.signIn) sessionEndedListeners.forEach((listener) => listener());
+    throw new Error(result.error);
+  }
   return result.data;
 }
 
@@ -172,5 +128,5 @@ function blockedStudioStore(reason: string): StudioStore {
 export function getStudioStore(storage: StudioStorage): StudioStore {
   if (storage.kind === 'sanity') return sanityStudioStore;
   if (storage.kind === 'blocked') return blockedStudioStore(storage.reason);
-  return localStudioStore;
+  return blockedStudioStore('Sign in to use the studio.');
 }

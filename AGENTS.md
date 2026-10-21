@@ -15,7 +15,7 @@ Live at `https://www.sagekite.com`.
   build time, so redeploy after changing it. The blog studio's Sanity connection uses
   `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET` and the server-only
   `SANITY_API_WRITE_TOKEN` (docs/sanity.md); the studio's team sign-in adds the server-only
-  `STUDIO_PASSWORD` (a strong passphrase, 20+ characters) and `STUDIO_SESSION_SECRET` (32+). Set the
+  `STUDIO_PASSWORD` (12+ characters, not guessable) and `STUDIO_SESSION_SECRET` (32+). Set the
   token and `STUDIO_*` on Vercel Production only; see `.env.example`.
 - Google Analytics 4 (gtag.js, measurement ID `G-QQFH3W77TS`) is loaded once by two
   `next/script` components (`strategy="afterInteractive"`, inline one with
@@ -101,9 +101,11 @@ app/
   sk-studio-ufn5xdafhll7/
                         Unlisted blog studio for the SEO team (decision.md D019, D022, D030).
                         Shared team password (`STUDIO_PASSWORD` + `STUDIO_SESSION_SECRET`): signed in,
-                        it saves to Sanity and publishes to the live blog; not signed in, or without
-                        those env vars on the deployed site, it saves in the visitor's browser only
-                        (components/blog-studio/server.ts decides, and every Server Action re-checks).
+                        it saves to Sanity and publishes to the live blog; not signed in, it sits behind a full-screen
+                        sign-in dialog that cannot be dismissed (LoginGate.tsx, D035), and without valid
+                        sign-in env vars (or on Vercel Preview) it shows "unavailable". There is no
+                        browser-only mode. components/blog-studio/server.ts decides, and every Server Action
+                        re-checks: the dialog is only the visible half of the gate.
                         noindex, no-referrer, not in sitemap.ts and deliberately not in robots.ts.
                         Read docs/blog-studio.md and docs/sanity.md before changing it.
   api/sk-studio-ufn5xdafhll7/login/
@@ -278,6 +280,8 @@ The essentials:
   without `_type == "blogPost"`: that is how a signed-in user could reach image assets.
 - Trust `X-Forwarded-For` or `X-Real-IP` for anything outside Vercel, or set `SANITY_API_WRITE_TOKEN` or
   `STUDIO_*` on Vercel Preview.
+- Reintroduce a browser-only studio mode, or remove the `inert` wrapper / make `LoginGate` dismissable. The studio is
+  locked until a valid session exists (D035); the server check in every Server Action is what actually protects Sanity.
 - Turn sign-in back into a Server Action. It is a Route Handler at its own path so the WAF rate-limit
   rule can hit it without also limiting saving, publishing and uploads (Server Actions all post to the
   studio page's path). Do not move the login path out of the `/api/sk-studio-…` namespace either.

@@ -9,8 +9,8 @@ import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
  * (or the secret) signs everyone out.
  */
 
-export const MIN_PASSWORD_LENGTH = 20;
-const MIN_DISTINCT_CHARACTERS = 12;
+export const MIN_PASSWORD_LENGTH = 12;
+const MIN_DISTINCT_CHARACTERS = 8;
 const GUESSABLE_FRAGMENTS = ['password', 'passphrase', 'sagekite', 'sage kite', 'studio', 'qwerty', '123456', 'letmein', 'welcome', 'admin'];
 export const MIN_SECRET_LENGTH = 32;
 export const SESSION_SECONDS = 60 * 60 * 24 * 7;
@@ -24,20 +24,24 @@ function sign(expiry: number, secret: string, password: string): string {
 
 /**
  * Why a studio passphrase is too weak, or null when it is acceptable. One shared password
- * guards publishing to the live blog, so it must be long and not guessable: 20+ characters,
- * at least 12 different ones, and none of the obvious words. A few random words with
- * spaces ("maple orbit canyon pelican") pass; `openssl rand -base64 24` passes.
+ * guards publishing to the live blog, so it must not be guessable: 12+ characters, at least 8
+ * different ones (so no repeated or patterned strings), and none of the obvious words. The same
+ * rule applies in local development and in Production. Longer is still better: a few random
+ * words with spaces ("maple orbit canyon pelican") pass; `openssl rand -base64 24` passes.
  */
 export function passphraseProblem(password: string | undefined): string | null {
   if (!password) return 'missing';
   if (password.length < MIN_PASSWORD_LENGTH) return `shorter than ${MIN_PASSWORD_LENGTH} characters`;
   if (new Set(password).size < MIN_DISTINCT_CHARACTERS) return `fewer than ${MIN_DISTINCT_CHARACTERS} different characters`;
+  // Also catch the usual letter-for-symbol swaps ("Passw0rd", "Adm1n", "L3tmein").
   const lower = password.toLowerCase();
-  if (GUESSABLE_FRAGMENTS.some((word) => lower.includes(word))) return 'contains a guessable word';
+  const swap = (one: string) => lower.replace(/[0345@$!1]/g, (c) => ({ '0': 'o', '3': 'e', '4': 'a', '5': 's', '@': 'a', $: 's', '!': 'i', '1': one })[c]!);
+  const forms = [lower, swap('i'), swap('l')];
+  if (GUESSABLE_FRAGMENTS.some((word) => forms.some((form) => form.includes(word)))) return 'contains a guessable word';
   return null;
 }
 
-/** Sign-in needs a strong passphrase and a long secret (different from each other); anything weaker is treated as "not set up". */
+/** Sign-in needs an acceptable password and a long secret (different from each other); anything weaker is treated as "not set up". */
 export function isAuthConfigured(password: string | undefined, secret: string | undefined): boolean {
   return passphraseProblem(password) === null && !!secret && secret.length >= MIN_SECRET_LENGTH && secret !== password;
 }

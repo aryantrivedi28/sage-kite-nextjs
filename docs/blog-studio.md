@@ -25,9 +25,9 @@ password was added so the deployed studio can publish to Sanity (D030).
 | Saving on the deployed site, or without the env vars | Browser `localStorage` only (one browser, one device) |
 | Images | Sanity mode: uploaded to Sanity's asset store (CDN URL). Browser mode: stored inside the post as WebP data URLs |
 | Publishing to sagekite.com | Works where the Sanity env vars are set and the visitor is signed in (locally with `npm run dev`; on the deployed site once the `STUDIO_*` vars are set, D030): published posts appear on `/blog/<slug>`, `/blog`, "Keep reading", the sitemap and in JSON-LD within a minute, immediately after a save (section 10). "Scheduled" is still a label only |
-| Authentication / admin accounts | **One shared team password** (`STUDIO_PASSWORD`, D030): HttpOnly signed cookie, checked on the page and in every Server Action. No per-person accounts and no roles: everyone who signs in can publish and delete. Without `STUDIO_PASSWORD` + `STUDIO_SESSION_SECRET` the deployed studio is browser-only |
+| Authentication / admin accounts | **One shared team password** (`STUDIO_PASSWORD`, D030): HttpOnly signed cookie, checked on the page and in every Server Action. No per-person accounts and no roles: everyone who signs in can publish and delete. Without valid `STUDIO_PASSWORD` + `STUDIO_SESSION_SECRET` the studio is locked ("unavailable"); there is no browser-only mode (D035) |
 
-The deployed studio uses browser storage until the visitor signs in with the team password, and then Sanity. The deployed blog shows Sanity posts only if `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` are set in Vercel.
+The studio is locked behind a sign-in dialog until the visitor signs in with the team password, and then it saves to Sanity. The deployed blog shows Sanity posts only if `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` are set in Vercel.
 
 ---
 
@@ -68,18 +68,19 @@ components/blog-studio/
   types.ts                  StudioPost, StudioBlock (union of block types), StudioStatus,
                             SitePostSummary, StudioStorage, ActionResult. The data model (section 4).
   server.ts                 Server-only. getSitePostSummaries() and async getStudioStorage(): Sanity
-                            when the Sanity env vars are set AND (team sign-in is set up and the
-                            visitor is signed in, OR no sign-in is set up and NODE_ENV is not
-                            production); otherwise browser storage, with the reason in the sidebar.
+                            `sanity` when sign-in is set up, the visitor has a valid session and the write guard
+                            passes; `blocked` when signed in but the guard refuses; otherwise `locked`
+                            (`signin` or `unavailable`). No browser-only mode (D035).
   auth.ts, auth-core.ts,    Shared-password sign-in (D030): auth-core.ts is the pure HMAC session and
   auth-actions.ts           password logic; auth.ts reads env and sets the cookie (HttpOnly,
                             SameSite=Lax, Secure in production, limited to the studio path, 7 days);
                             auth-actions.ts only signs out. Sign-in is the Route Handler
                             app/api/sk-studio-ufn5xdafhll7/login/route.ts (D032); paths.ts holds both URLs;
                             rate-limit.ts is the wrong-password brake.
-  store.ts                  StudioStore interface, localStudioStore (localStorage),
-                            sanityStudioStore (calls actions.ts) and getStudioStore(storage).
-                            Images are resized to 1600px WebP in the browser in both stores.
+  LoginGate.tsx             The mandatory full-screen sign-in dialog (D035).
+  store.ts                  StudioStore interface, sanityStudioStore (calls actions.ts), a
+                            refusing store for blocked/locked, and getStudioStore(storage).
+                            Images are resized to 1600px WebP in the browser.
   actions.ts                'use server'. list / save / delete / upload-image for Sanity. Each
                             re-checks the storage mode and validates input (id format, block
                             types, no data: images, required checklist items before publishing,
@@ -268,7 +269,7 @@ like `&amp;` in title, SEO title, excerpt, alt text or tags; no `glasspane.pages
 - It does not render the site header and footer, related posts or the booking CTA; a
   note says these appear on the live page.
 
-### Images (`localStudioStore.uploadImage`)
+### Images (`sanityStudioStore.uploadImage`)
 - JPG, PNG or WebP, up to 8 MB. Resized in the browser to at most 1600px wide and
   re-encoded as WebP at quality 0.82, then stored as a data URL inside the post.
 - Paths and URLs can be typed instead of uploading.
@@ -284,20 +285,17 @@ request and the sidebar says which one is active:
 
 | Condition | Store | Sidebar says |
 |---|---|---|
-| Team sign-in not set up, `NODE_ENV` is production | Browser | "Saved in this browser only" + that sign-in is not set up |
-| Any of the three Sanity env vars missing | Browser | "Saved in this browser only" + which vars to set |
-| Team sign-in set up, not signed in | Browser | "Saved in this browser only" + a "Team password" form |
-| Team sign-in set up and signed in | Sanity | "Saved in Sanity" + dataset name + "Sign out" |
-| Team sign-in not set up, development, all three Sanity vars set | Sanity | "Saved in Sanity" + dataset name |
+| Team sign-in not set up or invalid (any environment), or Vercel Preview | None: locked | Full-screen dialog "Blog Studio unavailable" (no reason is shown) |
+| Team sign-in set up, no valid session (never signed in, expired, password changed) | None: locked | Full-screen "Sign in to continue" dialog |
+| Signed in, but the write guard refuses (project, dataset or token) | None: blocked | "Publishing is blocked" + the reason, to signed-in users only |
+| Signed in and the write guard passes | Sanity | "Saved in Sanity" + dataset name + "Sign out" |
 
-### Browser store (`localStudioStore`)
-- Key: `localStorage['sk-blog-studio:v1']`, a JSON array of `StudioPost`.
-- `list()` returns the array; `save()` replaces by `id` or adds at the front and returns
-  the post; `remove()` filters by `id`. All methods are `async`.
-- Browsers allow roughly 5 MB per site for localStorage. Uploaded images use most of it.
-  When storage is full, the save fails with a message suggesting image paths and an export.
-- Posts are visible only in the browser that saved them. Clearing site data deletes
-  them. **Export is the only backup.**
+There is no browser-only store any more (D035). The sign-in dialog is `LoginGate.tsx`: it
+cannot be dismissed (no backdrop click, no Escape, no close button), the studio behind it is
+`inert` so nothing can be clicked or reached with Tab, and focus stays inside it. If a Server
+Action reports that the session has ended while the page is open, the dialog comes back over
+the studio without losing the post being edited; signing in again continues where the person was.
+The server re-checks the session on every action; the dialog is not what protects Sanity.
 
 ### Sanity store (`sanityStudioStore` → `actions.ts`)
 - `list()` fetches every `blogPost` document (drafts included) with the token.

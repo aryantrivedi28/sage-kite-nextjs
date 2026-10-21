@@ -29,15 +29,16 @@ import type { ActionResult, StudioPost } from './types';
  * deletes are scoped to `blogPost` documents.
  */
 
-const fail = (error: string): { ok: false; error: string } => ({ ok: false, error });
+const fail = (error: string, signIn = false): { ok: false; error: string; signIn?: true } =>
+  signIn ? { ok: false, error, signIn: true } : { ok: false, error };
 
 /**
  * What the browser is told when something other than our own checks fails (Sanity, the network, a
  * bug). Raw error text can carry request details, so only SafeError messages (written in this app)
  * are passed on. The server log gets the action name and an HTTP status code, never the message.
  */
-function failure(action: string, e: unknown, generic: string): { ok: false; error: string } {
-  if (e instanceof SafeError) return fail(e.message);
+function failure(action: string, e: unknown, generic: string): { ok: false; error: string; signIn?: true } {
+  if (e instanceof SafeError) return fail(e.message, e.signIn);
   const status = (e as { statusCode?: unknown } | null)?.statusCode;
   console.error(`[blog-studio] ${action} failed${typeof status === 'number' ? ` (status ${status})` : ''}`);
   return fail(generic);
@@ -45,7 +46,13 @@ function failure(action: string, e: unknown, generic: string): { ok: false; erro
 
 async function assertSanityMode() {
   const storage = await getStudioStorage();
-  if (storage.kind !== 'sanity') throw new SafeError(storage.reason);
+  if (storage.kind === 'sanity') return;
+  if (storage.kind === 'blocked') throw new SafeError(storage.reason);
+  // Locked: no valid session (or sign-in is not available here). The message gives no configuration detail.
+  throw new SafeError(
+    storage.why === 'signin' ? 'Your session has ended. Sign in again.' : 'The blog studio is not available.',
+    { signIn: storage.why === 'signin' },
+  );
 }
 
 /**
