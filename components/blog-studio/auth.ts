@@ -2,6 +2,7 @@ import 'server-only';
 import { cookies, headers } from 'next/headers';
 import {
   SESSION_SECONDS,
+  authConfigProblem,
   createSessionValue,
   isAuthConfigured,
   isSessionValid,
@@ -33,6 +34,17 @@ export function isStudioAuthConfigured(): boolean {
   if (runtimeKind() === 'preview') return false;
   const { password, secret } = config();
   return isAuthConfigured(password, secret);
+}
+
+/**
+ * Why the studio is locked as "unavailable", for the server log only (Vercel > Logs). Visitors are told nothing.
+ * Names the setting or rule, never a value. Null when sign-in is available.
+ */
+export function studioUnavailableReason(): string | null {
+  const runtime = runtimeKind();
+  if (runtime === 'preview') return 'this is a Vercel Preview deployment (VERCEL_ENV=preview), where sign-in is off';
+  const { password, secret } = config();
+  return authConfigProblem(password, secret);
 }
 
 export async function isStudioSignedIn(): Promise<boolean> {

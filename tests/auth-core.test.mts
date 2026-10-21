@@ -75,3 +75,18 @@ test('session: garbage values are rejected without throwing', () => {
     assert.equal(core.isSessionValid(g as string | undefined, secret, pw, now), false, String(g));
   }
 });
+
+test('authConfigProblem names the setting and rule that failed, and never a value', () => {
+  const strong = 'k8Q-mv2Lx9Zr';
+  assert.equal(core.authConfigProblem(strong, secret), null);
+  assert.equal(core.authConfigProblem(undefined, secret), 'STUDIO_PASSWORD: missing');
+  assert.match(core.authConfigProblem('Welcome12345', secret)!, /^STUDIO_PASSWORD: contains a guessable word$/);
+  assert.match(core.authConfigProblem('short', secret)!, /^STUDIO_PASSWORD: shorter than 12/);
+  assert.equal(core.authConfigProblem(strong, undefined), 'STUDIO_SESSION_SECRET: missing');
+  assert.match(core.authConfigProblem(strong, 'x'.repeat(31))!, /^STUDIO_SESSION_SECRET: shorter than 32/);
+  assert.equal(core.authConfigProblem(strong.padEnd(40, 'q'), strong.padEnd(40, 'q')), 'STUDIO_SESSION_SECRET: same as STUDIO_PASSWORD');
+  for (const [p, s] of [['Welcome12345', secret], [strong, 'y'.repeat(31)]] as const) {
+    const text = core.authConfigProblem(p, s)!;
+    assert.ok(!text.includes(p) && !text.includes(s), 'the log line never contains a value');
+  }
+});

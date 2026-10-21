@@ -41,9 +41,22 @@ export function passphraseProblem(password: string | undefined): string | null {
   return null;
 }
 
+/**
+ * Why sign-in cannot be used, or null when it can. The text names the setting and the rule that failed, never a
+ * value, so it is safe to write to the server log (auth.ts does, to explain a locked studio).
+ */
+export function authConfigProblem(password: string | undefined, secret: string | undefined): string | null {
+  const passwordProblem = passphraseProblem(password);
+  if (passwordProblem) return `STUDIO_PASSWORD: ${passwordProblem}`;
+  if (!secret) return 'STUDIO_SESSION_SECRET: missing';
+  if (secret.length < MIN_SECRET_LENGTH) return `STUDIO_SESSION_SECRET: shorter than ${MIN_SECRET_LENGTH} characters`;
+  if (secret === password) return 'STUDIO_SESSION_SECRET: same as STUDIO_PASSWORD';
+  return null;
+}
+
 /** Sign-in needs an acceptable password and a long secret (different from each other); anything weaker is treated as "not set up". */
 export function isAuthConfigured(password: string | undefined, secret: string | undefined): boolean {
-  return passphraseProblem(password) === null && !!secret && secret.length >= MIN_SECRET_LENGTH && secret !== password;
+  return authConfigProblem(password, secret) === null;
 }
 
 /** Constant-time password check (both sides are hashed first so lengths match). */

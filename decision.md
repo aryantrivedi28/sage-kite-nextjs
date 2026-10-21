@@ -1305,6 +1305,10 @@ Past approval records below describe only what the supplied reports establish.
   - [page.tsx](app/sk-studio-ufn5xdafhll7/page.tsx): a locked studio is rendered with no posts, so nothing about the
     studio is sent to a visitor who has not signed in.
   - Docs: AGENTS.md, docs/blog-studio.md (section 6 table, file list), `.env.example`, comments.
+  - Added after the first deployment showed "unavailable" (21 October 2026): when the studio is locked as
+    unavailable, the server writes one line to its log, e.g. `[blog-studio] unavailable: STUDIO_SESSION_SECRET:
+    shorter than 32 characters (runtime: production)` (`authConfigProblem` in auth-core.ts, `studioUnavailableReason`
+    in auth.ts). It names the setting and the rule, never a value; visitors still see nothing.
 - **Expected effects:** on localhost and in Production the studio opens only after the team password is entered;
   editors can no longer draft in the browser before signing in (there is no browser-only mode, so the
   Export/Import-before-sign-in note is gone). Local development now needs `STUDIO_PASSWORD` and

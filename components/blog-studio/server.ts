@@ -1,7 +1,7 @@
 import 'server-only';
 import { posts } from '@/content/blog';
 import { checkSanityWriteGuard, runtimeKind } from '@/lib/sanity/guard';
-import { isStudioAuthConfigured, isStudioSignedIn } from './auth';
+import { isStudioAuthConfigured, isStudioSignedIn, studioUnavailableReason } from './auth';
 import type { SitePostSummary, StudioStorage } from './types';
 
 /** Live posts that are written in code (app/blog/<slug>/post.tsx), newest first. */
@@ -32,7 +32,11 @@ export function getSitePostSummaries(): SitePostSummary[] {
  * guard fails gets `blocked`: an error, never a fall-back to browser storage or another dataset.
  */
 export async function getStudioStorage(): Promise<StudioStorage> {
-  if (runtimeKind() === 'preview' || !isStudioAuthConfigured()) return { kind: 'locked', why: 'unavailable' };
+  if (runtimeKind() === 'preview' || !isStudioAuthConfigured()) {
+    // Visitors learn nothing; the reason (no values) goes to the server log so an administrator can fix it.
+    console.error(`[blog-studio] unavailable: ${studioUnavailableReason() ?? 'unknown'} (runtime: ${runtimeKind()})`);
+    return { kind: 'locked', why: 'unavailable' };
+  }
   if (!(await isStudioSignedIn())) return { kind: 'locked', why: 'signin' };
 
   const guard = checkSanityWriteGuard();
