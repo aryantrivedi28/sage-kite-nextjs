@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { getSanityWriteClient } from '@/lib/sanity/client';
+import { SafeError } from '@/lib/sanity/errors';
 import {
   ALL_BLOG_POSTS_QUERY,
   BLOG_POST_TYPE,
@@ -11,22 +12,40 @@ import {
   isLiveStatus,
   toBlogPostDocument,
 } from '@/lib/sanity/blogPosts';
-import { ACCEPTED_IMAGE_TYPES, BLOCK_LABELS, MAX_RESIZED_BYTES, checklist } from './postUtils';
+import { checkUploadedImage, uploadFileName } from '@/lib/sanity/imageUpload';
+import { postShapeProblem } from '@/lib/sanity/postValidation';
+import { MAX_RESIZED_BYTES, checklist } from './postUtils';
 import { getSitePostSummaries, getStudioStorage } from './server';
 import type { ActionResult, StudioPost } from './types';
 
 /*
- * Server side of the Sanity store (store.ts). Every action re-checks that
- * Sanity mode is allowed (server.ts) and validates its input: the browser
- * checklist can be bypassed by calling an action directly.
+ * Server side of the Sanity store (store.ts). Every action re-checks, first thing, that
+ * Sanity mode is allowed (server.ts: signed in, not Preview, write guard passes) and then
+ * validates its input: the browser checklist can be bypassed by calling an action directly.
+ *
+ * Nothing the client sends decides which document is touched. Ids must be UUIDs
+ * (blogPosts.ts), saves only ever write documents of type `blogPost` built from an explicit
+ * field list, an existing document of another type under the same id is refused, and
+ * deletes are scoped to `blogPost` documents.
  */
 
 const fail = (error: string): { ok: false; error: string } => ({ ok: false, error });
-const message = (e: unknown) => (e instanceof Error ? e.message : 'Unexpected error.');
 
-function assertSanityMode() {
-  const storage = getStudioStorage();
-  if (storage.kind !== 'sanity') throw new Error(storage.reason);
+/**
+ * What the browser is told when something other than our own checks fails (Sanity, the network, a
+ * bug). Raw error text can carry request details, so only SafeError messages (written in this app)
+ * are passed on. The server log gets the action name and an HTTP status code, never the message.
+ */
+function failure(action: string, e: unknown, generic: string): { ok: false; error: string } {
+  if (e instanceof SafeError) return fail(e.message);
+  const status = (e as { statusCode?: unknown } | null)?.statusCode;
+  console.error(`[blog-studio] ${action} failed${typeof status === 'number' ? ` (status ${status})` : ''}`);
+  return fail(generic);
+}
+
+async function assertSanityMode() {
+  const storage = await getStudioStorage();
+  if (storage.kind !== 'sanity') throw new SafeError(storage.reason);
 }
 
 /**
@@ -34,8 +53,14 @@ function assertSanityMode() {
  * (their "Keep reading" lists) and the sitemap. Pages also revalidate every 60 s.
  */
 function revalidateBlog() {
-  revalidatePath('/blog', 'layout');
-  revalidatePath('/sitemap.xml');
+  // The write has already succeeded. If refreshing the cache fails, the pages still catch up within 60 s,
+  // so this must not turn a saved post into an error message.
+  try {
+    revalidatePath('/blog', 'layout');
+    revalidatePath('/sitemap.xml');
+  } catch {
+    console.error('[blog-studio] cache refresh failed; pages will update within 60 seconds');
+  }
 }
 
 async function fetchAllPosts(): Promise<StudioPost[]> {
@@ -51,37 +76,19 @@ async function fetchAllPosts(): Promise<StudioPost[]> {
   return [...byId.values()];
 }
 
-function shapeProblem(post: StudioPost): string | null {
-  if (!post || typeof post !== 'object') return 'Invalid post.';
-  if (!POST_ID_PATTERN.test(post.id)) return 'Invalid post id.';
-  if (!['draft', 'published', 'scheduled'].includes(post.status)) return 'Invalid status.';
-  if (typeof post.title !== 'string' || !post.title.trim()) return 'Add a title before saving.';
-  if (!Array.isArray(post.blocks) || !Array.isArray(post.tags)) return 'Invalid post content.';
-  for (const b of post.blocks) {
-    if (!b || typeof b.id !== 'string' || !POST_ID_PATTERN.test(b.id) || !(b.type in BLOCK_LABELS)) {
-      return 'Invalid block in the article.';
-    }
-  }
-  const images = [post.featuredImage, ...post.blocks.flatMap((b) => (b.type === 'image' ? [b.src] : []))];
-  if (images.some((src) => typeof src === 'string' && src.startsWith('data:'))) {
-    return 'Images must be uploaded before saving.';
-  }
-  return null;
-}
-
 export async function listStudioPostsAction(): Promise<ActionResult<StudioPost[]>> {
   try {
-    assertSanityMode();
+    await assertSanityMode();
     return { ok: true, data: await fetchAllPosts() };
   } catch (e) {
-    return fail(message(e));
+    return failure('listStudioPostsAction', e, 'Could not load the posts from Sanity. Nothing was changed. Try again.');
   }
 }
 
 export async function saveStudioPostAction(post: StudioPost): Promise<ActionResult<StudioPost>> {
   try {
-    assertSanityMode();
-    const problem = shapeProblem(post);
+    await assertSanityMode();
+    const problem = postShapeProblem(post);
     if (problem) return fail(problem);
 
     const client = getSanityWriteClient();
@@ -96,9 +103,13 @@ export async function saveStudioPostAction(post: StudioPost): Promise<ActionResu
 
     // Write the document under the id for its status and remove the other copy, in one transaction.
     const doc = toBlogPostDocument(post);
-    const existing = await client.fetch<string[]>(`*[_id in $ids]._id`, { ids: [post.id, draftId(post.id)] });
+    const existing = await client.fetch<{ _id: string; _type: string }[]>(`*[_id in $ids]{_id, _type}`, {
+      ids: [post.id, draftId(post.id)],
+    });
+    // Never replace or delete a document that is not a blog post, whatever id the client chose.
+    if (existing.some((d) => d._type !== BLOG_POST_TYPE)) return fail('That id belongs to a different kind of document.');
     const tx = client.transaction().createOrReplace(doc);
-    for (const id of existing) if (id !== doc._id) tx.delete(id);
+    for (const { _id } of existing) if (_id !== doc._id) tx.delete(_id);
     // Only one post may be featured.
     if (post.featured) {
       for (const other of others.filter((p) => p.featured)) {
@@ -109,36 +120,45 @@ export async function saveStudioPostAction(post: StudioPost): Promise<ActionResu
     revalidateBlog();
     return { ok: true, data: post };
   } catch (e) {
-    return fail(message(e));
+    return failure('saveStudioPostAction', e, 'Could not save the post to Sanity. Nothing was saved. Try again.');
   }
 }
 
 export async function deleteStudioPostAction(id: string): Promise<ActionResult<null>> {
   try {
-    assertSanityMode();
+    await assertSanityMode();
     if (typeof id !== 'string' || !POST_ID_PATTERN.test(id)) return fail('Invalid post id.');
-    await getSanityWriteClient().delete({ query: `*[_id in $ids]`, params: { ids: [id, draftId(id)] } });
+    await getSanityWriteClient().delete({
+      query: `*[_type == $type && _id in $ids]`,
+      params: { type: BLOG_POST_TYPE, ids: [id, draftId(id)] },
+    });
     revalidateBlog();
     return { ok: true, data: null };
   } catch (e) {
-    return fail(message(e));
+    return failure('deleteStudioPostAction', e, 'Could not delete the post. Try again.');
   }
 }
 
-/** Uploads an already-resized image to Sanity's asset store and returns its CDN URL. */
+/**
+ * Uploads an already-resized image to Sanity's asset store and returns its CDN URL. The declared type
+ * and name are the browser's claims: the bytes must be a complete JPG, PNG or WebP of that same type
+ * (lib/sanity/imageUpload.ts), and Sanity gets the detected type and a cleaned-up name.
+ */
 export async function uploadStudioImageAction(form: FormData): Promise<ActionResult<string>> {
   try {
-    assertSanityMode();
+    await assertSanityMode();
     const file = form.get('file');
     if (!(file instanceof File)) return fail('No image received.');
-    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) return fail('Use a JPG, PNG or WebP image.');
     if (file.size > MAX_RESIZED_BYTES) return fail('This image is still too large after resizing. Try a smaller one.');
-    const asset = await getSanityWriteClient().assets.upload('image', Buffer.from(await file.arrayBuffer()), {
-      filename: file.name,
-      contentType: file.type,
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    const image = checkUploadedImage(bytes, file.type);
+    if (!image.ok) return fail(image.error);
+    const asset = await getSanityWriteClient().assets.upload('image', Buffer.from(bytes), {
+      filename: uploadFileName(file.name, image.type),
+      contentType: image.type,
     });
     return { ok: true, data: asset.url };
   } catch (e) {
-    return fail(message(e));
+    return failure('uploadStudioImageAction', e, 'Could not upload the image. Try again.');
   }
 }

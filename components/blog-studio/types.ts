@@ -60,11 +60,18 @@ export interface StudioPost {
 
 /**
  * Where the studio saves, decided on the server (components/blog-studio/server.ts).
- * Sanity is used only when running locally until sign-in exists.
+ * - sanity: signed in (or, with no team sign-in set up, running locally) and the write
+ *   guard passes. `signedIn` says whether a session cookie got the visitor there.
+ * - local: browser storage. Used before sign-in (`signIn`: signing in would unlock Sanity),
+ *   on Vercel Preview, and wherever Sanity cannot be used locally.
+ * - blocked: the visitor is signed in on production but the write guard refuses (wrong
+ *   dataset, project or token). Nothing is saved anywhere: it never falls back to browser
+ *   storage or another dataset.
  */
 export type StudioStorage =
-  | { kind: 'sanity'; dataset: string }
-  | { kind: 'local'; reason: string };
+  | { kind: 'sanity'; dataset: string; signedIn: boolean }
+  | { kind: 'local'; reason: string; signIn: boolean }
+  | { kind: 'blocked'; reason: string };
 
 /** Server Actions return errors as values: thrown messages are hidden in production. */
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string };

@@ -70,6 +70,9 @@
 }
 .storageNote strong { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
 .storageNote p { line-height: 1.45; }
+.signIn { display: grid; gap: 8px; margin-top: 12px; }
+.signIn label { font-weight: 700; }
+.signInError { font-weight: 700; }
 
 /* ── Main list ───────────────────────────────────────────────────────── */
 

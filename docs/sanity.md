@@ -15,8 +15,8 @@ disagree, the code wins; update this plan.
 |---|---|---|
 | 0. Prerequisites | **Done.** Project `lk42drbi` has public `production` and `development` datasets. `.env` has the project ID, `NEXT_PUBLIC_SANITY_DATASET=development` and an Editor `SANITY_API_WRITE_TOKEN`. Adding them to Vercel has not been part of this work (not verified what Vercel has) | `.env`, `.env.example` |
 | 1. Sanity connection | **Built** | `lib/sanity/client.ts`, `lib/sanity/blogPosts.ts` |
-| 2. Sign-in | Not built (the user postponed it) | — |
-| 3. Dashboard on Sanity | **Built, local only**: the studio stays at `/sk-studio-ufn5xdafhll7` and uses Sanity only under `npm run dev` (D022). Not moved to `/admin/blogs` | `components/blog-studio/actions.ts`, `server.ts`, `store.ts` |
+| 2. Sign-in | **Built as a shared team password** (D030), not Auth.js + Google: the user chose the password for speed; per-person accounts and roles are not built | `components/blog-studio/auth.ts`, `auth-core.ts`, `auth-actions.ts` |
+| 3. Dashboard on Sanity | **Built**: the studio stays at `/sk-studio-ufn5xdafhll7`. It uses Sanity when signed in with the team password (D030), or under `npm run dev` when no sign-in is set up (D022). Not moved to `/admin/blogs` | `components/blog-studio/actions.ts`, `server.ts`, `store.ts` |
 | 4. Live blog | **Built** (D024): `/blog/[slug]`, `/blog`, "Keep reading" and the sitemap include published Sanity posts; drafts never shown; 60 s ISR + on-demand revalidation on studio saves | `content/blog/live.tsx`, `app/blog/[slug]/page.tsx`, `app/blog/layout.tsx`, `lib/sanity/image.ts` |
 | 5–6. Scheduling, users page | Not built | — |
 | 7. Testing | Sanity mode tested end to end on `development` (D023): 20/20 checks passed. Typecheck, build and the browser-mode flow pass. No browser requests to Sanity, no CORS errors | — |
@@ -31,7 +31,9 @@ Differences from the plan below, decided while building:
   not `{ assetId, url }`; the asset ID can be derived from the URL if needed.
 - Image upload is a Server Action (`uploadStudioImageAction`) with
   `experimental.serverActions.bodySizeLimit: "4mb"` in `next.config.ts`, not a route
-  handler. Server Actions get Next's built-in Origin/Host check.
+  handler. Server Actions get Next's built-in Origin/Host check. The action reads the file's
+  bytes and accepts only a complete JPG, PNG or WebP whose signature matches the declared type
+  (`lib/sanity/imageUpload.ts`); Sanity gets the detected type and a cleaned file name (D033).
 - Public reads use `getSanityReadClient()`: no token, `perspective: 'published'`, `useCdn: false`.
 - Images are optimised by `next/image` (hero, cards) and by Sanity's CDN parameters (article images, 1200x675 share crop) rather than `@sanity/image-url`.
 
@@ -43,6 +45,56 @@ Differences from the plan below, decided while building:
    "Saved in Sanity" and the dataset name.
 3. Create a draft, upload an image, publish, unpublish (status → Draft), delete. Check in
    Sanity (Vision or the API) that drafts are `drafts.<id>` and published posts `<id>`.
+
+### Write guard (D031)
+
+Writes to Sanity pass `checkSanityWriteGuard()` ([lib/sanity/guard.ts](../lib/sanity/guard.ts)) every time:
+`getSanityWriteClient()` runs it before returning a client, and `getStudioStorage()` runs it before a
+signed-in visitor gets Sanity mode. It fails closed and never falls back to another dataset:
+
+| Where it runs | Rule |
+|---|---|
+| Vercel Preview (`VERCEL_ENV=preview`) | Never writable. Sign-in is not offered either, even if the variables are present |
+| Vercel Production, or any `next start` (`NODE_ENV=production`) | Project ID must be `lk42drbi`, `NEXT_PUBLIC_SANITY_DATASET` exactly `production`, a write token present, and a valid sign-in session. Otherwise a signed-in visitor sees "Publishing is blocked" and every action returns the reason: no silent browser-storage fall-back |
+| `npm run dev` | Project `lk42drbi`, a valid dataset name and a token; no sign-in needed unless `STUDIO_*` is set |
+
+Post ids must be UUIDs, documents are built from an explicit field list, an existing document of another
+type under the same id is refused, and deletes only match `_type == "blogPost"`
+([lib/sanity/blogPosts.ts](../lib/sanity/blogPosts.ts), [lib/sanity/postValidation.ts](../lib/sanity/postValidation.ts)).
+`npm test` covers all of this against a fake Sanity client.
+
+### Login rate limit (D031, D032)
+
+Sign-in is its own endpoint, `POST /api/sk-studio-ufn5xdafhll7/login` (a Route Handler, not a Server Action), so a
+rate-limit rule can target login attempts and nothing else. Saving, publishing, deleting and uploading are Server
+Actions that all post to the studio page's own path; they are not affected by a rule on the login path. The path
+repeats the studio's unguessable segment, so the endpoint cannot be found without knowing the studio URL. There is
+no sign-in Server Action any more, so there is no second way to guess the password.
+
+In-app protection stays as defence in depth: a 700 ms delay on a wrong password, 8 wrong passwords per client and
+40 in total per 15 minutes per server instance (then HTTP 429 with `Retry-After`), a 20+ character passphrase, an
+Origin check and a 1 KB body limit. Clients are counted by the address Vercel supplies: Vercel overwrites
+`X-Forwarded-For` and does not forward external values to prevent spoofing (Vercel docs, "Request headers",
+checked 21 October 2026); anywhere else no header is trusted. Serverless instances do not share memory, so the
+shared, durable limit is a Vercel Firewall rule:
+
+**Vercel configuration (to be done by the site owner; not set up by the code)**
+
+1. Vercel → the project → **Firewall** → **Configure** → **+ New Rule**.
+2. Name it, for example "Studio login rate limit".
+3. **If** (all conditions must be true): request path **equals** `/api/sk-studio-ufn5xdafhll7/login` and request
+   method **equals** `POST`.
+4. **Then**: **Rate Limit**, algorithm **Fixed Window**, time window **60 s**, request limit **10**, counting key
+   **IP**, action **Default (429)**. To watch first without blocking, choose **Log** and change it later.
+5. **Save Rule**, then **Review Changes** → **Publish**.
+6. Check: ten wrong sign-ins in a minute should end in HTTP 429 from Vercel, while saving a post still works.
+
+Plans and pricing (Vercel docs, "WAF Rate Limiting", checked 21 October 2026): available on all plans. Hobby: 1
+rate-limit rule per project (this would use it), fixed window of 10 s to 10 min, counting keys IP or JA4 digest,
+1,000,000 included allowed requests. Pro: 40 rules per project, usage-based pricing (regional). Enterprise: more
+keys and a token-bucket option. Counters are per region, so traffic spread over several regions can exceed the
+limit in each one. No external service or dependency is needed. A durable store (Upstash Redis, Vercel KV) was
+considered and not added: a new dependency, service, secrets and possibly cost, which need the owner's approval.
 
 Facts below were checked on 20 October 2026 against npm, the Next.js 16 docs in
 `node_modules/next/dist/docs/`, and the Sanity and Vercel websites (sources at

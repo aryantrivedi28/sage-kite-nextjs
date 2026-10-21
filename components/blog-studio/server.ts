@@ -1,6 +1,7 @@
 import 'server-only';
 import { posts } from '@/content/blog';
-import { isSanityWritable, sanityDataset } from '@/lib/sanity/client';
+import { checkSanityWriteGuard, runtimeKind } from '@/lib/sanity/guard';
+import { isStudioAuthConfigured, isStudioSignedIn } from './auth';
 import type { SitePostSummary, StudioStorage } from './types';
 
 /** Live posts that are written in code (app/blog/<slug>/post.tsx), newest first. */
@@ -19,24 +20,42 @@ export function getSitePostSummaries(): SitePostSummary[] {
 }
 
 /*
- * The studio has no sign-in yet (decision.md D019, D022). Reading drafts and
- * writing with the Sanity token from a page anyone can open would expose and
- * endanger the content, so Sanity is used only under `npm run dev`. Deployed
- * builds keep browser storage. Remove the production check when sign-in exists.
+ * Where the studio saves (decision.md D022, D030, D031). Writing with the Sanity token from
+ * a page anyone can open would endanger the live blog, so Sanity needs ALL of:
+ *   - not a Vercel Preview (previews are read-only);
+ *   - team sign-in set up and the visitor signed in, or (no team sign-in set up) the app
+ *     running in development;
+ *   - the write guard (lib/sanity/guard.ts): the expected project, a write token, and in
+ *     production exactly the "production" dataset.
+ * This runs on the page and again in every Server Action (actions.ts), so a direct call
+ * cannot skip it. A signed-in visitor on production whose guard fails gets `blocked`: an
+ * error, never a silent fall-back to browser storage or another dataset.
  */
-export function getStudioStorage(): StudioStorage {
-  if (process.env.NODE_ENV === 'production') {
+export async function getStudioStorage(): Promise<StudioStorage> {
+  const runtime = runtimeKind();
+
+  if (runtime === 'preview') {
+    return { kind: 'local', signIn: false, reason: 'Preview deployments cannot publish, so the studio saves in this browser only.' };
+  }
+
+  const authConfigured = isStudioAuthConfigured();
+  if (runtime === 'production' && !authConfigured) {
     return {
       kind: 'local',
-      reason: 'On the deployed site the studio saves in this browser only. Sanity is used when running locally, until sign-in is added.',
+      signIn: false,
+      reason: 'Team sign-in is not set up on this site yet, so the studio saves in this browser only.',
     };
   }
-  if (!isSanityWritable()) {
-    return {
-      kind: 'local',
-      reason:
-        'Sanity is not configured: set NEXT_PUBLIC_SANITY_PROJECT_ID, NEXT_PUBLIC_SANITY_DATASET and SANITY_API_WRITE_TOKEN in .env, then restart npm run dev.',
-    };
+  if (authConfigured && !(await isStudioSignedIn())) {
+    return { kind: 'local', signIn: true, reason: 'Sign in with the team password to save to Sanity and publish.' };
   }
-  return { kind: 'sanity', dataset: sanityDataset };
+
+  // From here on the visitor may write: signed in, or running in development without team sign-in.
+  const guard = checkSanityWriteGuard();
+  if (!guard.ok) {
+    return runtime === 'production'
+      ? { kind: 'blocked', reason: guard.reason }
+      : { kind: 'local', signIn: false, reason: `Sanity is not available here: ${guard.reason}` };
+  }
+  return { kind: 'sanity', dataset: guard.dataset, signedIn: authConfigured };
 }

@@ -35,6 +35,8 @@ import {
 } from 'lucide-react';
 import { BlogGuide } from '@/components/blog/BlogGuide';
 import { formatDate } from '@/components/blog/formatDate';
+import { signOutStudioAction } from './auth-actions';
+import { STUDIO_LOGIN_PATH } from './paths';
 import { getStudioStore, type StudioStore } from './store';
 import { StudioArticle } from './StudioArticle';
 import {
@@ -153,6 +155,9 @@ export function BlogStudio({ storage, sitePosts, categories, platforms, author, 
   const [toast, setToast] = useState('');
   const toastTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const importRef = useRef<HTMLInputElement>(null);
+  const [password, setPassword] = useState('');
+  const [signInError, setSignInError] = useState('');
+  const [signingIn, setSigningIn] = useState(false);
 
   const dirty = !!draft && JSON.stringify(draft) !== snapshot;
 
@@ -171,6 +176,37 @@ export function BlogStudio({ storage, sitePosts, categories, platforms, author, 
     window.addEventListener('beforeunload', warn);
     return () => window.removeEventListener('beforeunload', warn);
   }, [dirty]);
+
+  async function signIn(e: React.FormEvent) {
+    e.preventDefault();
+    if (!password || signingIn) return;
+    setSigningIn(true);
+    setSignInError('');
+    try {
+      const response = await fetch(STUDIO_LOGIN_PATH, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      const result = (await response.json()) as { ok: boolean; error?: string };
+      if (response.ok && result.ok) {
+        // The storage mode is fixed for the page's lifetime, so reload to pick up the new one.
+        window.location.reload();
+        return;
+      }
+      setSignInError(result.error ?? 'Could not sign in. Try again.');
+    } catch {
+      setSignInError('Could not sign in. Check your connection and try again.');
+    }
+    setSigningIn(false);
+  }
+
+  async function signOut() {
+    const result = await signOutStudioAction();
+    if (result.ok) window.location.reload();
+    else notify(result.error);
+  }
 
   function notify(message: string) {
     setToast(message);
@@ -232,9 +268,13 @@ export function BlogStudio({ storage, sitePosts, categories, platforms, author, 
       return notify(`Before ${status === 'scheduled' ? 'scheduling' : 'publishing'}, complete: ${missing.map((m) => m.label.toLowerCase()).join('; ')}.`);
     }
     const message =
-      status === 'scheduled'
-        ? `Schedule saved ${studioStore.savedIn}. The live site has not changed.`
-        : `Saved as published ${studioStore.savedIn}. The live site has not changed.`;
+      storage.kind === 'sanity'
+        ? status === 'scheduled'
+          ? 'Schedule saved to Sanity. Automatic publishing is not built yet: publish the post yourself on that date.'
+          : 'Published to Sanity. It appears on the blog within a minute.'
+        : status === 'scheduled'
+          ? `Schedule saved ${studioStore.savedIn}. The live site has not changed.`
+          : `Saved as published ${studioStore.savedIn}. The live site has not changed.`;
     const go = () => persist(stampDates(next), message);
     const warnings = checks.filter((c) => !c.required && !c.ok);
     if (warnings.length && draft.status !== status) {
@@ -359,17 +399,46 @@ export function BlogStudio({ storage, sitePosts, categories, platforms, author, 
           </a>
         </nav>
         <div className={styles.storageNote}>
-          <strong><Info size={15} /> Saved in {studioStore.label}</strong>
+          <strong>
+            <Info size={15} /> {storage.kind === 'blocked' ? 'Publishing is blocked' : `Saved in ${studioStore.label}`}
+          </strong>
           {storage.kind === 'sanity' ? (
             <p>
-              Dataset “{storage.dataset}”. Posts are not shown on sagekite.com yet. Sanity is used only when running
-              locally, until sign-in is added.
+              Dataset “{storage.dataset}”. Published posts appear on the blog within a minute; drafts stay private.
+            </p>
+          ) : storage.kind === 'blocked' ? (
+            <p role="alert">
+              Nothing can be saved or published until this is fixed. {storage.reason} It does not fall back to this
+              browser, so no post is lost silently.
             </p>
           ) : (
             <p>
               Posts here are not on sagekite.com yet, and other people cannot see them.
               Export a backup regularly; clearing browser data deletes them. {storage.reason}
             </p>
+          )}
+          {storage.kind === 'local' && storage.signIn && (
+            <form className={styles.signIn} onSubmit={signIn}>
+              <p>Posts saved in this browser are not copied when you sign in: Export them first, then Import after signing in.</p>
+              <label htmlFor="studio-password">Team password</label>
+              <input
+                id="studio-password"
+                className={styles.input}
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {signInError && <p className={styles.signInError} role="alert">{signInError}</p>}
+              <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={!password || signingIn}>
+                {signingIn ? 'Signing in…' : 'Sign in'}
+              </button>
+            </form>
+          )}
+          {((storage.kind === 'sanity' && storage.signedIn) || storage.kind === 'blocked') && (
+            <div className={styles.signIn}>
+              <button type="button" className={styles.btn} onClick={signOut}>Sign out</button>
+            </div>
           )}
         </div>
       </aside>
@@ -1205,9 +1274,9 @@ function ImageField({
         <input
           className={styles.input}
           value={uploaded ? '' : value}
-          placeholder={uploaded ? 'Uploaded image (stored inside the post)' : '/images/blog/your-image.jpg or https://…'}
+          placeholder={uploaded ? 'Uploaded image (stored inside the post)' : '/images/blog/your-image.jpg, or use Upload'}
           onChange={(e) => onChange(e.target.value.trim())}
-          aria-label="Image path or URL"
+          aria-label="Image path"
         />
         <div className={styles.inline}>
           <button type="button" className={styles.btn} disabled={busy} onClick={() => fileRef.current?.click()}>
@@ -1588,7 +1657,7 @@ function Preview({ post, onBack }: { post: StudioPost; onBack: () => void }) {
 
             <div className="article-layout">
               <div className="article-content">
-                {post.blocks.length ? <StudioArticle blocks={post.blocks} /> : <p>No article content yet.</p>}
+                {post.blocks.length ? <StudioArticle blocks={post.blocks} preview /> : <p>No article content yet.</p>}
               </div>
               <aside className="article-sidebar">
                 {guide.length > 0 && <BlogGuide items={guide} />}

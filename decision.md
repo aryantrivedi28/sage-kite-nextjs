@@ -1020,11 +1020,235 @@ Past approval records below describe only what the supplied reports establish.
 - **Delivery:** No code changed and no Sanity writes by Claude. No commit, push or deployment
   performed. The user commits manually.
 
+## D030 — Team sign-in for the blog studio, so published posts reach the live blog
+
+- **Date:** 21 October 2026.
+- **Status:** Implemented and verified locally on a production build (`next build` + `next start`). Not committed,
+  pushed or deployed. Vercel's environment variables were not read or changed.
+- **Why:** The user asked for posts published in the studio to show on the live website. Until now the deployed
+  studio could not write to Sanity at all (D022): without a login, anyone with the unlisted URL could have
+  changed the live blog. Sign-in had to come first.
+- **Approval:** The user chose, when asked: a **shared team password** (not Google sign-in) and **everyone who
+  signs in may publish** (no admin/editor split). This also means a content change reaches the live blog
+  without a separate approval step, which AGENTS.md's approval rule leaves to the user.
+- **What changed:**
+  - `components/blog-studio/auth-core.ts` (new): pure session logic. Cookie value `<expiry>.<HMAC-SHA256>`;
+    the HMAC covers the expiry and a fingerprint of the password, so changing the password or the secret signs
+    everyone out. Constant-time comparisons. Password 12+ characters and secret 32+ are required; weaker values
+    count as "not set up".
+  - `components/blog-studio/auth.ts` (new): reads `STUDIO_PASSWORD` and `STUDIO_SESSION_SECRET`, sets the cookie
+    (HttpOnly, SameSite=Lax, Secure in production, `Path` limited to the studio URL, 7 days), a 700 ms delay on a
+    wrong password and a best-effort brake of 8 wrong attempts per 15 minutes per client per server instance.
+  - `components/blog-studio/auth-actions.ts` (new): sign-in and sign-out Server Actions.
+  - `components/blog-studio/server.ts`: `getStudioStorage()` is now async. Sanity is used only when Sanity is
+    configured and either the visitor is signed in, or (no team sign-in set up) the app runs in development.
+    Without `STUDIO_*` on the deployed site nothing changes: still browser-only. The old
+    `NODE_ENV === 'production'` block is gone; the sign-in replaces it.
+  - `components/blog-studio/actions.ts`: all four Server Actions call the async check, so a direct call without
+    a session is refused (the page is not the guard).
+  - `app/sk-studio-ufn5xdafhll7/page.tsx`: `await connection()` so the page is rendered per request. Without it
+    the page was prerendered at build time and showed the wrong state (found by the tests below).
+  - `components/blog-studio/BlogStudio.tsx` and `.module.css`: a "Team password" form in the sidebar when signed
+    out, a "Sign out" button when signed in, and honest messages (the old "The live site has not changed" text is
+    now shown only in browser mode; Sanity mode says the post appears on the blog within a minute, and that
+    scheduling does not publish automatically).
+  - `.env.example`, AGENTS.md, docs/blog-studio.md, docs/sanity.md updated.
+- **Expected effects:** With `STUDIO_PASSWORD`, `STUDIO_SESSION_SECRET`, the Sanity vars and
+  `NEXT_PUBLIC_SANITY_DATASET=production` set on Vercel, a signed-in publish appears on `/blog`, the post page and
+  the sitemap straight away (`revalidatePath`) and at the latest after 60 s. Browser-stored posts are not copied
+  at sign-in: Export first, then Import after signing in.
+- **Limitations:** One shared password, so nobody is recorded as the publisher and nothing separates admins from
+  editors. The attempt brake is per server instance (serverless instances do not share memory). "Scheduled" still
+  does not publish automatically. A published post is public and indexable at once (no per-post noindex).
+- **Validation (run by Claude, local):** `npx tsc --noEmit` and `npm run build` pass. 15 unit checks on
+  `auth-core.ts` (valid, expired, tampered, extended-expiry, wrong secret, changed password, garbage values).
+  34 HTTP checks on a production build on port 3100 (`next start`, throwaway test credentials passed on the
+  command line, `.env` untouched): signed-out page shows the sign-in form and no Sanity claim; list, save, delete
+  and upload actions are refused without a session; wrong and non-string passwords are rejected, delayed and set
+  no cookie; the right password sets an HttpOnly, SameSite=Lax, Secure, path-limited, 7-day cookie; forged,
+  tampered, extended and empty cookies are refused; sign-out clears the cookie; the brute-force brake blocks even
+  the right password. Browser run on that build against the `development` dataset: wrong password message, sign
+  in, image upload, publish ("Published to Sanity"), the card on `/blog`, the post page (200), the sitemap and
+  "Keep reading" updated immediately, sign out (studio back to browser mode, the post stays public), sign in,
+  delete. The real live site showed nothing of it (post 404, not in sitemap).
+- **Mistake during cleanup (development dataset only):** to remove the test image the cleanup deleted every
+  image asset with no references in `development` (3). One was uploaded by this test; the other two
+  (`audit-planning.webp`, `deal-closed.webp`) were not and were deleted without the user's say. Sanity assets
+  cannot be restored. A CDN copy of `audit-planning` (a JPEG, not the original file) was saved; `deal-closed`
+  was already gone from the CDN. The dataset held no documents at the time, so no post was broken. If the user
+  was editing a post in the studio with those images, they must be uploaded again. Rule going forward: delete
+  only assets this work created, by ID.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D031 — Security fixes from the studio audit: JSON-LD escaping, document validation, dataset guard, login hardening
+
+- **Date:** 21 October 2026.
+- **Status:** Implemented and verified locally (unit tests, a production build and HTTP tests). Not committed, pushed
+  or deployed. Vercel settings were not read or changed. Nothing was written to either Sanity dataset.
+- **Why:** The final security review of D030 found one configuration blocker and several hardening items. The user
+  authorised fixing I1 to I4 locally, without deploying.
+- **Approval:** User instruction of 21 October 2026 ("I authorize you to fix the critical issues locally, but not to
+  deploy or push anything").
+- **I1, stored XSS through JSON-LD (fixed):** `serializeJsonLd()` in
+  [components/blog/blogJsonLd.ts](components/blog/blogJsonLd.ts) escapes `<` as `\u003c` (Next.js's documented
+  fix) and the two Unicode line separators. The new [components/blog/JsonLd.ts](components/blog/JsonLd.ts)
+  component is the only way [BlogArticleLayout.tsx](components/blog/BlogArticleLayout.tsx) embeds it, so Article,
+  BreadcrumbList and FAQPage are all covered. Other JSON-LD on the site is written in code, not from Sanity, and was
+  not changed.
+- **I2, unrestricted writes and deletes (fixed):** post ids must be UUIDs
+  ([lib/sanity/blogPosts.ts](lib/sanity/blogPosts.ts)), so image assets, `drafts.…` and system ids never match (the
+  old pattern accepted `image-<hash>-1200x675-webp`). Documents are built from an explicit field list, so `_type`,
+  `_id`, `_createdAt` and unknown keys sent by a client are dropped. A new pure validator,
+  [lib/sanity/postValidation.ts](lib/sanity/postValidation.ts), checks every field's type and size and that
+  category, platform and status are known values. `saveStudioPostAction` refuses to replace or delete an existing
+  document of another type under the same id, and `deleteStudioPostAction` only matches `_type == "blogPost"`
+  ([actions.ts](components/blog-studio/actions.ts)). A post from browser storage or an import with an older id shape
+  gets a new UUID when first saved to Sanity ([store.ts](components/blog-studio/store.ts)).
+- **I4, dataset guard (fixed):** [lib/sanity/guard.ts](lib/sanity/guard.ts). Vercel Preview is never writable and
+  never offers sign-in. Production (Vercel Production or any `next start`) needs project `lk42drbi`, the dataset
+  exactly `production` and a write token; development needs the project, a valid dataset name and a token. The
+  Sanity write client runs the guard on every call. A signed-in visitor on production whose guard fails sees a new
+  `blocked` state ("Publishing is blocked" and the reason) and every action returns it: no silent browser-storage
+  fall-back and no other dataset. Signed-out visitors are not told about the misconfiguration.
+- **I3, login rate limit (partly fixed, rest waiting for approval):** the limiter is now
+  [components/blog-studio/rate-limit.ts](components/blog-studio/rate-limit.ts): 8 wrong passwords per client and 40
+  in total per 15 minutes per instance, a bounded client table, and a client key that trusts `x-vercel-forwarded-for`
+  / `x-forwarded-for` only on Vercel, where Vercel overwrites them (Vercel docs, "Request headers", checked 21 October
+  2026); elsewhere everyone shares one bucket, so spoofing a header gains nothing. The passphrase must be 20+
+  characters with 12+ different ones and no guessable word (this supersedes D030's 12-character minimum). A shared,
+  durable limit needs a Vercel Firewall rule (WAF Rate Limiting, all plans, Hobby 1 rule, per-region counters, Pro
+  usage-based pricing; Vercel docs checked 21 October 2026) or an external store. Both change infrastructure or
+  cost, so they are described in docs/sanity.md ("Login rate limit") and **not** set up: the user decides.
+- **Tests added:** `npm test` (`tests/`, Node's built-in runner with a small loader and stubs; no new dependency, no
+  network, Sanity replaced by a recording fake): 49 tests: JSON-LD (6, including a negative control showing the old
+  embedding broke out), guard (8), rate limit (8), auth-core and passphrase (7), Server Actions (20, including
+  malicious ids, wrong document types, hostile extra fields, dataset/project/token/Preview refusals, unauthenticated
+  and forged cookies, slug collision with all eight code posts, revalidation, upload limits and negative controls).
+- **Other checks (run by Claude, local production build):** `npx tsc --noEmit` and `npm run build` pass. 27 HTTP
+  checks on `next start` with throwaway credentials (unauthenticated refusals, cookie flags, blocked state, forged
+  cookies, cross-origin requests, spoofed `X-Forwarded-For` no longer bypassing the limiter). A weak passphrase
+  leaves sign-in off. No token, password or secret in any client bundle or rendered page. Structured data of all
+  eight posts is identical to the live site's, now without any raw `<`. YouTube `referrerPolicy`, Analytics
+  (`app/layout.tsx`), tag spacing (`app/globals.css`) and the Studio button styles are unchanged (`StudioArticle.tsx`,
+  `layout.tsx` and `globals.css` identical to HEAD; the studio CSS only gained the sign-in form rules).
+- **Not tested / assumptions:** behaviour on Vercel itself (that `VERCEL_ENV` is `production` or `preview` there and
+  that `VERCEL=1` is set at runtime are Vercel's documented behaviour); the positive Sanity path against real Sanity
+  (only against the fake); upload content-type is still the client's declaration.
+- **Not done in this step:** I5 (raw Sanity error text returned to signed-in users), I6 (no X-Frame-Options or CSP)
+  and I7 (inline image URLs not restricted). Done in D032.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D032 — Dedicated sign-in endpoint, generic errors, studio security headers and an image-source allowlist
+
+- **Date:** 21 October 2026.
+- **Status:** Implemented and verified locally (unit tests, a production build, HTTP tests and a real-browser check).
+  Not committed, pushed or deployed. Vercel settings were not read or changed. Nothing was written to either Sanity
+  dataset.
+- **Approval:** User instruction of 21 October 2026: give sign-in its own endpoint so a WAF rule does not limit every
+  studio action; implement I5, I6 and I7 with minimal changes; no external service or dependency without approval.
+- **Dedicated sign-in endpoint:** sign-in moved from a Server Action to a Route Handler,
+  [app/api/sk-studio-ufn5xdafhll7/login/route.ts](app/api/sk-studio-ufn5xdafhll7/login/route.ts) (`POST
+  /api/sk-studio-ufn5xdafhll7/login`; the form in [BlogStudio.tsx](components/blog-studio/BlogStudio.tsx) calls it with
+  `fetch`). The path keeps the studio's unguessable segment instead of the example `/api/studio/login`, so the endpoint
+  cannot be found without the studio URL (a fixed, guessable path would have exposed the password to guessing without
+  the secret URL). The sign-in Server Action was **removed** (it would have been a second, unlimited way to guess the
+  password and would sit on the studio path); `auth-actions.ts` now only signs out. The route checks that the request
+  comes from this site (Origin must match Host or X-Forwarded-Host: Route Handlers have no built-in check), accepts only
+  `application/json` up to 1 KB, answers 401 / 429 (with `Retry-After`) / 503 / 400 / 403 / 413 / 415, and sets
+  `Cache-Control: no-store`. The cookie is unchanged (HttpOnly, SameSite=Lax, Secure in production, `Path` = the studio
+  page, 7 days); a server may set a cookie for another path of its own host, and Chrome accepted it. The in-app delay and
+  per-client and global brake remain (defence in depth). New file [paths.ts](components/blog-studio/paths.ts) holds both
+  URLs. **Vercel WAF rule, to be set by the owner:** path equals `/api/sk-studio-ufn5xdafhll7/login`, method POST, rate
+  limit, fixed window 60 s, 10 requests, key IP (details, plans and pricing in docs/sanity.md). Saving, publishing,
+  deleting and uploading post to the studio page path and are not touched by that rule. No dependency or external service
+  was added.
+- **I5, generic errors:** [actions.ts](components/blog-studio/actions.ts) now returns a message only when it was
+  written in this app (`SafeError`, [lib/sanity/errors.ts](lib/sanity/errors.ts); also validation and guard
+  messages). A failure from Sanity or the network becomes a generic sentence per action. The server log gets the action
+  name and an HTTP status code, never the error text. A failed cache refresh after a successful write is logged and
+  no longer turns the save into an error.
+- **I6, security headers:** [next.config.ts](next.config.ts) sends, for the studio page and its sign-in endpoint only,
+  `X-Frame-Options: DENY`, a CSP of just `frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src
+  'none'`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, `X-Robots-Tag: noindex, nofollow,
+  noarchive` and a restrictive `Permissions-Policy`. A full CSP was deliberately not added (it needs an allowlist for
+  Next's inline scripts, Google Analytics, YouTube, cdn.sanity.io and `data:` previews); docs/blog-studio.md §10b
+  describes how to roll one out as Report-Only. Public pages are unchanged.
+- **I7, image sources:** [lib/sanity/image.ts](lib/sanity/image.ts) `isAllowedImageSrc`: a file under `/images/` or at
+  the site root with an image extension, or an unmodified upload to this project's Sanity CDN. The server
+  ([postValidation.ts](lib/sanity/postValidation.ts)) refuses anything else in the featured image, author image and
+  image blocks, so a crafted request cannot insert a tracking pixel; `isUsableFeaturedImage` is the same rule; the live
+  renderer ignores a stored author image that is not allowed and
+  [StudioArticle.tsx](components/blog-studio/StudioArticle.tsx) renders only allowed sources (the studio preview alone
+  also shows raster `data:` images just picked in the browser). The image field in the studio no longer advertises
+  pasting a URL. This is a change for editors: an external image URL can no longer be used; upload it instead.
+- **Tests (run by Claude):** `npm test` 65/65 (new: login route 6, image sources 5, generic errors and failed
+  transaction and cache-refresh cases, crafted image requests, and the proof that a rate-limited login does not stop a
+  signed-in editor from saving, listing and deleting). `npx tsc --noEmit` and `npm run build` pass. 45 HTTP checks on
+  `next start` with throwaway credentials: headers on the studio page and endpoint (and absent on public pages), the old
+  sign-in Server Action returns 404, every login status code and cookie flags, blocked state on a production runtime with
+  the development dataset, forged cookies, cross-origin requests, spoofed `X-Forwarded-For` still ending in 429, and 30
+  rapid editing requests in a row all answered (no 429). Browser run in Chrome: the form posts to the new endpoint, a
+  wrong password shows the message, the right one signs in (cookie accepted), no console errors from the headers, and the
+  YouTube embed still plays on the page with the new headers. Eight posts and the sitemap unchanged; structured data of all
+  eight identical to the live site's, with no raw `<`; no token, password or secret in any built file; YouTube
+  `referrerPolicy`, Analytics (`app/layout.tsx`), tag spacing (`app/globals.css`) and the Studio button styles unchanged.
+- **Not tested / assumptions:** behaviour on Vercel itself (`VERCEL_ENV`, `VERCEL=1`, `Host` and `X-Forwarded-Host` as
+  documented); the WAF rule (not set up); the positive Sanity path against real Sanity (fake client only); a full CSP.
+- **Remaining risks:** the WAF rule is not yet configured, so until it is the only brake is per instance; counters in
+  the WAF are per region; one shared password and stateless 7-day sessions (D030); upload content-type is still the
+  client's declaration; Sanity sends images to visitors from cdn.sanity.io.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D033 — Studio image uploads are checked from the file's bytes, not the declared type
+
+- **Date:** 21 October 2026.
+- **Status:** Implemented and verified locally (unit tests, typecheck, production build). Not committed, pushed or
+  deployed. Vercel settings were not read or changed. Nothing was written to either Sanity dataset.
+- **Why:** the remaining risk recorded in D032: `uploadStudioImageAction` accepted a file because the browser said it
+  was `image/jpeg`, `image/png` or `image/webp`, and passed that declared type and the browser's file name to Sanity.
+  A direct call to the action could send any bytes under an allowed label.
+- **Approval:** User instruction of 21 October 2026: validate the actual file on the server, enforce an explicit
+  allowlist, reject mismatched or unsupported content before calling Sanity, keep existing uploads and previews, and add
+  regression tests. No content or design change; no dependency added.
+- **Change:** new [lib/sanity/imageUpload.ts](lib/sanity/imageUpload.ts). `UPLOAD_IMAGE_FORMATS` is the allowlist (JPG,
+  PNG, WebP). `detectImageType` recognises a format only from a complete file: JPEG starts `FF D8 FF` and ends `FF D9`;
+  PNG has its signature, a 13-byte `IHDR` first and `IEND` as the last 12 bytes; WebP is `RIFF…WEBP` with a `VP8 `,
+  `VP8L` or `VP8X` chunk and a RIFF size equal to the file size. `checkUploadedImage` refuses a declared type outside
+  the allowlist ("Use a JPG, PNG or WebP image."), bytes that are none of the formats ("This file is not a valid JPG,
+  PNG or WebP image.") and a mismatch ("This file's contents do not match its image type."). `uploadFileName` reduces
+  the name to letters, digits and dashes (80 characters at most) with the detected extension.
+  [actions.ts](components/blog-studio/actions.ts) checks the size, reads the bytes, runs the check, and only then calls
+  Sanity, with the detected `contentType` and the cleaned `filename`. `ACCEPTED_IMAGE_TYPES` in
+  [postUtils.ts](components/blog-studio/postUtils.ts) (the browser's file picker and pre-check) now derives from the
+  same allowlist. The browser side (resize and re-encode to WebP, previews, browser-only storage) is unchanged.
+- **Expected effects:** editors see no difference: the studio re-encodes every picked image in the browser to WebP (or
+  PNG where a browser cannot encode WebP; that PNG, previously stored under a `.webp` name, is now named `.png`).
+  Images already in Sanity and posts that use them are not touched. A crafted request with SVG, HTML, GIF, a mislabelled
+  image or an image with data appended is refused before Sanity.
+- **Tests (run by Claude):** `npm test` 75/75 (10 new). New [tests/image-upload.test.mts](tests/image-upload.test.mts):
+  real 2x2 JPG, PNG and lossy, lossless and alpha WebP (made once with sharp, embedded in
+  [tests/fixtures/images.mts](tests/fixtures/images.mts)) pass; all 48 JPG, PNG and WebP files in `public/` pass;
+  incorrect MIME types (SVG, HTML, GIF, AVIF, HEIC, `image/jpg`, octet-stream, parameters, empty) are refused;
+  six signature mismatches are refused; 16 unsupported, fake, truncated or padded files are refused under every allowed
+  type; file-name cleaning; negative control. In [tests/actions.test.mts](tests/actions.test.mts), the real action
+  against the fake Sanity client: 10 bad uploads refused with no Sanity call, Sanity receives the detected type, cleaned
+  name and unchanged bytes (including the PNG fallback named `.webp`), and an oversized file is refused. The upload
+  helper there now sends a real WebP instead of 100 zero bytes, which the new check rightly refuses. Mutation check:
+  with the previous declared-type check restored, the two new action tests fail. `npx tsc --noEmit` and `npm run build`
+  pass. `next start` (write token and studio secrets blanked) serves the studio, `/blog` and `/` with 200.
+- **Not tested / assumptions:** a real upload from a browser to Sanity (not done: no writes to either dataset); the
+  browser's actual canvas output was not captured, so its acceptance rests on the format rules and the sharp fixtures.
+- **Limitations / remaining risks:** the check is of the file's structure, not a full decode: a well-formed file with
+  hidden content inside its chunks (metadata, a crafted image body) still passes, and Sanity processes it; uploads are
+  served from cdn.sanity.io, not this site. Image dimensions are not checked on the server. The browser pre-check
+  still reads `file.type`, but the server no longer depends on it.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
 
-### D030 — [Short description]
+### D034 — [Short description]
 
 - **Date:** [Date recorded; implementation date if different.]
 - **Status:** [Proposed / approved / implemented / verified.]

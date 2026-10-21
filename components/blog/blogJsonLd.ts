@@ -4,6 +4,22 @@ import { absoluteImageUrl } from '@/lib/sanity/image';
 const SITE_URL = 'https://www.sagekite.com';
 
 /**
+ * Serialises JSON-LD for a `<script type="application/ld+json">` element. `JSON.stringify` does
+ * not escape `<`, so a post field such as `</script><script>alert(1)</script>` would end the
+ * script element early and run as page JavaScript. Every `<` becomes `\u003c` (still valid JSON,
+ * the same value once parsed), as Next.js's JSON-LD guide recommends. The two Unicode line
+ * separators are escaped too: they are legal in JSON but break JavaScript string literals.
+ * Titles, excerpts, authors, tags and FAQs come from the blog studio, so always embed JSON-LD
+ * through this function (or the JsonLd component), never with a bare JSON.stringify.
+ */
+export function serializeJsonLd(data: unknown): string {
+  return JSON.stringify(data)
+    .replace(/</g, '\\u003c')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+}
+
+/**
  * Builds the JSON-LD graph for a blog post from its data in content/blog.
  * Every post gets Article + BreadcrumbList. FAQPage is added when the post
  * sets `faqs`, and the Article is linked to a platform page's Service schema

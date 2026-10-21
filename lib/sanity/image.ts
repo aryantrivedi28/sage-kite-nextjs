@@ -6,7 +6,6 @@
  */
 
 const SITE_URL = 'https://www.sagekite.com';
-const PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? '';
 
 // https://cdn.sanity.io/images/<project>/<dataset>/<hash>-<width>x<height>.<ext>, no query string
 const SANITY_IMAGE = /^https:\/\/cdn\.sanity\.io\/images\/([a-z0-9]+)\/[\w-]+\/[a-f0-9]+-(\d+)x(\d+)\.[a-z]+$/;
@@ -14,7 +13,8 @@ const SANITY_IMAGE = /^https:\/\/cdn\.sanity\.io\/images\/([a-z0-9]+)\/[\w-]+\/[
 /** An unmodified image URL from this project's Sanity CDN (what next.config.ts allows). */
 export function isSanityImage(src: string): boolean {
   const m = SANITY_IMAGE.exec(src);
-  return !!m && !!PROJECT_ID && m[1] === PROJECT_ID;
+  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? '';
+  return !!m && !!projectId && m[1] === projectId;
 }
 
 /** Original pixel size, read from the asset URL. */
@@ -36,9 +36,39 @@ export function sanityImageUrl(
   return `${src}?${q}`;
 }
 
-/** A site path (/images/…) or a Sanity upload: the featured-image sources next/image accepts. */
+/**
+ * A path to an image file on this site: under /images/ or a single file at the site root (such as
+ * /aryan_t.jpeg). No query, no host, no `..`, and nothing under /api/ or /_next/.
+ */
+const SITE_IMAGE_PATH = /^\/(?:images\/(?:[A-Za-z0-9._~%-]+\/)*[A-Za-z0-9._~%-]+|[A-Za-z0-9][A-Za-z0-9._~%-]*)\.(?:jpe?g|png|webp|avif|gif|svg)$/i;
+
+export function isSiteImagePath(src: string): boolean {
+  return SITE_IMAGE_PATH.test(src) && !src.includes('..');
+}
+
+/**
+ * The only image sources the blog accepts: a file on this site or an unmodified upload to this
+ * project's Sanity CDN. Anything else (another host, a query string, `data:`, `javascript:`) is
+ * refused, so a crafted request cannot plant a tracking pixel or hotlink in a post.
+ */
+export function isAllowedImageSrc(src: string): boolean {
+  return isSiteImagePath(src) || isSanityImage(src);
+}
+
+/** Featured and author images, which next/image shows: the same two sources. */
 export function isUsableFeaturedImage(src: string): boolean {
-  return (src.startsWith('/') && !src.startsWith('//')) || isSanityImage(src);
+  return isAllowedImageSrc(src);
+}
+
+/**
+ * The image source an article should render, or null to render nothing. Published pages show only
+ * allowed sources, whatever is stored. The studio preview also shows images the editor just picked in
+ * this browser (`data:` URLs of raster images), which never reach a published page.
+ */
+export function imageSrcForRender(src: string, preview = false): string | null {
+  if (isAllowedImageSrc(src)) return src;
+  if (preview && /^data:image\/(?:png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(src)) return src;
+  return null;
 }
 
 /** Absolute URL for metadata and JSON-LD. */

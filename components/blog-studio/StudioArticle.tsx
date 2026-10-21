@@ -11,7 +11,7 @@ import {
   tableRows,
   youtubeId,
 } from './postUtils';
-import { isSanityImage, sanityImageSize, sanityImageUrl } from '@/lib/sanity/image';
+import { imageSrcForRender, isSanityImage, sanityImageSize, sanityImageUrl } from '@/lib/sanity/image';
 
 /** Widths offered for article images (the article column is 720px wide). */
 const ARTICLE_IMAGE_WIDTHS = [720, 1080, 1440];
@@ -47,7 +47,7 @@ export function Inline({ text }: { text: string }) {
   );
 }
 
-function Block({ block, anchor }: { block: StudioBlock; anchor?: string }) {
+function Block({ block, anchor, preview }: { block: StudioBlock; anchor?: string; preview: boolean }) {
   switch (block.type) {
     case 'heading': {
       if (!block.text.trim()) return null;
@@ -69,10 +69,11 @@ function Block({ block, anchor }: { block: StudioBlock; anchor?: string }) {
       return <L>{items.map((t, i) => <li key={i}><Inline text={t} /></li>)}</L>;
     }
     case 'image': {
-      if (!block.src) return null;
-      // Sanity uploads are resized by Sanity's CDN (format chosen per browser); other sources render as given.
-      const size = isSanityImage(block.src) ? sanityImageSize(block.src) : null;
-      const src = block.src;
+      // Only this site's files and this project's Sanity uploads are ever rendered (lib/sanity/image.ts).
+      const src = imageSrcForRender(block.src, preview);
+      if (!src) return null;
+      // Sanity uploads are resized by Sanity's CDN (format chosen per browser); site files render as given.
+      const size = isSanityImage(src) ? sanityImageSize(src) : null;
       return (
         <figure>
           {size ? (
@@ -155,13 +156,14 @@ function Block({ block, anchor }: { block: StudioBlock; anchor?: string }) {
 }
 
 /** The article body. Place inside an element with className="article-content". */
-export function StudioArticle({ blocks }: { blocks: StudioBlock[] }) {
+/** `preview` is true only in the studio, where images picked in this browser are shown before they are uploaded. */
+export function StudioArticle({ blocks, preview = false }: { blocks: StudioBlock[]; preview?: boolean }) {
   const resolved = resolveBlocks(blocks);
   const anchors = headingAnchors(resolved);
   return (
     <>
       {resolved.map((b) => (
-        <Block key={b.id} block={b} anchor={anchors.get(b.id)} />
+        <Block key={b.id} block={b} anchor={anchors.get(b.id)} preview={preview} />
       ))}
     </>
   );

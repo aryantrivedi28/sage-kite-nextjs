@@ -6,7 +6,7 @@ import type { StudioPost } from '@/components/blog-studio/types';
 import { PLATFORM_PAGE_SLUGS } from '@/content/platforms';
 import { BLOG_POST_TYPE, PUBLISHED_BLOG_POSTS_QUERY, fromBlogPostDocument } from '@/lib/sanity/blogPosts';
 import { getSanityReadClient, isSanityConfigured } from '@/lib/sanity/client';
-import { isUsableFeaturedImage } from '@/lib/sanity/image';
+import { isAllowedImageSrc, isUsableFeaturedImage } from '@/lib/sanity/image';
 import { posts as codePosts } from './index';
 import type { BlogPost } from './types';
 
@@ -55,7 +55,7 @@ function toBlogPost(p: StudioPost): BlogPost | null {
     excerpt: p.excerpt.trim(),
     category: p.category,
     author: p.author.trim() || 'Sage Kite',
-    authorImage: p.authorImage || undefined,
+    authorImage: isAllowedImageSrc(p.authorImage) ? p.authorImage : undefined,
     publishedAt: p.publishedAt,
     updatedAt: ISO_DATE.test(p.updatedAt) ? p.updatedAt : undefined,
     readingTime,

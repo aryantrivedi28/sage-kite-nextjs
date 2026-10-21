@@ -1,12 +1,14 @@
 import type { BlogFaq, BlogGuideItem } from '@/content/blog/types';
 import { isUsableFeaturedImage } from '@/lib/sanity/image';
+import { UPLOAD_IMAGE_FORMATS } from '@/lib/sanity/imageUpload';
 import type { SitePostSummary, StudioBlock, StudioBlockType, StudioPost } from './types';
 
 export const SITE_URL = 'https://www.sagekite.com';
 export const TITLE_SUFFIX = ' | Sage Kite';
 const WORDS_PER_MINUTE = 225;
 
-export const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+/** The formats a writer may pick (checked again from the file's bytes on upload: lib/sanity/imageUpload.ts). */
+export const ACCEPTED_IMAGE_TYPES: string[] = Object.keys(UPLOAD_IMAGE_FORMATS);
 /** Largest file a writer may pick; it is resized in the browser before saving. */
 export const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
 /** Largest resized image sent to the server (Server Action limit is set to 4mb in next.config.ts). */

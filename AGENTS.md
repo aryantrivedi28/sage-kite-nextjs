@@ -10,11 +10,13 @@ Marketing website for **Sage Kite**, a business growth consultancy.
 Live at `https://www.sagekite.com`.
 
 - Next.js 16 (App Router), React 19, TypeScript. No database for the site itself, no
-  API routes, no auth. `NEXT_PUBLIC_GHL_WEBHOOK_URL` (contact form webhook) is set in
+  auth for the public pages, and one API route (the blog studio's sign-in). `NEXT_PUBLIC_GHL_WEBHOOK_URL` (contact form webhook) is set in
   `.env` locally (not committed) and in Vercel's environment variables; it is fixed at
   build time, so redeploy after changing it. The blog studio's Sanity connection uses
   `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET` and the server-only
-  `SANITY_API_WRITE_TOKEN` (docs/sanity.md). See `.env.example`.
+  `SANITY_API_WRITE_TOKEN` (docs/sanity.md); the studio's team sign-in adds the server-only
+  `STUDIO_PASSWORD` (a strong passphrase, 20+ characters) and `STUDIO_SESSION_SECRET` (32+). Set the
+  token and `STUDIO_*` on Vercel Production only; see `.env.example`.
 - Google Analytics 4 (gtag.js, measurement ID `G-QQFH3W77TS`) is loaded once by two
   `next/script` components (`strategy="afterInteractive"`, inline one with
   `id="google-analytics"`) at the end of `<body>` in `app/layout.tsx`, so it runs on every
@@ -34,10 +36,12 @@ Live at `https://www.sagekite.com`.
 npm run dev          # local dev server on http://localhost:3000
 npx tsc --noEmit     # typecheck
 npm run build        # production build; must pass before committing
+npm test             # unit tests for the blog studio security code (tests/, node:test, no Sanity)
 ```
 
-There is no lint script and no test suite. "Done" means typecheck + build pass
-and the changed page has been opened in the browser.
+There is no lint script. The only tests are the studio security tests in `tests/` (they run the real
+Server Actions against a fake Sanity client and never touch the network). "Done" means typecheck +
+build + `npm test` pass and the changed page has been opened in the browser.
 
 ## Where things live
 
@@ -95,19 +99,27 @@ app/
                         form_embed.js is loaded by components/book/BookingEmbedScript.tsx, not
                         next/script: it must re-run on every visit or the iframe is not resized.
   sk-studio-ufn5xdafhll7/
-                        Unlisted blog studio for the SEO team (decision.md D019, D022). No login.
-                        Saves to Sanity under `npm run dev` when the Sanity env vars are set;
-                        on the deployed site it saves in the visitor's browser only
-                        (components/blog-studio/server.ts decides). Studio posts never reach
-                        the live site yet. noindex, no-referrer, not in sitemap.ts and
-                        deliberately not in robots.ts. Read docs/blog-studio.md and
-                        docs/sanity.md before changing it. Planned: /admin/blogs with sign-in.
+                        Unlisted blog studio for the SEO team (decision.md D019, D022, D030).
+                        Shared team password (`STUDIO_PASSWORD` + `STUDIO_SESSION_SECRET`): signed in,
+                        it saves to Sanity and publishes to the live blog; not signed in, or without
+                        those env vars on the deployed site, it saves in the visitor's browser only
+                        (components/blog-studio/server.ts decides, and every Server Action re-checks).
+                        noindex, no-referrer, not in sitemap.ts and deliberately not in robots.ts.
+                        Read docs/blog-studio.md and docs/sanity.md before changing it.
+  api/sk-studio-ufn5xdafhll7/login/
+                        The studio's sign-in: a Route Handler (the site's only API route) at a path of its own,
+                        so a Vercel WAF rate-limit rule can target login attempts alone (docs/sanity.md,
+                        "Login rate limit"). /api/ is already disallowed in robots.ts, which does not name it.
   sitemap.ts, robots.ts, not-found.tsx
 components/
   blog-studio/            The studio UI (BlogStudio.tsx + BlogStudio.module.css). store.ts is the
                           StudioStore interface with a browser store and a Sanity store;
                           actions.ts holds the Sanity Server Actions (validate, then write);
-                          server.ts decides the storage mode (Sanity only in development);
+                          server.ts decides the storage mode (Sanity when signed in with the team
+                          password, or in development with no sign-in set up); auth.ts, auth-core.ts,
+                          rate-limit.ts and paths.ts are the shared-password sign-in (sign-in itself is the
+                          Route Handler app/api/sk-studio-ufn5xdafhll7/login/route.ts; auth-actions.ts only
+                          signs out);
                           StudioArticle renders blocks as plain .article-content HTML (no hooks): the
                           studio preview and, via content/blog/live.tsx, published Sanity posts on
                           /blog/[slug]; postUtils derives guide, faqs,
@@ -122,8 +134,9 @@ components/
                           (HTML/CSS diagrams inside articles).
 lib/sanity/               Server-only Sanity connection: client.ts (read client without token, write
                           client with token, pinned apiVersion), blogPosts.ts (StudioPost <-> `blogPost`
-                          document; drafts as drafts.<id>; queries) and image.ts (Sanity CDN URLs,
-                          absolute image URLs for metadata/JSON-LD, 1200x675 share crop).
+                          document; drafts as drafts.<id>; queries), image.ts (Sanity CDN URLs,
+                          absolute image URLs for metadata/JSON-LD, 1200x675 share crop) and
+                          imageUpload.ts (what an uploaded file really is, read from its bytes).
 content/blog/
   index.tsx               Registry of code posts (`posts`). Read its header comment.
   live.tsx                Server-only selectors for the site: code posts + published Sanity posts
@@ -256,6 +269,26 @@ The essentials:
 - Embed YouTube without `referrerPolicy="strict-origin-when-cross-origin"` on the iframe. The
   studio page is `no-referrer`, and YouTube shows Error 153 when it receives no referrer.
 
+- Embed JSON-LD for blog posts with a bare `JSON.stringify(...)` in `dangerouslySetInnerHTML`. Post
+  titles, excerpts, authors, tags and FAQs come from the studio, so `</script>` in one would run as
+  page JavaScript. Use `JsonLd` / `serializeJsonLd` (components/blog), which escape `<`.
+- Write to Sanity from anywhere except through `getSanityWriteClient()` (lib/sanity/client.ts), which
+  runs the write guard (lib/sanity/guard.ts) on every call, and only after `getStudioStorage()` says
+  `sanity`. Do not widen post ids beyond UUIDs, spread a client-sent object into a document, or delete
+  without `_type == "blogPost"`: that is how a signed-in user could reach image assets.
+- Trust `X-Forwarded-For` or `X-Real-IP` for anything outside Vercel, or set `SANITY_API_WRITE_TOKEN` or
+  `STUDIO_*` on Vercel Preview.
+- Turn sign-in back into a Server Action. It is a Route Handler at its own path so the WAF rate-limit
+  rule can hit it without also limiting saving, publishing and uploads (Server Actions all post to the
+  studio page's path). Do not move the login path out of the `/api/sk-studio-…` namespace either.
+- Return a raw error from Sanity, the network or any library to the browser. Throw `SafeError`
+  (lib/sanity/errors.ts) for messages written in this app; everything else becomes a generic text.
+- Trust an uploaded file's declared content type or name. `uploadStudioImageAction` sends Sanity only bytes that
+  `checkUploadedImage` (lib/sanity/imageUpload.ts) recognised as a complete JPG, PNG or WebP of the declared type,
+  with the detected type and `uploadFileName`. Add a format there (with a structure check and tests), not to a list.
+- Let a post use any image source except `isAllowedImageSrc` (lib/sanity/image.ts): a file under
+  /images/ or the site root, or an upload to this project's Sanity CDN. Never an arbitrary URL.
+
 ## Known gaps (do not "fix" these without asking)
 
 - `/insights` (index page) does not exist yet. There is no `/for-agencies` page:
@@ -273,11 +306,13 @@ The essentials:
   other page uses the default in `content/share-image.ts` (see "Where things live").
 - `app/home-interactions.tsx` and `app/site-content.ts` are not used by any page.
 - Published Sanity posts render on /blog, /blog/[slug], "Keep reading" and the sitemap
-  wherever `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` are set. Adding them
-  to Vercel was not part of D024; without them the site shows only code posts. Publishing from the studio
-  works only under `npm run dev`: the Sanity store is deliberately disabled when `NODE_ENV`
-  is production (components/blog-studio/server.ts). Do not remove that check until
-  authentication exists; an unlisted URL is not protection.
+  wherever `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` are set; without them the
+  site shows only code posts. Publishing from the deployed studio needs the team sign-in env vars
+  (`STUDIO_PASSWORD`, `STUDIO_SESSION_SECRET`) and `SANITY_API_WRITE_TOKEN` in the environment, and
+  the dataset the site reads must be the one you mean to publish to (`production` on Vercel,
+  `development` locally). The sign-in is one shared password: no per-person accounts, no roles.
+  Never let a Server Action write to Sanity without `getStudioStorage()` returning `kind: 'sanity'`;
+  an unlisted URL is not protection.
 - Platform pages keep page-specific CSS in an inline `<style>` block.
   `honeybook` uses `honeybook.module.css`.
 - One-off conversion scripts (`transform.js`, `transform_jobber.js`, `scratch/`),

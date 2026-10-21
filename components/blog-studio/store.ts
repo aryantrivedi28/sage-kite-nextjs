@@ -14,8 +14,10 @@ import {
  *
  * - localStudioStore: this browser's localStorage. Nothing reaches Sanity or
  *   sagekite.com, and another browser or device will not see it.
- * - sanityStudioStore: Sanity, through the Server Actions in actions.ts.
- *   Used only under `npm run dev` until sign-in exists.
+ * - sanityStudioStore: Sanity, through the Server Actions in actions.ts. Used when signed
+ *   in (or in development without team sign-in) and the write guard passes.
+ * - blockedStudioStore: production, signed in, but the write guard refuses. Saves nothing
+ *   anywhere and says why: it never falls back to browser storage or another dataset.
  */
 export interface StudioStore {
   /** Where posts are kept, e.g. "this browser only". */
@@ -130,6 +132,9 @@ async function uploadInlineImages(post: StudioPost): Promise<StudioPost> {
   };
 }
 
+/** New posts get UUIDs; a post from browser storage or an import may carry an older id shape. */
+const POST_UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 export const sanityStudioStore: StudioStore = {
   label: 'Sanity',
   savedIn: 'to Sanity',
@@ -137,7 +142,9 @@ export const sanityStudioStore: StudioStore = {
     return unwrap(await listStudioPostsAction());
   },
   async save(post) {
-    return unwrap(await saveStudioPostAction(await uploadInlineImages(post)));
+    // Sanity document ids must be UUIDs (lib/sanity/blogPosts.ts); a post that never reached Sanity gets one.
+    const withId = POST_UUID.test(post.id) ? post : { ...post, id: crypto.randomUUID() };
+    return unwrap(await saveStudioPostAction(await uploadInlineImages(withId)));
   },
   async remove(id) {
     unwrap(await deleteStudioPostAction(id));
@@ -148,6 +155,22 @@ export const sanityStudioStore: StudioStore = {
   },
 };
 
+function blockedStudioStore(reason: string): StudioStore {
+  const refuse = (): never => {
+    throw new Error(`Publishing is blocked: ${reason}`);
+  };
+  return {
+    label: 'nowhere (publishing is blocked)',
+    savedIn: 'nowhere',
+    list: async () => [],
+    save: async () => refuse(),
+    remove: async () => refuse(),
+    uploadImage: async () => refuse(),
+  };
+}
+
 export function getStudioStore(storage: StudioStorage): StudioStore {
-  return storage.kind === 'sanity' ? sanityStudioStore : localStudioStore;
+  if (storage.kind === 'sanity') return sanityStudioStore;
+  if (storage.kind === 'blocked') return blockedStudioStore(storage.reason);
+  return localStudioStore;
 }

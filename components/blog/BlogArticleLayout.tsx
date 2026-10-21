@@ -7,6 +7,7 @@ import { BlogCard } from '@/components/blog/BlogCard';
 import { BlogGuide } from '@/components/blog/BlogGuide';
 import { formatDate } from '@/components/blog/formatDate';
 import { buildBlogJsonLd } from '@/components/blog/blogJsonLd';
+import { JsonLd } from '@/components/blog/JsonLd';
 import type { BlogPost } from '@/content/blog';
 import { getPublishedPosts } from '@/content/blog/live';
 
@@ -36,10 +37,7 @@ export async function BlogArticleLayout({
       </a>
       <Header />
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={jsonLd} />
 
       <main id="main">
         <article className="article">

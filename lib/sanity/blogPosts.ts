@@ -12,13 +12,21 @@ import type { StudioBlock, StudioPost, StudioStatus } from '@/components/blog-st
 export const BLOG_POST_TYPE = 'blogPost';
 const DRAFT_PREFIX = 'drafts.';
 
-/** Post ids become document ids, so only uuid-like values are accepted. */
-export const POST_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9-]{0,63}$/;
+/**
+ * Post ids become document ids, so only UUIDs are accepted (what the studio generates with
+ * crypto.randomUUID). That keeps every other kind of document out of reach: image assets
+ * (`image-<hash>-<w>x<h>-<ext>`), `drafts.…`, `system.…` and the like never match.
+ */
+export const POST_ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+/** Block ids become array `_key`s inside a post: looser than post ids, never a document id. */
+export const BLOCK_KEY_PATTERN = /^[A-Za-z0-9][A-Za-z0-9-]{0,63}$/;
 
 export const draftId = (id: string) => `${DRAFT_PREFIX}${id}`;
 export const isLiveStatus = (status: StudioStatus) => status === 'published';
 
-type SanityBlock = Omit<StudioBlock, 'id'> & { _key: string };
+type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
+type SanityBlock = DistributiveOmit<StudioBlock, 'id'> & { _key: string };
 
 export interface BlogPostDocument extends Omit<StudioPost, 'id' | 'blocks'> {
   _id: string;
@@ -26,14 +34,61 @@ export interface BlogPostDocument extends Omit<StudioPost, 'id' | 'blocks'> {
   blocks: SanityBlock[];
 }
 
+/** Copies only the known fields of a block: anything else a client sends is dropped. */
+function toSanityBlock(block: StudioBlock): SanityBlock {
+  const _key = block.id;
+  switch (block.type) {
+    case 'heading':
+      return { _key, type: 'heading', level: block.level, text: block.text };
+    case 'text':
+      return { _key, type: 'text', text: block.text };
+    case 'list':
+      return { _key, type: 'list', ordered: block.ordered, items: block.items };
+    case 'image':
+      return { _key, type: 'image', src: block.src, alt: block.alt, caption: block.caption };
+    case 'quote':
+      return { _key, type: 'quote', text: block.text, cite: block.cite };
+    case 'table':
+      return { _key, type: 'table', rows: block.rows };
+    case 'video':
+      return { _key, type: 'video', url: block.url, title: block.title };
+    case 'faq':
+      return { _key, type: 'faq', question: block.question, answer: block.answer };
+    case 'divider':
+      return { _key, type: 'divider' };
+  }
+}
+
+/**
+ * Builds the stored document from an explicit list of fields. The client's object is never
+ * spread into it, so `_id`, `_type`, `_createdAt`, `_rev` or any other key it sends cannot
+ * reach Sanity: the type is always `blogPost` and the id is derived here.
+ */
 export function toBlogPostDocument(post: StudioPost): BlogPostDocument {
-  const { id, blocks, ...fields } = post;
   return {
-    ...fields,
-    _id: isLiveStatus(post.status) ? id : draftId(id),
+    _id: isLiveStatus(post.status) ? post.id : draftId(post.id),
     _type: BLOG_POST_TYPE,
-    // Sanity identifies array items by _key.
-    blocks: blocks.map(({ id: key, ...block }) => ({ ...block, _key: key }) as SanityBlock),
+    slug: post.slug,
+    title: post.title,
+    seoTitle: post.seoTitle,
+    excerpt: post.excerpt,
+    category: post.category,
+    author: post.author,
+    authorImage: post.authorImage,
+    status: post.status,
+    publishedAt: post.publishedAt,
+    updatedAt: post.updatedAt,
+    scheduledFor: post.scheduledFor,
+    featuredImage: post.featuredImage,
+    imageAlt: post.imageAlt,
+    tags: [...post.tags],
+    focusKeyword: post.focusKeyword,
+    relatedPlatform: post.relatedPlatform,
+    featured: post.featured,
+    ...(post.firstPublishedAt ? { firstPublishedAt: post.firstPublishedAt } : {}),
+    createdAt: post.createdAt,
+    savedAt: post.savedAt,
+    blocks: post.blocks.map(toSanityBlock),
   };
 }
 

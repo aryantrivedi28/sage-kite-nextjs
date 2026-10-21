@@ -15,7 +15,8 @@ code wins; fix this doc in the same change.
 The studio is an admin panel built on 20 October 2026 from a prototype the user
 supplied (a "GHL Scale Up" blog CMS demo), restyled with Sage Kite brand tokens
 and adapted to this site's blog rules. The same day it was connected to Sanity
-for local use (decision.md D022, [sanity.md](sanity.md)).
+for local use (decision.md D022, [sanity.md](sanity.md)). On 21 October 2026 a shared team
+password was added so the deployed studio can publish to Sanity (D030).
 
 | Area | State today |
 |---|---|
@@ -23,10 +24,10 @@ for local use (decision.md D022, [sanity.md](sanity.md)).
 | Saving under `npm run dev` with the Sanity env vars set | **Sanity** (project `lk42drbi`, dataset from `NEXT_PUBLIC_SANITY_DATASET`) |
 | Saving on the deployed site, or without the env vars | Browser `localStorage` only (one browser, one device) |
 | Images | Sanity mode: uploaded to Sanity's asset store (CDN URL). Browser mode: stored inside the post as WebP data URLs |
-| Publishing to sagekite.com | Works where the Sanity env vars are set (locally today): published posts appear on `/blog/<slug>`, `/blog`, "Keep reading", the sitemap and in JSON-LD within 60 s (section 10). This work did not change Vercel's environment variables (not verified what they contain). "Scheduled" is still a label only |
-| Authentication / admin accounts | **None.** Protected only by an unlisted URL; that is why Sanity is disabled in production |
+| Publishing to sagekite.com | Works where the Sanity env vars are set and the visitor is signed in (locally with `npm run dev`; on the deployed site once the `STUDIO_*` vars are set, D030): published posts appear on `/blog/<slug>`, `/blog`, "Keep reading", the sitemap and in JSON-LD within a minute, immediately after a save (section 10). "Scheduled" is still a label only |
+| Authentication / admin accounts | **One shared team password** (`STUDIO_PASSWORD`, D030): HttpOnly signed cookie, checked on the page and in every Server Action. No per-person accounts and no roles: everyone who signs in can publish and delete. Without `STUDIO_PASSWORD` + `STUDIO_SESSION_SECRET` the deployed studio is browser-only |
 
-The deployed studio cannot change the site: it uses browser storage. The deployed blog shows Sanity posts only if the Sanity env vars are set in Vercel, which this work did not do.
+The deployed studio uses browser storage until the visitor signs in with the team password, and then Sanity. The deployed blog shows Sanity posts only if `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` are set in Vercel.
 
 ---
 
@@ -34,7 +35,7 @@ The deployed studio cannot change the site: it uses browser storage. The deploye
 
 - URL: **`/sk-studio-ufn5xdafhll7`** (local: `http://localhost:3000/sk-studio-ufn5xdafhll7`).
   The path segment is random so it cannot be guessed.
-- No login. The user chose "hidden URL only" (D019) after being told the risk.
+- Sign-in: a shared team password (D030). Before that the user chose "hidden URL only" (D019) after being told the risk. Browser-only mode stays open to anyone with the URL; it cannot change the site.
 - The page metadata (in `app/sk-studio-ufn5xdafhll7/page.tsx`) sets:
   - `robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } }`
   - `referrer: 'no-referrer'`, so links clicked inside the studio do not send its URL to other sites.
@@ -46,9 +47,10 @@ The deployed studio cannot change the site: it uses browser storage. The deploye
 - Known leak: the Google Analytics tag in `app/layout.tsx` loads on every page,
   including this one, so the path is recorded in GA.
 
-**An unlisted URL is not security.** It is acceptable only while the studio
-cannot write to the live site. Add authentication (section 8) before connecting
-any backend that publishes.
+**An unlisted URL is not security.** Writing to Sanity is gated by the team password
+(`components/blog-studio/auth.ts`), not by the URL. The password is shared, so rotate it when
+someone leaves (changing `STUDIO_PASSWORD` or `STUDIO_SESSION_SECRET` signs everyone out).
+Per-person accounts and roles (section 8) are still the better long-term setup.
 
 ---
 
@@ -65,9 +67,16 @@ app/sk-studio-ufn5xdafhll7/
 components/blog-studio/
   types.ts                  StudioPost, StudioBlock (union of block types), StudioStatus,
                             SitePostSummary, StudioStorage, ActionResult. The data model (section 4).
-  server.ts                 Server-only. getSitePostSummaries() and getStudioStorage(): Sanity
-                            when the env vars are set AND NODE_ENV is not production; otherwise
-                            browser storage, with the reason shown in the sidebar.
+  server.ts                 Server-only. getSitePostSummaries() and async getStudioStorage(): Sanity
+                            when the Sanity env vars are set AND (team sign-in is set up and the
+                            visitor is signed in, OR no sign-in is set up and NODE_ENV is not
+                            production); otherwise browser storage, with the reason in the sidebar.
+  auth.ts, auth-core.ts,    Shared-password sign-in (D030): auth-core.ts is the pure HMAC session and
+  auth-actions.ts           password logic; auth.ts reads env and sets the cookie (HttpOnly,
+                            SameSite=Lax, Secure in production, limited to the studio path, 7 days);
+                            auth-actions.ts only signs out. Sign-in is the Route Handler
+                            app/api/sk-studio-ufn5xdafhll7/login/route.ts (D032); paths.ts holds both URLs;
+                            rate-limit.ts is the wrong-password brake.
   store.ts                  StudioStore interface, localStudioStore (localStorage),
                             sanityStudioStore (calls actions.ts) and getStudioStore(storage).
                             Images are resized to 1600px WebP in the browser in both stores.
@@ -275,9 +284,11 @@ request and the sidebar says which one is active:
 
 | Condition | Store | Sidebar says |
 |---|---|---|
-| `NODE_ENV` is production (deployed site, `next start`) | Browser | "Saved in this browser only" + why Sanity is off |
-| Development, any of the three Sanity env vars missing | Browser | "Saved in this browser only" + which vars to set |
-| Development, all three set | Sanity | "Saved in Sanity" + dataset name |
+| Team sign-in not set up, `NODE_ENV` is production | Browser | "Saved in this browser only" + that sign-in is not set up |
+| Any of the three Sanity env vars missing | Browser | "Saved in this browser only" + which vars to set |
+| Team sign-in set up, not signed in | Browser | "Saved in this browser only" + a "Team password" form |
+| Team sign-in set up and signed in | Sanity | "Saved in Sanity" + dataset name + "Sign out" |
+| Team sign-in not set up, development, all three Sanity vars set | Sanity | "Saved in Sanity" + dataset name |
 
 ### Browser store (`localStudioStore`)
 - Key: `localStorage['sk-blog-studio:v1']`, a JSON array of `StudioPost`.
@@ -296,7 +307,8 @@ request and the sidebar says which one is active:
   Featuring a post unfeatures other Sanity posts in the same transaction.
 - `remove()` deletes both `<id>` and `drafts.<id>`. Image assets are not deleted.
 - `uploadImage()` resizes in the browser, then uploads the WebP to Sanity's asset store
-  (largest accepted after resizing: 3.5 MB) and returns its `cdn.sanity.io` URL.
+  (largest accepted after resizing: 3.5 MB) and returns its `cdn.sanity.io` URL. The server
+  checks the file's bytes before uploading (see §10b, "Image uploads").
 - **Migrating browser posts:** in a browser that has posts, Export; then, running locally
   with Sanity configured, Import that file. Each post is saved to Sanity and its images uploaded.
 - Tested end to end on the `development` dataset on 20 October 2026 (D023): 20/20
@@ -645,12 +657,44 @@ before the SEO team publishes; the Sanity env vars have not been added to Vercel
 
 ---
 
+## 10b. Security headers, errors, image sources (D032) and image uploads (D033)
+
+- **Headers.** The studio page and its sign-in endpoint send `X-Frame-Options: DENY`, a Content-Security-Policy of
+  only `frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'`, `X-Content-Type-Options:
+  nosniff`, `Referrer-Policy: no-referrer`, `X-Robots-Tag: noindex, nofollow, noarchive` and a restrictive
+  `Permissions-Policy` (`next.config.ts`). None of them limits scripts, images, styles, fonts, connections or
+  frames, so Next's inline scripts, Google Analytics, the YouTube preview, cdn.sanity.io images and `data:` previews
+  keep working. A **full CSP** was not added: it needs an allowlist for exactly those (`script-src` with Next's
+  inline scripts and googletagmanager.com, `connect-src` for Analytics, `img-src` with `data:` and cdn.sanity.io,
+  `frame-src https://www.youtube-nocookie.com`). If wanted later, send it first as
+  `Content-Security-Policy-Report-Only`, watch the browser console while using every studio feature, then enforce.
+  Public pages carry no extra headers.
+- **Errors.** A Server Action returns only messages written in this app (`SafeError`, validation, guard, sign-in).
+  A failure from Sanity or the network becomes a generic sentence ("Could not save the post to Sanity. Nothing was
+  saved. Try again."); the server log gets the action name and an HTTP status code, never the error text. A failed
+  cache refresh after a successful write is logged, not shown: the post is saved and pages catch up within 60 s.
+- **Image sources.** A post may use only a file under `/images/` (or one at the site root, like `/aryan_t.jpeg`) or an
+  unmodified upload to this project's Sanity CDN (`isAllowedImageSrc`, `lib/sanity/image.ts`). The server refuses
+  anything else in the featured image, author image and image blocks (no other host, query string, `data:` or
+  `javascript:`), and published pages render only allowed sources. The studio preview alone also shows raster
+  `data:` images that were just picked in this browser. The image field no longer advertises pasting a URL: use
+  Upload or a site path.
+- **Image uploads.** The server never trusts the content type or file name the browser sends. `uploadStudioImageAction`
+  reads the file and accepts it only when the declared type is JPG, PNG or WebP, the bytes are a complete image of
+  that format (signature at the start, JPEG end marker, PNG `IEND`, WebP RIFF size equal to the file size) and the two
+  agree (`checkUploadedImage`, `lib/sanity/imageUpload.ts`). Anything else (SVG, GIF, HTML, a PNG labelled WebP, an
+  image with data appended) is refused with a message and never reaches Sanity. Sanity gets the detected type and a
+  file name reduced to letters, digits and dashes with the detected extension, so a PNG from a browser that cannot
+  encode WebP is stored as `.png`.
+
+---
+
 ## 11. Known limitations (today)
 
-- No authentication; the unlisted URL is the only barrier, and GA records it.
+- One shared password, no per-person accounts: nobody is recorded as the publisher. The sign-in brake (8 wrong passwords per client and 40 in total per 15 minutes) is kept in memory per server instance and counts clients by the address Vercel supplies (nothing is trusted off Vercel), so it slows guessing but is not a shared, durable limit. That is a Vercel Firewall rate-limit rule on the studio URL (docs/sanity.md, "Login rate limit"); until it is set, rely on the 20+ character passphrase.
 - Browser-only storage (about 5 MB), not shared, lost with browser data; export to back up.
-- "Scheduled" does not publish at the scheduled time; the deployed studio cannot publish (no sign-in).
-- No roles; anyone with the URL has every action.
+- "Scheduled" does not publish at the scheduled time (no cron job): publish the post by hand on the date.
+- No roles; anyone signed in has every action.
 - No autosave and no version history; edits are saved only with Save, Publish or `Cmd/Ctrl+S`.
 - Two people cannot work on the same post: there is no shared store and no conflict handling.
 - The preview omits the site header, footer, related posts and the booking CTA.
