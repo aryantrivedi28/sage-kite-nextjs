@@ -5,8 +5,8 @@ const sanityProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 /*
  * Security headers for the blog studio page and its sign-in endpoint (decision.md D032). The paths
  * repeat components/blog-studio/paths.ts. Chosen so nothing breaks: none of them restricts scripts,
- * images, fonts or frames the app loads (Next's inline scripts, Google Analytics, the YouTube preview,
- * cdn.sanity.io images and `data:` previews all keep working). A full Content-Security-Policy would
+ * images, fonts or frames the app loads (Next's inline scripts, the YouTube preview, cdn.sanity.io images
+ * and `data:` previews all keep working; Google Analytics is not loaded on the studio, D038). A full Content-Security-Policy would
  * need a tuned allowlist for those, so it is recommended as Report-Only first (docs/blog-studio.md).
  */
 const studioSecurityHeaders = [

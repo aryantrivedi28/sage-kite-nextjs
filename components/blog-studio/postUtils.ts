@@ -109,9 +109,21 @@ export function stripInline(s: string): string {
     .trim();
 }
 
-/** Internal paths, anchors, http(s) and mailto only. Anything else is rendered as text. */
+/**
+ * Internal paths, anchors, http(s) and mailto only. Anything else is rendered as text.
+ * A path may not start with `//` or `/\`: browsers read both as a link to another host.
+ */
 export function safeHref(href: string): string | null {
-  return /^(\/(?!\/)|#|https?:\/\/|mailto:)/i.test(href) ? href : null;
+  return /^(\/(?![/\\])|#|https?:\/\/|mailto:)/i.test(href) ? href : null;
+}
+
+/**
+ * An absolute http(s) link to another site (opened in a new tab with rel="noopener noreferrer").
+ * The host must be exactly www.sagekite.com to count as internal, so `https://www.sagekite.com.evil.com`
+ * and `https://www.sagekite.com@evil.com` are external.
+ */
+export function isExternalHref(href: string): boolean {
+  return /^https?:\/\//i.test(href) && !/^https:\/\/www\.sagekite\.com(?:[/?#]|$)/i.test(href);
 }
 
 export function lines(s: string): string[] {

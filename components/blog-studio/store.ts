@@ -19,9 +19,9 @@ import {
  *   browser-only mode and no fallback to another dataset.
  */
 export interface StudioStore {
-  /** Where posts are kept, e.g. "this browser only". */
+  /** Where posts are kept, e.g. "Sanity". */
   readonly label: string;
-  /** Ending for save messages, e.g. "in this browser". */
+  /** Ending for save messages, e.g. "to Sanity". */
   readonly savedIn: string;
   list(): Promise<StudioPost[]>;
   /** Saves and returns the post as stored (uploaded image URLs replace inline images). */

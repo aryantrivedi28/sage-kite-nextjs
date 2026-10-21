@@ -28,14 +28,18 @@ export default async function BlogStudioPage() {
   const storage = await getStudioStorage();
   const locked = storage.kind === 'locked';
   return (
-    <BlogStudio
-      storage={storage}
-      // A locked studio is rendered as an empty inert shell behind the dialog: nothing is sent to a visitor who has not signed in.
-      sitePosts={locked ? [] : getSitePostSummaries()}
-      categories={[...CATEGORIES]}
-      platforms={PLATFORM_PAGE_SLUGS}
-      author={AUTHOR}
-      authorImage={AUTHOR_IMAGE}
-    />
+    <>
+      {/* Keeps Google Analytics off this page (components/GoogleAnalytics.tsx, decision.md D038). */}
+      <div hidden data-no-analytics="" />
+      <BlogStudio
+        storage={storage}
+        // A locked studio is rendered as an empty inert shell behind the dialog: nothing is sent to a visitor who has not signed in.
+        sitePosts={locked ? [] : getSitePostSummaries()}
+        categories={[...CATEGORIES]}
+        platforms={PLATFORM_PAGE_SLUGS}
+        author={AUTHOR}
+        authorImage={AUTHOR_IMAGE}
+      />
+    </>
   );
 }

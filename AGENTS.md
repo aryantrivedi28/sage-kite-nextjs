@@ -19,8 +19,9 @@ Live at `https://www.sagekite.com`.
   token and `STUDIO_*` on Vercel Production only; see `.env.example`.
 - Google Analytics 4 (gtag.js, measurement ID `G-QQFH3W77TS`) is loaded once by two
   `next/script` components (`strategy="afterInteractive"`, inline one with
-  `id="google-analytics"`) at the end of `<body>` in `app/layout.tsx`, so it runs on every
-  page. Do not add a second Google tag.
+  `id="google-analytics"`) in `components/GoogleAnalytics.tsx`, rendered at the end of `<body>`
+  in `app/layout.tsx`. It runs on every page except one containing an element with
+  `data-no-analytics` (only the blog studio, D038). Do not add a second Google tag.
 - Every page is statically generated at build time. Pages under `/blog` and the sitemap
   are also regenerated at most every 60 seconds (`app/blog/layout.tsx`, `app/sitemap.ts`),
   so posts published to Sanity appear without a redeploy.
@@ -117,8 +118,8 @@ components/
   blog-studio/            The studio UI (BlogStudio.tsx + BlogStudio.module.css). store.ts is the
                           StudioStore interface with a browser store and a Sanity store;
                           actions.ts holds the Sanity Server Actions (validate, then write);
-                          server.ts decides the storage mode (Sanity when signed in with the team
-                          password, or in development with no sign-in set up); auth.ts, auth-core.ts,
+                          server.ts decides the storage mode (Sanity only when signed in with the team
+                          password, in development too; otherwise locked, D035); auth.ts, auth-core.ts,
                           rate-limit.ts and paths.ts are the shared-password sign-in (sign-in itself is the
                           Route Handler app/api/sk-studio-ufn5xdafhll7/login/route.ts; auth-actions.ts only
                           signs out);
@@ -127,6 +128,8 @@ components/
                           /blog/[slug]; postUtils derives guide, faqs,
                           readingTime and the publishing checklist from docs/blog-seo-schema.md.
   Header.tsx, Footer.tsx  Shared header/footer.
+  GoogleAnalytics.tsx     The GA4 tag (client component in the root layout); skipped on pages
+                          with a `data-no-analytics` element (the blog studio).
   home/                   Homepage sections. Work.tsx is the featured case studies
                           section (Santa Barbara Trapeze, Get Daily, 260 Sample Sale),
                           read from content/case-studies; change its FEATURED list to swap them.
@@ -265,6 +268,9 @@ The essentials:
 - Prefix `SITE_URL` onto an image path by hand in metadata or JSON-LD. Sanity images are
   absolute URLs; use `absoluteImageUrl` / `shareImageUrl` from `lib/sanity/image.ts`.
 - Give the public site's Sanity client a token. Without one, drafts cannot be read.
+- Load Google Analytics or any other third-party script on the blog studio page, or remove its
+  `data-no-analytics` marker. Do not detect the studio by its path in client code either: that would put
+  the unlisted URL into the JavaScript of every public page (D038).
 - Load executable JavaScript with a raw `<script>` tag in a React component or layout. React
   never runs a `<script>` it renders in the browser (e.g. the 404 fallback under /blog), so
   analytics silently broke there. Use `next/script`. (JSON-LD `type="application/ld+json"` is fine.)

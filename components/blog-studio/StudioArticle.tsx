@@ -4,6 +4,7 @@ import {
   INLINE_PATTERN,
   LINK_PATTERN,
   headingAnchors,
+  isExternalHref,
   lines,
   listItems,
   resolveBlocks,
@@ -34,8 +35,7 @@ export function Inline({ text }: { text: string }) {
           const m = part.match(LINK_PATTERN);
           const href = m && safeHref(m[2]);
           if (!m || !href) return m ? m[1] : part;
-          const external = /^https?:\/\//i.test(href) && !href.startsWith('https://www.sagekite.com');
-          return external ? (
+          return isExternalHref(href) ? (
             <a key={i} href={href} target="_blank" rel="noopener noreferrer">{m[1]}</a>
           ) : (
             <a key={i} href={href}>{m[1]}</a>

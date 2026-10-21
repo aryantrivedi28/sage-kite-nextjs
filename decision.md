@@ -1332,11 +1332,130 @@ Past approval records below describe only what the supplied reports establish.
   empty shell. One shared password and stateless 7-day sessions remain (D030).
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D036 — Security review of the blog studio; out-of-date docs corrected
+
+- **Date:** 21 October 2026.
+- **Status:** Review done. The findings below are **proposed, not implemented**: no code changed. The only
+  changes are documentation corrections (listed under "Change"). Not committed, pushed or deployed. No Vercel
+  setting, Sanity token or dataset was read or changed.
+- **Why:** the user asked whether the studio's security is tight and which edges could be improved.
+- **Approval:** User request of 21 October 2026 ("check if the security is tight… if there are any edge which i can
+  improve"), then "first update all the docs till now work done". Implementing any finding needs the user's go-ahead;
+  findings 1 and 3 change analytics or sign-in behaviour and need explicit approval.
+- **Scope reviewed (read in full):** the login Route Handler, studio page, `auth.ts`, `auth-core.ts`,
+  `auth-actions.ts`, `rate-limit.ts`, `server.ts`, `actions.ts`, `StudioArticle.tsx`, `lib/sanity/*` (guard, client,
+  errors, post validation, image, image upload, document mapping), `content/blog/live.tsx`, `app/blog/[slug]/page.tsx`,
+  `next.config.ts` and the GA tag in `app/layout.tsx`.
+- **Found sound:** constant-time password check; HMAC-signed, HttpOnly, path-limited session cookie bound to the
+  password; every Server Action re-checks the session and the write guard; UUID-only ids, explicit-field documents,
+  type-scoped writes and deletes; upload checks on the bytes (no SVG); escaped rendering, allowlisted link schemes,
+  YouTube id only, allowlisted image sources; Preview can never sign in or write; generic errors to the browser; the
+  studio path appears only in studio-only client code (`LoginGate.tsx`). No route was found by which someone without
+  the password can publish, edit or delete.
+- **Findings (proposed improvements, most important first):**
+  1. **Google Analytics runs on the studio page** (root layout, every page). The unlisted URL and the title
+     "Blog studio" are sent to GA, and a third-party script runs inside a signed-in session. Proposed: skip the GA
+     tag on the studio path. Needs approval (changes analytics coverage; AGENTS.md says GA runs on every page).
+     **Approved and implemented in D038.**
+  2. **The cookie's path limit is not isolation.** Any script on `www.sagekite.com` (GA, the GoHighLevel
+     `form_embed.js` on `/book`, a future XSS) can request the studio path, and the browser sends the editor's cookie
+     with it. Proposed: an enforced CSP with `script-src` on the studio (Report-Only first, as docs/blog-studio.md
+     §10b already describes); long term, serve the studio from its own subdomain.
+  3. **Sessions last 7 days and cannot be revoked one by one.** Sign out clears only that browser's cookie; a copied
+     cookie stays valid until it expires. Today's kill switch is rotating `STUDIO_SESSION_SECRET` (signs everyone
+     out). Proposed: shorter sessions (12–24 h) and/or a session-version value in the signature. Needs approval.
+  4. **The global wrong-password brake can lock the team out.** 40 wrong attempts per 15 minutes per server instance
+     block everyone, and the block is checked before the password, so the right password is refused too
+     (`auth.ts`). Proposed: once the Vercel Firewall rule is confirmed, raise the global limit.
+  5. **The Sanity Editor token covers the whole project** (both datasets, every document type). The write guard limits
+     the app, not the token, so a leaked local `.env` can write to `production`. Proposed: separate tokens for local
+     and Production, rotation, and dataset-scoped roles if the Sanity plan offers them (not checked).
+  6. **Link edge cases in `safeHref` / `Inline`** (`postUtils.ts`, `StudioArticle.tsx`): `/\evil.com` (browsers read it
+     as `//evil.com`) passes as an internal link, and `https://www.sagekite.com.evil.com` counts as internal, so
+     neither gets `target="_blank" rel="noopener noreferrer"`. Low risk (editors can link anywhere); one-line fixes.
+     **Implemented in D037.**
+  7. **Out-of-date docs** from before D034/D035: corrected in this entry.
+- **Open questions for the owner (not verifiable from the code):** is the Vercel Firewall rate-limit rule on the login
+  path set up (docs/sanity.md, "Login rate limit")? Are `SANITY_API_WRITE_TOKEN` and `STUDIO_*` scoped to Production
+  only on Vercel? (The code ignores them on Preview, but a branch build could change that code and print them.)
+- **Change (docs only):**
+  - [AGENTS.md](AGENTS.md): `server.ts` no longer described as opening Sanity "in development with no sign-in set up".
+  - [docs/blog-studio.md](docs/blog-studio.md): §1 state table (no browser `localStorage` mode, no browser-mode images,
+    sign-in needed locally too); §2 sign-in line; §9.1 note on the "Saved in this browser only" text marked done; §11
+    limitations (12+ character password per D034, browser-only storage line removed, "no shared store" corrected to
+    last-save-wins on Sanity); new §11a listing these open findings.
+  - [docs/sanity.md](docs/sanity.md): status line, phase 3 row, the `npm run dev` guard row, and the `server.ts`,
+    `store.ts` and `BlogStudio.tsx` rows of the file table.
+  - [store.ts](components/blog-studio/store.ts): one comment example ("this browser only" → "Sanity"). No code change.
+  - This log: the template's placeholder number.
+- **Expected effects:** none for visitors or editors; the docs match the code again.
+- **Validation (run by Claude):** `npm test` 80/80 pass before the doc edits. No browser check (no page changed).
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D037 — Studio links: `/\host` refused, look-alike sagekite.com hosts treated as external
+
+- **Date:** 21 October 2026.
+- **Status:** Implemented and verified locally (unit tests, typecheck, production build). Not committed, pushed or
+  deployed.
+- **Why:** finding 6 of D036. Browsers read a link starting `/\` as `//`, i.e. another host, but `safeHref` accepted it
+  as a site path. The internal-link test was `startsWith('https://www.sagekite.com')`, so
+  `https://www.sagekite.com.evil.com` (and `https://www.sagekite.com@evil.com`) counted as internal and opened in the
+  same tab without `rel="noopener noreferrer"`.
+- **Approval:** User instruction of 21 October 2026 ("fix this", quoting finding 6). Technical fix; no content or
+  design change.
+- **Change:**
+  - [postUtils.ts](components/blog-studio/postUtils.ts): `safeHref` refuses a path starting `//` or `/\` (regex
+    `\/(?!\/)` → `\/(?![/\\])`); such a link renders as plain text. New `isExternalHref`: an http(s) link is internal
+    only when its host is exactly `www.sagekite.com` over https, followed by `/`, `?`, `#` or the end.
+  - [StudioArticle.tsx](components/blog-studio/StudioArticle.tsx): `Inline` uses `isExternalHref` instead of
+    `startsWith`.
+  - New [tests/links.test.mts](tests/links.test.mts) (4 tests); docs/blog-studio.md §4 link rules, file list and §11a.
+- **Expected effects:** ordinary links render exactly as before. A link written `[x](/\evil.com)` now shows as text;
+  look-alike hosts open in a new tab with `rel="noopener noreferrer"`. Applies to the studio preview and to published
+  Sanity posts (both render through `StudioArticle`). Behaviour unchanged: `http://www.sagekite.com/…` was and is
+  external; upper-case `HTTPS://WWW.SAGEKITE.COM/…` is now internal (hosts are case-insensitive).
+- **Validation (run by Claude):** `npm test` 84/84 (80 before + 4 new), `npx tsc --noEmit` and `npm run build` pass.
+  Not checked in a browser: the studio is behind sign-in and no published post contains such links; the rendering
+  change is the one-line swap above, and both functions are covered by the new tests.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D038 — Google Analytics no longer loads on the blog studio
+
+- **Date:** 21 October 2026.
+- **Status:** Implemented and verified locally (typecheck, unit tests, production build, headless Chrome against a
+  local production server). Not committed, pushed or deployed.
+- **Why:** finding 1 of D036. The GA tag in the root layout ran on every page, including the studio, so the unlisted
+  URL and the title "Blog studio" were sent to GA, and a third-party script ran inside signed-in sessions.
+- **Approval:** User instruction of 21 October 2026, quoting finding 1 ("Fix: skip GA on the studio path"). This
+  narrows D027's "GA on every page" to every page except the studio. No content or design change.
+- **Change:**
+  - New [components/GoogleAnalytics.tsx](components/GoogleAnalytics.tsx) (client component): the same two
+    `next/script` tags as before (same measurement ID, `afterInteractive`, inline `id="google-analytics"` config),
+    rendered only after mount when the page has no element with `data-no-analytics`. Re-checked when the path
+    changes; once loaded, the tag stays for that visit.
+  - [app/layout.tsx](app/layout.tsx): the two `<Script>` tags replaced by `<GoogleAnalytics />`.
+  - [app/sk-studio-ufn5xdafhll7/page.tsx](app/sk-studio-ufn5xdafhll7/page.tsx): renders
+    `<div hidden data-no-analytics="" />` before the studio.
+  - A marker was chosen over checking the path in client code: a path check would put the unlisted URL into the
+    JavaScript of every public page.
+  - Docs: AGENTS.md (GA paragraph, file list, a "Do not" rule), docs/blog-studio.md (§2, §10b CSP note, §11a).
+- **Expected effects:** public pages load GA as before (`afterInteractive`, after hydration, one render later than
+  before; not measured), and ContactForm's `generate_lead` event is unchanged. Studio visits stop appearing in GA.
+  Past studio visits remain in GA reports. A future CSP for the studio no longer needs googletagmanager.com.
+- **Validation (run by Claude):** `npx tsc --noEmit`, `npm test` 84/84 and `npm run build` pass. Local production
+  server (`next start`, port 3123), pages loaded in headless Chrome with JavaScript run: `/`, `/contact` and `/blog`
+  each have exactly one `gtag/js?id=G-QQFH3W77TS` script and the `google-analytics` inline script; the studio has
+  the marker and neither script. Every JS chunk referenced by `/` was fetched and none contains `sk-studio`. The
+  server was stopped afterwards.
+- **Not tested:** that hits actually reach GA (requests to Google were not inspected; GA Realtime not checked), and the
+  studio in a signed-in state (the marker is rendered by the page whatever the sign-in state).
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
 
-### D034 — [Short description]
+### D0NN — [Short description]
 
 - **Date:** [Date recorded; implementation date if different.]
 - **Status:** [Proposed / approved / implemented / verified.]

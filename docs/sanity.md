@@ -3,8 +3,9 @@
 The plan for connecting the blog dashboard to Sanity, adding sign-in, and showing
 dashboard posts on the live blog. Written for AI coding assistants and developers.
 
-**Status (20 October 2026): the Sanity connection and the live blog integration are built
-and tested on the `development` dataset; sign-in and `/admin/blogs` are not.** See "Implementation status" below. The
+**Status (21 October 2026): the Sanity connection and the live blog integration are built
+and tested on the `development` dataset. Sign-in is built as one shared team password (D030, D035), not the
+per-person Auth.js plan below; `/admin/blogs` is not built.** Open security findings: decision.md D036. See "Implementation status" below. The
 dashboard is described in [blog-studio.md](blog-studio.md). Record each phase in
 [decision.md](../decision.md) when it is implemented. When this plan and the code
 disagree, the code wins; update this plan.
@@ -16,7 +17,7 @@ disagree, the code wins; update this plan.
 | 0. Prerequisites | **Done.** Project `lk42drbi` has public `production` and `development` datasets. `.env` has the project ID, `NEXT_PUBLIC_SANITY_DATASET=development` and an Editor `SANITY_API_WRITE_TOKEN`. Adding them to Vercel has not been part of this work (not verified what Vercel has) | `.env`, `.env.example` |
 | 1. Sanity connection | **Built** | `lib/sanity/client.ts`, `lib/sanity/blogPosts.ts` |
 | 2. Sign-in | **Built as a shared team password** (D030), not Auth.js + Google: the user chose the password for speed; per-person accounts and roles are not built | `components/blog-studio/auth.ts`, `auth-core.ts`, `auth-actions.ts` |
-| 3. Dashboard on Sanity | **Built**: the studio stays at `/sk-studio-ufn5xdafhll7`. It uses Sanity when signed in with the team password (D030), or under `npm run dev` when no sign-in is set up (D022). Not moved to `/admin/blogs` | `components/blog-studio/actions.ts`, `server.ts`, `store.ts` |
+| 3. Dashboard on Sanity | **Built**: the studio stays at `/sk-studio-ufn5xdafhll7`. It uses Sanity only when signed in with the team password (D030), locally too: the dev shortcut without sign-in was removed (D035). Not moved to `/admin/blogs` | `components/blog-studio/actions.ts`, `server.ts`, `store.ts` |
 | 4. Live blog | **Built** (D024): `/blog/[slug]`, `/blog`, "Keep reading" and the sitemap include published Sanity posts; drafts never shown; 60 s ISR + on-demand revalidation on studio saves | `content/blog/live.tsx`, `app/blog/[slug]/page.tsx`, `app/blog/layout.tsx`, `lib/sanity/image.ts` |
 | 5–6. Scheduling, users page | Not built | — |
 | 7. Testing | Sanity mode tested end to end on `development` (D023): 20/20 checks passed. Typecheck, build and the browser-mode flow pass. No browser requests to Sanity, no CORS errors | — |
@@ -56,7 +57,7 @@ signed-in visitor gets Sanity mode. It fails closed and never falls back to anot
 |---|---|
 | Vercel Preview (`VERCEL_ENV=preview`) | Never writable. Sign-in is not offered either, even if the variables are present |
 | Vercel Production, or any `next start` (`NODE_ENV=production`) | Project ID must be `lk42drbi`, `NEXT_PUBLIC_SANITY_DATASET` exactly `production`, a write token present, and a valid sign-in session. Otherwise a signed-in visitor sees "Publishing is blocked" and every action returns the reason: no silent browser-storage fall-back |
-| `npm run dev` | Project `lk42drbi`, a valid dataset name and a token; no sign-in needed unless `STUDIO_*` is set |
+| `npm run dev` | Project `lk42drbi`, a valid dataset name, a token and a valid sign-in session: `STUDIO_*` must be set in `.env.local`, or the studio is locked (D035) |
 
 Post ids must be UUIDs, documents are built from an explicit field list, an existing document of another
 type under the same id is refused, and deletes only match `_type == "blogPost"`
@@ -305,7 +306,7 @@ dataset. Use this so the list of admin emails is not publicly readable.
 |---|---|
 | `lib/sanity/client.ts` | **Built:** server-only read client without token (`getSanityReadClient`) and write client (`getSanityWriteClient`). Never imported by a `'use client'` file |
 | `lib/sanity/blogPosts.ts` | **Built:** mapping between `StudioPost` and the `blogPost` document (`id` ↔ `_id`, `block.id` ↔ `_key`), `drafts.` ids, `ALL_BLOG_POSTS_QUERY` |
-| `components/blog-studio/server.ts` | **Built:** `getStudioStorage()` (Sanity only outside production until sign-in) and `getSitePostSummaries()`. Replace the production check with `requireAdmin()` in phase 2 |
+| `components/blog-studio/server.ts` | **Built:** `getStudioStorage()` (`sanity` only with a valid team-password session and a passing write guard; otherwise `blocked` or `locked`, D035) and `getSitePostSummaries()`. Per-person accounts would replace the session check with `requireAdmin()` |
 | `lib/auth.ts` | Auth.js `authOptions` (Google provider, JWT sessions, `signIn` callback that rejects emails not in `adminUser` / `ADMIN_BOOTSTRAP_EMAILS`, role in the session) and `requireAdmin(role?)` |
 | `app/api/auth/[...nextauth]/route.ts` | Auth.js route handler. `/api/` is already disallowed in `robots.ts` |
 | `proxy.ts` (project root) | Next 16's renamed middleware. Redirects signed-out visitors from `/admin/*` (except `/admin/login`) to `/admin/login`. Redirect only; not the security check |
@@ -315,8 +316,8 @@ dataset. Use this so the list of admin emails is not publicly readable.
 | `app/admin/users/page.tsx` (optional) | Admins add/remove editors (writes `adminUser` docs) |
 | `components/blog-studio/actions.ts` | **Built:** `'use server'` list, save (publish/unpublish by status), delete and image upload. Each re-checks the storage mode and validates on the server. Phase 2 adds `requireAdmin()` and role checks; later, a users action |
 | ~~`app/api/admin/images/route.ts`~~ | Not needed: image upload is the `uploadStudioImageAction` Server Action (4mb body limit in `next.config.ts`) |
-| `components/blog-studio/store.ts` | **Built:** `sanityStudioStore` (calls the actions, uploads inline images on save) beside `localStudioStore`; `getStudioStore(storage)` picks one. Remove the localStorage store after migration |
-| `components/blog-studio/BlogStudio.tsx` | UI text: remove "Saved in this browser only" and "live site has not changed"; show the signed-in user and a sign-out button; hide Publish/Delete for editors |
+| `components/blog-studio/store.ts` | **Built:** `sanityStudioStore` (calls the actions, uploads inline images on save) and `blockedStudioStore` (saves nothing); `getStudioStore(storage)` picks one. `localStudioStore` was removed (D035) |
+| `components/blog-studio/BlogStudio.tsx` | **Built:** browser-only texts removed, Sign out button, locked behind `LoginGate` (D035). Not built (needs per-person accounts): showing the signed-in user, hiding Publish/Delete for editors |
 | `app/blog/[slug]/page.tsx` | **Built:** renders Sanity posts with the existing `BlogArticleLayout` + `StudioArticle`; 404 for unknown/draft slugs |
 | `content/blog/live.tsx` (new) | **Built:** async selectors merging code posts with published Sanity posts. The old sync selectors were removed from `content/blog/index.tsx`, which keeps the code registry |
 | `app/blog/page.tsx`, `app/sitemap.ts`, `components/blog/BlogArticleLayout.tsx` | **Built:** await the async selectors; `app/blog/layout.tsx` and `app/sitemap.ts` set `revalidate = 60` |

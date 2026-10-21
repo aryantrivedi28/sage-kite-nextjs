@@ -21,9 +21,8 @@ password was added so the deployed studio can publish to Sanity (D030).
 | Area | State today |
 |---|---|
 | Writing, editing, previewing, checking posts | Works |
-| Saving under `npm run dev` with the Sanity env vars set | **Sanity** (project `lk42drbi`, dataset from `NEXT_PUBLIC_SANITY_DATASET`) |
-| Saving on the deployed site, or without the env vars | Browser `localStorage` only (one browser, one device) |
-| Images | Sanity mode: uploaded to Sanity's asset store (CDN URL). Browser mode: stored inside the post as WebP data URLs |
+| Saving (locally and on the deployed site) | **Sanity** only (project `lk42drbi`, dataset from `NEXT_PUBLIC_SANITY_DATASET`), after signing in with the team password. Without valid sign-in settings or a session the studio is locked and saves nothing; there is no browser `localStorage` mode (D035) |
+| Images | Uploaded to Sanity's asset store (CDN URL) after a byte check (D033) |
 | Publishing to sagekite.com | Works where the Sanity env vars are set and the visitor is signed in (locally with `npm run dev`; on the deployed site once the `STUDIO_*` vars are set, D030): published posts appear on `/blog/<slug>`, `/blog`, "Keep reading", the sitemap and in JSON-LD within a minute, immediately after a save (section 10). "Scheduled" is still a label only |
 | Authentication / admin accounts | **One shared team password** (`STUDIO_PASSWORD`, D030): HttpOnly signed cookie, checked on the page and in every Server Action. No per-person accounts and no roles: everyone who signs in can publish and delete. Without valid `STUDIO_PASSWORD` + `STUDIO_SESSION_SECRET` the studio is locked ("unavailable"); there is no browser-only mode (D035) |
 
@@ -35,7 +34,7 @@ The studio is locked behind a sign-in dialog until the visitor signs in with the
 
 - URL: **`/sk-studio-ufn5xdafhll7`** (local: `http://localhost:3000/sk-studio-ufn5xdafhll7`).
   The path segment is random so it cannot be guessed.
-- Sign-in: a shared team password (D030). Before that the user chose "hidden URL only" (D019) after being told the risk. Browser-only mode stays open to anyone with the URL; it cannot change the site.
+- Sign-in: a shared team password (D030). Before that the user chose "hidden URL only" (D019) after being told the risk. Since D035 nothing is usable without signing in: there is no browser-only mode.
 - The page metadata (in `app/sk-studio-ufn5xdafhll7/page.tsx`) sets:
   - `robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } }`
   - `referrer: 'no-referrer'`, so links clicked inside the studio do not send its URL to other sites.
@@ -44,8 +43,10 @@ The studio is locked behind a sign-in dialog until the visitor signs in with the
 - It is **not** in `app/sitemap.ts`, and nothing on the site links to it.
 - It is **deliberately not** in `app/robots.ts`. robots.txt is public, so a
   `Disallow` line would advertise the path. Do not add it.
-- Known leak: the Google Analytics tag in `app/layout.tsx` loads on every page,
-  including this one, so the path is recorded in GA.
+- No Google Analytics (D038): the page renders a hidden `data-no-analytics` element, and
+  `components/GoogleAnalytics.tsx` does not load the tag on a page that has one. The studio's
+  URL and title are no longer sent to GA, and no third-party script runs in a signed-in session.
+  Visits before D038 were recorded, so the path is still in past GA reports.
 
 **An unlisted URL is not security.** Writing to Sanity is gated by the team password
 (`components/blog-studio/auth.ts`), not by the URL. The password is shared, so rotate it when
@@ -94,7 +95,7 @@ lib/sanity/
                             draft/scheduled = `drafts.<id>`; block `id` <-> `_key`.
   postUtils.ts              Pure helpers, no React: slugify, ids, today(), emptyPost, newBlock,
                             BLOCK_LABELS, inline-format regexes (INLINE_PATTERN, LINK_PATTERN,
-                            stripInline, safeHref), list/table parsing, youtubeId,
+                            stripInline, safeHref, isExternalHref), list/table parsing, youtubeId,
                             resolveBlocks (auto FAQ heading), headingAnchors, buildGuide,
                             buildFaqs, wordCount, readingTime, googleTitle, postUrl,
                             checklist() (the publishing rules) and toBlogFields().
@@ -177,8 +178,9 @@ blocks (JSON) instead of a JSX function, so any backend can store it.
 and FAQ answers: `**bold**`, `*italic*`, `[text](url)`. Link URLs may contain one
 level of parentheses. Only `/path`, `#anchor`, `http(s)://` and `mailto:` links
 are rendered as links (`safeHref`); anything else, for example `javascript:`,
-renders as plain text. External links (not `https://www.sagekite.com…`) get
-`target="_blank" rel="noopener noreferrer"`. Content is rendered as React
+`//host` or `/\host` (browsers read both as another site), renders as plain text. External
+links (`isExternalHref`: any http(s) link whose host is not exactly `www.sagekite.com` over https,
+so `https://www.sagekite.com.evil.com` is external) get `target="_blank" rel="noopener noreferrer"`. Content is rendered as React
 elements; there is no `dangerouslySetInnerHTML`.
 
 **Automatic FAQ heading:** if a post has FAQ blocks and the block before the
@@ -531,8 +533,8 @@ Notes:
 - Once images live on a backend, `uploadImage` should return that URL. The browser
   resize-to-WebP step in `store.ts` (`toWebpDataUrl`) can be kept to shrink files before
   upload, by converting its output to a Blob.
-- The "Saved in this browser only" sidebar note and the "live site has not changed"
-  messages in `BlogStudio.tsx` must be updated when publishing really happens.
+- Done (D030, D035): the "Saved in this browser only" sidebar note and the "live site has not
+  changed" messages were removed from `BlogStudio.tsx`.
 
 ### 9.2 Supabase
 
@@ -661,9 +663,9 @@ before the SEO team publishes; the Sanity env vars have not been added to Vercel
   only `frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'`, `X-Content-Type-Options:
   nosniff`, `Referrer-Policy: no-referrer`, `X-Robots-Tag: noindex, nofollow, noarchive` and a restrictive
   `Permissions-Policy` (`next.config.ts`). None of them limits scripts, images, styles, fonts, connections or
-  frames, so Next's inline scripts, Google Analytics, the YouTube preview, cdn.sanity.io images and `data:` previews
+  frames, so Next's inline scripts, the YouTube preview, cdn.sanity.io images and `data:` previews
   keep working. A **full CSP** was not added: it needs an allowlist for exactly those (`script-src` with Next's
-  inline scripts and googletagmanager.com, `connect-src` for Analytics, `img-src` with `data:` and cdn.sanity.io,
+  inline scripts; Google Analytics no longer loads here (D038), so googletagmanager.com is not needed; `img-src` with `data:` and cdn.sanity.io,
   `frame-src https://www.youtube-nocookie.com`). If wanted later, send it first as
   `Content-Security-Policy-Report-Only`, watch the browser console while using every studio feature, then enforce.
   Public pages carry no extra headers.
@@ -689,12 +691,31 @@ before the SEO team publishes; the Sanity env vars have not been added to Vercel
 
 ## 11. Known limitations (today)
 
-- One shared password, no per-person accounts: nobody is recorded as the publisher. The sign-in brake (8 wrong passwords per client and 40 in total per 15 minutes) is kept in memory per server instance and counts clients by the address Vercel supplies (nothing is trusted off Vercel), so it slows guessing but is not a shared, durable limit. That is a Vercel Firewall rate-limit rule on the studio URL (docs/sanity.md, "Login rate limit"); until it is set, rely on the 20+ character passphrase.
-- Browser-only storage (about 5 MB), not shared, lost with browser data; export to back up.
+- One shared password, no per-person accounts: nobody is recorded as the publisher. The sign-in brake (8 wrong passwords per client and 40 in total per 15 minutes) is kept in memory per server instance and counts clients by the address Vercel supplies (nothing is trusted off Vercel), so it slows guessing but is not a shared, durable limit. That is a Vercel Firewall rate-limit rule on the studio URL (docs/sanity.md, "Login rate limit"); until it is set, rely on a strong passphrase (12+ characters, not guessable, D034; longer is better).
+- Sessions are stateless and last 7 days. Signing out clears only that browser's cookie; to end every session
+  (for example when someone leaves or a device is lost), rotate `STUDIO_SESSION_SECRET` or `STUDIO_PASSWORD`.
 - "Scheduled" does not publish at the scheduled time (no cron job): publish the post by hand on the date.
 - No roles; anyone signed in has every action.
 - No autosave and no version history; edits are saved only with Save, Publish or `Cmd/Ctrl+S`.
-- Two people cannot work on the same post: there is no shared store and no conflict handling.
+- Two people should not edit the same post at once: posts are shared through Sanity, but there is no conflict
+  handling, so the last save wins.
+
+## 11a. Open security findings (D036, proposed, not implemented)
+
+From the review of 21 October 2026. None of these lets someone without the password publish; each narrows a
+remaining edge. Details and reasoning are in decision.md D036.
+
+1. ~~Google Analytics loads on the studio page.~~ **Fixed (D038):** the tag is skipped on the studio (see §2).
+2. The cookie's path limit is not isolation: any script on `www.sagekite.com` can request the studio path with the
+   editor's cookie. Proposed: an enforced CSP with `script-src` (§10b, Report-Only first); long term, a subdomain.
+3. 7-day sessions with no per-session revocation. Proposed: shorter sessions and/or a session version (needs approval).
+4. The global brake (40 wrong passwords per 15 minutes per instance) can lock the team out, even with the right
+   password. Proposed: raise it once the Vercel Firewall rule is confirmed.
+5. The Editor token is project-wide (both datasets). Proposed: separate local and Production tokens, rotation,
+   dataset-scoped roles if the Sanity plan allows.
+6. ~~`safeHref` accepts `/\host` and treats `https://www.sagekite.com.<other>` as internal.~~ **Fixed (D037).**
+
+To confirm on Vercel: the login rate-limit rule exists, and `SANITY_API_WRITE_TOKEN` / `STUDIO_*` are Production-only.
 - The preview omits the site header, footer, related posts and the booking CTA.
 - Inline formatting is limited to bold, italic and links; there are no nested lists,
   H4 headings or custom diagrams (`FieldDiagram` is available only to posts written in code).
