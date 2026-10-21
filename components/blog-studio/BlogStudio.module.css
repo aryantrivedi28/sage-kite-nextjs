@@ -168,6 +168,9 @@ button.rowTitle:hover { text-decoration: underline; text-decoration-color: var(-
 .btnPrimary:hover:not(:disabled) { background: color-mix(in srgb, var(--coral) 85%, var(--ink)); }
 .btnDanger:hover:not(:disabled) { border-color: var(--coral); background: var(--coral-soft); }
 .btnDangerSolid { background: var(--ink); border-color: var(--ink); color: var(--warm-white); }
+/* `.app button { color: inherit }` (class + element) outranks a single class, so without this
+   the label inherited dark text on the ink background. */
+.app .btnDangerSolid { color: var(--warm-white); }
 .btnDangerSolid:hover:not(:disabled) { background: var(--dark-sage); }
 .btnBlock { width: 100%; }
 .btnBlock + .btnBlock { margin-top: 8px; }

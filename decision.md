@@ -854,11 +854,177 @@ Past approval records below describe only what the supplied reports establish.
   silently dropped); image assets of deleted posts stay in Sanity.
 - **Delivery:** No commit, push or deployment performed. The user commits manually.
 
+## D025 — Fix YouTube Error 153 in the blog studio preview
+
+- **Date:** 21 October 2026.
+- **Status:** Fixed and verified locally. Not deployed.
+- **Reported by the user:** the YouTube block in the draft "Test post: dashboard check"
+  (`test-post-dashboard-check`, `development` dataset) showed "Video player configuration
+  error, Error 153" in the studio Preview; the video (`M7lc1UVf-VE`) plays on YouTube.
+- **Root cause (verified):** the studio page sets `referrer: 'no-referrer'` (D019, to keep its
+  unlisted URL private). The YouTube iframe in `StudioArticle.tsx` had no referrer policy of
+  its own, so it inherited `no-referrer` and YouTube received no Referer. Reproduced in
+  Chrome against the dev server: studio preview sent no Referer and showed Error 153; the
+  same embed injected on `/blog` (no page policy) sent `http://localhost:3000/` and played.
+  External references tie Error 153 to a missing referrer and recommend
+  `strict-origin-when-cross-origin` (Simon Willison's TIL; University of Michigan KB).
+- **Fix:** `referrerPolicy="strict-origin-when-cross-origin"` on the YouTube iframe in
+  [components/blog-studio/StudioArticle.tsx](components/blog-studio/StudioArticle.tsx)
+  (3 lines). It overrides the page policy for that request and sends only the origin, never
+  the studio path. Public blog pages already used this policy by default, so their behaviour
+  is unchanged. One-line rule added to AGENTS.md "Do not".
+- **Validation (run by Claude):** after the fix the studio preview sent Referer
+  `http://localhost:3000/` (origin only) and the player loaded the video title with no Error
+  153; the control on `/blog` still played. `npx tsc --noEmit` and `npm run build` pass.
+- **Safety:** for this fix the test post was only previewed (still Draft, not publicly
+  readable). `production` dataset: 0 documents when checked for this entry. Nothing deployed.
+  Later, during the user's manual testing, the test post was published locally in
+  `development` (D026), set back to Draft (D027) and deleted (D029).
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+
+## D026 — "Keep reading" investigation; spacing below article tags
+
+- **Date:** 21 October 2026.
+- **Status:** Issue 1 not a bug (no change). Issue 2 fixed, verified locally and approved by the
+  user. Not deployed.
+- **Reported by the user:** on `/blog/test-post-dashboard-check` (published in `development`,
+  category Business Growth) (1) no "Keep reading" section, (2) the tags sit directly on the
+  next section.
+- **Issue 1, investigated, no code change:** `BlogArticleLayout` shows up to 3 other published
+  posts in the **same category** and hides the section when there are none
+  (`related.length > 0`). It reads `content/blog/live.tsx` (code posts + published Sanity posts
+  from the configured dataset, `development` locally). Code posts are CRM or Automation; the
+  only published Sanity post in `development` is the test post itself. So no post qualifies:
+  expected behaviour. The earlier manual test plan step ("yours appears under Keep reading on
+  any post in the same category") was imprecise: it needs another published post in that
+  category. Showing other categories as a fallback would be a design/content change needing
+  approval; not done.
+- **Issue 2, root cause:** `.article-tags` in `app/globals.css` had 44px margin and 28px padding
+  above the tags but nothing below, and `.article` has no bottom padding, so the next section
+  started at the tags' edge: the CTA band when there are no related posts, and the "Keep
+  reading" divider on every existing post (measured 0px on both, 1440px and 390px). Pre-existing
+  on all blog posts; only obvious when the tinted CTA follows.
+- **Fix:** `.article-tags` padding `28px 0 clamp(40px, 5vw, 56px)` (was `padding-top: 28px`).
+  The class is used only by blog articles and the studio preview.
+- **Effect on existing pages:** spacing only. On all 8 live code posts the "Keep reading" divider
+  moves 40–56px further below the tags; no content, colour or typography change.
+- **Approval:** on 21 October 2026 the user reviewed before/after browser captures (test article
+  and `/blog/what-is-dubsado`, 1440 × 900 and 390 × 844; measured gap 0 → 56px desktop,
+  0 → 40px mobile, Before from the committed CSS) and wrote: "I approve keeping the global
+  tag-spacing improvement: 56px on desktop and 40px on mobile." Approval covers this rule only.
+  The user asked to keep it local (no deploy or push) pending their remaining SEO and mobile tests.
+  After finishing those tests the user confirmed it again: "I have also reviewed and approved the
+  global tag-spacing improvement" (D029).
+- **Validation (run by Claude):** measured from the tag chips to the next section: 0px →
+  56px at 1440px and 0px → 40px at 390px, on the test post (CTA follows) and on
+  `/blog/what-is-dubsado` (related posts follow); before/after screenshots checked.
+  `npx tsc --noEmit` and `npm run build` pass. No Sanity data changed.
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+
+## D027 — Load Google Analytics with next/script (fixes "Encountered a script tag")
+
+- **Date:** 21 October 2026.
+- **Status:** Fixed and verified locally (dev and production build). Not deployed.
+- **Reported by the user:** console error "Encountered a script tag while rendering React
+  component…", pointing at the GA scripts in `app/layout.tsx`, noticed after changing the test
+  post from Published to Draft.
+- **Root cause (verified):** the root layout rendered GA as raw `<script>` elements. They work
+  only when the server sends them as finished HTML. A direct load of a 404 under `/blog`
+  (`notFound()` in `app/blog/[slug]/page.tsx`, e.g. the now-unpublished test post or any unknown
+  blog slug) returns Next's HTTP-error fallback document (`NEXT_HTTP_ERROR_FALLBACK;404`), and
+  React renders the root layout, including `<head>`, in the browser. React warns about the inline
+  `<script>` and never executes it: `window.gtag` was **undefined** on those pages in dev and in a
+  production build (silently there). Normal pages, top-level 404s, client navigation and
+  `router.refresh()` (what a saving Server Action does) did not reproduce it.
+- **Did the status change cause it?** Only indirectly: it turned the post's URL into a 404,
+  and loading that URL hits the fallback. Saving itself does not trigger the error.
+- **Fix:** [app/layout.tsx](app/layout.tsx): the two raw scripts in `<head>` replaced by
+  `next/script` at the end of `<body>`: `<Script src="https://www.googletagmanager.com/gtag/js?id=G-QQFH3W77TS" strategy="afterInteractive" />`
+  and `<Script id="google-analytics" strategy="afterInteractive">` with the same init code
+  (dataLayer, `gtag()`, `gtag('js')`, `gtag('config', 'G-QQFH3W77TS')`). Measurement ID and
+  `window.gtag` (used by `ContactForm`'s `generate_lead`) unchanged. No new dependency
+  (`@next/third-parties` is not installed). AGENTS.md updated, plus a "Do not" rule.
+- **Behaviour change:** GA now loads after hydration (`afterInteractive`, the Next.js
+  recommendation) instead of during HTML parsing; a visitor who leaves before hydration may not
+  be counted.
+- **Validation (run by Claude, Chrome, dev server and `next start`):** before the fix, 1 "script
+  tag" error and `window.gtag` undefined on `/blog/test-post-dashboard-check` and
+  `/blog/does-not-exist` (dev); `window.gtag` undefined on both in production. After: 0 errors
+  and `window.gtag` defined on all 8 pages checked (both `/blog` 404s, a top-level 404, `/`,
+  `/blog`, a post, `/contact`, the studio), in dev and production; one gtag.js tag in the DOM
+  and one `config` call after client navigation and `router.refresh()`; one `page_view` per
+  full load and per client navigation (no duplicates); calling `gtag('event', 'generate_lead',
+  …)` as ContactForm does produced one dataLayer entry and a `/g/collect` request with
+  `en=generate_lead` and `event_label=contact_form_submission`. `npx tsc --noEmit` and
+  `npm run build` pass.
+- **Not checked:** a real contact-form submission (it would post to the GoHighLevel webhook);
+  GA reports in the Google Analytics UI.
+- **Safety:** no Sanity writes and no post status changes (the reproduction used the existing
+  404 and read-only navigation). Nothing pushed or deployed.
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+
+## D028 — Readable "Delete post" button in the studio's confirmation dialog
+
+- **Date:** 21 October 2026.
+- **Status:** Fixed and verified locally. Not deployed.
+- **Reported by the user:** in the studio's "Delete this post?" dialog the **Delete post** label
+  was dark on a dark navy button.
+- **Root cause (measured in Chrome):** `.btnDangerSolid` sets `color: var(--warm-white)`, but the
+  studio reset `.app button { font: inherit; color: inherit; }` has higher specificity (class +
+  element beats one class), so the label inherited the dialog's dark-sage text: `rgb(52,64,51)`
+  on `rgb(36,55,70)`, contrast 1.13:1, and 1.00:1 on hover (dark-sage background). Not a
+  disabled state: `disabled=false`, no `aria-disabled`, opacity 1, pointer events on.
+- **Fix:** [components/blog-studio/BlogStudio.module.css](components/blog-studio/BlogStudio.module.css):
+  added `.app .btnDangerSolid { color: var(--warm-white); }`. Brand tokens only. Studio UI only
+  (the public site does not use these styles).
+- **Scope (corrected in the final audit):** `.btnDangerSolid` is the confirm button of every
+  danger dialog in `ConfirmModal`, so the fix changes two buttons, not one: **Delete post**
+  ("Delete this post?") and **Discard changes** ("Discard unsaved changes?"). Discard changes
+  had the same dark label on the ink background and now has the same warm-white text. Both use
+  the same rule, so the same contrast applies by calculation; only Delete post was measured
+  and screenshotted in the browser.
+- **Validation (run by Claude):** opened the dialog for the test post at 1440 × 900 and 390 × 844,
+  measured computed colours, screenshotted, then closed it with **Cancel** (never confirmed).
+  Delete post: 11.26:1 (9.99:1 on hover); Cancel unchanged at 9.99:1; button still enabled;
+  test post still listed after each run (studio showed 9 posts, 8 published, 1 draft).
+  `npx tsc --noEmit` and `npm run build` pass.
+- **Not changed (noted for later):** the same reset also overrides the declared text colour and
+  font of other studio buttons (e.g. `.btn`'s 0.875rem bold, `.btnPrimary`'s ink text), which
+  inherit instead. They remain readable; changing the reset would alter the whole studio's look,
+  so it was left for a separate, approved change.
+- **Delivery:** No commit, push or deployment performed. The user commits manually.
+
+## D029 — Test post deleted from the development dataset; manual testing complete
+
+- **Date:** recorded 21 October 2026, from the user's report that day.
+- **Status:** Reported by the user; partly confirmed by read-only local checks.
+- **Reported by the user:** manual testing of the blog dashboard is complete ("The manual
+  testing of the Sage Kite blog dashboard is complete."). After verifying draft privacy,
+  missing-featured-image validation, duplicate-slug validation, local publishing and rendering,
+  sitemap behaviour, SEO metadata and structured data, mobile layout and unpublishing, the user
+  deleted "Test post: dashboard check" (`test-post-dashboard-check`) from the `development`
+  dataset. The studio dashboard then showed 8 posts, 8 published, 0 drafts (the 8 code posts;
+  it showed 9 posts, 8 published, 1 draft before the deletion, D028).
+- **Checked by Claude (read-only, local build of the working tree, `.env` on `development`):**
+  `npm run build` prerendered no page under `/blog/[slug]`; under `next start`,
+  `/blog/test-post-dashboard-check` returned 404 and `/sitemap.xml` listed 8 blog post URLs
+  (the code posts), not the test post. This shows no published Sanity post in `development`.
+  It does not show drafts or image assets.
+- **Not verified:** a direct Sanity query for drafts, assets or the `production` dataset (a
+  read-only query was blocked by the session's permission settings and not retried). The test
+  post's uploaded image asset(s) probably remain in `development`, since deleting a post does
+  not delete its assets (D024). They were not deleted.
+- **Documentation corrected in the same step (final audit follow-up):** D025 safety note, D026
+  status and approval, D028 scope (above); AGENTS.md `StudioArticle` description;
+  docs/blog-studio.md video block referrer policy.
+- **Delivery:** No code changed and no Sanity writes by Claude. No commit, push or deployment
+  performed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
 
-### D025 — [Short description]
+### D030 — [Short description]
 
 - **Date:** [Date recorded; implementation date if different.]
 - **Status:** [Proposed / approved / implemented / verified.]

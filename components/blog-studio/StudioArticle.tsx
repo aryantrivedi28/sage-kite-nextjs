@@ -130,6 +130,9 @@ function Block({ block, anchor }: { block: StudioBlock; anchor?: string }) {
             src={`https://www.youtube-nocookie.com/embed/${id}`}
             title={block.title.trim() || 'YouTube video'}
             loading="lazy"
+            // YouTube needs the embedding site's origin (Error 153 without it). Set here because
+            // the studio page uses `no-referrer`; this sends only the origin, never the URL path.
+            referrerPolicy="strict-origin-when-cross-origin"
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', border: 0 }}

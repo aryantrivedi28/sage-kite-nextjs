@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from "@/content/share-image";
 
 import "./brand.css";
@@ -118,18 +119,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Google tag (gtag.js): GA4, measurement ID G-QQFH3W77TS. In the root
-            layout so it loads on every page. ContactForm sends generate_lead through it. */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQFH3W77TS" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-QQFH3W77TS');`,
-          }}
-        />
-
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -149,7 +138,25 @@ gtag('config', 'G-QQFH3W77TS');`,
         />
       </head>
 
-      <body>{children}</body>
+      <body>
+        {children}
+
+        {/* Google tag (gtag.js): GA4, measurement ID G-QQFH3W77TS. In the root
+            layout so it loads on every page. ContactForm sends generate_lead through it.
+            next/script, not raw <script> tags: React never runs <script> elements it
+            renders in the browser (e.g. the 404 fallback under /blog), and next/script
+            loads each script once across client-side navigations. */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-QQFH3W77TS"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-QQFH3W77TS');`}
+        </Script>
+      </body>
     </html>
   );
 }

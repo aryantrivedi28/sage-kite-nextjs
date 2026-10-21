@@ -15,8 +15,10 @@ Live at `https://www.sagekite.com`.
   build time, so redeploy after changing it. The blog studio's Sanity connection uses
   `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET` and the server-only
   `SANITY_API_WRITE_TOKEN` (docs/sanity.md). See `.env.example`.
-- Google Analytics 4 (gtag.js, measurement ID `G-QQFH3W77TS`) is loaded once in the
-  `<head>` of `app/layout.tsx`, so it runs on every page. Do not add a second Google tag.
+- Google Analytics 4 (gtag.js, measurement ID `G-QQFH3W77TS`) is loaded once by two
+  `next/script` components (`strategy="afterInteractive"`, inline one with
+  `id="google-analytics"`) at the end of `<body>` in `app/layout.tsx`, so it runs on every
+  page. Do not add a second Google tag.
 - Every page is statically generated at build time. Pages under `/blog` and the sitemap
   are also regenerated at most every 60 seconds (`app/blog/layout.tsx`, `app/sitemap.ts`),
   so posts published to Sanity appear without a redeploy.
@@ -106,8 +108,9 @@ components/
                           StudioStore interface with a browser store and a Sanity store;
                           actions.ts holds the Sanity Server Actions (validate, then write);
                           server.ts decides the storage mode (Sanity only in development);
-                          StudioArticle renders blocks as plain .article-content HTML (no hooks, so
-                          a future live route can reuse it); postUtils derives guide, faqs,
+                          StudioArticle renders blocks as plain .article-content HTML (no hooks): the
+                          studio preview and, via content/blog/live.tsx, published Sanity posts on
+                          /blog/[slug]; postUtils derives guide, faqs,
                           readingTime and the publishing checklist from docs/blog-seo-schema.md.
   Header.tsx, Footer.tsx  Shared header/footer.
   home/                   Homepage sections. Work.tsx is the featured case studies
@@ -247,6 +250,11 @@ The essentials:
 - Prefix `SITE_URL` onto an image path by hand in metadata or JSON-LD. Sanity images are
   absolute URLs; use `absoluteImageUrl` / `shareImageUrl` from `lib/sanity/image.ts`.
 - Give the public site's Sanity client a token. Without one, drafts cannot be read.
+- Load executable JavaScript with a raw `<script>` tag in a React component or layout. React
+  never runs a `<script>` it renders in the browser (e.g. the 404 fallback under /blog), so
+  analytics silently broke there. Use `next/script`. (JSON-LD `type="application/ld+json"` is fine.)
+- Embed YouTube without `referrerPolicy="strict-origin-when-cross-origin"` on the iframe. The
+  studio page is `no-referrer`, and YouTube shows Error 153 when it receives no referrer.
 
 ## Known gaps (do not "fix" these without asking)
 

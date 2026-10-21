@@ -38,6 +38,7 @@ The deployed studio cannot change the site: it uses browser storage. The deploye
 - The page metadata (in `app/sk-studio-ufn5xdafhll7/page.tsx`) sets:
   - `robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } }`
   - `referrer: 'no-referrer'`, so links clicked inside the studio do not send its URL to other sites.
+    The YouTube embed overrides this with an origin-only policy (§4.2, D025).
   - No canonical, no Open Graph.
 - It is **not** in `app/sitemap.ts`, and nothing on the site links to it.
 - It is **deliberately not** in `app/robots.ts`. robots.txt is public, so a
@@ -158,7 +159,7 @@ blocks (JSON) instead of a JSX function, so any backend can store it.
 | `image` | `src`, `alt`, `caption` | `<figure><img alt title></figure>` + optional `<figcaption>` |
 | `quote` | `text`, `cite` | `<blockquote>`; cite rendered as `— name` |
 | `table` | `rows` | One row per line, cells split on `\|`, first row is `<thead>` |
-| `video` | `url`, `title` | `<iframe>` to `youtube-nocookie.com/embed/<id>`; accepts watch, youtu.be, embed, shorts, live links |
+| `video` | `url`, `title` | `<iframe>` to `youtube-nocookie.com/embed/<id>`; accepts watch, youtu.be, embed, shorts, live links. `referrerPolicy="strict-origin-when-cross-origin"`: YouTube needs the embedding origin (Error 153 without it) and the studio page is `no-referrer`; sends the origin only, never the path (D025) |
 | `faq` | `question`, `answer` | `<h3>` + `<p>` per line; also feeds `buildFaqs()` |
 | `divider` | — | `<hr>` |
 

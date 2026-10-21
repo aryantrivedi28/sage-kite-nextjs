@@ -1199,7 +1199,8 @@ html {
 .article-tags {
   max-width: 720px;
   margin: 44px auto 0;
-  padding-top: 28px;
+  /* Bottom space: the next section ("Keep reading" or the CTA band) starts right after. */
+  padding: 28px 0 clamp(40px, 5vw, 56px);
   border-top: 1px solid var(--light-sage);
   display: flex;
   flex-wrap: wrap;
