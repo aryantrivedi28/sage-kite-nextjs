@@ -10,9 +10,9 @@ import { PLATFORMS, PLATFORM_GROUPS } from '@/content/platforms';
 const PAGE_URL = "https://www.sagekite.com/platforms";
 
 export const metadata: Metadata = {
-  title: "GoHighLevel, HubSpot & CRM Platforms We Implement | Sage Kite",
-  description: "We implement GoHighLevel, HubSpot, Keap, Follow Up Boss, ServiceTitan, Kajabi, Clio Grow and more, each set up around how your business actually sells.",
-  keywords: ["CRM implementation services", "CRM consultant", "CRM setup services", "industry CRM", "CRM platforms for small business"],
+  title: "CRM Platforms for Growing Businesses and Teams | Sage Kite",
+  description: "Sage Kite helps you choose and set up CRM platforms that fit your business, organise customer data, automate follow-up, and improve team visibility and reporting.",
+  keywords: ["CRM Platforms", "Business CRM Platforms", "CRM Implementation Services", "Business Management Platforms", "CRM Software for Small Businesses", "CRM Automation Services", "CRM Platform Consulting"],
   alternates: {
     canonical: PAGE_URL,
   },
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "GoHighLevel, HubSpot & CRM Platforms We Implement | Sage Kite",
-    description: "The CRM, marketing and industry platforms Sage Kite implements, grouped by industry, each set up around how your business actually sells.",
+    title: "CRM and Business Platforms for Growing Firms | Sage Kite",
+    description: "Choose the right CRM platforms with Sage Kite. Get practical setup, automated workflows and clear reporting to help your team manage leads and customer data.",
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {

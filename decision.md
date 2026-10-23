@@ -1471,6 +1471,36 @@ Past approval records below describe only what the supplied reports establish.
 - **Limitations / remaining:** /book's `og:title` is still "Book a discovery call | Sage Kite" (lower-case) while its `<title>` is "Book a Discovery Call | Sage Kite"; it was not in the approved scope. Blog post meta keywords (row #7) remain.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D040 — SEO team's approved metadata for the homepage and /platforms
+
+- **Date:** 23 October 2026.
+- **Status:** Implemented and verified locally. Not committed, pushed or deployed.
+- **Why:** The SEO and marketing team supplied approved meta titles, meta descriptions, OG titles, OG descriptions and keywords (screenshots, one per page) as part of a site-wide metadata update. This entry covers the homepage and /platforms only; other pages follow when their values are supplied.
+- **Approval:** The user supplied the screenshots and instructed that the values be copied exactly and take priority over existing repository rules, documentation, previous decisions, character limits and keyword-count limits. Fields not in the screenshots stay unchanged.
+- **Change (before → after):**
+  - Homepage ([app/page.tsx](app/page.tsx)):
+    - `title`: "Business Growth Consulting & Consultancy for SMEs | Sage Kite" → "Business Growth Consulting Services for SMEs | Sage Kite".
+    - `description`: "Sage Kite is a business growth consultancy for SMEs. Growth consulting, CRM implementation, digital marketing, AI SEO and virtual assistants, run as one system." → "Sage Kite offers business growth consulting, CRM, marketing and specialist support to help small and medium-sized businesses improve processes and revenue."
+    - `og:title`: "Business Growth Consulting & Consultancy for SMEs | Sage Kite" → "Business Growth Consulting for Growing SMEs | Sage Kite".
+    - `og:description`: "A business growth consultancy that advises, implements and executes: consultancy, CRM, marketing automation, marketing and specialist VA support, working as one system." → "See how Sage Kite combines business growth consulting, CRM, marketing, and specialist support to help businesses improve operations and generate more revenue."
+    - `keywords`: business growth consultancy, business growth consulting, CRM implementation, marketing automation, growth operations, SME growth consulting → Business Growth Consulting (primary), Business Consulting Services, CRM Implementation Services, Digital Marketing Services, Business Growth Strategy, Specialist Staffing Services, White Label Services.
+  - /platforms ([app/platforms/page.tsx](app/platforms/page.tsx)):
+    - `title`: "GoHighLevel, HubSpot & CRM Platforms We Implement | Sage Kite" → "CRM Platforms for Growing Businesses and Teams | Sage Kite".
+    - `description`: "We implement GoHighLevel, HubSpot, Keap, Follow Up Boss, ServiceTitan, Kajabi, Clio Grow and more, each set up around how your business actually sells." → "Sage Kite helps you choose and set up CRM platforms that fit your business, organise customer data, automate follow-up, and improve team visibility and reporting."
+    - `og:title`: "GoHighLevel, HubSpot & CRM Platforms We Implement | Sage Kite" → "CRM and Business Platforms for Growing Firms | Sage Kite".
+    - `og:description`: "The CRM, marketing and industry platforms Sage Kite implements, grouped by industry, each set up around how your business actually sells." → "Choose the right CRM platforms with Sage Kite. Get practical setup, automated workflows and clear reporting to help your team manage leads and customer data."
+    - `keywords`: CRM implementation services, CRM consultant, CRM setup services, industry CRM, CRM platforms for small business → CRM Platforms (primary), Business CRM Platforms, CRM Implementation Services, Business Management Platforms, CRM Software for Small Businesses, CRM Automation Services, CRM Platform Consulting.
+- **Unchanged (not in the screenshots):** `twitter` title and description on both pages, canonical, `og:url`, share images, JSON-LD (homepage `WebPage`, /platforms `CollectionPage` name and description), headings and all visible content.
+- **Exceptions to existing rules, by the SEO team's approval:**
+  - Supersedes D039 for these two pages: `og:title` now differs from `<title>` (D039 had aligned them for audit row #8).
+  - /platforms meta description is 162 characters (docs/new-page-checklist.md and docs/blog-seo-schema.md say 70–160).
+  - Each page has 7 keywords (docs say 3–6), in the screenshots' Title Case. "CRM Implementation Services" is on both pages, and some phrases also appear in the keywords of /services, /services/consultancy and /services/crm-implementation (docs say keywords are not repeated across pages). Those pages were not changed.
+- **Expected effects:** Search results and the browser tab use the new titles and descriptions after recrawling; LinkedIn, Slack and other Open Graph previews use the new OG text. X uses its own `twitter:*` tags, so it still shows the previous titles and descriptions. Ranking and how search engines display or rewrite the text are not guaranteed.
+- **Observed effects:** Not measured (not deployed).
+- **Limitations:** The `twitter` title and description were not in the screenshots, so they keep their previous text, which no longer matches the new titles. The homepage comment above its `twitter` block ("the title ... now matches the page title") is no longer accurate for the same reason.
+- **Validation (run by Claude):** `npx tsc --noEmit --incremental false`, `npm test` (84/84) and `npm run build` pass. On a local production server (`next start`), the rendered `<title>`, `description`, `og:title`, `og:description` and `keywords` on / and /platforms were compared with the screenshot text and match exactly (Next.js joins keywords with "," and no space). Canonical, `og:url`, `og:image` and `twitter:*` are unchanged. The git diff contains only these metadata values and this entry.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

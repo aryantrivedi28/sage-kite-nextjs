@@ -20,18 +20,18 @@ import type { Metadata } from 'next';
 import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 export const metadata: Metadata = {
-  title: 'Business Growth Consulting & Consultancy for SMEs | Sage Kite',
+  title: 'Business Growth Consulting Services for SMEs | Sage Kite',
   description:
-    'Sage Kite is a business growth consultancy for SMEs. Growth consulting, CRM implementation, digital marketing, AI SEO and virtual assistants, run as one system.',
-  keywords: ["business growth consultancy", "business growth consulting", "CRM implementation", "marketing automation", "growth operations", "SME growth consulting"],
+    'Sage Kite offers business growth consulting, CRM, marketing and specialist support to help small and medium-sized businesses improve processes and revenue.',
+  keywords: ["Business Growth Consulting", "Business Consulting Services", "CRM Implementation Services", "Digital Marketing Services", "Business Growth Strategy", "Specialist Staffing Services", "White Label Services"],
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
     siteName: 'Sage Kite',
     url: 'https://www.sagekite.com/',
-    title: 'Business Growth Consulting & Consultancy for SMEs | Sage Kite',
+    title: 'Business Growth Consulting for Growing SMEs | Sage Kite',
     description:
-      'A business growth consultancy that advises, implements and executes: consultancy, CRM, marketing automation, marketing and specialist VA support, working as one system.',
+      'See how Sage Kite combines business growth consulting, CRM, marketing, and specialist support to help businesses improve operations and generate more revenue.',
     images: DEFAULT_OG_IMAGES,
   },
   // Same text as the root layout's twitter block except the title, which now matches the page title.
