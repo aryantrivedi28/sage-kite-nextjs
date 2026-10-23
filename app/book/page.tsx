@@ -4,6 +4,7 @@ import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BookingEmbedScript } from "@/components/book/BookingEmbedScript";
+import { JsonLd } from "@/components/blog/JsonLd";
 
 const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/book`;
@@ -36,6 +37,30 @@ export const metadata: Metadata = {
  * links here. The calendar is the GoHighLevel booking widget, embedded exactly
  * as supplied; form_embed.js resizes the iframe to fit the widget.
  */
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${PAGE_URL}/#webpage`,
+      url: PAGE_URL,
+      name: "Book a Discovery Call | Sage Kite",
+      isPartOf: { "@id": `${SITE_URL}/#website` },
+      about: { "@id": `${SITE_URL}/#organization` },
+      breadcrumb: { "@id": `${PAGE_URL}/#breadcrumb` },
+      inLanguage: "en",
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${PAGE_URL}/#breadcrumb`,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 2, name: "Book a discovery call" },
+      ],
+    },
+  ],
+};
+
 export default function BookPage() {
   return (
     <>
@@ -90,6 +115,7 @@ export default function BookPage() {
         </section>
       </main>
 
+      <JsonLd data={jsonLd} />
       <Footer />
     </>
   );

@@ -6,9 +6,35 @@ import { Footer } from '@/components/Footer';
 import { BlogHeader } from '@/components/blog/BlogHeader';
 import { FeaturedBlog } from '@/components/blog/FeaturedBlog';
 import { BlogCard } from '@/components/blog/BlogCard';
+import { JsonLd } from '@/components/blog/JsonLd';
 import { getFeaturedPost, getPublishedPosts } from '@/content/blog/live';
 
 const SITE_URL = 'https://www.sagekite.com';
+const PAGE_URL = `${SITE_URL}/blog`;
+
+// Structured data for the blog index: the blog itself and its breadcrumb. Each post carries its own Article schema.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Blog',
+      '@id': `${PAGE_URL}/#blog`,
+      url: PAGE_URL,
+      name: 'Sage Kite Blog',
+      isPartOf: { '@id': `${SITE_URL}/#website` },
+      publisher: { '@id': `${SITE_URL}/#organization` },
+      inLanguage: 'en',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${PAGE_URL}/#breadcrumb`,
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+        { '@type': 'ListItem', position: 2, name: 'Blog' },
+      ],
+    },
+  ],
+};
 
 export const metadata: Metadata = {
   title: 'Business Growth, CRM & Marketing Insights | Sage Kite',
@@ -75,6 +101,7 @@ export default async function BlogIndexPage() {
         </section>
       </main>
 
+      <JsonLd data={jsonLd} />
       <Footer />
     </>
   );

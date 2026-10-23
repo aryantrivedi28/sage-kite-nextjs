@@ -1451,6 +1451,26 @@ Past approval records below describe only what the supplied reports establish.
   studio in a signed-in state (the marker is rendered by the page whatever the sign-in state).
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D039 — Social titles aligned on three pages; structured data added to /blog, /about and /book
+
+- **Date:** 22 October 2026.
+- **Status:** Implemented and verified locally (typecheck, `npm test`, production build, local HTML compared with the live site). Not committed, pushed or deployed. Nothing was written to Sanity.
+- **Why:** SEO audit sheet rows #8 (title and og:title differ), #67 (/blog has no Blog or BreadcrumbList schema) and #73 (/about has no AboutPage or Person schema); /book had no page-level schema. Rows #7 (meta keywords) and the email, heading, spelling and CTA items were **not** part of this change.
+- **Approval:** User approved items A, B, C and D of my 22 October 2026 proposal ("do A,B,C and D and verify everything that nothing breaks"). Item E (removing the meta keywords tag) was not approved and not done. The homepage structured-data `name` ("Business growth consulting for SMEs | Sage Kite") was offered as an extra and not approved, so it is unchanged.
+- **Change (before → after):**
+  - Homepage `og:title`: "Sage Kite: business growth through systems, people and execution" → "Business Growth Consulting & Consultancy for SMEs | Sage Kite". `twitter:title` (inherited from the layout) "Sage Kite: business growth consulting" → the same new title. [app/page.tsx](app/page.tsx) now has its own `twitter` block (card, description and images copied from the layout, because a page-level block replaces the layout's).
+  - /platforms `og:title` and `twitter:title`: "CRM and business platforms we implement | Sage Kite" → "GoHighLevel, HubSpot & CRM Platforms We Implement | Sage Kite".
+  - /contact `og:title` and `twitter:title`: "Contact Sage Kite | Book a discovery call" → "Contact Us: Book a Discovery Call | Sage Kite".
+  - /blog: JSON-LD `Blog` ("Sage Kite Blog") and `BreadcrumbList` (Home › Blog) added.
+  - /about: JSON-LD `AboutPage`, `BreadcrumbList` (Home › About) and `Person` (Aryan Trivedi, "Founder, Sage Kite", BITS Pilani, LinkedIn, worksFor the site's Organization) added in [app/about/layout.tsx](app/about/layout.tsx) because the page is a client component. Only facts already stated on the page are used.
+  - /book: JSON-LD `WebPage` and `BreadcrumbList` (Home › Book a discovery call) added.
+  - All new blocks use `JsonLd` (escapes `<`) and reference the site's `#organization` and `#website` by `@id`.
+- **Expected effects:** link previews on LinkedIn, X and Slack show the new titles for the three pages; search engines read the new structured data. Visible page text is unchanged.
+- **Checks (run by Claude):** `npx tsc --noEmit`, `npm run build` and `npm test` (84/84) pass. For /, /platforms, /contact, /blog, /about and /book on a local production server: title, og:title and twitter:title are identical; canonical, og:image and twitter:image are unchanged; all JSON-LD parses; visible text is identical to the live site; the structured-data types on /, /platforms and /contact are unchanged and /blog, /about and /book gained only the types listed above. Six untouched pages (/services, /services/consultancy, /industries, /case-studies, /platforms/hubspot and a blog post) had the same titles, descriptions and structured data as the live site; only the og:image asset path differs between `next start` and Vercel (`/_next/static/media/` vs `/_next/static/immutable/media/`, same file). No console errors on /about, /book and /blog in the browser.
+- **Not tested / assumptions:** Google's Rich Results Test and the Schema Markup Validator (not run); how LinkedIn, X and Slack render the new previews; the live site after deployment.
+- **Limitations / remaining:** /book's `og:title` is still "Book a discovery call | Sage Kite" (lower-case) while its `<title>` is "Book a Discovery Call | Sage Kite"; it was not in the approved scope. Blog post meta keywords (row #7) remain.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

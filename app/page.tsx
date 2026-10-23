@@ -17,7 +17,7 @@ import { FAQ } from '../components/home/FAQ';
 import { HOME_FAQ_GROUPS } from '../components/home/faqData';
 import { FinalCTA } from '../components/home/FinalCTA';
 import type { Metadata } from 'next';
-import { DEFAULT_OG_IMAGES } from '@/content/share-image';
+import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 export const metadata: Metadata = {
   title: 'Business Growth Consulting & Consultancy for SMEs | Sage Kite',
@@ -29,10 +29,19 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'Sage Kite',
     url: 'https://www.sagekite.com/',
-    title: 'Sage Kite: business growth through systems, people and execution',
+    title: 'Business Growth Consulting & Consultancy for SMEs | Sage Kite',
     description:
       'A business growth consultancy that advises, implements and executes: consultancy, CRM, marketing automation, marketing and specialist VA support, working as one system.',
     images: DEFAULT_OG_IMAGES,
+  },
+  // Same text as the root layout's twitter block except the title, which now matches the page title.
+  // A page-level twitter block replaces the root one, so the rest is repeated here.
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Business Growth Consulting & Consultancy for SMEs | Sage Kite',
+    description:
+      'Sage Kite improves the systems, people and execution behind growth for small and medium-sized businesses.',
+    images: DEFAULT_TWITTER_IMAGES,
   },
 };
 
