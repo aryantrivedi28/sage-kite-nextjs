@@ -11,9 +11,9 @@ const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services/crm-implementation`;
 
 export const metadata: Metadata = {
-  title: "CRM Implementation Services: Setup & Migration | Sage Kite",
-  description: "CRM implementation services: setup, pipeline design, data cleanup and migration, automation, training and handover, built around how your team sells.",
-  keywords: ["CRM implementation services", "CRM implementation consultant", "CRM setup services", "CRM migration", "CRM optimisation", "custom CRM development"],
+  title: "CRM Implementation Services for Growing Teams | Sage Kite",
+  description: "Sage Kite provides CRM implementation services, from pipeline setup and data migration to automation and reporting, helping your team manage leads and close sales.",
+  keywords: ["CRM Implementation Services", "CRM Implementation Consultant", "CRM Setup Services", "CRM Data Migration", "CRM Automation Services", "CRM Workflow Automation", "CRM Consulting Services"],
   alternates: {
     canonical: PAGE_URL,
   },
@@ -21,8 +21,8 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "CRM Implementation Services: Setup & Migration | Sage Kite",
-    description: "A CRM your team uses, where every lead has an owner and a next step. Setup, cleanup, migration, automation, training and handover.",
+    title: "CRM Implementation Services That Fit Your Sales | Sage Kite",
+    description: "See how Sage Kite CRM implementation services organise leads, automate follow-up, and connect reporting, so your team can manage opportunities and track revenue.",
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {

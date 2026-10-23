@@ -37,10 +37,10 @@ const jsonLd = {
 };
 
 export const metadata: Metadata = {
-  title: 'Business Growth, CRM & Marketing Insights | Sage Kite',
+  title: 'Business Success Stories and Results for Clients | Sage Kite',
   description:
-    'Practical guides to CRM platforms, marketing automation and the systems behind business growth, written for small and medium-sized businesses.',
-  keywords: ["business growth insights", "CRM blog", "marketing automation guides", "growth operations", "Sage Kite blog"],
+    'Explore Sage Kite business success stories to see how companies improve operations, manage customer relationships, and achieve measurable business results.',
+  keywords: ["Business Success Stories", "Client Success Stories", "Business Growth Stories", "CRM Success Stories", "Business Case Studies", "Client Results"],
   alternates: {
     canonical: `${SITE_URL}/blog`,
   },
@@ -48,9 +48,9 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'Sage Kite',
     url: `${SITE_URL}/blog`,
-    title: 'Business Growth, CRM & Marketing Insights | Sage Kite',
+    title: 'Business Success Stories That Show Real Results | Sage Kite',
     description:
-      'Practical thinking on CRM, marketing, automation and the systems behind sustainable business growth.',
+      'See Sage Kite business success stories featuring practical solutions that help companies improve workflows, strengthen customer relationships, and support growth.',
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {

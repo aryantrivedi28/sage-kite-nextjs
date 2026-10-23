@@ -1501,6 +1501,39 @@ Past approval records below describe only what the supplied reports establish.
 - **Validation (run by Claude):** `npx tsc --noEmit --incremental false`, `npm test` (84/84) and `npm run build` pass. On a local production server (`next start`), the rendered `<title>`, `description`, `og:title`, `og:description` and `keywords` on / and /platforms were compared with the screenshot text and match exactly (Next.js joins keywords with "," and no space). Canonical, `og:url`, `og:image` and `twitter:*` are unchanged. The git diff contains only these metadata values and this entry.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D041 — SEO team's approved metadata for /industries, /blog and /services/crm-implementation
+
+- **Date:** 23 October 2026.
+- **Status:** Implemented and verified locally. Not committed, pushed or deployed.
+- **Why:** Second batch of the SEO and marketing team's site-wide metadata update (see D040), one screenshot per page.
+- **Approval:** The user supplied the screenshots, confirmed the mapping (Screenshot 1 → /industries, Screenshot 2 → /blog, not /case-studies, Screenshot 3 → /services/crm-implementation) and instructed that the values be copied exactly and take priority over existing repository rules. Fields not in the screenshots stay unchanged.
+- **Change (before → after):**
+  - /industries ([app/industries/page.tsx](app/industries/page.tsx)):
+    - `title`: "CRM and Automation by Industry | Sage Kite" → "Business Consulting Services for Industries | Sage Kite".
+    - `description`: "CRM and automation set up for how your industry sells: home services, real estate, law firms, coaches, service businesses, fitness studios and nonprofits." → "Sage Kite provides business consulting services to help companies improve processes, manage customer relationships, and build practical plans for business growth."
+    - `og:title`: "CRM and automation by industry | Sage Kite" → "Business Consulting Services for Business Growth | Sage Kite".
+    - `og:description`: "A CRM set up for how your customers decide: the right follow-up at the right speed, and a person stepping in where one is needed." → "See how Sage Kite business consulting services help companies address operational challenges, improve customer management, and plan their next stage of growth."
+    - `keywords`: industry CRM setup, CRM for home services, real estate CRM setup, law firm client intake, CRM for fitness studios, nonprofit donor CRM → Business Consulting Services (primary), Business Consulting, CRM Consulting Services, Business Growth Strategy, Business Process Improvement, Digital Marketing Services.
+  - /blog ([app/blog/page.tsx](app/blog/page.tsx)):
+    - `title`: "Business Growth, CRM & Marketing Insights | Sage Kite" → "Business Success Stories and Results for Clients | Sage Kite".
+    - `description`: "Practical guides to CRM platforms, marketing automation and the systems behind business growth, written for small and medium-sized businesses." → "Explore Sage Kite business success stories to see how companies improve operations, manage customer relationships, and achieve measurable business results."
+    - `og:title`: "Business Growth, CRM & Marketing Insights | Sage Kite" → "Business Success Stories That Show Real Results | Sage Kite".
+    - `og:description`: "Practical thinking on CRM, marketing, automation and the systems behind sustainable business growth." → "See Sage Kite business success stories featuring practical solutions that help companies improve workflows, strengthen customer relationships, and support growth."
+    - `keywords`: business growth insights, CRM blog, marketing automation guides, growth operations, Sage Kite blog → Business Success Stories (primary), Client Success Stories, Business Growth Stories, CRM Success Stories, Business Case Studies, Client Results.
+  - /services/crm-implementation ([app/services/crm-implementation/page.tsx](app/services/crm-implementation/page.tsx)):
+    - `title`: "CRM Implementation Services: Setup & Migration | Sage Kite" → "CRM Implementation Services for Growing Teams | Sage Kite".
+    - `description`: "CRM implementation services: setup, pipeline design, data cleanup and migration, automation, training and handover, built around how your team sells." → "Sage Kite provides CRM implementation services, from pipeline setup and data migration to automation and reporting, helping your team manage leads and close sales."
+    - `og:title`: "CRM Implementation Services: Setup & Migration | Sage Kite" → "CRM Implementation Services That Fit Your Sales | Sage Kite".
+    - `og:description`: "A CRM your team uses, where every lead has an owner and a next step. Setup, cleanup, migration, automation, training and handover." → "See how Sage Kite CRM implementation services organise leads, automate follow-up, and connect reporting, so your team can manage opportunities and track revenue."
+    - `keywords`: CRM implementation services, CRM implementation consultant, CRM setup services, CRM migration, CRM optimisation, custom CRM development → CRM Implementation Services (primary), CRM Implementation Consultant, CRM Setup Services, CRM Data Migration, CRM Automation Services, CRM Workflow Automation, CRM Consulting Services.
+- **Unchanged (not in the screenshots):** `twitter` title and description, canonical, `og:url`, share images, structured data, headings and visible content. On /industries the meta description was previously the shared `DESCRIPTION` constant; it is now written in the metadata, and the constant still feeds the `Service` JSON-LD description unchanged.
+- **Exceptions to existing rules, by the SEO team's approval:** over the 160-character description limit in the docs: the /industries meta description (162), the /services/crm-implementation meta and OG descriptions (163 and 161) and the /blog OG description (162). /services/crm-implementation has 7 keywords (docs say 3–6). Several keywords repeat on other pages (docs say they should not): Business Consulting Services, Business Growth Strategy and Digital Marketing Services (homepage and /industries), CRM Consulting Services (/industries and /services/crm-implementation), CRM Automation Services (/platforms and /services/crm-implementation), CRM Implementation Services (homepage, /platforms and /services/crm-implementation).
+- **Expected effects:** Search results, browser tabs and Open Graph previews use the new text after recrawling. X uses `twitter:*`, which keeps the previous text. Ranking and display are not guaranteed.
+- **Observed effects:** Not measured (not deployed).
+- **Limitations:** /blog's new metadata describes business success stories while the page lists guides and articles (its H1 and content are unchanged); the user confirmed this mapping. `twitter` text on the three pages no longer matches the new titles.
+- **Validation (run by Claude):** `npx tsc --noEmit --incremental false`, `npm test` (84/84) and `npm run build` pass. On a local production server, the rendered `<title>`, `description`, `og:title`, `og:description` and `keywords` on /industries, /blog and /services/crm-implementation match the screenshot text exactly; `twitter:*` and `og:url` are unchanged. The user's uncommitted `next-env.d.ts` change (rewritten by the build) was restored byte for byte and is not part of this change.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

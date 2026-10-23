@@ -12,9 +12,9 @@ const PAGE_URL = `${SITE_URL}/industries`;
 const DESCRIPTION = "CRM and automation set up for how your industry sells: home services, real estate, law firms, coaches, service businesses, fitness studios and nonprofits.";
 
 export const metadata: Metadata = {
-  title: "CRM and Automation by Industry | Sage Kite",
-  description: DESCRIPTION,
-  keywords: ["industry CRM setup", "CRM for home services", "real estate CRM setup", "law firm client intake", "CRM for fitness studios", "nonprofit donor CRM"],
+  title: "Business Consulting Services for Industries | Sage Kite",
+  description: "Sage Kite provides business consulting services to help companies improve processes, manage customer relationships, and build practical plans for business growth.",
+  keywords: ["Business Consulting Services", "Business Consulting", "CRM Consulting Services", "Business Growth Strategy", "Business Process Improvement", "Digital Marketing Services"],
   alternates: {
     canonical: PAGE_URL,
   },
@@ -22,8 +22,8 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "CRM and automation by industry | Sage Kite",
-    description: "A CRM set up for how your customers decide: the right follow-up at the right speed, and a person stepping in where one is needed.",
+    title: "Business Consulting Services for Business Growth | Sage Kite",
+    description: "See how Sage Kite business consulting services help companies address operational challenges, improve customer management, and plan their next stage of growth.",
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {
