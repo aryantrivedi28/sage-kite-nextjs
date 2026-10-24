@@ -102,11 +102,11 @@ export default function BookPage() {
 
             <div className="bk-panel">
               <iframe
-                src="https://pay.ghlscaleup.com/widget/booking/p11W8VUan5yI69fRHjVl"
+                src="https://pay.ghlscaleup.com/widget/booking/mWF3minFplRuFTsouj8G"
                 allow="payment"
                 style={{ width: '100%', border: 'none', overflow: 'hidden' }}
                 scrolling="no"
-                id="p11W8VUan5yI69fRHjVl_1791032182352"
+                id="mWF3minFplRuFTsouj8G_1792831363134"
                 title="Book a discovery call"
               />
               <BookingEmbedScript />

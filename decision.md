@@ -1534,6 +1534,22 @@ Past approval records below describe only what the supplied reports establish.
 - **Validation (run by Claude):** `npx tsc --noEmit --incremental false`, `npm test` (84/84) and `npm run build` pass. On a local production server, the rendered `<title>`, `description`, `og:title`, `og:description` and `keywords` on /industries, /blog and /services/crm-implementation match the screenshot text exactly; `twitter:*` and `og:url` are unchanged. The user's uncommitted `next-env.d.ts` change (rewritten by the build) was restored byte for byte and is not part of this change.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D042 — /book embeds a new GoHighLevel calendar; the previous one was deleted
+
+- **Date:** 24 October 2026.
+- **Status:** Implemented and verified locally. Not committed, pushed or deployed.
+- **Why:** The site audit of 24 October 2026 (BUG-01) found that the booking widget on /book showed GoHighLevel's "404 Page Not Found". Every "Book a discovery call" button (60 links on 50 pages) leads there. Cause, from read-only requests: GoHighLevel's calendar API answers the old ID with `400 "The calendar is deleted"` (a made-up ID gets `404 "Calendar not found"`), and the widget returns the same 404 page on `pay.ghlscaleup.com` and on GoHighLevel's own domains (`api.leadconnectorhq.com`, `link.msgsndr.com`). The calendar was deleted in the GoHighLevel account; the domain and the site code were not at fault. No replacement ID existed anywhere in the repository or its Git history.
+- **Change (before → after):** in [app/book/page.tsx](app/book/page.tsx), the iframe only:
+  - `src`: `https://pay.ghlscaleup.com/widget/booking/p11W8VUan5yI69fRHjVl` → `https://pay.ghlscaleup.com/widget/booking/mWF3minFplRuFTsouj8G`
+  - `id`: `p11W8VUan5yI69fRHjVl_1791032182352` → `mWF3minFplRuFTsouj8G_1792831363134`
+  - Unchanged: `title="Book a discovery call"` (not in the supplied embed code; kept so the iframe has an accessible name), `allow`, `style`, `scrolling`, and `BookingEmbedScript` (same `pay.ghlscaleup.com/js/form_embed.js`). Visible text, metadata and structured data are unchanged.
+- **Approval:** The new embed code was supplied by the user, who received it from their team lead. The user approved the two-line change, keeping the iframe title, on 24 October 2026.
+- **Expected effects:** Visitors to /book see the discovery-call calendar again and can book.
+- **Observed effects:** Not measured on the live site (not deployed). Before the change, by read-only requests: the new calendar's free-slots API returned 200 with slots on each of the next 8 days, and its widget page returned 200 without "Page Not Found".
+- **Limitations:** No browser was available, so the calendar's rendering inside the iframe and the iframe resizing by `form_embed.js` were not seen. No test booking was made (it would create an appointment and a contact in GoHighLevel). Who deleted the old calendar, and why, is not known; that is visible only in the GoHighLevel account.
+- **Validation (run by Claude):** `npx tsc --noEmit --incremental false` (0 errors), `npm test` (84/84) and `npm run build` pass. On a local production server (`next start`, port 3123, stopped afterwards): /book returns 200; the iframe has the new `src`, `id` and the title; the old ID is not in the page; the page's scripts include `form_embed.js`; title, description, canonical and JSON-LD match the live site; visible text is identical to the live site. The only difference is the og:image asset path (`next start` vs Vercel, as in D039). The user's uncommitted `next-env.d.ts` change (rewritten by the build) was restored byte for byte.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
