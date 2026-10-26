@@ -153,7 +153,8 @@ blocks (JSON) instead of a JSX function, so any backend can store it.
 | `featuredImage` | string | `/public` path, `https://` URL, or `data:image/webp;base64,…` from an upload |
 | `imageAlt` | string | |
 | `tags` | string[] | Comma-separated in the UI |
-| `focusKeyword` | string | Editorial hint for the checklist only; never output on a page |
+| `focusKeyword` | string | The phrase the post should rank for. The checklist checks it; it is the first schema `keyword` when the post has secondary keywords. Never shown on a page |
+| `secondaryKeywords` | string[] | 0–8 related SEO phrases (80 characters each at most), comma-separated in the UI, separate from `tags`. Used in the Article schema `keywords` when present. Never shown on a page. Posts saved before this field existed have none (D043) |
 | `relatedPlatform` | string | `''` or a platform page slug |
 | `featured` | boolean | Saving a featured post unfeatures other **studio** posts |
 | `blocks` | `StudioBlock[]` | The article |
@@ -227,7 +228,8 @@ studio posts on the live site (section 10).
   remove. Word count and reading time are shown. Paragraph, list, quote and FAQ-answer
   fields have Bold / Italic / Link buttons that wrap the selection in the markers.
 - **SEO tab:** SEO title with a count of the full Google title out of 60, meta
-  description (the same `excerpt` value), tags, focus keyword, read-only canonical URL,
+  description (the same `excerpt` value), **Tags** (shown on the post), then **SEO keywords**
+  (not shown on the post): focus keyword and secondary keywords, read-only canonical URL,
   a Google result preview and a social share preview.
 - **Settings tab:** status, "Publish on" date and time (scheduled only), published date,
   last updated (with a "Today" button), related platform, featured checkbox (the hint
@@ -260,7 +262,8 @@ Recommended (warns): meta description 70–160 characters; Google title (title o
 title + ` | Sage Kite`) 60 characters or fewer; at least one H2; 3–6 tags; every image
 has a source and alt text; every FAQ has a question and an answer; every video is a valid
 YouTube link; if a focus keyword is set, it appears in the Google title, the meta
-description, a heading and the first line of the first paragraph block; no HTML entities
+description, a heading and the first line of the first paragraph block, and 2–5 secondary
+keywords are expected; each secondary keyword appears in the article text (checked when any are set); no HTML entities
 like `&amp;` in title, SEO title, excerpt, alt text or tags; no `glasspane.pages.dev` links.
 
 ### Preview

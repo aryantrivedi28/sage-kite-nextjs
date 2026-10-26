@@ -100,7 +100,8 @@ export const sanityStudioStore: StudioStore = {
   async save(post) {
     // Sanity document ids must be UUIDs (lib/sanity/blogPosts.ts); a post that never reached Sanity gets one.
     const withId = POST_UUID.test(post.id) ? post : { ...post, id: crypto.randomUUID() };
-    return unwrap(await saveStudioPostAction(await uploadInlineImages(withId)));
+    // A post exported before secondary keywords existed has no such field.
+    return unwrap(await saveStudioPostAction(await uploadInlineImages({ ...withId, secondaryKeywords: withId.secondaryKeywords ?? [] })));
   },
   async remove(id) {
     unwrap(await deleteStudioPostAction(id));

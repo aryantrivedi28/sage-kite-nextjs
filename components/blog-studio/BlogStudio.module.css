@@ -300,6 +300,8 @@ textarea.input { resize: vertical; line-height: 1.55; }
 .addBlock:hover { border-color: var(--sage); background: var(--pale-sage); }
 
 /* SEO previews */
+.groupLabel { display: block; margin: 26px 0 12px; padding-top: 16px; border-top: 1px solid var(--studio-line); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sage); }
+.groupLabelFirst { margin-top: 8px; padding-top: 0; border-top: 0; }
 .previewLabel { display: block; margin: 22px 0 8px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sage); }
 .serp { border: 1px solid var(--studio-line); border-radius: var(--r); padding: 14px 16px; }
 .serpUrl { display: block; font-size: 0.8125rem; color: var(--dark-sage); word-break: break-all; }

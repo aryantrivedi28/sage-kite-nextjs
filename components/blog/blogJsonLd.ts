@@ -20,6 +20,27 @@ export function serializeJsonLd(data: unknown): string {
 }
 
 /**
+ * The Article's `keywords`. A post with secondary keywords (written in the studio) gets its focus keyword
+ * followed by them, without duplicates. Every other post (all code posts and every post saved before
+ * secondary keywords existed) keeps its tags, exactly as before. Tags themselves stay labels for grouping.
+ */
+export function articleKeywords(post: Pick<BlogPost, 'tags' | 'focusKeyword' | 'secondaryKeywords'>): string | undefined {
+  if (post.secondaryKeywords?.length) {
+    const seen = new Set<string>();
+    const phrases: string[] = [];
+    for (const raw of [post.focusKeyword ?? '', ...post.secondaryKeywords]) {
+      const phrase = raw.trim();
+      if (phrase && !seen.has(phrase.toLowerCase())) {
+        seen.add(phrase.toLowerCase());
+        phrases.push(phrase);
+      }
+    }
+    return phrases.join(', ');
+  }
+  return post.tags ? post.tags.join(', ') : undefined;
+}
+
+/**
  * Builds the JSON-LD graph for a blog post from its data in content/blog.
  * Every post gets Article + BreadcrumbList. FAQPage is added when the post
  * sets `faqs`, and the Article is linked to a platform page's Service schema
@@ -27,6 +48,7 @@ export function serializeJsonLd(data: unknown): string {
  */
 export function buildBlogJsonLd(post: BlogPost) {
   const url = `${SITE_URL}/blog/${post.slug}`;
+  const keywords = articleKeywords(post);
 
   const graph: Record<string, unknown>[] = [
     {
@@ -49,7 +71,7 @@ export function buildBlogJsonLd(post: BlogPost) {
       },
       isPartOf: { '@id': `${SITE_URL}/#website` },
       articleSection: post.category,
-      ...(post.tags ? { keywords: post.tags.join(', ') } : {}),
+      ...(keywords !== undefined ? { keywords } : {}),
       ...(post.relatedPlatform
         ? { about: { '@id': `${SITE_URL}/platforms/${post.relatedPlatform}/#service` } }
         : {}),

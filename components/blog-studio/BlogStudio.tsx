@@ -42,6 +42,8 @@ import { StudioArticle } from './StudioArticle';
 import {
   ACCEPTED_IMAGE_TYPES,
   BLOCK_LABELS,
+  MAX_KEYWORD_LENGTH,
+  MAX_SECONDARY_KEYWORDS,
   SLUG_PATTERN,
   TITLE_SUFFIX,
   buildGuide,
@@ -51,6 +53,7 @@ import {
   headingAnchors,
   newBlock,
   newId,
+  parseKeywordList,
   postUrl,
   readingTime,
   resolveBlocks,
@@ -794,6 +797,9 @@ function Editor({
   const [pane, setPane] = useState<Pane>('content');
   const [slugTouched, setSlugTouched] = useState(() => !!draft.slug && draft.slug !== slugify(draft.title));
   const [tagsText, setTagsText] = useState(() => draft.tags.join(', '));
+  const [secondaryText, setSecondaryText] = useState(() => (draft.secondaryKeywords ?? []).join(', '));
+  const secondaryList = parseKeywordList(secondaryText);
+  const secondaryOver = secondaryList.length > MAX_SECONDARY_KEYWORDS || secondaryList.some((k) => k.length > MAX_KEYWORD_LENGTH);
   const [addAt, setAddAt] = useState<number | null>(null);
   const slugLocked = !!draft.firstPublishedAt;
   const checks = checklist(draft, { studio: posts, site: sitePosts });
@@ -1039,7 +1045,8 @@ function Editor({
                 >
                   <textarea className={styles.input} rows={3} value={draft.excerpt} onChange={(e) => set('excerpt', e.target.value)} />
                 </Field>
-                <Field label="Tags / keywords" hint="3–6 phrases, separated by commas. Shown on the post and used as schema keywords.">
+                <span className={`${styles.groupLabel} ${styles.groupLabelFirst}`}>Tags · shown on the post</span>
+                <Field label="Tags" hint="3–6 labels that group the post. Shown on the post page and kept in the page's meta tags.">
                   <input
                     className={styles.input}
                     value={tagsText}
@@ -1050,8 +1057,28 @@ function Editor({
                     }}
                   />
                 </Field>
-                <Field label="Focus keyword (editorial hint)" hint="Not output on the page. The checklist uses it to check the title, description, headings and first paragraph.">
-                  <input className={styles.input} value={draft.focusKeyword} onChange={(e) => set('focusKeyword', e.target.value)} />
+
+                <span className={styles.groupLabel}>SEO keywords · not shown on the post</span>
+                <Field label="Focus keyword" hint="The one phrase this post should rank for. The checklist looks for it in the title, description, a heading and the first paragraph.">
+                  <input className={styles.input} value={draft.focusKeyword} placeholder="email marketing automation" onChange={(e) => set('focusKeyword', e.target.value)} />
+                </Field>
+                <Field
+                  label="Secondary keywords"
+                  count={`${secondaryList.length} / ${MAX_SECONDARY_KEYWORDS}`}
+                  countState={secondaryOver || (secondaryList.length > 0 && (secondaryList.length < 2 || secondaryList.length > 5)) ? 'warn' : secondaryList.length ? 'ok' : undefined}
+                  hint={secondaryOver
+                    ? `Use at most ${MAX_SECONDARY_KEYWORDS} phrases of ${MAX_KEYWORD_LENGTH} characters or fewer: saving is refused until then.`
+                    : `2–5 related phrases, separated by commas (at most ${MAX_SECONDARY_KEYWORDS}, ${MAX_KEYWORD_LENGTH} characters each). Added to the page's structured data.`}
+                >
+                  <input
+                    className={styles.input}
+                    value={secondaryText}
+                    placeholder="automated email campaigns, email workflow automation"
+                    onChange={(e) => {
+                      setSecondaryText(e.target.value);
+                      set('secondaryKeywords', parseKeywordList(e.target.value));
+                    }}
+                  />
                 </Field>
                 <Field label="Canonical URL" hint="Set automatically from the slug, with no trailing slash.">
                   <input className={styles.input} value={postUrl(draft.slug)} readOnly />

@@ -7,6 +7,28 @@ export const SITE_URL = 'https://www.sagekite.com';
 export const TITLE_SUFFIX = ' | Sage Kite';
 const WORDS_PER_MINUTE = 225;
 
+/** Secondary keywords (SEO phrases, separate from tags): at most this many, each at most this long. */
+export const MAX_SECONDARY_KEYWORDS = 8;
+export const MAX_KEYWORD_LENGTH = 80;
+
+/** Trims, drops empty entries and removes duplicates (ignoring case), keeping the first spelling. */
+export function normalizeKeywords(list: readonly string[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of list) {
+    const phrase = raw.trim();
+    const key = phrase.toLowerCase();
+    if (phrase && !seen.has(key)) {
+      seen.add(key);
+      out.push(phrase);
+    }
+  }
+  return out;
+}
+
+/** The comma-separated text a writer types into a keyword field. */
+export const parseKeywordList = (text: string): string[] => normalizeKeywords(text.split(','));
+
 /** The formats a writer may pick (checked again from the file's bytes on upload: lib/sanity/imageUpload.ts). */
 export const ACCEPTED_IMAGE_TYPES: string[] = Object.keys(UPLOAD_IMAGE_FORMATS);
 /** Largest file a writer may pick; it is resized in the browser before saving. */
@@ -58,6 +80,7 @@ export function emptyPost(title: string, category: string, author: string, autho
     imageAlt: '',
     tags: [],
     focusKeyword: '',
+    secondaryKeywords: [],
     relatedPlatform: '',
     featured: false,
     blocks: [],
@@ -212,6 +235,11 @@ function blockText(b: StudioBlock): string {
   }
 }
 
+/** The article's readable text (inline markup removed), used to look for keywords. */
+export function articlePlainText(blocks: StudioBlock[]): string {
+  return blocks.map((b) => stripInline(blockText(b))).join(' ');
+}
+
 export function wordCount(blocks: StudioBlock[]): number {
   const text = blocks.map((b) => stripInline(blockText(b))).join(' ');
   return text.split(/\s+/).filter(Boolean).length;
@@ -255,6 +283,8 @@ export function checklist(
   const metadata = [post.title, post.seoTitle, post.excerpt, post.imageAlt, ...post.tags].join(' ');
   const allText = JSON.stringify(post.blocks);
   const kw = post.focusKeyword.trim().toLowerCase();
+  // Posts saved before this field existed have none.
+  const secondary = normalizeKeywords(post.secondaryKeywords ?? []);
   const firstText = post.blocks.find((b) => b.type === 'text');
 
   const items: CheckItem[] = [
@@ -297,7 +327,12 @@ export function checklist(
       { label: 'Focus keyword in the meta description', ok: post.excerpt.toLowerCase().includes(kw), required: false },
       { label: 'Focus keyword in a heading', ok: post.blocks.some((b) => b.type === 'heading' && b.text.toLowerCase().includes(kw)), required: false },
       { label: 'Focus keyword in the first paragraph', ok: !!firstText && firstText.type === 'text' && lines(firstText.text)[0]?.toLowerCase().includes(kw), required: false },
+      { label: 'Secondary keywords: 2 to 5 phrases', ok: secondary.length >= 2 && secondary.length <= 5, required: false },
     );
+  }
+  if (secondary.length) {
+    const body = articlePlainText(post.blocks).toLowerCase();
+    items.push({ label: 'Each secondary keyword appears in the article', ok: secondary.every((k) => body.includes(k.toLowerCase())), required: false });
   }
   items.push(
     { label: 'No HTML entities such as &amp; in title or description', ok: !/&(amp|lt|gt|quot|apos|nbsp|#\d+);/.test(metadata), required: false },

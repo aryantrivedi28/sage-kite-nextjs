@@ -62,6 +62,8 @@ function toBlogPost(p: StudioPost): BlogPost | null {
     featuredImage: p.featuredImage,
     imageAlt: p.imageAlt.trim() || undefined,
     tags: p.tags.length ? p.tags : undefined,
+    focusKeyword: p.focusKeyword.trim() || undefined,
+    secondaryKeywords: p.secondaryKeywords.length ? p.secondaryKeywords : undefined,
     guide,
     faqs: faqs.length ? faqs : undefined,
     relatedPlatform: PLATFORM_PAGE_SLUGS.includes(p.relatedPlatform) ? p.relatedPlatform : undefined,

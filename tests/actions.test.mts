@@ -49,7 +49,7 @@ const validPost = (over: Record<string, unknown> = {}) => ({
   id: UUID, slug: 'a-valid-test-slug', title: 'A valid test post', seoTitle: '', excerpt: 'x'.repeat(90), category: 'CRM',
   author: 'Aryan Trivedi', authorImage: '/aryan_t.jpeg', status: 'draft', publishedAt: '2026-10-21', updatedAt: '2026-10-21',
   scheduledFor: '', featuredImage: '/images/blog/audit-planning.jpg', imageAlt: 'A photo', tags: ['one', 'two', 'three'],
-  focusKeyword: '', relatedPlatform: '', featured: false,
+  focusKeyword: '', secondaryKeywords: [], relatedPlatform: '', featured: false,
   blocks: [{ id: 'aaaa1111', type: 'heading', level: 2, text: 'Heading' }, { id: 'bbbb2222', type: 'text', text: 'Body text.' }],
   createdAt: '2026-10-21T00:00:00.000Z', savedAt: '2026-10-21T00:00:00.000Z', ...over,
 });
@@ -456,4 +456,33 @@ test('crafted requests cannot plant tracking pixels or foreign images: featured,
   const sanityImage = `https://cdn.sanity.io/images/lk42drbi/production/${'f'.repeat(40)}-1200x675.webp`;
   const ok = await actions.saveStudioPostAction(validPost({ featuredImage: sanityImage, blocks: [{ id: 'aaaa1111', type: 'image', src: '/images/blog/audit-planning.jpg', alt: 'a', caption: 'c' }, { id: 'bbbb2222', type: 'image', src: sanityImage, alt: 'b', caption: '' }, { id: 'cccc3333', type: 'image', src: '', alt: '', caption: '' }] }) as never);
   assert.equal(ok.ok, true, 'this site\'s files, this project\'s uploads and an empty draft image are accepted');
+});
+
+/* ── secondary keywords through the real actions (decision.md D043) ─────── */
+
+test('saving: more than 8 or too-long secondary keywords are refused before Sanity is touched', async () => {
+  for (const bad of [Array.from({ length: 9 }, (_, i) => `phrase ${i}`), ['k'.repeat(81)]]) {
+    const r = await actions.saveStudioPostAction(validPost({ secondaryKeywords: bad }) as never);
+    assert.equal(r.ok, false);
+    assert.match(!r.ok ? r.error : '', /secondary keywords/);
+  }
+  assert.equal(writes().length, 0);
+});
+
+test('saving: the keywords are written next to (not instead of) the tags', async () => {
+  const r = await actions.saveStudioPostAction(validPost({ tags: ['CRM', 'Setup'], focusKeyword: 'email automation', secondaryKeywords: [' a ', 'b', 'A'] }) as never);
+  assert.equal(r.ok, true);
+  const commit = calls().find((c) => c.op === 'commit') as { ops: { op: string; doc: Record<string, unknown> }[] };
+  const doc = commit.ops.find((o) => o.op === 'createOrReplace')!.doc;
+  assert.deepEqual(doc.tags, ['CRM', 'Setup']);
+  assert.equal(doc.focusKeyword, 'email automation');
+  assert.deepEqual(doc.secondaryKeywords, ['a', 'b']);
+});
+
+test('saving: a post without the field (an older export) still saves, with empty secondary keywords', async () => {
+  const old = validPost() as Record<string, unknown>;
+  delete old.secondaryKeywords;
+  assert.equal((await actions.saveStudioPostAction(old as never)).ok, true);
+  const commit = calls().find((c) => c.op === 'commit') as { ops: { op: string; doc: Record<string, unknown> }[] };
+  assert.deepEqual(commit.ops.find((o) => o.op === 'createOrReplace')!.doc.secondaryKeywords, []);
 });

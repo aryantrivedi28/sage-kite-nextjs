@@ -47,7 +47,8 @@ schema by hand. The shared template builds all of that from the post file.
 | `readingTime` | yes | e.g. `"8 min read"`. |
 | `featuredImage` | yes | Path under `public`, e.g. `/images/blog/<name>.jpg`. |
 | `imageAlt` | yes | Describe what the image shows. |
-| `tags` | no | Become schema `keywords` and meta keywords. |
+| `tags` | no | Labels that group the post: shown on the page, and the meta keywords tag. They are also the schema `keywords` unless the post has `secondaryKeywords`. |
+| `focusKeyword`, `secondaryKeywords` | no | SEO phrases, set in the blog studio only (not shown on the page). When a post has `secondaryKeywords`, its schema `keywords` is the focus keyword followed by them. Never the meta keywords tag. |
 | `guide` | yes | Sidebar table of contents. Each `id` **must** match an `id` on a heading inside `content`. |
 | `faqs` | no | Only if the article has an FAQ section. Question and answer text must be **identical** to what the page shows. Produces FAQPage schema. |
 | `relatedPlatform` | no | `'dubsado' \| 'honeybook' \| 'hubspot' \| 'activecampaign' \| 'jobber' \| 'lofty' \| 'kajabi' \| 'bloomerang' \| 'keap' \| 'follow-up-boss' \| 'housecall-pro' \| 'servicetitan' \| 'mindbody' \| 'clio-grow'`. Links the article to that platform page's Service schema. Only set it if the post is mainly about that platform. |
@@ -132,7 +133,7 @@ Rules:
   in `app/layout.tsx` and apply to every page. Do not repeat them per page.
   Blog posts override `authors` with the post author.
 - Every page sets `keywords`: 3–6 phrases specific to that page (not
-  repeated across pages). Blog posts get them from `tags` automatically.
+  repeated across pages). Blog posts get them from `tags` automatically (the meta keywords tag always comes from `tags`).
   Search engines give this tag little or no weight; it is kept for audit tools.
 - Next.js merges `openGraph` shallowly: a page that sets `openGraph` must set
   every field it needs (`type`, `siteName`, `url`, `title`, `description`).
@@ -210,7 +211,7 @@ Field mapping:
 | `publisher` | `{ "@id": "https://www.sagekite.com/#organization" }` |
 | `mainEntityOfPage` | `https://www.sagekite.com/blog/<slug>` |
 | `articleSection` | `category` |
-| `keywords` | `tags` joined with `, ` |
+| `keywords` | `focusKeyword` + `secondaryKeywords` joined with `, ` (no duplicates) when the post has secondary keywords; otherwise `tags` joined with `, ` |
 | `about` | `relatedPlatform` → `/platforms/<name>/#service` |
 | FAQPage `mainEntity` | `faqs` |
 

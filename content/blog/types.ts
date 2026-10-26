@@ -36,7 +36,11 @@ export interface BlogPost {
   featuredImage: string;
   /** Alt text for the featured image. */
   imageAlt?: string;
+  /** Labels that group the post. Shown on the page; also the meta keywords tag and, without keywords below, the schema keywords. */
   tags?: string[];
+  /** SEO phrases for the studio's blog posts. Not shown on the page. Used in the Article schema `keywords`. */
+  focusKeyword?: string;
+  secondaryKeywords?: string[];
   guide: BlogGuideItem[];
   /**
    * Optional FAQ schema. Copy the questions and answers exactly as they

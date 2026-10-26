@@ -1,4 +1,4 @@
-import { BLOCK_LABELS } from '@/components/blog-studio/postUtils';
+import { BLOCK_LABELS, MAX_KEYWORD_LENGTH, MAX_SECONDARY_KEYWORDS } from '@/components/blog-studio/postUtils';
 import { CATEGORIES } from '@/content/blog/types';
 import { PLATFORM_PAGE_SLUGS } from '@/content/platforms';
 import { BLOCK_KEY_PATTERN, POST_ID_PATTERN } from './blogPosts';
@@ -74,6 +74,13 @@ export function postShapeProblem(input: unknown): string | null {
   if (post.relatedPlatform !== '' && !PLATFORM_PAGE_SLUGS.includes(post.relatedPlatform as string)) return 'Invalid related platform.';
 
   if (!Array.isArray(post.tags) || post.tags.length > MAX.tags || !post.tags.every((t) => isString(t, MAX.tag))) return 'Invalid post content.';
+  // Optional so posts exported before this field existed can still be imported.
+  if (post.secondaryKeywords !== undefined) {
+    const k = post.secondaryKeywords;
+    if (!Array.isArray(k) || k.length > MAX_SECONDARY_KEYWORDS || !k.every((x) => isString(x, MAX_KEYWORD_LENGTH))) {
+      return `Use at most ${MAX_SECONDARY_KEYWORDS} secondary keywords, ${MAX_KEYWORD_LENGTH} characters each or fewer.`;
+    }
+  }
   if (!Array.isArray(post.blocks) || post.blocks.length > MAX.blocks) return 'Invalid post content.';
   for (const b of post.blocks) {
     const problem = blockProblem(b);

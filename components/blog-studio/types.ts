@@ -46,8 +46,10 @@ export interface StudioPost {
   featuredImage: string;
   imageAlt: string;
   tags: string[];
-  /** Editorial hint for the checklist only; not output on the page. */
+  /** The one phrase the post should rank for. Checked by the checklist and used in the structured data. Not shown on the page. */
   focusKeyword: string;
+  /** Related SEO phrases (up to 8). Used in the structured data when present. Not shown on the page and not tags. */
+  secondaryKeywords: string[];
   relatedPlatform: string;
   featured: boolean;
   blocks: StudioBlock[];

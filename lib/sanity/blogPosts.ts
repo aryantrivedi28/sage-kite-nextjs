@@ -1,3 +1,4 @@
+import { normalizeKeywords } from '@/components/blog-studio/postUtils';
 import type { StudioBlock, StudioPost, StudioStatus } from '@/components/blog-studio/types';
 
 /*
@@ -83,6 +84,7 @@ export function toBlogPostDocument(post: StudioPost): BlogPostDocument {
     imageAlt: post.imageAlt,
     tags: [...post.tags],
     focusKeyword: post.focusKeyword,
+    secondaryKeywords: normalizeKeywords(post.secondaryKeywords ?? []),
     relatedPlatform: post.relatedPlatform,
     featured: post.featured,
     ...(post.firstPublishedAt ? { firstPublishedAt: post.firstPublishedAt } : {}),
@@ -115,6 +117,8 @@ export function fromBlogPostDocument(doc: Record<string, unknown>): StudioPost {
     imageAlt: str(doc.imageAlt),
     tags: Array.isArray(doc.tags) ? doc.tags.filter((t): t is string => typeof t === 'string') : [],
     focusKeyword: str(doc.focusKeyword),
+    // Posts saved before this field existed have none.
+    secondaryKeywords: Array.isArray(doc.secondaryKeywords) ? doc.secondaryKeywords.filter((k): k is string => typeof k === 'string') : [],
     relatedPlatform: str(doc.relatedPlatform),
     featured: doc.featured === true,
     blocks: blocks.map(({ _key, ...block }) => ({ ...block, id: str(_key) }) as StudioBlock),
