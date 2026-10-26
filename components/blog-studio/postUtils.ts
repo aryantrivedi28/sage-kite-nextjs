@@ -11,6 +11,9 @@ const WORDS_PER_MINUTE = 225;
 export const MAX_SECONDARY_KEYWORDS = 8;
 export const MAX_KEYWORD_LENGTH = 80;
 
+/** Most blocks one post may have (checked on save in lib/sanity/postValidation.ts). */
+export const MAX_POST_BLOCKS = 400;
+
 /** Trims, drops empty entries and removes duplicates (ignoring case), keeping the first spelling. */
 export function normalizeKeywords(list: readonly string[]): string[] {
   const seen = new Set<string>();
@@ -123,13 +126,17 @@ const URL_PART = String.raw`(?:[^()\s]|\([^()\s]*\))+`;
 export const INLINE_PATTERN = new RegExp(String.raw`(\*\*[^*\n]+\*\*|\*[^*\s][^*\n]*\*|\[[^\]\n]+\]\(${URL_PART}\))`, 'g');
 export const LINK_PATTERN = new RegExp(String.raw`^\[([^\]\n]+)\]\((${URL_PART})\)$`);
 
+/** Every `[text](url)` in a string; group 1 is the text, group 2 the URL. */
+export const LINK_ANYWHERE = new RegExp(String.raw`\[([^\]\n]+)\]\((${URL_PART})\)`, 'g');
+
+/** Text with the bold and italic markers removed; links are kept. */
+export function stripEmphasis(s: string): string {
+  return s.replace(/\*\*([^*\n]+)\*\*/g, '$1').replace(/\*([^*\s][^*\n]*)\*/g, '$1');
+}
+
 /** Plain text with the inline markers removed, as used in FAQ schema. */
 export function stripInline(s: string): string {
-  return s
-    .replace(new RegExp(String.raw`\[([^\]\n]+)\]\(${URL_PART}\)`, 'g'), '$1')
-    .replace(/\*\*([^*\n]+)\*\*/g, '$1')
-    .replace(/\*([^*\s][^*\n]*)\*/g, '$1')
-    .trim();
+  return stripEmphasis(s.replace(LINK_ANYWHERE, '$1')).trim();
 }
 
 /**
@@ -153,9 +160,12 @@ export function lines(s: string): string[] {
   return s.split('\n').map((l) => l.trim()).filter(Boolean);
 }
 
+/** A list line without a typed or pasted bullet or number marker (`- `, `* `, `• `, `1. `, `1) `). */
+export const stripListMarker = (line: string) => line.replace(/^([-*•]|\d+[.)])\s+/, '');
+
 /** List lines with any pasted bullet or number marker removed. */
 export function listItems(s: string): string[] {
-  return lines(s).map((l) => l.replace(/^([-*•]|\d+[.)])\s+/, ''));
+  return lines(s).map(stripListMarker);
 }
 
 /**
@@ -188,7 +198,7 @@ const NAMED_ENTITIES: Record<string, string> = {
   lsquo: '‘', rsquo: '’', ldquo: '“', rdquo: '”', bull: '•', copy: '©', reg: '®', trade: '™', euro: '€', pound: '£',
 };
 
-function decodeEntities(text: string): string {
+export function decodeEntities(text: string): string {
   return text.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (match, entity: string) => {
     if (entity[0] !== '#') return NAMED_ENTITIES[entity.toLowerCase()] ?? match;
     const code = entity[1].toLowerCase() === 'x' ? parseInt(entity.slice(2), 16) : parseInt(entity.slice(1), 10);
@@ -200,7 +210,7 @@ function decodeEntities(text: string): string {
   });
 }
 
-const cleanCell = (text: string) => text.replace(/\s+/g, ' ').trim();
+export const cleanCell = (text: string) => text.replace(/\s+/g, ' ').trim();
 
 /** Bold and italic markers with spaces moved outside them and empty pairs removed, so they match INLINE_PATTERN. */
 function tidyMarkers(text: string): string {
@@ -211,10 +221,10 @@ function tidyMarkers(text: string): string {
   );
 }
 
-type Grid = string[][];
+export type Grid = string[][];
 
 /** Shared by the HTML and tab-separated paths: drop empty rows and trailing empty columns, pad, check the limits. */
-function finishGrid(grid: Grid, options: { dropLeadingEmptyColumns?: boolean; minColumns: number }): PastedTable {
+export function finishGrid(grid: Grid, options: { dropLeadingEmptyColumns?: boolean; minColumns: number }): PastedTable {
   let rows = grid.map((r) => r.map(cleanCell)).filter((r) => r.some(Boolean));
   let width = Math.max(0, ...rows.map((r) => r.length));
   rows = rows.map((r) => [...r, ...Array(width - r.length).fill('')]);
@@ -296,17 +306,152 @@ function parseTabSeparated(text: string): Grid {
   return rows;
 }
 
+/* ── Clipboard HTML: shared by the table and article paste parsers ────── */
+
+/**
+ * Clipboard HTML without comments (including Word's `<!--[if …]-->`), declarations (`<!DOCTYPE …>`, Word's
+ * `<![if …]>` markers), processing instructions (`<?xml …?>`, Word's `<?xml:namespace … />`), `<o:p>` and the contents
+ * of style, script, head, title and xml elements. Left in, a declaration would be read as text (decision.md D048).
+ */
+export function cleanClipboardHtml(html: string): string {
+  return html
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<![^>]*>/g, '')
+    .replace(/<\?[^>]*>/g, '')
+    .replace(/<(style|script|head|title|xml)\b[\s\S]*?<\/\1\s*>/gi, '')
+    .replace(/<o:p>[\s\S]*?<\/o:p>/gi, '');
+}
+
+/** A new tokenizer for clipboard HTML: group 1 `/` for a closing tag, 2 the tag name, 3 its attributes, 4 text. A lone `<` is text. */
+export const htmlTokenizer = () => /<(\/?)([a-zA-Z][\w:.-]*)((?:"[^"]*"|'[^']*'|[^'">])*)>|([^<]+)|</g;
+
+/** An attribute's value (entities decoded), or undefined. `data-aria-level` is not `aria-level`. */
+export function htmlAttr(attrs: string, name: string): string | undefined {
+  const m = attrs.match(new RegExp(String.raw`(?:^|\s)${name}\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))`, 'i'));
+  return m ? decodeEntities(m[1] ?? m[2] ?? m[3] ?? '') : undefined;
+}
+
+/**
+ * The value of one CSS property in a style attribute, lower case. Only the property itself counts: Word writes
+ * `mso-bidi-font-weight:normal` on ordinary bold text, and that is not `font-weight`.
+ */
+export function cssValue(style: string, property: string): string | undefined {
+  for (const declaration of style.toLowerCase().split(';')) {
+    const colon = declaration.indexOf(':');
+    if (colon > 0 && declaration.slice(0, colon).trim() === property) return declaration.slice(colon + 1).trim().split(/\s+/)[0];
+  }
+  return undefined;
+}
+
+const isBoldWeight = (w: string | undefined) => w === 'bold' || w === 'bolder' || (!!w && /^\d+$/.test(w) && parseInt(w, 10) >= 600);
+
+type InlineMark = 'b' | 'i' | 'link' | null;
+const INLINE_TAGS = new Set(['b', 'strong', 'i', 'em', 'span', 'a']);
+
+/**
+ * Collects the text of one table cell, paragraph, heading or list item from clipboard HTML. Bold, italic and safe
+ * links become the studio's `**`, `*` and `[text](url)` markers; everything else is text. Bold wins over italic, and a
+ * link is kept outside bold or italic (the page's inline pattern can match neither nesting).
+ */
+export function inlineCollector() {
+  let text = '';
+  let bold = 0;
+  let italic = 0;
+  /** Where the text of the open bold or italic starts (right after its marker). */
+  let openAt = -1;
+  const marks: InlineMark[] = [];
+  /**
+   * `reopen` is the bold or italic marker ended before the link and started again after it; `cut` says how it was
+   * ended: its closing marker was added, or its opening marker was removed because nothing came after it.
+   */
+  const links: { start: number; href: string; reopen: string; cut: 'closed' | 'removed' | '' }[] = [];
+
+  /** Ends the open bold or italic; when nothing was written inside it, its opening marker is removed instead. */
+  function endEmphasis(marker: string): 'closed' | 'removed' {
+    if (text.length === openAt) {
+      text = text.slice(0, -marker.length);
+      return 'removed';
+    }
+    text += marker;
+    return 'closed';
+  }
+
+  function open(tag: string, attrs: string) {
+    const style = htmlAttr(attrs, 'style') ?? '';
+    const weight = cssValue(style, 'font-weight');
+    const fontStyle = cssValue(style, 'font-style');
+    let kind: InlineMark = null;
+    if (tag === 'a') {
+      const href = (htmlAttr(attrs, 'href') ?? '').trim();
+      if (safeHref(href)) {
+        const reopen = bold > 0 ? '**' : italic > 0 ? '*' : '';
+        const cut = reopen ? endEmphasis(reopen) : '';
+        links.push({ start: text.length, href, reopen, cut });
+        kind = 'link';
+      }
+    } else if (tag === 'b' || tag === 'strong') {
+      // Google Docs wraps everything it copies in <b style="font-weight:normal">: that is not bold.
+      if (weight === undefined || isBoldWeight(weight)) kind = 'b';
+    } else if (tag === 'i' || tag === 'em') {
+      if (fontStyle === undefined || fontStyle === 'italic' || fontStyle === 'oblique') kind = 'i';
+    } else if (isBoldWeight(weight)) kind = 'b';
+    else if (fontStyle === 'italic' || fontStyle === 'oblique') kind = 'i';
+    // Bold wins over italic: nesting markers would not match the page's inline pattern. Inside a link, no markers.
+    if (kind === 'b' && italic === 0 && bold === 0 && !links.length) { text += '**'; bold++; openAt = text.length; }
+    else if (kind === 'i' && bold === 0 && italic === 0 && !links.length) { text += '*'; italic++; openAt = text.length; }
+    else if (kind === 'b' || kind === 'i') kind = null;
+    marks.push(kind);
+  }
+
+  function close() {
+    const kind = marks.pop();
+    if (kind === 'b' || kind === 'i') {
+      if (kind === 'b') bold--;
+      else italic--;
+      // Ended inside a link that already ended it (badly nested tags): nothing to write, and nothing to reopen.
+      const suspended = links.find((l) => l.reopen);
+      if (suspended) suspended.reopen = '';
+      else endEmphasis(kind === 'b' ? '**' : '*');
+    } else if (kind === 'link') {
+      const link = links.pop();
+      if (!link) return;
+      const label = text.slice(link.start).replace(/[*[\]]/g, '').trim();
+      const markdown = `[${label}](${link.href})`;
+      // Keep the link only if the page's link syntax accepts it; otherwise leave the text as it is.
+      text = text.slice(0, link.start) + (label && LINK_PATTERN.test(markdown) ? markdown : label) + link.reopen;
+      if (link.reopen) openAt = text.length;
+    }
+  }
+
+  return {
+    append(t: string) { text += t; },
+    /** Handles b, strong, i, em, span and a; returns false for any other tag. */
+    tag(tag: string, closing: boolean, attrs: string): boolean {
+      if (!INLINE_TAGS.has(tag)) return false;
+      if (closing) close();
+      else open(tag, attrs);
+      return true;
+    },
+    /** The collected text, with whitespace collapsed and any marker left open closed. */
+    finish(): string {
+      // A link that was never closed stays text, inside the bold or italic it started in: undo how that was ended.
+      for (const link of links.reverse()) {
+        if (link.cut === 'closed') text = text.slice(0, link.start - link.reopen.length) + text.slice(link.start);
+        else if (link.cut === 'removed') text = text.slice(0, link.start) + link.reopen + text.slice(link.start);
+      }
+      return tidyMarkers(text + (italic > 0 ? '*' : '') + (bold > 0 ? '**' : ''));
+    },
+  };
+}
+
 /**
  * The cells of the one table in a clipboard's HTML, or null when it holds no table, more than one, or text
  * outside the table (a pasted article is not a pasted table). Written as a small tokenizer rather than
  * DOMParser so it runs, and is tested, without a browser. Only text, bold, italic and safe links are kept.
  */
-function gridFromHtml(html: string): Grid | null {
+export function gridFromHtml(html: string): Grid | null {
   if (!/<table[\s>]/i.test(html)) return null;
-  const source = html
-    .replace(/<!--[\s\S]*?-->/g, '')
-    .replace(/<!\[[^>]*>/g, '')
-    .replace(/<(style|script|head|title|xml)\b[\s\S]*?<\/\1\s*>/gi, '');
+  const source = cleanClipboardHtml(html);
 
   const grid: Grid = [];
   const carry: number[] = [];
@@ -314,8 +459,7 @@ function gridFromHtml(html: string): Grid | null {
   let depth = 0;
   let tables = 0;
   let row: string[] | null = null;
-  let cell: { text: string; colspan: number; rowspan: number; bold: number; italic: number; links: { start: number; href: string }[] } | null = null;
-  const inline: ('b' | 'i' | 'link' | null)[] = [];
+  let cell: { colspan: number; rowspan: number; inline: ReturnType<typeof inlineCollector> } | null = null;
 
   const fillCarry = () => {
     while (row && carry[row.length] > 0) { carry[row.length]--; row.push(''); }
@@ -323,12 +467,10 @@ function gridFromHtml(html: string): Grid | null {
   const finishCell = () => {
     if (!cell || !row) { cell = null; return; }
     const start = row.length;
-    // A <b> or <i> that was never closed would leave a stray marker: close it here.
-    row.push(tidyMarkers(cell.text + (cell.italic > 0 ? '*' : '') + (cell.bold > 0 ? '**' : '')));
+    row.push(cell.inline.finish());
     for (let i = 1; i < cell.colspan; i++) row.push('');
     if (cell.rowspan > 1) for (let c = start; c < start + cell.colspan; c++) carry[c] = cell.rowspan - 1;
     cell = null;
-    inline.length = 0;
     fillCarry();
   };
   const finishRow = () => {
@@ -339,15 +481,9 @@ function gridFromHtml(html: string): Grid | null {
     const m = attrs.match(new RegExp(`\\b${name}\\s*=\\s*["']?(\\d+)`, 'i'));
     return m ? Math.min(Math.max(parseInt(m[1], 10), 1), MAX_TABLE_COLUMNS) : 1;
   };
-  const styleOf = (attrs: string) => (attrs.match(/\bstyle\s*=\s*("([^"]*)"|'([^']*)')/i)?.[2] ?? attrs.match(/\bstyle\s*=\s*'([^']*)'/i)?.[1] ?? '').toLowerCase();
-  const weightOf = (style: string) => style.match(/font-weight\s*:\s*([a-z0-9]+)/)?.[1];
-  const isBoldStyle = (style: string) => {
-    const w = weightOf(style);
-    return w === 'bold' || w === 'bolder' || (!!w && /^\d+$/.test(w) && parseInt(w, 10) >= 600);
-  };
-  const append = (text: string) => { if (cell) cell.text += text; };
+  const append = (text: string) => { if (cell) cell.inline.append(text); };
 
-  const tokenizer = /<(\/?)([a-zA-Z][\w:.-]*)((?:"[^"]*"|'[^']*'|[^'">])*)>|([^<]+)|</g;
+  const tokenizer = htmlTokenizer();
   for (let m = tokenizer.exec(source); m; m = tokenizer.exec(source)) {
     if (m[4] !== undefined || !m[2]) {
       const text = decodeEntities(m[4] ?? m[0]);
@@ -382,45 +518,14 @@ function gridFromHtml(html: string): Grid | null {
       finishCell();
       if (!closing) {
         if (!row) { row = []; fillCarry(); }
-        cell = { text: '', colspan: span(attrs, 'colspan'), rowspan: span(attrs, 'rowspan'), bold: 0, italic: 0, links: [] };
+        cell = { colspan: span(attrs, 'colspan'), rowspan: span(attrs, 'rowspan'), inline: inlineCollector() };
       }
     } else if (!cell) {
       continue;
     } else if (tag === 'br' || /^(p|div|li|ul|ol|h[1-6])$/.test(tag)) {
       append(' ');
-    } else if (tag === 'b' || tag === 'strong' || tag === 'i' || tag === 'em' || tag === 'span' || tag === 'a') {
-      if (!closing) {
-        const style = styleOf(attrs);
-        let kind: 'b' | 'i' | 'link' | null = null;
-        if (tag === 'a') {
-          const href = attrs.match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
-          const url = decodeEntities(href?.[1] ?? href?.[2] ?? href?.[3] ?? '').trim();
-          if (safeHref(url)) { kind = 'link'; cell.links.push({ start: cell.text.length, href: url }); }
-        } else if (tag === 'b' || tag === 'strong') {
-          // Google Docs wraps everything it copies in <b style="font-weight:normal">: that is not bold.
-          if (weightOf(style) === undefined || isBoldStyle(style)) kind = 'b';
-        } else if (tag === 'i' || tag === 'em') kind = 'i';
-        else if (isBoldStyle(style)) kind = 'b';
-        else if (/font-style\s*:\s*italic/.test(style)) kind = 'i';
-        // Bold wins over italic: nesting markers would not match the page's inline pattern.
-        if (kind === 'b' && cell.italic === 0 && cell.bold === 0) { append('**'); cell.bold++; }
-        else if (kind === 'i' && cell.bold === 0 && cell.italic === 0) { append('*'); cell.italic++; }
-        else if (kind === 'b' || kind === 'i') kind = null;
-        inline.push(kind);
-      } else {
-        const kind = inline.pop();
-        if (kind === 'b') { append('**'); cell.bold--; }
-        else if (kind === 'i') { append('*'); cell.italic--; }
-        else if (kind === 'link') {
-          const link = cell.links.pop();
-          if (link) {
-            const label = cell.text.slice(link.start).replace(/[*[\]]/g, '').trim();
-            const markdown = `[${label}](${link.href})`;
-            // Keep the link only if the page's link syntax accepts it; otherwise leave the text as it is.
-            cell.text = label && LINK_PATTERN.test(markdown) ? cell.text.slice(0, link.start) + markdown : cell.text.slice(0, link.start) + label;
-          }
-        }
-      }
+    } else {
+      cell.inline.tag(tag, closing, attrs);
     }
   }
   finishCell();

@@ -40,9 +40,10 @@ npm run build        # production build; must pass before committing
 npm test             # unit tests for the blog studio security code (tests/, node:test, no Sanity)
 ```
 
-There is no lint script. The only tests are the studio security tests in `tests/` (they run the real
-Server Actions against a fake Sanity client and never touch the network). "Done" means typecheck +
-build + `npm test` pass and the changed page has been opened in the browser.
+There is no lint script. The only tests are the blog studio tests in `tests/`: security (they run the real
+Server Actions against a fake Sanity client and never touch the network) and paste / formatting. tests/hooks.mjs
+compiles `.tsx` files with the project's TypeScript, so a test can render a component (e.g. StudioArticle) with
+react-dom/server. "Done" means typecheck + build + `npm test` pass and the changed page has been opened in the browser.
 
 ## Where things live
 
@@ -126,7 +127,12 @@ components/
                           StudioArticle renders blocks as plain .article-content HTML (no hooks): the
                           studio preview and, via content/blog/live.tsx, published Sanity posts on
                           /blog/[slug]; postUtils derives guide, faqs,
-                          readingTime and the publishing checklist from docs/blog-seo-schema.md.
+                          readingTime and the publishing checklist from docs/blog-seo-schema.md, and
+                          holds the clipboard-HTML helpers shared by table and article paste;
+                          articlePaste.ts turns a pasted article (Docs, Word, Markdown; Pages with a
+                          note, D048) into blocks and picks a pasted image to upload (imageFromClipboard);
+                          formatting.ts is the editor's formatting bar (Turn into, bold, italic, links),
+                          both pure and tested (D047).
   Header.tsx, Footer.tsx  Shared header/footer.
   GoogleAnalytics.tsx     The GA4 tag (client component in the root layout); skipped on pages
                           with a `data-no-analytics` element (the blog studio).

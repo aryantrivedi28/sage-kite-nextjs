@@ -192,3 +192,22 @@ test('the plain-text version of a pasted table, for "Paste as text" when the cli
   assert.ok(!/[*[\]]/.test(r.plain), 'no formatting markers in the plain text');
   assert.equal(ok('', 'A\tB\n1\t2').plain, 'A\tB\n1\t2');
 });
+
+/* ── Word's mso- properties (decision.md D047) ───────────────────────── */
+
+test('Word bold and italic: mso-bidi-font-weight / mso-bidi-font-style are not font-weight / font-style', () => {
+  // Word writes <b style='mso-bidi-font-weight:normal'> for ordinary bold; reading the mso- property as font-weight lost it.
+  const html = `<table class=MsoTableGrid><tr><td><p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Price<o:p></o:p></b></p></td><td><p class=MsoNormal><i style='mso-bidi-font-style:normal'>Monthly</i></p></td></tr>
+<tr><td><p class=MsoNormal><span style='mso-bidi-font-weight:bold'>not bold</span></p></td><td><p class=MsoNormal><span style='mso-bidi-font-style:italic'>not italic</span></p></td></tr></table>`;
+  assert.deepEqual(tableRows(ok(html).text), [['**Price**', '*Monthly*'], ['not bold', 'not italic']]);
+});
+
+test('a link inside bold text is kept outside the markers, so the page shows the link', () => {
+  const html = '<table><tr><td><b>See <a href="/blog/x">the guide</a> now</b></td><td><i><a href="/a">only</a></i></td></tr><tr><td>c</td><td>d</td></tr></table>';
+  assert.deepEqual(tableRows(ok(html).text)[0], ['**See** [the guide](/blog/x) **now**', '[only](/a)']);
+});
+
+test('a table after a DOCTYPE or <?xml?> declaration still converts (decision.md D048)', () => {
+  const html = '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><html><body><table><tr><td><b>A</b></td><td>B</td></tr><tr><td>1</td><td>2</td></tr></table></body></html>';
+  assert.deepEqual(tableRows(ok(html).text), [['**A**', 'B'], ['1', '2']]);
+});

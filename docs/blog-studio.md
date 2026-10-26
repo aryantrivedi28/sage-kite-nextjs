@@ -95,16 +95,24 @@ lib/sanity/
                             draft/scheduled = `drafts.<id>`; block `id` <-> `_key`.
   postUtils.ts              Pure helpers, no React: slugify, ids, today(), emptyPost, newBlock,
                             BLOCK_LABELS, inline-format regexes (INLINE_PATTERN, LINK_PATTERN,
-                            stripInline, safeHref, isExternalHref), list/table parsing, youtubeId,
+                            stripInline, safeHref, isExternalHref), list/table parsing, the
+                            clipboard-HTML tokenizer and inline collector shared by the table and
+                            article paste (tableFromClipboard, gridFromHtml, inlineCollector), youtubeId,
                             resolveBlocks (auto FAQ heading), headingAnchors, buildGuide,
                             buildFaqs, wordCount, readingTime, googleTitle, postUrl,
                             checklist() (the publishing rules) and toBlogFields().
+  articlePaste.ts           Pure. articleFromClipboard(html, plain): a pasted article (Google Docs,
+                            Word desktop or web, Markdown / plain text) as blocks plus a detected
+                            title; looksLikeArticle, describeBlocks, articleText (D047); isAppleHtml
+                            and the Pages note; imageFromClipboard and the image-paste checks (D048).
+  formatting.ts             Pure. The formatting bar: convertLines ("Turn into"), lineRange, and the
+                            Bold / Italic / Link / Remove link / Clear formatting text edits (D047).
   StudioArticle.tsx         Renders blocks as plain HTML elements (h2, h3, p, ul/ol, figure,
                             blockquote, table, iframe, hr) that the existing .article-content
                             styles format. No hooks and no 'use client', so a future server
                             route can reuse it to render studio posts on the live site.
   BlogStudio.tsx            'use client'. The whole UI: BlogStudio (state, save/publish logic),
-                            PostList, Editor, BlockCard, AddBlockMenu, FormatTextarea,
+                            PostList, Editor, BlockCard, AddBlockMenu, PasteArea, FormatTextarea,
                             ImageField, Field, Checklist, CreateModal, ConfirmModal, Preview.
   BlogStudio.module.css     Studio styles. Brand tokens only (var(--…)); tints are made with
                             color-mix from tokens; font is var(--sans). The preview uses the
@@ -190,7 +198,80 @@ text. `tableFromClipboard()` in `postUtils.ts` converts either into the `|` rows
   text elsewhere, with a message to split it.
 - Tab-separated text without HTML follows Excel's quoting only where Excel would have quoted (a cell holding a tab, a line
   break or a quote); a cell that merely starts with a quote mark is kept as written.
-- Not handled: a whole article pasted at once (headings, lists and tables together) is not turned into blocks.
+- A whole article pasted at once is handled by the article paste below; a paste that is only a table keeps this dialog.
+
+**Pasting an article (D047).** `articleFromClipboard(html, plain)` in `articlePaste.ts` turns a pasted article into
+blocks. It is a tokenizer like the table paste (no DOMParser), shares its inline handling (`inlineCollector` in
+`postUtils.ts`) and hands every `<table>` to the table paste above.
+- HTML wins when it gives any text (Google Docs, Word desktop, Word for the web, web pages). Headings: `h1`–`h6`,
+  Word for the web's `<p role="heading" aria-level="N">`, Word desktop's `MsoTitle` and `MsoHeadingN`. Paragraphs:
+  `p`/`div` with text; `<br>` starts a new line. Lists: `ul`/`ol`/`li`, and Word desktop's list paragraphs
+  (`MsoListParagraph…` or an `mso-list:` style), whose bullet or number (between the `supportLists` conditionals) is
+  dropped: ordered when it is a number, letter or roman numeral followed by `.` or `)`. Nested lists are flattened
+  into one list of the outermost kind. Quotes: `blockquote`, `MsoQuote`, `MsoIntenseQuote`. `hr` is a Divider.
+- Title rule: if the paste starts with exactly one top-level heading (H1 or Word's Title, at most 140 characters) it
+  is the post title, not a block; otherwise H1 and H2 become H2 and H3–H6 become H3. Bold and italic inside headings
+  are dropped (Google Docs styles headings with font-weight spans).
+- Consecutive paragraphs merge into one Paragraphs block (one line each); consecutive lists of the same kind merge;
+  consecutive quote lines merge. A heading, list, table, quote, image or divider starts a new block. FAQ blocks are
+  never created. Empty lines and blocks are dropped.
+- Images become empty Image blocks (alt kept, at most 160 characters) at their position, and the writer is told how
+  many need uploading. The source URL is never copied: Docs (googleusercontent), Word (`file:///`) and `data:` URLs are
+  not allowed image sources (D032). Images inside a table are left out, with a note.
+- Tables: each becomes a Table block (100 × 12 limit as above). A bigger table, or a one-cell table (a "callout"
+  box), becomes paragraphs of its rows (cells joined with ` | `), with a note for the oversized one.
+- Text only: no attributes, styles, classes or HTML are kept; entities are decoded, whitespace collapsed, scripts and
+  styles removed; only safe links survive (`safeHref`). Bold and italic follow the table paste, and Word's
+  `mso-bidi-font-weight` / `mso-bidi-font-style` are no longer read as `font-weight` / `font-style` (they lost Word's
+  ordinary bold before D047). A link inside bold or italic text is kept outside the markers (`**see** [link](/x)
+  **here**`), because the page cannot show a link inside bold or italic.
+- Plain text (no HTML): `# ` (title rule), `## ` H2, `###`+ H3; `- `, `* `, `• ` bullets; `1. ` / `1) ` numbers; `> `
+  quote; `---`, `***`, `___` alone a divider; `__bold__` becomes `**bold**`; a Markdown table (`| a | b |` with a
+  `|---|` line) becomes a Table block; everything else is paragraphs. Links that `safeHref` refuses become their text.
+  Tab-separated text that is a table becomes one Table block.
+- At most 300 blocks per paste: a bigger paste is refused with a message and nothing is converted. A paste that would
+  take the post over 400 blocks (the save limit) is refused too.
+- Where it converts: the paste area of an empty post and the "Paste article" area (converted at once, inserted at
+  the end or below the block whose `+` was used); a Paragraphs, List, Quote or FAQ-answer box asks first (Editor, §5).
+- Declarations are removed before parsing, for article and table pastes alike: `<!DOCTYPE …>` and any other `<!…>`,
+  and processing instructions (`<?xml …?>`, Word's `<?xml:namespace … />`). Before D048 a doctype became the first
+  line of text.
+- **Pages and other Apple apps (D048).** Pages puts only RTF / RTFD on the clipboard, never HTML. The browser converts
+  the RTF with Apple's "Cocoa HTML Writer" (HTML 4.01 strict doctype, `<meta name="Generator" content="Cocoa HTML
+  Writer">`, `<p class="p1">`, `Apple-converted-space`). That HTML has no heading information (headings and body text
+  share classes, and Pages marks almost everything bold) and no images (the picture is only in the RTFD, which
+  browsers never expose). The studio does not guess headings from font size or bold. It detects this HTML
+  (`isAppleHtml`), parses it as usual (lists, numbered lists, tables, bold, italic and links come through; everything
+  else is paragraphs), and adds this note: "This was copied from Pages or another Apple app, which doesn't mark
+  headings or include images. Headings came in as paragraphs: use Turn into → Heading 2 or Heading 3 on each one, and
+  add images with an Image block. Copying from Google Docs or Word keeps headings." It is shown in the message, in the
+  Undo paste bar, and in the "Split into blocks?" dialog when the paste goes through a text box.
+- What a whole-document copy can carry for images: Google Docs gives a temporary Google address and Word a file on the
+  writer's computer, so each image becomes an empty Image block in its place (the address is never used); Pages gives
+  nothing, so nothing appears (with the note above). Upload those images in the Image blocks, or paste each image on
+  its own (below).
+
+**Pasting an image (D048).** Copying one image (from Pages, Word, Preview, a screenshot, a web page or Finder) and
+pasting it uploads it.
+- `imageFromClipboard(files, plain)` in `articlePaste.ts` picks the first JPG, PNG or WebP file, and only when the
+  paste has no text (Finder's copied file name as the only text counts as no text). Word and other programs also put a
+  picture of a text selection on the clipboard: a paste with text is always a text paste and never an upload. Another
+  image type (GIF, HEIC…) says "Only JPG, PNG or WebP images can be pasted." The browser side reads
+  `clipboardData.files` (or the `file` items).
+- In an **Image block** (paste into its source field, whose placeholder says so) the image is uploaded and becomes the
+  block's source; the cursor moves to Alt text. In the **paste area** (empty post or "Paste article") and in **any box
+  with the formatting bar** (headings, paragraphs, lists, quotes, FAQ answers) it is uploaded into a new Image block at
+  the paste area's position or right after the current block; the box's own text is not changed. The editor scrolls to
+  the new block and puts the cursor in its Alt text. The featured image field accepts a pasted image the same way.
+- Uploads go only through the normal path: the editor's `upload` → `uploadImage` (8 MB pick limit, resized to WebP in
+  the browser, bytes checked on the server by `checkUploadedImage`). No `data:` or blob URL is ever put in a block. The
+  message says "Uploading image…", then "Image uploaded. Add its alt text." or the upload's error. One paste is one
+  upload and at most one block: another image paste while one is uploading is refused with "Still uploading the last
+  image. Paste again when it is done."
+- Alt text stays empty (the checklist warns); it is never made from the file name.
+- Copying a single image inside Google Docs can put only HTML with a Google address on the clipboard. Then nothing is
+  uploaded and the message says: "This image was copied as a web address, not as a file, so it cannot be uploaded
+  from here. Download the image, then paste it or use Upload."
 
 **Inline formatting** in paragraphs, list items, quotes, captions, table cells
 and FAQ answers: `**bold**`, `*italic*`, `[text](url)`. Link URLs may contain one
@@ -242,8 +323,39 @@ studio posts on the live site (section 10).
   published), category, author, excerpt/meta description (count out of 160), featured
   image (path/URL or upload) with alt text, and the block builder.
 - **Block builder:** add blocks at the end or below any block (`+`), move up and down,
-  remove. Word count and reading time are shown. Paragraph, list, quote and FAQ-answer
-  fields have Bold / Italic / Link buttons that wrap the selection in the markers.
+  remove. Word count and reading time are shown.
+- **Paste-first writing (D047):** an empty post shows a large paste area ("Paste your article here: …"); pasting
+  converts at once (section 4.2), and typing in it starts a Paragraphs block. The normal "Add a block" menu stays below
+  it. In a post with blocks, the add-block menu has **Paste article**, which opens the same area in its place. If the
+  paste has a title and the post has none, it fills the title (and the slug, unless edited or locked); if the post
+  already has a title, the pasted one is left out and the message says so. After a conversion a message gives the
+  counts ("Pasted 2 headings, 4 paragraphs, 2 lists, 1 table, 1 image") and how many images need uploading, a bar above
+  the blocks repeats it with **Undo paste** (restores the previous blocks, title and slug in one step; offered only
+  while nothing else has changed), and the editor scrolls to the first new block.
+- **Pasting into a box:** in a Paragraphs, List, Quote or FAQ-answer box, a paste that is more than a single paragraph
+  (2+ blocks, or any heading, list, table, quote or divider) is held back and "Split into blocks?" asks first, with
+  the counts: **Split into blocks** inserts them below the current block; **Paste as text** (also Escape or a click
+  outside) pastes the plain text as before. A single paragraph, or a single block of the box's own kind (a list into a
+  List box), pastes as before with no dialog. A paste that is only a table keeps the "Paste as a table?" dialog. A
+  paste from Pages shows the Pages note in the dialog (section 4.2).
+- **Pasting an image** (D048): a single image (no text) pasted into an Image block's source field, the paste area or
+  any box with the formatting bar is uploaded; see "Pasting an image" in section 4.2.
+- **Formatting bar** on Paragraphs, List, Quote and FAQ-answer boxes and on headings: **Turn into** (Paragraph,
+  Heading 2, Heading 3, Bulleted list, Numbered list, Quote; not on FAQ answers), **Bold**, **Italic**, **Link**,
+  **Remove link**, **Clear formatting**. Shortcuts in a box: `Cmd/Ctrl + B`, `I`, `K` (`Cmd/Ctrl + S` still saves).
+  - Turn into acts on the selected lines (whole lines), or the whole block with no selection. The block is split into
+    lines before, the converted lines and lines after, each keeping its type; each line turned into a heading is its
+    own heading (bold or italic on it is removed); a heading turned into anything else is one line; list markers are
+    removed. Bulleted ↔ numbered flips the whole list. The result merges with a neighbouring block of the same kind
+    (paragraphs, same-kind lists, quotes without attribution). A quote's attribution stays with its last part, or
+    follows the text as a `— name` line. Image, Table, Video, FAQ question and Divider blocks are never changed.
+  - Bold and Italic toggle: inside existing markers they remove them; otherwise they wrap the selection line by line,
+    with links kept outside. Bold wins: Bold replaces italic, and bold text cannot be made italic.
+  - Link opens a small address field under the bar (prefilled when the cursor is in a link, which it then updates).
+    Only what `safeHref` accepts is allowed; otherwise the reason is shown under the field. A link inside bold or
+    italic text splits it. Remove link replaces every link touching the selection (or the one under the cursor) with
+    its text. Clear formatting removes bold and italic markers in the selection and leaves links.
+  - The bar wraps on narrow screens and fits at 375 px; the markers stay visible in the boxes.
 - **SEO tab:** SEO title with a count of the full Google title out of 60, meta
   description (the same `excerpt` value), **Tags** (shown on the post), then **SEO keywords**
   (not shown on the post): focus keyword and secondary keywords, read-only canonical URL,
@@ -290,11 +402,14 @@ like `&amp;` in title, SEO title, excerpt, alt text or tags; no `glasspane.pages
   date and reading time, 16:9 hero image, `.article-content`, guide sidebar, tags.
 - It does not render the site header and footer, related posts or the booking CTA; a
   note says these appear on the live page.
+- An Image block without a source shows as a dashed 16:9 box, "Image to upload", with its alt text and caption if any
+  (D048), so empty Image blocks left by a pasted article are visible. Only in the preview (`StudioArticle` with
+  `preview`); a published page renders nothing for an image without a source, as before.
 
 ### Images (`sanityStudioStore.uploadImage`)
 - JPG, PNG or WebP, up to 8 MB. Resized in the browser to at most 1600px wide and
   re-encoded as WebP at quality 0.82, then stored as a data URL inside the post.
-- Paths and URLs can be typed instead of uploading.
+- Paths and URLs can be typed instead of uploading, and an image can be pasted (section 4.2, "Pasting an image").
 - The studio uses plain `<img>` (not `next/image`) because sources can be data URLs or
   any external URL, which `next/image` would reject without `remotePatterns`.
 

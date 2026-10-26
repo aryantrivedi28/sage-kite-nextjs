@@ -17,6 +17,20 @@ import { imageSrcForRender, isSanityImage, sanityImageSize, sanityImageUrl } fro
 /** Widths offered for article images (the article column is 720px wide). */
 const ARTICLE_IMAGE_WIDTHS = [720, 1080, 1440];
 
+/** The preview's box for an Image block that has no image yet: the 16:9 shape of a featured image. */
+const IMAGE_PLACEHOLDER_STYLE: React.CSSProperties = {
+  aspectRatio: '16 / 9',
+  display: 'grid',
+  placeContent: 'center',
+  gap: 6,
+  padding: 16,
+  textAlign: 'center',
+  border: '2px dashed var(--sage)',
+  borderRadius: 'var(--r)',
+  background: 'var(--pale-sage)',
+  color: 'var(--sage)',
+};
+
 /*
  * Renders studio blocks as the plain HTML elements a blog post's `content`
  * uses (docs/blog-seo-schema.md §1.3), so the existing .article-content styles
@@ -69,6 +83,19 @@ function Block({ block, anchor, preview }: { block: StudioBlock; anchor?: string
       return <L>{items.map((t, i) => <li key={i}><Inline text={t} /></li>)}</L>;
     }
     case 'image': {
+      // Studio preview only: show where an image is still to be uploaded (a pasted article leaves empty Image
+      // blocks, decision.md D048). Published pages render nothing for an image without a source.
+      if (preview && !block.src.trim()) {
+        return (
+          <figure>
+            <div style={IMAGE_PLACEHOLDER_STYLE}>
+              <strong>Image to upload</strong>
+              {block.alt.trim() && <span style={{ fontSize: '0.875rem' }}>{block.alt.trim()}</span>}
+            </div>
+            {block.caption.trim() && <figcaption><Inline text={block.caption} /></figcaption>}
+          </figure>
+        );
+      }
       // Only this site's files and this project's Sanity uploads are ever rendered (lib/sanity/image.ts).
       const src = imageSrcForRender(block.src, preview);
       if (!src) return null;

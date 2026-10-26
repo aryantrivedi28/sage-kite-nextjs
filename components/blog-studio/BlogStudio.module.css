@@ -262,7 +262,6 @@ textarea.input { resize: vertical; line-height: 1.55; }
 .imageControls { display: grid; gap: 8px; align-content: start; }
 
 /* Blocks */
-.blocksEmpty { padding: 24px; text-align: center; color: var(--sage); border: 1px dashed var(--studio-line); border-radius: var(--r); margin-bottom: 14px; }
 .block { border: 1px solid var(--studio-line); border-radius: var(--r); margin-bottom: 12px; background: var(--warm-white); scroll-margin: 90px; }
 .blockHead {
   display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 14px;
@@ -273,7 +272,7 @@ textarea.input { resize: vertical; line-height: 1.55; }
 .blockControls { display: flex; gap: 4px; }
 .blockControls .iconBtn { width: 30px; height: 30px; }
 .blockBody { padding: 14px; }
-.headingRow { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 10px; }
+.headingRow { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 10px; align-items: start; }
 .headingInput { font-weight: 700; font-size: 1.05rem; }
 
 .formatBox { border: 1px solid var(--studio-line); border-radius: var(--r); overflow: hidden; }
@@ -286,6 +285,34 @@ textarea.input { resize: vertical; line-height: 1.55; }
 .formatBar button { display: grid; place-items: center; width: 30px; height: 28px; border: 0; border-radius: 4px; background: none; color: var(--dark-sage); }
 .formatBar button:hover { background: var(--pale-sage); color: var(--ink); }
 .formatHint { margin-left: auto; font-size: 0.75rem; color: var(--sage); padding: 0 4px; }
+.turnInto {
+  height: 28px; max-width: 100%; margin-right: 4px; padding: 0 6px; border: 1px solid var(--studio-line); border-radius: 4px;
+  background: var(--warm-white); color: var(--ink); font-size: 0.8125rem; font-weight: 600;
+}
+.turnInto:focus-visible { outline: 2px solid var(--sage); outline-offset: 1px; }
+.linkRow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px; border-bottom: 1px solid var(--studio-line); }
+.formatBox .linkRow .input { flex: 1 1 200px; width: auto; min-height: 36px; padding: 6px 10px; border: 1px solid var(--studio-line); border-radius: var(--r); }
+.formatBox .linkRow .input:focus { border-color: var(--sage); }
+.btnSmall { min-height: 36px; padding: 6px 12px; }
+.linkError { flex-basis: 100%; font-size: 0.8125rem; font-weight: 600; color: var(--ink); }
+.linkError::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--coral); }
+
+.pasteArea {
+  display: grid; gap: 8px; border: 1px dashed var(--sage); border-radius: var(--r); padding: 12px; margin-bottom: 12px;
+  background: color-mix(in srgb, var(--pale-sage) 25%, var(--warm-white));
+}
+.pasteArea .addMenuHead { margin-bottom: 0; }
+.pasteTitle { display: inline-flex; align-items: center; gap: 8px; }
+.pasteTitle svg { color: var(--sage); }
+.pasteInput { min-height: 104px; resize: vertical; }
+.pasteAreaLarge .pasteInput { min-height: 180px; font-size: 1rem; }
+.addPaste { border-color: var(--sage); }
+.undoBar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px;
+  padding: 10px 12px; margin-bottom: 14px; border-radius: var(--r); background: var(--butter-soft); color: var(--ink); font-size: 0.875rem;
+}
+.undoBar > span { flex: 1 1 240px; min-width: 0; }
+.undoActions { display: flex; gap: 6px; align-items: center; }
 
 .addMenu { border: 1px dashed var(--sage); border-radius: var(--r); padding: 12px; margin-bottom: 12px; background: color-mix(in srgb, var(--pale-sage) 25%, var(--warm-white)); }
 .addMenuHead { display: flex; justify-content: space-between; align-items: center; font-size: 0.8125rem; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
@@ -347,6 +374,7 @@ textarea.input { resize: vertical; line-height: 1.55; }
 }
 .modalTitle { font-size: 1.35rem; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 8px; }
 .modalText { color: var(--dark-sage); margin-bottom: 18px; }
+.modalNote { margin-top: 10px; padding: 10px 12px; border-radius: var(--r); background: var(--butter-soft); color: var(--ink); font-size: 0.875rem; }
 .confirmList { list-style: disc; padding-left: 20px; margin-top: 8px; display: grid; gap: 4px; font-size: 0.875rem; }
 .modalActions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
 
@@ -417,6 +445,8 @@ textarea.input { resize: vertical; line-height: 1.55; }
   .editorActions { width: 100%; justify-content: flex-end; }
   .card { padding: 16px; }
   .formatHint { display: none; }
+  .formatBar button { width: 28px; }
+  .turnInto { max-width: 108px; margin-right: 2px; }
 }
 
 /* ── Mandatory sign-in dialog (LoginGate.tsx). Brand tokens only; it sits outside .app, so it sets its own font. ── */

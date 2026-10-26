@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   ArrowDown,
   ArrowLeft,
@@ -9,6 +9,7 @@ import {
   CircleAlert,
   CircleCheck,
   CircleQuestionMark,
+  ClipboardPaste,
   Copy,
   Download,
   ExternalLink,
@@ -25,17 +26,45 @@ import {
   Pencil,
   Plus,
   Quote,
+  RemoveFormatting,
   Search,
   Table,
   Trash2,
   Type,
+  Undo2,
+  Unlink,
   Upload,
   Video,
   X,
 } from 'lucide-react';
 import { BlogGuide } from '@/components/blog/BlogGuide';
 import { formatDate } from '@/components/blog/formatDate';
+import {
+  APPLE_PASTE_NOTE,
+  IMAGE_ADDRESS_MESSAGE,
+  UNSUPPORTED_IMAGE_MESSAGE,
+  articleFromClipboard,
+  articleText,
+  describeBlocks,
+  imageAddressOnly,
+  imageFromClipboard,
+  looksLikeArticle,
+  unsupportedImage,
+  type PastedArticle,
+} from './articlePaste';
 import { signOutStudioAction } from './auth-actions';
+import {
+  TURN_INTO_OPTIONS,
+  applyLink,
+  clearFormatting,
+  convertLines,
+  lineRange,
+  linkAt,
+  removeLinks,
+  toggleEmphasis,
+  type TextEditResult,
+  type TurnInto,
+} from './formatting';
 import { LoginGate } from './LoginGate';
 import { getStudioStore, onSessionEnded, type StudioStore } from './store';
 import { StudioArticle } from './StudioArticle';
@@ -43,6 +72,7 @@ import {
   ACCEPTED_IMAGE_TYPES,
   BLOCK_LABELS,
   MAX_KEYWORD_LENGTH,
+  MAX_POST_BLOCKS,
   MAX_SECONDARY_KEYWORDS,
   MAX_TABLE_COLUMNS,
   MAX_TABLE_ROWS,
@@ -152,6 +182,38 @@ function downloadJson(filename: string, data: unknown) {
 function isStudioPost(v: unknown): v is StudioPost {
   const p = v as StudioPost;
   return !!p && typeof p.id === 'string' && typeof p.title === 'string' && Array.isArray(p.blocks);
+}
+
+/** The files on a clipboard (some browsers list them only as items). */
+function clipboardFiles(data: DataTransfer): File[] {
+  const files = Array.from(data.files);
+  if (files.length) return files;
+  return Array.from(data.items).flatMap((item) => {
+    const file = item.kind === 'file' ? item.getAsFile() : null;
+    return file ? [file] : [];
+  });
+}
+
+/**
+ * An image paste (decision.md D048): the file to upload, a message when it is an image the studio cannot upload (a
+ * GIF, or only a web address such as an image copied inside Google Docs), or null for any other paste.
+ */
+function imagePaste(data: DataTransfer): { file: File } | { message: string } | null {
+  const files = clipboardFiles(data);
+  const plain = data.getData('text/plain');
+  const file = imageFromClipboard(files, plain);
+  if (file) return { file };
+  if (unsupportedImage(files, plain)) return { message: UNSUPPORTED_IMAGE_MESSAGE };
+  if (imageAddressOnly(data.getData('text/html'), plain, files)) return { message: IMAGE_ADDRESS_MESSAGE };
+  return null;
+}
+
+/** After an image is uploaded into block `id`: bring it into view and put the cursor in its Alt text field. */
+function focusAltText(id: string) {
+  requestAnimationFrame(() => {
+    document.getElementById(`block-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.querySelector<HTMLInputElement>(`#block-${id} [data-alt-input]`)?.focus({ preventScroll: true });
+  });
 }
 
 /**
@@ -815,6 +877,14 @@ function Editor({
   const secondaryList = parseKeywordList(secondaryText);
   const secondaryOver = secondaryList.length > MAX_SECONDARY_KEYWORDS || secondaryList.some((k) => k.length > MAX_KEYWORD_LENGTH);
   const [addAt, setAddAt] = useState<number | null>(null);
+  /** The "Paste article" area is open where the add-block menu would be. */
+  const [pasting, setPasting] = useState(false);
+  /** The last pasted article, to undo in one step while nothing else has changed. */
+  const [undo, setUndo] = useState<{ before: Pick<StudioPost, 'blocks' | 'title' | 'slug'>; after: StudioPost; message: string } | null>(null);
+  // Paste and Turn into compute the new blocks from the current post once, outside a state updater, so new block ids
+  // (and the block to focus) are known before the update.
+  const draftRef = useRef(draft);
+  draftRef.current = draft;
   const slugLocked = !!draft.firstPublishedAt;
   const checks = checklist(draft, { studio: posts, site: sitePosts });
   const featuredSitePost = sitePosts.find((p) => p.featured);
@@ -878,15 +948,154 @@ function Editor({
     });
   }
 
+  /**
+   * Puts a pasted article's blocks at `at`, and its title if the post has none (decision.md D047). One step can be
+   * undone. Refused pastes and pastes that would pass the post's block limit change nothing.
+   */
+  function insertArticle(article: PastedArticle, at: number) {
+    if (article.refused) return notify(article.notes.join(' '));
+    const d = draftRef.current;
+    const total = d.blocks.length + article.blocks.length;
+    if (total > MAX_POST_BLOCKS) {
+      return notify(`A post can have at most ${MAX_POST_BLOCKS} blocks, and this paste would make ${total}. Nothing was converted.`);
+    }
+    const notes: string[] = [];
+    let { title, slug } = d;
+    if (article.title) {
+      if (!d.title.trim()) {
+        title = article.title;
+        if (!slugTouched && !slugLocked) slug = slugify(title);
+        notes.push('The title was filled in from the paste.');
+      } else {
+        notes.push(`The pasted title “${article.title}” was left out: this post already has a title.`);
+      }
+    }
+    if (!article.blocks.length && title === d.title) return notify(notes.join(' ') || 'There was nothing to paste.');
+    const after = { ...d, title, slug, blocks: [...d.blocks.slice(0, at), ...article.blocks, ...d.blocks.slice(at)] };
+    const message = [article.blocks.length ? `Pasted ${describeBlocks(article.blocks)}.` : '', ...notes, ...article.notes].filter(Boolean).join(' ');
+    setDraft(() => after);
+    setUndo({ before: { blocks: d.blocks, title: d.title, slug: d.slug }, after, message });
+    setPasting(false);
+    setAddAt(null);
+    notify(message);
+    const first = article.blocks[0];
+    if (first) {
+      requestAnimationFrame(() => document.getElementById(`block-${first.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+    }
+  }
+
+  // Undo is offered only while the post is exactly as the paste left it, so it never discards later edits.
+  const canUndo = !!undo && draft.blocks === undo.after.blocks && draft.title === undo.after.title;
+
+  function undoPaste() {
+    if (!undo) return;
+    const { before } = undo;
+    setDraft((d) => ({ ...d, ...before }));
+    setUndo(null);
+    notify('Paste undone.');
+  }
+
+  /** An article was pasted into a text box of block `blockId`: offer to split it into blocks (never automatic, as D044). */
+  function askArticlePaste(blockId: string, article: PastedArticle, pasteAsText: () => void) {
+    confirmAction({
+      title: 'Split into blocks?',
+      body: (
+        <>
+          <p>
+            This looks like an article: {describeBlocks(article.blocks)}{article.title ? ' and a title' : ''}. Split it into blocks below
+            this one? “Paste as text” pastes it into this box as ordinary text.
+          </p>
+          {article.source === 'apple' && <p className={styles.modalNote}>{APPLE_PASTE_NOTE}</p>}
+        </>
+      ),
+      confirmLabel: 'Split into blocks',
+      cancelLabel: 'Paste as text',
+      onConfirm: () => insertArticle(article, draftRef.current.blocks.findIndex((b) => b.id === blockId) + 1),
+      onCancel: pasteAsText,
+    });
+  }
+
+  /** One image paste uploads at a time; another paste while it runs is refused with a message. */
+  const imagePasteBusy = useRef(false);
+
+  /**
+   * A pasted image (decision.md D048): uploaded through the normal path (resized to WebP in the browser, checked on the
+   * server), then a new Image block at `at()` (worked out when the upload finishes, as blocks may have moved).
+   */
+  async function pasteImageBlock(file: File, at: () => number, fromPasteArea = false) {
+    if (imagePasteBusy.current) return notify('Still uploading the last image. Paste again when it is done.');
+    imagePasteBusy.current = true;
+    notify('Uploading image…');
+    try {
+      const src = await upload(file);
+      if (!src) return;
+      const block = { ...newBlock('image'), src } as StudioBlock;
+      const index = Math.min(at(), draftRef.current.blocks.length);
+      setDraft((d) => ({ ...d, blocks: [...d.blocks.slice(0, index), block, ...d.blocks.slice(index)] }));
+      if (fromPasteArea) {
+        setPasting(false);
+        setAddAt(null);
+      }
+      notify('Image uploaded. Add its alt text.');
+      focusAltText(block.id);
+    } finally {
+      imagePasteBusy.current = false;
+    }
+  }
+
+  /** Where a block pasted into the box of block `blockId` goes: right after it (or at the end if it was removed). */
+  const afterBlock = (blockId: string) => () => {
+    const i = draftRef.current.blocks.findIndex((b) => b.id === blockId);
+    return i === -1 ? draftRef.current.blocks.length : i + 1;
+  };
+
+  /** Typing in the paste area starts a Paragraphs block with that text and moves the cursor into it. */
+  function startWriting(text: string, at: number) {
+    const block = { ...newBlock('text'), text } as StudioBlock;
+    setDraft((d) => ({ ...d, blocks: [...d.blocks.slice(0, at), block, ...d.blocks.slice(at)] }));
+    setPasting(false);
+    setAddAt(null);
+    requestAnimationFrame(() => {
+      const box = document.querySelector<HTMLTextAreaElement>(`#block-${block.id} [data-format-box]`);
+      box?.focus();
+      box?.setSelectionRange(text.length, text.length);
+    });
+  }
+
+  function turnInto(blockId: string, startLine: number, endLine: number, target: TurnInto) {
+    const result = convertLines(draftRef.current.blocks, blockId, startLine, endLine, target);
+    if (result.blocks === draftRef.current.blocks) return;
+    setDraft((d) => ({ ...d, blocks: result.blocks }));
+    requestAnimationFrame(() => document.querySelector<HTMLElement>(`#block-${result.focusId} [data-format-box]`)?.focus());
+  }
+
   function insertBlock(type: StudioBlockType) {
     const block = newBlock(type);
     const at = addAt ?? draft.blocks.length;
     setDraft((d) => ({ ...d, blocks: [...d.blocks.slice(0, at), block, ...d.blocks.slice(at)] }));
     setAddAt(null);
+    setPasting(false);
     requestAnimationFrame(() =>
       document.getElementById(`block-${block.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
     );
   }
+
+  /** The add-block menu at position `at`, or the paste area in its place. */
+  const addControls = (at: number, onCancel?: () => void) =>
+    pasting && draft.blocks.length ? (
+      <PasteArea
+        onPasteArticle={(article) => insertArticle(article, at)}
+        onPasteImage={(file) => pasteImageBlock(file, () => at, true)}
+        notify={notify}
+        onType={(text) => startWriting(text, at)}
+        onCancel={() => {
+          setPasting(false);
+          onCancel?.();
+        }}
+      />
+    ) : (
+      <AddBlockMenu onAdd={insertBlock} onCancel={onCancel} onPasteArticle={draft.blocks.length ? () => setPasting(true) : undefined} />
+    );
 
   const primary =
     draft.status === 'draft'
@@ -1010,6 +1219,7 @@ function Editor({
                     value={draft.featuredImage}
                     onChange={(v) => set('featuredImage', v)}
                     onUpload={upload}
+                    notify={notify}
                     hint="16:9, about 1200 × 675. Used at the top of the post, on blog cards and in social shares."
                   />
                   <Field label="Alt text" required hint="Describe what the image shows, for screen readers and search engines.">
@@ -1029,8 +1239,26 @@ function Editor({
                     <span className={styles.muted}>{wordCount(draft.blocks).toLocaleString('en-GB')} words · {readingTime(draft.blocks)}</span>
                   </div>
 
+                  {canUndo && undo && (
+                    <div className={styles.undoBar} role="status">
+                      <span>{undo.message}</span>
+                      <div className={styles.undoActions}>
+                        <button type="button" className={styles.btn} onClick={undoPaste}>
+                          <Undo2 size={15} /> Undo paste
+                        </button>
+                        <IconButton label="Dismiss" onClick={() => setUndo(null)}><X size={15} /></IconButton>
+                      </div>
+                    </div>
+                  )}
+
                   {draft.blocks.length === 0 && (
-                    <p className={styles.blocksEmpty}>No blocks yet. Add a heading or paragraphs to start writing.</p>
+                    <PasteArea
+                      large
+                      onPasteArticle={(article) => insertArticle(article, 0)}
+                      onPasteImage={(file) => pasteImageBlock(file, () => 0, true)}
+                      notify={notify}
+                      onType={(text) => startWriting(text, 0)}
+                    />
                   )}
 
                   {draft.blocks.map((b, i) => (
@@ -1045,17 +1273,16 @@ function Editor({
                         onAddBelow={() => setAddAt(addAt === i + 1 ? null : i + 1)}
                         onUpload={upload}
                         onTablePaste={(table, pasteAsText) => askTablePaste(i, table, pasteAsText)}
+                        onArticlePaste={(article, pasteAsText) => askArticlePaste(b.id, article, pasteAsText)}
+                        onImagePaste={(file) => pasteImageBlock(file, afterBlock(b.id))}
+                        onTurnInto={(startLine, endLine, target) => turnInto(b.id, startLine, endLine, target)}
                         notify={notify}
                       />
-                      {addAt === i + 1 && i + 1 < draft.blocks.length && (
-                        <AddBlockMenu onAdd={insertBlock} onCancel={() => setAddAt(null)} />
-                      )}
+                      {addAt === i + 1 && i + 1 < draft.blocks.length && addControls(i + 1, () => setAddAt(null))}
                     </React.Fragment>
                   ))}
 
-                  {addAt === null || addAt >= draft.blocks.length ? (
-                    <AddBlockMenu onAdd={insertBlock} />
-                  ) : null}
+                  {addAt === null || addAt >= draft.blocks.length ? addControls(draft.blocks.length) : null}
                 </div>
               </>
             )}
@@ -1291,16 +1518,37 @@ function ImageField({
   value,
   onChange,
   onUpload,
+  onUploaded,
+  notify,
   hint,
 }: {
   value: string;
   onChange: (v: string) => void;
   onUpload: (f: File) => Promise<string | null>;
+  /** Called after an image was uploaded and set (by Upload or by pasting). */
+  onUploaded?: () => void;
+  notify: (m: string) => void;
   hint?: string;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  // State updates are not immediate: the ref stops a second paste from starting a second upload.
+  const busyRef = useRef(false);
   const uploaded = value.startsWith('data:');
+
+  async function uploadFile(file: File, pasted: boolean) {
+    if (busyRef.current) return notify('Still uploading the last image. Paste again when it is done.');
+    busyRef.current = true;
+    setBusy(true);
+    if (pasted) notify('Uploading image…');
+    const url = await onUpload(file);
+    busyRef.current = false;
+    setBusy(false);
+    if (!url) return;
+    onChange(url);
+    if (pasted) notify('Image uploaded. Add its alt text.');
+    onUploaded?.();
+  }
   return (
     <div className={styles.imageField}>
       <div className={styles.imageThumb}>
@@ -1314,8 +1562,15 @@ function ImageField({
         <input
           className={styles.input}
           value={uploaded ? '' : value}
-          placeholder={uploaded ? 'Uploaded image (stored inside the post)' : '/images/blog/your-image.jpg, or use Upload'}
+          placeholder={uploaded ? 'Uploaded image (stored inside the post)' : 'Paste an image (⌘V), use Upload, or type /images/blog/…'}
           onChange={(e) => onChange(e.target.value.trim())}
+          onPaste={(e) => {
+            const image = imagePaste(e.clipboardData);
+            if (!image) return;
+            e.preventDefault();
+            if ('file' in image) uploadFile(image.file, true);
+            else notify(image.message);
+          }}
           aria-label="Image path"
         />
         <div className={styles.inline}>
@@ -1336,25 +1591,29 @@ function ImageField({
         onChange={async (e) => {
           const f = e.target.files?.[0];
           e.target.value = '';
-          if (!f) return;
-          setBusy(true);
-          const url = await onUpload(f);
-          setBusy(false);
-          if (url) onChange(url);
+          if (f) uploadFile(f, false);
         }}
       />
     </div>
   );
 }
 
-/** Textarea with Bold / Italic / Link buttons that insert the inline markers around the selection. */
+/**
+ * A text box with the formatting bar (decision.md D047): Turn into, Bold, Italic, Link, Remove link and Clear formatting,
+ * which edit the `**`, `*` and `[text](url)` markers (formatting.ts). Cmd/Ctrl+B, I and K work inside the box.
+ */
 function FormatTextarea({
   value,
   onChange,
   rows = 5,
   placeholder,
   label,
+  singleLine,
+  kind,
+  onTurnInto,
   onTablePaste,
+  onImagePaste,
+  onArticlePaste,
   notify,
 }: {
   value: string;
@@ -1362,60 +1621,233 @@ function FormatTextarea({
   rows?: number;
   placeholder?: string;
   label: string;
+  /** A one-line box (a heading). */
+  singleLine?: boolean;
+  /** The block type the box belongs to: a paste that is only one block of this type is pasted as text, without asking. */
+  kind?: StudioBlockType;
+  /** Turn the selected lines (or the whole block) into another type. Not offered on FAQ answers. */
+  onTurnInto?: (startLine: number, endLine: number, target: TurnInto) => void;
   /** Called when the pasted content is a table; the paste is held back until the writer chooses. */
   onTablePaste?: (table: Extract<PastedTable, { ok: true }>, pasteAsText: () => void) => void;
+  /** Called when the paste is a single image (no text): it is uploaded into a new Image block below. */
+  onImagePaste?: (file: File) => void;
+  /** Called when the pasted content is an article; the paste is held back until the writer chooses. */
+  onArticlePaste?: (article: PastedArticle, pasteAsText: () => void) => void;
   notify?: (m: string) => void;
 }) {
-  const ref = useRef<HTMLTextAreaElement>(null);
-  function wrap(before: string, after: string, fallback: string) {
+  const ref = useRef<HTMLTextAreaElement & HTMLInputElement>(null);
+  const [link, setLink] = useState<{ start: number; end: number; url: string; editing: boolean; error?: string } | null>(null);
+  const linkErrorId = useId();
+
+  const selection = (): [number, number] => [ref.current?.selectionStart ?? value.length, ref.current?.selectionEnd ?? value.length];
+
+  function apply(result: TextEditResult) {
+    if ('error' in result) return notify?.(result.error);
+    onChange(result.value);
     const el = ref.current;
-    if (!el) return;
-    const { selectionStart: s, selectionEnd: e } = el;
-    const selected = value.slice(s, e) || fallback;
-    onChange(value.slice(0, s) + before + selected + after + value.slice(e));
     requestAnimationFrame(() => {
-      el.focus();
-      el.setSelectionRange(s + before.length, s + before.length + selected.length);
+      el?.focus();
+      el?.setSelectionRange(result.start, result.end);
     });
   }
-  function onPaste(e: React.ClipboardEvent<HTMLTextAreaElement>) {
-    if (!onTablePaste) return;
+  const edit = (fn: (v: string, s: number, e: number) => TextEditResult) => apply(fn(value, ...selection()));
+
+  function openLink() {
+    const [start, end] = selection();
+    const existing = linkAt(value, start, end);
+    setLink({ start, end, url: existing?.url ?? '', editing: !!existing });
+  }
+  function saveLink() {
+    if (!link) return;
+    const result = applyLink(value, link.start, link.end, link.url);
+    if ('error' in result) return setLink({ ...link, error: result.error });
+    setLink(null);
+    apply(result);
+  }
+  function closeLink() {
+    setLink(null);
+    ref.current?.focus();
+  }
+
+  function onKeyDown(e: React.KeyboardEvent) {
+    if (!(e.metaKey || e.ctrlKey) || e.altKey || e.shiftKey) return;
+    const key = e.key.toLowerCase();
+    if (key === 'b') edit((v, s, end) => toggleEmphasis(v, s, end, 'bold'));
+    else if (key === 'i') edit((v, s, end) => toggleEmphasis(v, s, end, 'italic'));
+    else if (key === 'k') openLink();
+    else return;
+    e.preventDefault();
+  }
+
+  function onPaste(e: React.ClipboardEvent<HTMLTextAreaElement | HTMLInputElement>) {
+    // A single image becomes an Image block below; the box's own text is not changed.
+    const image = onImagePaste ? imagePaste(e.clipboardData) : null;
+    if (image) {
+      e.preventDefault();
+      if ('file' in image) onImagePaste?.(image.file);
+      else notify?.(image.message);
+      return;
+    }
+    if (!onTablePaste && !onArticlePaste) return;
+    const html = e.clipboardData.getData('text/html');
     const plain = e.clipboardData.getData('text/plain');
-    const table = tableFromClipboard(e.clipboardData.getData('text/html'), plain);
-    if (table.ok) {
-      const { selectionStart: s, selectionEnd: end } = e.currentTarget;
+    const { selectionStart, selectionEnd } = e.currentTarget;
+    const s = selectionStart ?? value.length;
+    const end = selectionEnd ?? value.length;
+    const pasteText = (text: string) => onChange(value.slice(0, s) + text + value.slice(end));
+    const table = onTablePaste ? tableFromClipboard(html, plain) : null;
+    if (table?.ok) {
       e.preventDefault();
       // A clipboard with only HTML has no plain text: fall back to the table's own cells, tab-separated.
-      const asText = plain || table.plain;
-      onTablePaste(table, () => onChange(value.slice(0, s) + asText + value.slice(end)));
-    } else if (table.reason === 'too-large') {
+      onTablePaste?.(table, () => pasteText(plain || table.plain));
+      return;
+    }
+    if (table?.reason === 'too-large') {
       // Not blocked: the paste goes through as text, with a note that it was too big to become a table.
       notify?.(`That looks like a table, but ${table.rows} rows × ${table.columns} columns is more than ${MAX_TABLE_ROWS} × ${MAX_TABLE_COLUMNS}, so it was pasted as text. Split it to paste it as a table.`);
+      return;
+    }
+    if (!onArticlePaste) return;
+    const article = articleFromClipboard(html, plain);
+    if (article.refused) {
+      notify?.(`${article.notes.join(' ')} It was pasted as text.`);
+      return;
+    }
+    // A single block of this box's own kind (a list pasted into a list) is just text for this box.
+    const sameKind = article.blocks.length === 1 && article.blocks[0].type === kind && !article.title;
+    if (looksLikeArticle(article) && !sameKind) {
+      e.preventDefault();
+      onArticlePaste(article, () => pasteText(plain || articleText(article)));
     }
   }
+
+  // Bar buttons keep the box focused, so its selection is what they act on.
+  const keepFocus = (e: React.MouseEvent) => e.preventDefault();
+  const shortcut = (key: string) => `Ctrl+${key} / ⌘${key}`;
+  const boxProps = {
+    ref,
+    value,
+    placeholder,
+    'aria-label': label,
+    'data-format-box': '',
+    onChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => onChange(e.target.value),
+    onKeyDown,
+    onPaste,
+  };
+
   return (
     <div className={styles.formatBox}>
       <div className={styles.formatBar}>
-        <button type="button" title="Bold" aria-label="Bold" onClick={() => wrap('**', '**', 'bold text')}><Bold size={15} /></button>
-        <button type="button" title="Italic" aria-label="Italic" onClick={() => wrap('*', '*', 'italic text')}><Italic size={15} /></button>
-        <button type="button" title="Link" aria-label="Link" onClick={() => wrap('[', '](/blog/)', 'link text')}><LinkIcon size={15} /></button>
-        <span className={styles.formatHint}>**bold** · *italic* · [text](/path or https://…)</span>
+        {onTurnInto && (
+          <select
+            className={styles.turnInto}
+            value=""
+            aria-label="Turn into"
+            title="Turn the selected lines, or the whole block, into another type"
+            onChange={(e) => {
+              const target = e.target.value as TurnInto;
+              if (!target) return;
+              const [start, end] = selection();
+              const [first, last] = lineRange(value, start, end);
+              onTurnInto(first, last, target);
+            }}
+          >
+            <option value="" disabled>Turn into…</option>
+            {TURN_INTO_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        )}
+        <button type="button" title={`Bold (${shortcut('B')})`} aria-label="Bold" onMouseDown={keepFocus} onClick={() => edit((v, s, e) => toggleEmphasis(v, s, e, 'bold'))}><Bold size={15} /></button>
+        <button type="button" title={`Italic (${shortcut('I')})`} aria-label="Italic" onMouseDown={keepFocus} onClick={() => edit((v, s, e) => toggleEmphasis(v, s, e, 'italic'))}><Italic size={15} /></button>
+        <button type="button" title={`Link (${shortcut('K')})`} aria-label="Link" aria-expanded={!!link} onMouseDown={keepFocus} onClick={openLink}><LinkIcon size={15} /></button>
+        <button type="button" title="Remove link" aria-label="Remove link" onMouseDown={keepFocus} onClick={() => edit(removeLinks)}><Unlink size={15} /></button>
+        <button type="button" title="Clear bold and italic" aria-label="Clear formatting" onMouseDown={keepFocus} onClick={() => edit(clearFormatting)}><RemoveFormatting size={15} /></button>
+        <span className={styles.formatHint}>**bold** · *italic* · [text](url)</span>
       </div>
-      <textarea
-        ref={ref}
-        className={styles.input}
-        rows={rows}
-        value={value}
-        placeholder={placeholder}
-        aria-label={label}
-        onChange={(e) => onChange(e.target.value)}
-        onPaste={onPaste}
-      />
+      {link && (
+        <div className={styles.linkRow}>
+          <input
+            className={styles.input}
+            autoFocus
+            value={link.url}
+            placeholder="https://… or /blog/…"
+            aria-label="Link address"
+            aria-invalid={!!link.error}
+            aria-describedby={link.error ? linkErrorId : undefined}
+            onChange={(e) => setLink({ ...link, url: e.target.value, error: undefined })}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                saveLink();
+              } else if (e.key === 'Escape') {
+                e.preventDefault();
+                closeLink();
+              }
+            }}
+          />
+          <button type="button" className={cx(styles.btn, styles.btnSmall)} onClick={saveLink}>{link.editing ? 'Update link' : 'Add link'}</button>
+          <button type="button" className={cx(styles.btn, styles.btnSmall)} onClick={closeLink}>Cancel</button>
+          {link.error && <span id={linkErrorId} className={styles.linkError} role="alert">{link.error}</span>}
+        </div>
+      )}
+      {singleLine ? (
+        <input {...boxProps} className={cx(styles.input, styles.headingInput)} />
+      ) : (
+        <textarea {...boxProps} className={styles.input} rows={rows} />
+      )}
     </div>
   );
 }
 
-function AddBlockMenu({ onAdd, onCancel }: { onAdd: (t: StudioBlockType) => void; onCancel?: () => void }) {
+/** Where a writer pastes a whole article (articlePaste.ts): it becomes blocks at once. Typing starts a Paragraphs block. */
+function PasteArea({
+  large,
+  onPasteArticle,
+  onPasteImage,
+  notify,
+  onType,
+  onCancel,
+}: {
+  large?: boolean;
+  onPasteArticle: (article: PastedArticle) => void;
+  /** A single image (no text) is uploaded into a new Image block here. */
+  onPasteImage: (file: File) => void;
+  notify: (m: string) => void;
+  onType: (text: string) => void;
+  onCancel?: () => void;
+}) {
+  const hintId = useId();
+  return (
+    <div className={cx(styles.pasteArea, large && styles.pasteAreaLarge)}>
+      <div className={styles.addMenuHead}>
+        <span className={styles.pasteTitle}><ClipboardPaste size={16} aria-hidden="true" /> Paste article</span>
+        {onCancel && <button type="button" onClick={onCancel} aria-label="Cancel"><X size={15} /></button>}
+      </div>
+      <textarea
+        className={cx(styles.input, styles.pasteInput)}
+        value=""
+        rows={large ? 7 : 4}
+        autoFocus={!large}
+        aria-label="Paste your article"
+        aria-describedby={hintId}
+        placeholder="Paste your article here: headings, lists, tables and links from Google Docs or Word are kept."
+        onPaste={(e) => {
+          e.preventDefault();
+          const image = imagePaste(e.clipboardData);
+          if (image && 'file' in image) onPasteImage(image.file);
+          else if (image) notify(image.message);
+          else onPasteArticle(articleFromClipboard(e.clipboardData.getData('text/html'), e.clipboardData.getData('text/plain')));
+        }}
+        onChange={(e) => e.target.value && onType(e.target.value)}
+      />
+      <span id={hintId} className={styles.hint}>
+        Markdown and plain text work too. Images are not copied: each becomes an empty Image block to upload. Or start typing to
+        write paragraphs.
+      </span>
+    </div>
+  );
+}
+
+function AddBlockMenu({ onAdd, onCancel, onPasteArticle }: { onAdd: (t: StudioBlockType) => void; onCancel?: () => void; onPasteArticle?: () => void }) {
   return (
     <div className={styles.addMenu}>
       <div className={styles.addMenuHead}>
@@ -1423,6 +1855,11 @@ function AddBlockMenu({ onAdd, onCancel }: { onAdd: (t: StudioBlockType) => void
         {onCancel && <button type="button" onClick={onCancel} aria-label="Cancel"><X size={15} /></button>}
       </div>
       <div className={styles.addGrid}>
+        {onPasteArticle && (
+          <button type="button" className={cx(styles.addBlock, styles.addPaste)} onClick={onPasteArticle}>
+            <ClipboardPaste size={16} /> Paste article
+          </button>
+        )}
         {BLOCK_ORDER.map((t) => {
           const Icon = BLOCK_ICONS[t];
           return (
@@ -1446,6 +1883,9 @@ function BlockCard({
   onAddBelow,
   onUpload,
   onTablePaste,
+  onArticlePaste,
+  onImagePaste,
+  onTurnInto,
   notify,
 }: {
   block: StudioBlock;
@@ -1457,9 +1897,12 @@ function BlockCard({
   onAddBelow: () => void;
   onUpload: (f: File) => Promise<string | null>;
   onTablePaste: (table: Extract<PastedTable, { ok: true }>, pasteAsText: () => void) => void;
+  onArticlePaste: (article: PastedArticle, pasteAsText: () => void) => void;
+  onImagePaste: (file: File) => void;
+  onTurnInto: (startLine: number, endLine: number, target: TurnInto) => void;
   notify: (m: string) => void;
 }) {
-  const tablePaste = { onTablePaste, notify };
+  const paste = { onTablePaste, onArticlePaste, onImagePaste, notify };
   const Icon = BLOCK_ICONS[block.type];
   const name = block.type === 'heading' ? `Heading ${block.level === 2 ? '(H2)' : '(H3)'}` : BLOCK_LABELS[block.type];
 
@@ -1477,12 +1920,15 @@ function BlockCard({
             <option value={2}>H2 section</option>
             <option value={3}>H3 sub-section</option>
           </select>
-          <input
-            className={cx(styles.input, styles.headingInput)}
+          <FormatTextarea
+            singleLine
+            label="Heading text"
             value={block.text}
             placeholder="A heading that tells the reader what this section explains"
-            onChange={(e) => onChange({ text: e.target.value })}
-            aria-label="Heading text"
+            onChange={(text) => onChange({ text })}
+            onTurnInto={onTurnInto}
+            onImagePaste={onImagePaste}
+            notify={notify}
           />
         </div>
       );
@@ -1490,7 +1936,9 @@ function BlockCard({
     case 'text':
       body = (
         <FormatTextarea
-          {...tablePaste}
+          {...paste}
+          kind="text"
+          onTurnInto={onTurnInto}
           label="Paragraphs"
           value={block.text}
           rows={7}
@@ -1510,16 +1958,22 @@ function BlockCard({
               <input type="radio" checked={block.ordered} onChange={() => onChange({ ordered: true })} /> Numbered
             </label>
           </div>
-          <FormatTextarea {...tablePaste} label="List items" value={block.items} placeholder={'One item per line\nSecond item\nThird item'} onChange={(items) => onChange({ items })} />
+          <FormatTextarea {...paste} kind="list" onTurnInto={onTurnInto} label="List items" value={block.items} placeholder={'One item per line\nSecond item\nThird item'} onChange={(items) => onChange({ items })} />
         </>
       );
       break;
     case 'image':
       body = (
         <>
-          <ImageField value={block.src} onChange={(src) => onChange({ src })} onUpload={onUpload} />
+          <ImageField
+            value={block.src}
+            onChange={(src) => onChange({ src })}
+            onUpload={onUpload}
+            onUploaded={() => focusAltText(block.id)}
+            notify={notify}
+          />
           <Field label="Alt text" required hint="Describe what the image shows. Also used as the image title.">
-            <input className={styles.input} value={block.alt} onChange={(e) => onChange({ alt: e.target.value })} />
+            <input className={styles.input} data-alt-input="" value={block.alt} onChange={(e) => onChange({ alt: e.target.value })} />
           </Field>
           <Field label="Caption (optional)">
             <input className={styles.input} value={block.caption} onChange={(e) => onChange({ caption: e.target.value })} />
@@ -1530,7 +1984,7 @@ function BlockCard({
     case 'quote':
       body = (
         <>
-          <FormatTextarea {...tablePaste} label="Quote" value={block.text} rows={3} placeholder="The sharpest sentence of the section" onChange={(text) => onChange({ text })} />
+          <FormatTextarea {...paste} kind="quote" onTurnInto={onTurnInto} label="Quote" value={block.text} rows={3} placeholder="The sharpest sentence of the section" onChange={(text) => onChange({ text })} />
           <Field label="Attribution (optional)" hint="Only quote real, sourced people.">
             <input className={styles.input} value={block.cite} onChange={(e) => onChange({ cite: e.target.value })} />
           </Field>
@@ -1588,7 +2042,7 @@ function BlockCard({
           <Field label="Question">
             <input className={styles.input} value={block.question} placeholder="A question people actually ask" onChange={(e) => onChange({ question: e.target.value })} />
           </Field>
-          <FormatTextarea {...tablePaste} label="Answer" value={block.answer} rows={3} placeholder="The answer, as it should appear on the page" onChange={(answer) => onChange({ answer })} />
+          <FormatTextarea {...paste} kind="faq" label="Answer" value={block.answer} rows={3} placeholder="The answer, as it should appear on the page" onChange={(answer) => onChange({ answer })} />
           <span className={styles.hint}>FAQs are added to the page’s FAQ schema with exactly this text.</span>
         </>
       );

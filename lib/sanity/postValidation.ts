@@ -1,4 +1,4 @@
-import { BLOCK_LABELS, MAX_KEYWORD_LENGTH, MAX_SECONDARY_KEYWORDS } from '@/components/blog-studio/postUtils';
+import { BLOCK_LABELS, MAX_KEYWORD_LENGTH, MAX_POST_BLOCKS, MAX_SECONDARY_KEYWORDS } from '@/components/blog-studio/postUtils';
 import { CATEGORIES } from '@/content/blog/types';
 import { PLATFORM_PAGE_SLUGS } from '@/content/platforms';
 import { BLOCK_KEY_PATTERN, POST_ID_PATTERN } from './blogPosts';
@@ -14,7 +14,7 @@ import { isAllowedImageSrc } from './image';
 
 const STATUSES = ['draft', 'published', 'scheduled'];
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
-const MAX = { slug: 120, title: 200, seoTitle: 200, excerpt: 400, short: 160, url: 600, text: 40000, tags: 20, tag: 60, blocks: 400, stamp: 40 };
+const MAX = { slug: 120, title: 200, seoTitle: 200, excerpt: 400, short: 160, url: 600, text: 40000, tags: 20, tag: 60, blocks: MAX_POST_BLOCKS, stamp: 40 };
 
 const isString = (v: unknown, max: number): v is string => typeof v === 'string' && v.length <= max;
 
