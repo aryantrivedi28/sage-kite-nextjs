@@ -1028,13 +1028,17 @@ html {
   text-align: center;
 }
 
-/* Tables */
+/* Tables: a full grid. The borders are separate (not collapsed) so the outer border is not half clipped by the
+   rounded corners and overflow:hidden; the table draws the outer edge and each cell draws its right and bottom
+   lines, except the last column and the last row, which the outer edge closes. All the lines use --table-line. */
 .article-content table {
+  --table-line: var(--sage);
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin: 0 0 28px;
   font-size: 0.98rem;
-  border: 1px solid var(--light-sage);
+  border: 1px solid var(--table-line);
   border-radius: var(--r);
   overflow: hidden;
 }
@@ -1044,14 +1048,17 @@ html {
   font-weight: 700;
   color: var(--ink);
   padding: 12px 16px;
-  border-bottom: 1px solid var(--light-sage);
+  border-right: 1px solid var(--table-line);
+  border-bottom: 1px solid var(--table-line);
 }
 .article-content td {
   padding: 12px 16px;
-  border-bottom: 1px solid var(--light-sage);
+  border-right: 1px solid var(--table-line);
+  border-bottom: 1px solid var(--table-line);
   vertical-align: top;
   color: var(--dark-sage);
 }
+.article-content tr > :last-child { border-right: 0; }
 .article-content tbody tr:last-child td { border-bottom: 0; }
 
 /* ── Field diagrams (components/blog/FieldDiagram.tsx) ──
@@ -1228,8 +1235,9 @@ html {
   .article-content { font-size: 1.0625rem; }
   .article-content h2 { margin: 40px 0 18px; }
   .article-content table { font-size: 0.9rem; }
-  /* A table wider than the screen scrolls on its own instead of widening the page */
-  .article-content table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* A table wider than the screen scrolls on its own instead of widening the page. A short table shrinks to its
+     grid, so its outer border does not enclose empty space to the right of the last column. */
+  .article-content table { display: block; width: max-content; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .article-content th,
   .article-content td { padding: 10px 12px; }
   .blog-grid-head { flex-direction: column; gap: 4px; }

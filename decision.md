@@ -1596,6 +1596,36 @@ Past approval records below describe only what the supplied reports establish.
 - **Limitations:** a cell's formatting is limited to bold, italic and links; images, colours, alignment and column widths in the source table are dropped; a cell that already contains `*` or `[` may be read as formatting. A whole article pasted at once is not converted (a separate feature).
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D045 — Blog article tables get a full grid: outer border and lines between every row and column
+
+- **Date:** 26 October 2026.
+- **Status:** Implemented and verified locally (production build, browser checks at desktop and 375 px, `npm test`, typecheck). Not committed, pushed or deployed. Nothing was written to Sanity.
+- **Why:** the user asked for a proper grid-style table instead of horizontal dividers only. Cause: the table already had a 1 px outer border, but with `border-collapse: collapse` and `overflow: hidden` half of a collapsed outer border is clipped, so it did not show; cells had only a bottom border and no side borders.
+- **Approval:** User request of 26 October 2026 describing the design (visible outer border, lines between every row and column, same colours, typography and responsive behaviour). This is a visible design change to every blog article table, code posts included, because they share the same CSS.
+- **Change ([app/globals.css](app/globals.css) only):**
+  - `.article-content table`: `border-collapse: collapse` → `separate` with `border-spacing: 0`. The 1 px `--light-sage` outer border, 6 px radius and `overflow: hidden` are unchanged, and the outer border is now fully drawn.
+  - `th` and `td`: added a 1 px `--light-sage` right border next to the existing bottom border; the last column has no right border and the last row no bottom border (`tr > :last-child`, `tbody tr:last-child td`), so the table's own border closes the grid with no double lines.
+  - Mobile (max-width 680 px): the table stays `display: block` with horizontal scrolling and gained `width: max-content; max-width: 100%`, so the outer border hugs a short table instead of enclosing empty space to the right of the last column (which the now-visible border would have shown).
+  - Colours, fonts, padding and header background are unchanged (`--light-sage`, `--pale-sage`, `--ink`, `--dark-sage`).
+- **Not changed:** the table renderer, the table data and schema, the pasted-table conversion, and every table outside `.article-content` (services, platform and industry pages, the founder's essay, case studies). Tables inside `.article-content` occur on the 7 code blog posts, in the studio preview and on posts published from the studio.
+- **Checks (run by Claude):** `npm run build` and `npx tsc --noEmit` pass; `npm test` 121/121 (no test touches CSS). On a local production server: computed styles show every non-last cell with a 1 px right line, every non-last row with a 1 px bottom line, none on the last column or row, a 1 px outer border and `border-collapse: separate`, on `/blog/dubsado-vs-honeybook` and in the studio preview (a pasted 3 × 6 table). At 375 px: no horizontal page overflow; the six tables on that post keep their previous widths and scroll behaviour (the wide ones scroll inside the table); an injected 2-column table has no empty space inside its border (gap 0) and an injected 8-column table scrolls (333 px visible of 710 px). Screenshots of the live page before the change showed horizontal lines only.
+- **Not tested / assumptions:** Safari and Firefox rendering; a table on a post published from the studio on the live site (it uses the same classes as the code posts and the preview); print styles.
+- **Limitations:** the lines use `--light-sage`, the same light colour as the existing row lines, so they are as soft as before; a stronger colour would be a further design choice.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D046 — Blog article table lines darkened to the brand's `--sage`
+
+- **Date:** 26 October 2026.
+- **Status:** Implemented and verified locally (production build, browser checks at desktop and 375 px, `npm test`, typecheck). Not committed, pushed or deployed. Nothing was written to Sanity.
+- **Why:** after D045 the table grid used the same light `--light-sage` as the old row lines, which the user found too soft. They asked for a darker sage tone from the existing palette.
+- **Approval:** User request of 26 October 2026: darken the outer border and all horizontal and vertical lines with a darker sage tone from the brand palette; keep layout, rounded corners, header background, typography and spacing; same in the Studio preview and published tables. This is a visible design change.
+- **Change ([app/globals.css](app/globals.css) only):** `.article-content table` now sets `--table-line: var(--sage)` (#596B57, the darkest sage in `app/brand.css` apart from body text `--dark-sage`) and the outer border and every cell right and bottom border use it instead of `--light-sage`. The colour is defined in one place. Nothing else changed: the grid structure, 6 px radius, `--pale-sage` header, font, padding and the mobile rules of D045 are as they were. No new colour was added.
+- **Effect:** the same tables, on the 7 code blog posts, in the Studio preview and on posts published from the studio, now have dark sage lines. Tables outside `.article-content` (services, platforms, industries, the essay, case studies) are not affected.
+- **Checks (run by Claude):** `npm run build`, `npx tsc --noEmit` and `npm test` (121/121) pass. On a local production server, computed styles: the outer border and every cell line are `rgb(89, 107, 87)` (`--sage`) with a 1 px width, the grid structure is intact (right lines on all but the last column, bottom lines on all but the last row), and the header background (`rgb(233, 238, 231)`), 6 px radius, font size and 12 × 16 px padding are unchanged, on `/blog/dubsado-vs-honeybook` and in the Studio preview (a pasted 3 × 6 table). At 375 px: no horizontal page overflow, the six tables on that post keep their previous scroll behaviour, and the preview table fits. Screenshots checked at desktop and mobile in both places.
+- **Not tested / assumptions:** Safari and Firefox; a table on a post published from the studio on the live site; print styles.
+- **Limitations:** `--sage` lines are noticeably stronger than before; if they read too heavy, change the single `--table-line` value (for example to a mix of `--sage` and `--light-sage`) rather than editing each rule.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
