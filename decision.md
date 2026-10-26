@@ -1570,6 +1570,32 @@ Past approval records below describe only what the supplied reports establish.
 - **Limitations:** the meta keywords tag still carries the tags, by decision, so tags remain "keywords" in the page head even though they are no longer in the schema for posts with secondary keywords. Posts that have only a focus keyword keep tag-based schema keywords until secondary keywords are added.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D044 — Blog studio: tables pasted from Word, Google Docs or Excel become real table blocks
+
+- **Date:** 26 October 2026.
+- **Status:** Implemented and verified locally (unit tests, typecheck, production build, browser checks on localhost). Not committed, pushed or deployed. Nothing was written to Sanity.
+- **Why:** the SEO team reported that a table copied into the studio appeared as plain text on the website. Cause: the Table block only understands rows with `|` between cells, but Word, Google Docs and Excel copy cells separated by tabs (and as an HTML `<table>`, which the studio ignored). The studio had no paste handling at all, so a table pasted into a Paragraphs box became one paragraph per row, and one pasted into the Rows box became a one-column table. The website's table renderer and its mobile CSS were already correct and were not changed.
+- **Approval:** User approved my plan on 26 October 2026 with three decisions: keep the limit at 100 rows × 12 columns, keep the confirmation dialog (never convert automatically), and use generated HTML and clipboard data for tests if no real Word or Google Docs sample was available (none was supplied).
+- **Change:**
+  - [postUtils.ts](components/blog-studio/postUtils.ts): `tableFromClipboard(html, plain)` converts clipboard HTML (a small tokenizer, so it runs without a browser) or tab-separated text (Excel quoting handled) to the `|` row format with outer pipes, so an empty first or last cell is not lost. `tableRows` now also reads `\|` as a literal pipe. Word count treats `\|` like `|`.
+  - [BlogStudio.tsx](components/blog-studio/BlogStudio.tsx): a paste handler on the Table block's Rows box, and on the Paragraphs, List, Quote and FAQ-answer boxes, which asks "Paste as a table?" first. The confirm dialog gained an optional cancel label and handler. The Rows hint now also says tables can be pasted from Word, Google Docs or Excel.
+  - Unchanged: the renderer ([StudioArticle.tsx](components/blog-studio/StudioArticle.tsx)), the site CSS, the Sanity document shape and validation, the server actions, every existing post.
+- **Expected effects:** a table copied from Word, Google Docs or Excel becomes a real table block and renders as a `<table>` on the published page (scrolling sideways on a phone). A pasted table is never inserted automatically into a text box. Existing tables in the pipe format parse exactly as before.
+- **Tests (run by Claude):** `npx tsc --noEmit` and `npm run build` pass; `npm test` 115/115 (16 new in [table-paste.test.mts](tests/table-paste.test.mts), generated clipboard data in the shape each program produces: Word comments and classes, Google Docs' `font-weight:normal` wrapper, span styles and `javascript:` links, Excel `<col>` and quoted cells, merged cells, nested tables, scripts and event attributes reduced to text, text around a table, two tables, the limit at 100 × 12 and one over, pipes in cells, and the old pipe format unchanged). Two real bugs were found and fixed while writing them: bold markers removed by the italic clean-up, and an empty first or last cell shifting the columns. In the browser on a local production server: a Google Docs style paste into the Rows box gave the right rows and "Table pasted: 3 rows × 3 columns"; a tab-separated paste into a Paragraphs box held the paste back and opened the dialog, "Paste as text" pasted the tabs unchanged and "Convert to table" added a Table block below; a 101-row paste was refused in the Table block and pasted as text with a note in a Paragraphs box; ordinary text paste was untouched; the studio preview rendered a real table, and at 375 px the page did not overflow while the 8-column table scrolled inside itself (333 px visible of 718 px). Existing pages: the markup of every `<table>` on `/blog/dubsado-vs-honeybook` and `/blog/what-is-honeybook` is identical to the live site, and structured data and meta tags of seven pages match live. The only visible-text differences from live are Vikas's published post, which lives in the production dataset that this local build does not read.
+- **Review fixes (26 October 2026, same decision):** a final review found three small problems, all fixed.
+  (1) Tab-separated text without HTML: a cell starting with a plain quote (`"Best CRM ever`) was read as an Excel-quoted
+  cell and swallowed the rest of the table. A quoted field now counts only as Excel writes it (it holds a tab, line break
+  or doubled quote, has no lone quote inside, and closes right before a tab, line break or the end); anything else is
+  literal, so `"quoted"` keeps its quotes too. (2) An unclosed `<b>` or `<i>` in a cell left a stray `**` or `*`; it is now
+  closed at the end of the cell. (3) With HTML but no plain text on the clipboard, "Paste as text" pasted nothing; it now
+  pastes the table's own cells, tab-separated and without formatting markers (`plain` on the result of
+  `tableFromClipboard`). Tests: 121/121 (6 new). Each fix was mutation-checked (undoing it makes a test fail). In the
+  browser: an HTML-only paste then "Paste as text" gave `Tool<TAB>Price` / `Dubsado<TAB>$20`; the unmatched-quote paste
+  converted to 4 rows × 2 columns with the quote kept; a normal paste with a link was not intercepted.
+- **Not tested / assumptions:** a real Word, Google Docs or Excel clipboard (none was available; the samples are generated); a table published to the live site (no Sanity write was made, but the studio preview uses the same renderer and CSS as the published page); Safari and Firefox paste events.
+- **Limitations:** a cell's formatting is limited to bold, italic and links; images, colours, alignment and column widths in the source table are dropped; a cell that already contains `*` or `[` may be read as formatting. A whole article pasted at once is not converted (a separate feature).
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

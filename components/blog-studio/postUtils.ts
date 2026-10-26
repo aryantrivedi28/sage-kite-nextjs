@@ -158,8 +158,288 @@ export function listItems(s: string): string[] {
   return lines(s).map((l) => l.replace(/^([-*•]|\d+[.)])\s+/, ''));
 }
 
+/**
+ * Rows of a table block: one row per line, cells separated by `|`, the first row is the header.
+ * A literal pipe inside a cell is written `\|` (the paste conversion below does this).
+ */
 export function tableRows(s: string): string[][] {
-  return lines(s).map((l) => l.replace(/^\||\|$/g, '').split('|').map((c) => c.trim()));
+  return lines(s).map((l) =>
+    l
+      .replace(/^\||(?<!\\)\|$/g, '')
+      .split(/(?<!\\)\|/)
+      .map((c) => c.trim().replace(/\\\|/g, '|')),
+  );
+}
+
+/* ── Pasting a table (Word, Google Docs, Excel) ────────────────────────── */
+
+/** One paste may hold at most this many rows and columns (decision.md D044). */
+export const MAX_TABLE_ROWS = 100;
+export const MAX_TABLE_COLUMNS = 12;
+
+export type PastedTable =
+  /** `text` is the table block's rows; `plain` is the same cells as tab-separated text without formatting markers. */
+  | { ok: true; text: string; plain: string; rows: number; columns: number }
+  | { ok: false; reason: 'not-a-table' }
+  | { ok: false; reason: 'too-large'; rows: number; columns: number };
+
+const NAMED_ENTITIES: Record<string, string> = {
+  amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', ndash: '–', mdash: '—', hellip: '…',
+  lsquo: '‘', rsquo: '’', ldquo: '“', rdquo: '”', bull: '•', copy: '©', reg: '®', trade: '™', euro: '€', pound: '£',
+};
+
+function decodeEntities(text: string): string {
+  return text.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (match, entity: string) => {
+    if (entity[0] !== '#') return NAMED_ENTITIES[entity.toLowerCase()] ?? match;
+    const code = entity[1].toLowerCase() === 'x' ? parseInt(entity.slice(2), 16) : parseInt(entity.slice(1), 10);
+    try {
+      return code === 0xa0 ? ' ' : String.fromCodePoint(code);
+    } catch {
+      return match;
+    }
+  });
+}
+
+const cleanCell = (text: string) => text.replace(/\s+/g, ' ').trim();
+
+/** Bold and italic markers with spaces moved outside them and empty pairs removed, so they match INLINE_PATTERN. */
+function tidyMarkers(text: string): string {
+  return cleanCell(
+    text
+      .replace(/\*\*(\s*)([^*\n]*?)(\s*)\*\*/g, (_m, a: string, b: string, c: string) => (b ? `${a}**${b}**${c}` : `${a}${c}`))
+      .replace(/(?<!\*)\*(?!\*)(\s*)([^*\n]*?)(\s*)\*(?!\*)/g, (_m, a: string, b: string, c: string) => (b ? `${a}*${b}*${c}` : `${a}${c}`)),
+  );
+}
+
+type Grid = string[][];
+
+/** Shared by the HTML and tab-separated paths: drop empty rows and trailing empty columns, pad, check the limits. */
+function finishGrid(grid: Grid, options: { dropLeadingEmptyColumns?: boolean; minColumns: number }): PastedTable {
+  let rows = grid.map((r) => r.map(cleanCell)).filter((r) => r.some(Boolean));
+  let width = Math.max(0, ...rows.map((r) => r.length));
+  rows = rows.map((r) => [...r, ...Array(width - r.length).fill('')]);
+  const emptyColumn = (c: number) => rows.every((r) => !r[c]);
+  while (width > 0 && emptyColumn(width - 1)) width--;
+  let start = 0;
+  if (options.dropLeadingEmptyColumns) while (start < width && emptyColumn(start)) start++;
+  rows = rows.map((r) => r.slice(start, width));
+  const columns = width - start;
+  if (!rows.length || columns < options.minColumns || (rows.length === 1 && columns === 1)) return { ok: false, reason: 'not-a-table' };
+  if (rows.length > MAX_TABLE_ROWS || columns > MAX_TABLE_COLUMNS) return { ok: false, reason: 'too-large', rows: rows.length, columns };
+  const escape = (c: string) => c.replace(/\|/g, '\\|');
+  // Outer pipes keep an empty first or last cell from being read as the row's border.
+  return {
+    ok: true,
+    text: rows.map((r) => `| ${r.map(escape).join(' | ')} |`).join('\n'),
+    plain: rows.map((r) => r.map((c) => stripInline(c)).join('\t')).join('\n'),
+    rows: rows.length,
+    columns,
+  };
+}
+
+/**
+ * An Excel-quoted field starting at `start` (a `"`), or null when it is not one. Excel only quotes a cell that holds a
+ * tab, a line break or a quote, and then doubles every inner quote and closes it right before a tab, a line break or the
+ * end. A cell that starts with a plain quote (`"Best CRM ever`, or `"quoted"` typed as it is) is therefore literal text:
+ * treating it as quoted would swallow the rest of the table into one cell.
+ */
+function excelQuotedField(text: string, start: number): { value: string; end: number } | null {
+  let value = '';
+  let special = false;
+  for (let i = start + 1; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === '"') {
+      if (text[i + 1] === '"') {
+        value += '"';
+        special = true;
+        i++;
+        continue;
+      }
+      const next = text[i + 1];
+      // A lone quote inside the field, or a closing quote that is not followed by a separator, is not Excel quoting.
+      if (next !== undefined && next !== '\t' && next !== '\n' && next !== '\r') return null;
+      return special ? { value, end: i + 1 } : null;
+    }
+    if (ch === '\t' || ch === '\n' || ch === '\r') special = true;
+    value += ch;
+  }
+  return null; // never closed
+}
+
+/** Tab-separated text as Word, Google Docs and Excel put it on the clipboard (Excel quotes cells that hold tabs, line breaks or quotes). */
+function parseTabSeparated(text: string): Grid {
+  const rows: Grid = [];
+  let row: string[] = [];
+  let field = '';
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === '"' && field === '') {
+      const quoted = excelQuotedField(text, i);
+      if (quoted) {
+        field = quoted.value;
+        i = quoted.end - 1;
+        continue;
+      }
+      field += ch;
+    } else if (ch === '\t') {
+      row.push(field);
+      field = '';
+    } else if (ch === '\n' || ch === '\r') {
+      if (ch === '\r' && text[i + 1] === '\n') i++;
+      row.push(field);
+      rows.push(row);
+      row = [];
+      field = '';
+    } else field += ch;
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+/**
+ * The cells of the one table in a clipboard's HTML, or null when it holds no table, more than one, or text
+ * outside the table (a pasted article is not a pasted table). Written as a small tokenizer rather than
+ * DOMParser so it runs, and is tested, without a browser. Only text, bold, italic and safe links are kept.
+ */
+function gridFromHtml(html: string): Grid | null {
+  if (!/<table[\s>]/i.test(html)) return null;
+  const source = html
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<!\[[^>]*>/g, '')
+    .replace(/<(style|script|head|title|xml)\b[\s\S]*?<\/\1\s*>/gi, '');
+
+  const grid: Grid = [];
+  const carry: number[] = [];
+  let outside = '';
+  let depth = 0;
+  let tables = 0;
+  let row: string[] | null = null;
+  let cell: { text: string; colspan: number; rowspan: number; bold: number; italic: number; links: { start: number; href: string }[] } | null = null;
+  const inline: ('b' | 'i' | 'link' | null)[] = [];
+
+  const fillCarry = () => {
+    while (row && carry[row.length] > 0) { carry[row.length]--; row.push(''); }
+  };
+  const finishCell = () => {
+    if (!cell || !row) { cell = null; return; }
+    const start = row.length;
+    // A <b> or <i> that was never closed would leave a stray marker: close it here.
+    row.push(tidyMarkers(cell.text + (cell.italic > 0 ? '*' : '') + (cell.bold > 0 ? '**' : '')));
+    for (let i = 1; i < cell.colspan; i++) row.push('');
+    if (cell.rowspan > 1) for (let c = start; c < start + cell.colspan; c++) carry[c] = cell.rowspan - 1;
+    cell = null;
+    inline.length = 0;
+    fillCarry();
+  };
+  const finishRow = () => {
+    if (row) grid.push(row);
+    row = null;
+  };
+  const span = (attrs: string, name: string) => {
+    const m = attrs.match(new RegExp(`\\b${name}\\s*=\\s*["']?(\\d+)`, 'i'));
+    return m ? Math.min(Math.max(parseInt(m[1], 10), 1), MAX_TABLE_COLUMNS) : 1;
+  };
+  const styleOf = (attrs: string) => (attrs.match(/\bstyle\s*=\s*("([^"]*)"|'([^']*)')/i)?.[2] ?? attrs.match(/\bstyle\s*=\s*'([^']*)'/i)?.[1] ?? '').toLowerCase();
+  const weightOf = (style: string) => style.match(/font-weight\s*:\s*([a-z0-9]+)/)?.[1];
+  const isBoldStyle = (style: string) => {
+    const w = weightOf(style);
+    return w === 'bold' || w === 'bolder' || (!!w && /^\d+$/.test(w) && parseInt(w, 10) >= 600);
+  };
+  const append = (text: string) => { if (cell) cell.text += text; };
+
+  const tokenizer = /<(\/?)([a-zA-Z][\w:.-]*)((?:"[^"]*"|'[^']*'|[^'">])*)>|([^<]+)|</g;
+  for (let m = tokenizer.exec(source); m; m = tokenizer.exec(source)) {
+    if (m[4] !== undefined || !m[2]) {
+      const text = decodeEntities(m[4] ?? m[0]);
+      if (depth === 0) outside += text;
+      else append(text);
+      continue;
+    }
+    const closing = m[1] === '/';
+    const tag = m[2].toLowerCase();
+    const attrs = m[3] ?? '';
+
+    if (tag === 'table') {
+      if (!closing) {
+        depth++;
+        if (depth === 1 && ++tables > 1) return null;
+      } else if (depth > 0) {
+        depth--;
+        if (depth === 0) { finishCell(); finishRow(); }
+      }
+      continue;
+    }
+    if (depth === 0) continue;
+    if (depth > 1) { // a table inside a cell: keep its text, ignore its structure
+      if (/^(tr|td|th|p|div|br|li)$/.test(tag)) append(' ');
+      continue;
+    }
+
+    if (tag === 'tr') {
+      finishCell();
+      if (!closing) { finishRow(); row = []; fillCarry(); } else finishRow();
+    } else if (tag === 'td' || tag === 'th') {
+      finishCell();
+      if (!closing) {
+        if (!row) { row = []; fillCarry(); }
+        cell = { text: '', colspan: span(attrs, 'colspan'), rowspan: span(attrs, 'rowspan'), bold: 0, italic: 0, links: [] };
+      }
+    } else if (!cell) {
+      continue;
+    } else if (tag === 'br' || /^(p|div|li|ul|ol|h[1-6])$/.test(tag)) {
+      append(' ');
+    } else if (tag === 'b' || tag === 'strong' || tag === 'i' || tag === 'em' || tag === 'span' || tag === 'a') {
+      if (!closing) {
+        const style = styleOf(attrs);
+        let kind: 'b' | 'i' | 'link' | null = null;
+        if (tag === 'a') {
+          const href = attrs.match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+          const url = decodeEntities(href?.[1] ?? href?.[2] ?? href?.[3] ?? '').trim();
+          if (safeHref(url)) { kind = 'link'; cell.links.push({ start: cell.text.length, href: url }); }
+        } else if (tag === 'b' || tag === 'strong') {
+          // Google Docs wraps everything it copies in <b style="font-weight:normal">: that is not bold.
+          if (weightOf(style) === undefined || isBoldStyle(style)) kind = 'b';
+        } else if (tag === 'i' || tag === 'em') kind = 'i';
+        else if (isBoldStyle(style)) kind = 'b';
+        else if (/font-style\s*:\s*italic/.test(style)) kind = 'i';
+        // Bold wins over italic: nesting markers would not match the page's inline pattern.
+        if (kind === 'b' && cell.italic === 0 && cell.bold === 0) { append('**'); cell.bold++; }
+        else if (kind === 'i' && cell.bold === 0 && cell.italic === 0) { append('*'); cell.italic++; }
+        else if (kind === 'b' || kind === 'i') kind = null;
+        inline.push(kind);
+      } else {
+        const kind = inline.pop();
+        if (kind === 'b') { append('**'); cell.bold--; }
+        else if (kind === 'i') { append('*'); cell.italic--; }
+        else if (kind === 'link') {
+          const link = cell.links.pop();
+          if (link) {
+            const label = cell.text.slice(link.start).replace(/[*[\]]/g, '').trim();
+            const markdown = `[${label}](${link.href})`;
+            // Keep the link only if the page's link syntax accepts it; otherwise leave the text as it is.
+            cell.text = label && LINK_PATTERN.test(markdown) ? cell.text.slice(0, link.start) + markdown : cell.text.slice(0, link.start) + label;
+          }
+        }
+      }
+    }
+  }
+  finishCell();
+  finishRow();
+  if (outside.replace(/\s+/g, '') !== '') return null;
+  return grid;
+}
+
+/**
+ * Turns clipboard data into the text of a table block, or says why not. HTML wins when it holds a table
+ * (it keeps bold, italic and links); otherwise tab-separated text with at least two rows and two columns.
+ */
+export function tableFromClipboard(html: string, plain: string): PastedTable {
+  const fromHtml = html ? gridFromHtml(html) : null;
+  if (fromHtml) return finishGrid(fromHtml, { minColumns: 1 });
+  if (!plain.includes('\t')) return { ok: false, reason: 'not-a-table' };
+  const grid = parseTabSeparated(plain).filter((r) => r.some((c) => c.trim()));
+  if (grid.length < 2 || grid.some((r) => r.length < 2)) return { ok: false, reason: 'not-a-table' };
+  return finishGrid(grid, { dropLeadingEmptyColumns: true, minColumns: 2 });
 }
 
 export function youtubeId(url: string): string | null {
@@ -229,7 +509,7 @@ function blockText(b: StudioBlock): string {
     case 'list': return b.items;
     case 'image': return b.caption;
     case 'quote': return `${b.text} ${b.cite}`;
-    case 'table': return b.rows.replace(/\|/g, ' ');
+    case 'table': return b.rows.replace(/\\?\|/g, ' ');
     case 'faq': return `${b.question} ${b.answer}`;
     default: return '';
   }

@@ -44,6 +44,8 @@ import {
   BLOCK_LABELS,
   MAX_KEYWORD_LENGTH,
   MAX_SECONDARY_KEYWORDS,
+  MAX_TABLE_COLUMNS,
+  MAX_TABLE_ROWS,
   SLUG_PATTERN,
   TITLE_SUFFIX,
   buildGuide,
@@ -59,10 +61,12 @@ import {
   resolveBlocks,
   slugify,
   stripInline,
+  tableFromClipboard,
   today,
   wordCount,
   youtubeId,
   type CheckItem,
+  type PastedTable,
 } from './postUtils';
 import type { SitePostSummary, StudioBlock, StudioBlockType, StudioPost, StudioStatus, StudioStorage } from './types';
 import styles from './BlogStudio.module.css';
@@ -91,6 +95,10 @@ interface ConfirmState {
   body: React.ReactNode;
   confirmLabel: string;
   danger?: boolean;
+  /** Label of the button that dismisses the dialog (default "Cancel"). */
+  cancelLabel?: string;
+  /** Runs when the dialog is dismissed (button, Escape or a click outside). */
+  onCancel?: () => void;
   onConfirm: () => void;
 }
 
@@ -469,6 +477,7 @@ function StudioApp({ storage, sitePosts, categories, platforms, author, authorIm
           onDelete={() => (posts.some((p) => p.id === draft.id) ? askDelete(draft) : closeEditor())}
           store={studioStore}
           notify={notify}
+          confirmAction={setConfirm}
         />
       )}
 
@@ -479,7 +488,10 @@ function StudioApp({ storage, sitePosts, categories, platforms, author, authorIm
       {confirm && (
         <ConfirmModal
           {...confirm}
-          onCancel={() => setConfirm(null)}
+          onCancel={() => {
+            setConfirm(null);
+            confirm.onCancel?.();
+          }}
           onConfirm={() => {
             setConfirm(null);
             confirm.onConfirm();
@@ -779,6 +791,7 @@ function Editor({
   onDelete,
   store,
   notify,
+  confirmAction,
 }: {
   draft: StudioPost;
   setDraft: (fn: (d: StudioPost) => StudioPost) => void;
@@ -793,6 +806,7 @@ function Editor({
   onDelete: () => void;
   store: StudioStore;
   notify: (m: string) => void;
+  confirmAction: (c: ConfirmState) => void;
 }) {
   const [pane, setPane] = useState<Pane>('content');
   const [slugTouched, setSlugTouched] = useState(() => !!draft.slug && draft.slug !== slugify(draft.title));
@@ -842,6 +856,25 @@ function Editor({
       if (j < 0 || j >= blocks.length) return d;
       [blocks[index], blocks[j]] = [blocks[j], blocks[index]];
       return { ...d, blocks };
+    });
+  }
+
+  /** A table was pasted into a text field of block `index`: offer to turn it into a Table block (never automatic). */
+  function askTablePaste(index: number, table: Extract<PastedTable, { ok: true }>, pasteAsText: () => void) {
+    confirmAction({
+      title: 'Paste as a table?',
+      body: `This looks like a table (${table.rows} rows × ${table.columns} columns). Convert it to a Table block below this one? “Paste as text” pastes it as ordinary text instead.`,
+      confirmLabel: 'Convert to table',
+      cancelLabel: 'Paste as text',
+      onConfirm: () => {
+        const block = { ...newBlock('table'), rows: table.text } as StudioBlock;
+        setDraft((d) => ({ ...d, blocks: [...d.blocks.slice(0, index + 1), block, ...d.blocks.slice(index + 1)] }));
+        notify(`Table block added: ${table.rows} rows × ${table.columns} columns.`);
+        requestAnimationFrame(() =>
+          document.getElementById(`block-${block.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
+        );
+      },
+      onCancel: pasteAsText,
     });
   }
 
@@ -1011,6 +1044,8 @@ function Editor({
                         onRemove={() => setDraft((d) => ({ ...d, blocks: d.blocks.filter((x) => x.id !== b.id) }))}
                         onAddBelow={() => setAddAt(addAt === i + 1 ? null : i + 1)}
                         onUpload={upload}
+                        onTablePaste={(table, pasteAsText) => askTablePaste(i, table, pasteAsText)}
+                        notify={notify}
                       />
                       {addAt === i + 1 && i + 1 < draft.blocks.length && (
                         <AddBlockMenu onAdd={insertBlock} onCancel={() => setAddAt(null)} />
@@ -1319,12 +1354,17 @@ function FormatTextarea({
   rows = 5,
   placeholder,
   label,
+  onTablePaste,
+  notify,
 }: {
   value: string;
   onChange: (v: string) => void;
   rows?: number;
   placeholder?: string;
   label: string;
+  /** Called when the pasted content is a table; the paste is held back until the writer chooses. */
+  onTablePaste?: (table: Extract<PastedTable, { ok: true }>, pasteAsText: () => void) => void;
+  notify?: (m: string) => void;
 }) {
   const ref = useRef<HTMLTextAreaElement>(null);
   function wrap(before: string, after: string, fallback: string) {
@@ -1337,6 +1377,21 @@ function FormatTextarea({
       el.focus();
       el.setSelectionRange(s + before.length, s + before.length + selected.length);
     });
+  }
+  function onPaste(e: React.ClipboardEvent<HTMLTextAreaElement>) {
+    if (!onTablePaste) return;
+    const plain = e.clipboardData.getData('text/plain');
+    const table = tableFromClipboard(e.clipboardData.getData('text/html'), plain);
+    if (table.ok) {
+      const { selectionStart: s, selectionEnd: end } = e.currentTarget;
+      e.preventDefault();
+      // A clipboard with only HTML has no plain text: fall back to the table's own cells, tab-separated.
+      const asText = plain || table.plain;
+      onTablePaste(table, () => onChange(value.slice(0, s) + asText + value.slice(end)));
+    } else if (table.reason === 'too-large') {
+      // Not blocked: the paste goes through as text, with a note that it was too big to become a table.
+      notify?.(`That looks like a table, but ${table.rows} rows × ${table.columns} columns is more than ${MAX_TABLE_ROWS} × ${MAX_TABLE_COLUMNS}, so it was pasted as text. Split it to paste it as a table.`);
+    }
   }
   return (
     <div className={styles.formatBox}>
@@ -1354,6 +1409,7 @@ function FormatTextarea({
         placeholder={placeholder}
         aria-label={label}
         onChange={(e) => onChange(e.target.value)}
+        onPaste={onPaste}
       />
     </div>
   );
@@ -1389,6 +1445,8 @@ function BlockCard({
   onRemove,
   onAddBelow,
   onUpload,
+  onTablePaste,
+  notify,
 }: {
   block: StudioBlock;
   index: number;
@@ -1398,7 +1456,10 @@ function BlockCard({
   onRemove: () => void;
   onAddBelow: () => void;
   onUpload: (f: File) => Promise<string | null>;
+  onTablePaste: (table: Extract<PastedTable, { ok: true }>, pasteAsText: () => void) => void;
+  notify: (m: string) => void;
 }) {
+  const tablePaste = { onTablePaste, notify };
   const Icon = BLOCK_ICONS[block.type];
   const name = block.type === 'heading' ? `Heading ${block.level === 2 ? '(H2)' : '(H3)'}` : BLOCK_LABELS[block.type];
 
@@ -1429,6 +1490,7 @@ function BlockCard({
     case 'text':
       body = (
         <FormatTextarea
+          {...tablePaste}
           label="Paragraphs"
           value={block.text}
           rows={7}
@@ -1448,7 +1510,7 @@ function BlockCard({
               <input type="radio" checked={block.ordered} onChange={() => onChange({ ordered: true })} /> Numbered
             </label>
           </div>
-          <FormatTextarea label="List items" value={block.items} placeholder={'One item per line\nSecond item\nThird item'} onChange={(items) => onChange({ items })} />
+          <FormatTextarea {...tablePaste} label="List items" value={block.items} placeholder={'One item per line\nSecond item\nThird item'} onChange={(items) => onChange({ items })} />
         </>
       );
       break;
@@ -1468,7 +1530,7 @@ function BlockCard({
     case 'quote':
       body = (
         <>
-          <FormatTextarea label="Quote" value={block.text} rows={3} placeholder="The sharpest sentence of the section" onChange={(text) => onChange({ text })} />
+          <FormatTextarea {...tablePaste} label="Quote" value={block.text} rows={3} placeholder="The sharpest sentence of the section" onChange={(text) => onChange({ text })} />
           <Field label="Attribution (optional)" hint="Only quote real, sourced people.">
             <input className={styles.input} value={block.cite} onChange={(e) => onChange({ cite: e.target.value })} />
           </Field>
@@ -1477,13 +1539,30 @@ function BlockCard({
       break;
     case 'table': {
       body = (
-        <Field label="Rows" hint="One row per line, cells separated by |. The first row is the header.">
+        <Field label="Rows" hint="One row per line, cells separated by |. The first row is the header. You can paste a table straight from Word, Google Docs or Excel.">
           <textarea
             className={styles.input}
             rows={5}
             value={block.rows}
             placeholder={'Manual process | Automated process\nCopying leads by hand | Leads arrive in the CRM'}
             onChange={(e) => onChange({ rows: e.target.value })}
+            onPaste={(e) => {
+              const table = tableFromClipboard(e.clipboardData.getData('text/html'), e.clipboardData.getData('text/plain'));
+              if (table.ok) {
+                // Replace the selection, keeping the pasted rows on lines of their own.
+                const { selectionStart: s, selectionEnd: end } = e.currentTarget;
+                const before = block.rows.slice(0, s);
+                const after = block.rows.slice(end);
+                const lead = before && !before.endsWith('\n') ? '\n' : '';
+                const trail = after && !after.startsWith('\n') ? '\n' : '';
+                e.preventDefault();
+                onChange({ rows: before + lead + table.text + trail + after });
+                notify(`Table pasted: ${table.rows} rows × ${table.columns} columns.`);
+              } else if (table.reason === 'too-large') {
+                e.preventDefault();
+                notify(`That table is ${table.rows} rows × ${table.columns} columns. The limit is ${MAX_TABLE_ROWS} × ${MAX_TABLE_COLUMNS}: split it and paste the parts separately.`);
+              }
+            }}
           />
         </Field>
       );
@@ -1509,7 +1588,7 @@ function BlockCard({
           <Field label="Question">
             <input className={styles.input} value={block.question} placeholder="A question people actually ask" onChange={(e) => onChange({ question: e.target.value })} />
           </Field>
-          <FormatTextarea label="Answer" value={block.answer} rows={3} placeholder="The answer, as it should appear on the page" onChange={(answer) => onChange({ answer })} />
+          <FormatTextarea {...tablePaste} label="Answer" value={block.answer} rows={3} placeholder="The answer, as it should appear on the page" onChange={(answer) => onChange({ answer })} />
           <span className={styles.hint}>FAQs are added to the page’s FAQ schema with exactly this text.</span>
         </>
       );
@@ -1588,6 +1667,7 @@ function ConfirmModal({
   title,
   body,
   confirmLabel,
+  cancelLabel,
   danger,
   onConfirm,
   onCancel,
@@ -1599,7 +1679,7 @@ function ConfirmModal({
         <h2 id="studio-confirm-title" className={styles.modalTitle}>{title}</h2>
         <div className={styles.modalText}>{body}</div>
         <div className={styles.modalActions}>
-          <button type="button" className={styles.btn} onClick={onCancel} autoFocus>Cancel</button>
+          <button type="button" className={styles.btn} onClick={onCancel} autoFocus>{cancelLabel ?? 'Cancel'}</button>
           <button type="button" className={cx(styles.btn, danger ? styles.btnDangerSolid : styles.btnPrimary)} onClick={onConfirm}>
             {confirmLabel}
           </button>

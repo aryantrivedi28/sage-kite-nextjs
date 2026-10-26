@@ -170,10 +170,27 @@ blocks (JSON) instead of a JSX function, so any backend can store it.
 | `list` | `ordered`, `items` | `<ul>`/`<ol>`, one `<li>` per line; pasted `-`, `*`, `•`, `1.` markers are removed |
 | `image` | `src`, `alt`, `caption` | `<figure><img alt title></figure>` + optional `<figcaption>` |
 | `quote` | `text`, `cite` | `<blockquote>`; cite rendered as `— name` |
-| `table` | `rows` | One row per line, cells split on `\|`, first row is `<thead>` |
+| `table` | `rows` | One row per line, cells split on `\|` (a literal pipe in a cell is written `\\|`, a backslash then a pipe), first row is `<thead>`. Tables pasted from Word, Google Docs or Excel are converted to this format (see below) |
 | `video` | `url`, `title` | `<iframe>` to `youtube-nocookie.com/embed/<id>`; accepts watch, youtu.be, embed, shorts, live links. `referrerPolicy="strict-origin-when-cross-origin"`: YouTube needs the embedding origin (Error 153 without it) and the studio page is `no-referrer`; sends the origin only, never the path (D025) |
 | `faq` | `question`, `answer` | `<h3>` + `<p>` per line; also feeds `buildFaqs()` |
 | `divider` | — | `<hr>` |
+
+**Pasting a table (D044).** Word, Google Docs and Excel put a table on the clipboard as HTML and as tab-separated
+text. `tableFromClipboard()` in `postUtils.ts` converts either into the `|` rows above:
+- In a **Table block's Rows box**, pasting a table replaces the selection and shows "Table pasted: R rows × C columns".
+- In a **Paragraphs, List, Quote or FAQ-answer box**, pasting a table opens "Paste as a table?" and nothing is pasted until
+  the writer chooses: **Convert to table** adds a Table block below the current block; **Paste as text** (also Escape or a
+  click outside the dialog) pastes the original text (the table's own cells, tab-separated, if the clipboard had only HTML).
+  It never converts automatically.
+- HTML wins when present (it keeps bold, italic and links; only `http(s)`, `mailto:`, `/…` and `#` links survive). Merged
+  cells (`colspan`, `rowspan`) keep later cells in their own columns. Only the table's text is used, never its HTML.
+- It must be a table and nothing else: text around it, two tables, a single cell, or tab text with fewer than 2 rows or
+  2 columns is pasted as ordinary text. The first row becomes the header.
+- Limit: 100 rows × 12 columns per paste. A bigger one is refused in the Table block (nothing is truncated) and pasted as
+  text elsewhere, with a message to split it.
+- Tab-separated text without HTML follows Excel's quoting only where Excel would have quoted (a cell holding a tab, a line
+  break or a quote); a cell that merely starts with a quote mark is kept as written.
+- Not handled: a whole article pasted at once (headings, lists and tables together) is not turned into blocks.
 
 **Inline formatting** in paragraphs, list items, quotes, captions, table cells
 and FAQ answers: `**bold**`, `*italic*`, `[text](url)`. Link URLs may contain one
