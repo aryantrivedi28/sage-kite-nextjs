@@ -8,11 +8,22 @@
 
 export type StudioStatus = 'draft' | 'published' | 'scheduled';
 
+/** One entry of a Sources block (decision.md D049). `date` is free text, e.g. "checked 27 October 2026". */
+export interface StudioSource {
+  id: string;
+  publisher: string;
+  title: string;
+  url: string;
+  date: string;
+}
+
+export type HeadingLevel = 2 | 3 | 4;
+
 export type StudioBlock =
-  | { id: string; type: 'heading'; level: 2 | 3; text: string }
-  /** One paragraph per non-empty line. Supports **bold**, *italic* and [text](url). */
+  | { id: string; type: 'heading'; level: HeadingLevel; text: string }
+  /** One paragraph per non-empty line. Inline markers as in inline.ts: **bold**, *italic*, `code`, [text](url). */
   | { id: string; type: 'text'; text: string }
-  /** One item per line. */
+  /** One item per line; each leading tab is one level deeper (at most two, D049). Sub-levels use the list's type. */
   | { id: string; type: 'list'; ordered: boolean; items: string }
   | { id: string; type: 'image'; src: string; alt: string; caption: string }
   | { id: string; type: 'quote'; text: string; cite: string }
@@ -20,6 +31,8 @@ export type StudioBlock =
   | { id: string; type: 'table'; rows: string }
   | { id: string; type: 'video'; url: string; title: string }
   | { id: string; type: 'faq'; question: string; answer: string }
+  /** The article's sources: an H2 (in the guide) and a numbered list. */
+  | { id: string; type: 'sources'; heading: string; items: StudioSource[] }
   | { id: string; type: 'divider' };
 
 export type StudioBlockType = StudioBlock['type'];

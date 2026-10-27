@@ -29,7 +29,12 @@ Live at `https://www.sagekite.com`.
   `app/brand.css`; shared classes are in `app/globals.css`.
   **Read [docs/brand.md](docs/brand.md) before building a page or section.**
   There is **no Tailwind**. Do not add Tailwind classes or a new styling system.
-- Icons: `lucide-react`. No other UI libraries.
+- Icons: `lucide-react`. No other UI libraries, with one exception: the editor library **Tiptap**
+  (`@tiptap/react`, `@tiptap/pm`, `@tiptap/starter-kit`, `@tiptap/extensions`, `@tiptap/extension-list`, exact version
+  3.31.4, MIT) is allowed
+  **for the blog studio only** (approved by the user on 27 October 2026, decision.md D049). It is imported only by
+  `components/blog-studio/RichTextBox.tsx` and `editorSetup.ts`; never by `StudioArticle.tsx`, `components/blog` or
+  any public page, so it never loads outside the studio.
 
 ## Commands
 
@@ -131,8 +136,13 @@ components/
                           holds the clipboard-HTML helpers shared by table and article paste;
                           articlePaste.ts turns a pasted article (Docs, Word, Markdown; Pages with a
                           note, D048) into blocks and picks a pasted image to upload (imageFromClipboard);
-                          formatting.ts is the editor's formatting bar (Turn into, bold, italic, links),
-                          both pure and tested (D047).
+                          formatting.ts is Turn into (convertLines) and linkProblem. Text boxes show their
+                          formatting (D049): RichTextBox.tsx mounts a Tiptap editor only while a box is
+                          edited; editorDoc.ts converts the stored marker string to and from the editor's
+                          document; inline.ts is the inline grammar (**bold**, *italic*, ***both***,
+                          `code`, [text](url), escapes) that StudioArticle, stripInline and the paste
+                          parser share. Fields are still plain strings; headings are H2-H4; list items
+                          nest by leading tabs; the `sources` block renders an H2 and an <ol>.
   Header.tsx, Footer.tsx  Shared header/footer.
   GoogleAnalytics.tsx     The GA4 tag (client component in the root layout); skipped on pages
                           with a `data-no-analytics` element (the blog studio).
@@ -264,7 +274,15 @@ The essentials:
   "as reported" unless Sage Kite measured them.
 - Use a blog `guide` id that does not match an `id` on a heading in the article.
 - Change a heading or FAQ answer without updating `guide` / `faqs` to match.
-- Add Tailwind, CSS frameworks or component libraries.
+- Add Tailwind, CSS frameworks or component libraries. (Tiptap in the blog studio is the one approved exception, D049.)
+- Add text colour or underline to the blog studio, its editor schema or the article styles. The brand rules forbid new
+  colours and accent colours for body text, and an underline looks like a link (D049).
+- Import Tiptap (`@tiptap/*`), `RichTextBox`, `editorSetup` or `editorDoc` from `StudioArticle.tsx` or any file a public
+  page uses. After changing imports, check that no `/blog` chunk contains "tiptap" or "prosemirror" (D049 says how).
+- Let the editor's own HTML import handle a paste in the studio. `RichTextBox`'s `handlePaste` sends every paste through
+  the paste parser, so only bold, italic, code and safe links get in.
+- Leave a Tiptap extension's own binding on a key the studio handles (`editorSetup.ts`). When the studio's handler
+  returns false to let focus move, the next binding runs: Tiptap's ListItem Tab nested lists past 3 levels (D049).
 - Commit build output (`.next/`).
 - Commit TypeScript build caches (`*.tsbuildinfo`) or macOS `.DS_Store` files.
 - Add the blog studio path to `robots.ts` or `sitemap.ts`, or link to it from any page.

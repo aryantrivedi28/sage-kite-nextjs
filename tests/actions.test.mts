@@ -259,7 +259,7 @@ test('post shape: bad types, unknown category, platform, status and oversized co
     { excerpt: 'x'.repeat(5000) }, { title: 'x'.repeat(500) },
     { featuredImage: 'data:image/png;base64,AAAA' },
     { blocks: [{ id: 'aaaa1111', type: 'script', text: 'x' }] }, { blocks: [{ id: '../x', type: 'text', text: 'x' }] },
-    { blocks: [{ id: 'aaaa1111', type: 'heading', level: 4, text: 'x' }] }, { blocks: [{ id: 'aaaa1111', type: 'text', text: 7 }] },
+    { blocks: [{ id: 'aaaa1111', type: 'heading', level: 5, text: 'x' }] }, { blocks: [{ id: 'aaaa1111', type: 'text', text: 7 }] },
     { blocks: [{ id: 'aaaa1111', type: 'image', src: 'data:image/png;base64,AA', alt: 'a', caption: '' }] },
     { blocks: Array.from({ length: 500 }, (_, i) => ({ id: `b${i}`, type: 'divider' })) },
   ];

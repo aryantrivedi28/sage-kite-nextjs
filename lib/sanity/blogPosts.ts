@@ -1,5 +1,5 @@
 import { normalizeKeywords } from '@/components/blog-studio/postUtils';
-import type { StudioBlock, StudioPost, StudioStatus } from '@/components/blog-studio/types';
+import type { StudioBlock, StudioPost, StudioSource, StudioStatus } from '@/components/blog-studio/types';
 
 /*
  * StudioPost <-> Sanity `blogPost` document (docs/sanity.md §4).
@@ -27,7 +27,11 @@ export const draftId = (id: string) => `${DRAFT_PREFIX}${id}`;
 export const isLiveStatus = (status: StudioStatus) => status === 'published';
 
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
-type SanityBlock = DistributiveOmit<StudioBlock, 'id'> & { _key: string };
+/** A Sources entry as stored: its id is the array `_key`, like a block's. */
+type SanitySource = Omit<StudioSource, 'id'> & { _key: string };
+type SanityBlock =
+  | (DistributiveOmit<Exclude<StudioBlock, { type: 'sources' }>, 'id'> & { _key: string })
+  | { _key: string; type: 'sources'; heading: string; items: SanitySource[] };
 
 export interface BlogPostDocument extends Omit<StudioPost, 'id' | 'blocks'> {
   _id: string;
@@ -55,6 +59,13 @@ function toSanityBlock(block: StudioBlock): SanityBlock {
       return { _key, type: 'video', url: block.url, title: block.title };
     case 'faq':
       return { _key, type: 'faq', question: block.question, answer: block.answer };
+    case 'sources':
+      return {
+        _key,
+        type: 'sources',
+        heading: block.heading,
+        items: block.items.map((i) => ({ _key: i.id, publisher: i.publisher, title: i.title, url: i.url, date: i.date })),
+      };
     case 'divider':
       return { _key, type: 'divider' };
   }
@@ -96,6 +107,20 @@ export function toBlogPostDocument(post: StudioPost): BlogPostDocument {
 
 const str = (v: unknown) => (typeof v === 'string' ? v : '');
 
+/** A stored block for the studio: `_key` becomes `id`, in a Sources block's entries too. */
+function fromSanityBlock({ _key, ...block }: Record<string, unknown>): StudioBlock {
+  if (block.type === 'sources') {
+    const items = Array.isArray(block.items) ? (block.items as Record<string, unknown>[]) : [];
+    return {
+      id: str(_key),
+      type: 'sources',
+      heading: str(block.heading),
+      items: items.map((i) => ({ id: str(i._key), publisher: str(i.publisher), title: str(i.title), url: str(i.url), date: str(i.date) })),
+    };
+  }
+  return { ...block, id: str(_key) } as StudioBlock;
+}
+
 /** Builds a StudioPost from a stored document, ignoring Sanity's own fields (_rev, _updatedAt, ...). */
 export function fromBlogPostDocument(doc: Record<string, unknown>): StudioPost {
   const status = (['draft', 'published', 'scheduled'] as const).find((s) => s === doc.status) ?? 'draft';
@@ -121,7 +146,7 @@ export function fromBlogPostDocument(doc: Record<string, unknown>): StudioPost {
     secondaryKeywords: Array.isArray(doc.secondaryKeywords) ? doc.secondaryKeywords.filter((k): k is string => typeof k === 'string') : [],
     relatedPlatform: str(doc.relatedPlatform),
     featured: doc.featured === true,
-    blocks: blocks.map(({ _key, ...block }) => ({ ...block, id: str(_key) }) as StudioBlock),
+    blocks: blocks.map(fromSanityBlock),
     firstPublishedAt: str(doc.firstPublishedAt) || undefined,
     createdAt: str(doc.createdAt),
     savedAt: str(doc.savedAt),

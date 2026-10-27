@@ -1,4 +1,4 @@
-import { BLOCK_LABELS, MAX_KEYWORD_LENGTH, MAX_POST_BLOCKS, MAX_SECONDARY_KEYWORDS } from '@/components/blog-studio/postUtils';
+import { BLOCK_LABELS, MAX_KEYWORD_LENGTH, MAX_POST_BLOCKS, MAX_SECONDARY_KEYWORDS, MAX_SOURCES, safeHref } from '@/components/blog-studio/postUtils';
 import { CATEGORIES } from '@/content/blog/types';
 import { PLATFORM_PAGE_SLUGS } from '@/content/platforms';
 import { BLOCK_KEY_PATTERN, POST_ID_PATTERN } from './blogPosts';
@@ -27,7 +27,7 @@ function blockProblem(b: unknown): string | null {
   const text = (k: string) => isString(block[k], MAX.text);
   switch (block.type) {
     case 'heading':
-      return (block.level === 2 || block.level === 3) && text('text') ? null : bad;
+      return (block.level === 2 || block.level === 3 || block.level === 4) && text('text') ? null : bad;
     case 'text':
       return text('text') ? null : bad;
     case 'list':
@@ -42,11 +42,26 @@ function blockProblem(b: unknown): string | null {
       return isString(block.url, MAX.url) && isString(block.title, MAX.short) ? null : bad;
     case 'faq':
       return isString(block.question, MAX.excerpt) && text('answer') ? null : bad;
+    case 'sources':
+      return isString(block.heading, MAX.short) && Array.isArray(block.items) && block.items.length <= MAX_SOURCES && block.items.every(sourceOk)
+        ? null
+        : 'Invalid Sources block: at most 40 entries, each with a title of up to 200 characters and a link to a page on this site, http(s) or mailto.';
     case 'divider':
       return null;
     default:
       return bad;
   }
+}
+
+/** One Sources entry (D049): known fields of the right type and size; a link, if any, that the page would render. */
+function sourceOk(item: unknown): boolean {
+  if (!item || typeof item !== 'object' || Array.isArray(item)) return false;
+  const i = item as Record<string, unknown>;
+  return (
+    typeof i.id === 'string' && BLOCK_KEY_PATTERN.test(i.id) &&
+    isString(i.title, 200) && isString(i.publisher, 120) && isString(i.date, 40) && isString(i.url, MAX.url) &&
+    (i.url.trim() === '' || !!safeHref(i.url.trim()))
+  );
 }
 
 export function postShapeProblem(input: unknown): string | null {

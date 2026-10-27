@@ -1008,6 +1008,19 @@ html {
 .article-content ol { list-style: decimal; }
 .article-content li { padding-left: 6px; line-height: 1.65; }
 .article-content li::marker { color: var(--sage); }
+/* H4, nested lists and the Sources block from the blog studio (decision.md D049, approved 27 October 2026). */
+.article-content h4 {
+  font-size: 1.15rem;
+  line-height: 1.3;
+  font-weight: 700;
+  margin: 28px 0 10px;
+  color: var(--ink);
+}
+.article-content li > ul,
+.article-content li > ol { margin: 10px 0 0; padding-left: 22px; gap: 8px; }
+.article-content ul ul { list-style: circle; }
+.article-content .article-sources { gap: 10px; font-size: 1rem; line-height: 1.6; }
+.article-content .article-source-meta { color: var(--sage); }
 .article-content blockquote {
   border-left: 4px solid var(--butter);
   padding: 4px 0 4px 26px;
@@ -1265,7 +1278,7 @@ html {
   position: sticky;
   top: 120px;
 }
-.article-content h2, .article-content h3 {
+.article-content h2, .article-content h3, .article-content h4 {
   scroll-margin-top: 130px;
 }
 

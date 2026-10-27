@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { INLINE_PATTERN, MAX_TABLE_COLUMNS, MAX_TABLE_ROWS, tableFromClipboard, tableRows } from '@/components/blog-studio/postUtils';
+import { inlinePlainText, parseInline } from '@/components/blog-studio/inline';
+import { MAX_TABLE_COLUMNS, MAX_TABLE_ROWS, tableFromClipboard, tableRows } from '@/components/blog-studio/postUtils';
 
 // Pasting a table from Word, Google Docs or Excel (decision.md D044). The HTML below follows the shape each program
 // puts on the clipboard (generated, not copied from a real document): Word's conditional comments and MsoNormal classes,
@@ -181,7 +182,7 @@ test('an unclosed <b> or <i> never leaves a stray marker', () => {
   // **bold**, *italic* or [link](url) part is shown as it is, so no asterisk may be left over there.
   for (const cell of ['<b>a', '<i>a', '<b><i>a', '<i><b>a', '<b>a</b><i>b', '<span style="font-style:italic">a']) {
     const text = ok(html(cell)).text;
-    const outside = text.replace(/^\| | \|$/gm, '').split(INLINE_PATTERN).filter((_, i) => i % 2 === 0).join('');
+    const outside = inlinePlainText(parseInline(text.replace(/^\| | \|$/gm, '')));
     assert.ok(!outside.includes('*'), `${cell} → ${text}`);
   }
 });
@@ -202,9 +203,9 @@ test('Word bold and italic: mso-bidi-font-weight / mso-bidi-font-style are not f
   assert.deepEqual(tableRows(ok(html).text), [['**Price**', '*Monthly*'], ['not bold', 'not italic']]);
 });
 
-test('a link inside bold text is kept outside the markers, so the page shows the link', () => {
+test('a link inside bold or italic text keeps both (decision.md D049; before, the link was moved out of the bold)', () => {
   const html = '<table><tr><td><b>See <a href="/blog/x">the guide</a> now</b></td><td><i><a href="/a">only</a></i></td></tr><tr><td>c</td><td>d</td></tr></table>';
-  assert.deepEqual(tableRows(ok(html).text)[0], ['**See** [the guide](/blog/x) **now**', '[only](/a)']);
+  assert.deepEqual(tableRows(ok(html).text)[0], ['**See [the guide](/blog/x) now**', '*[only](/a)*']);
 });
 
 test('a table after a DOCTYPE or <?xml?> declaration still converts (decision.md D048)', () => {

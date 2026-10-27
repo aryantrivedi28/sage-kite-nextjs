@@ -1,39 +1,18 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import {
-  applyLink,
-  clearFormatting,
-  convertLines,
-  lineRange,
-  linkAt,
-  linkProblem,
-  removeLinks,
-  toggleEmphasis,
-  type TextEditResult,
-} from '@/components/blog-studio/formatting';
-import { INLINE_PATTERN } from '@/components/blog-studio/postUtils';
+import { convertLines, linkProblem } from '@/components/blog-studio/formatting';
 import type { StudioBlock } from '@/components/blog-studio/types';
 
-// The editor's formatting bar (decision.md D047): Turn into, and the inline Bold / Italic / Link / Remove link /
-// Clear formatting helpers, as pure functions.
+// The block side of the formatting bar (decision.md D047, D049): Turn into, and the check a link passes before the
+// editor adds it. Bold, italic, code and links inside a box are the editor's own commands (tests/editor.test.mts).
 
 const text = (id: string, t: string): StudioBlock => ({ id, type: 'text', text: t });
 const list = (id: string, items: string, ordered = false): StudioBlock => ({ id, type: 'list', ordered, items });
 const quote = (id: string, t: string, cite = ''): StudioBlock => ({ id, type: 'quote', text: t, cite });
-const heading = (id: string, t: string, level: 2 | 3 = 2): StudioBlock => ({ id, type: 'heading', level, text: t });
+const heading = (id: string, t: string, level: 2 | 3 | 4 = 2): StudioBlock => ({ id, type: 'heading', level, text: t });
 /** Blocks without the ids of new blocks: an original id is shown, a new one as "new". */
 const view = (blocks: StudioBlock[], originals: string[]) =>
   blocks.map((b) => ({ ...b, id: originals.includes(b.id) ? b.id : 'new' }));
-
-/* ── lineRange ───────────────────────────────────────────────────────── */
-
-test('lineRange: no selection is the whole box; a selection covers the lines it touches, not the line after a trailing break', () => {
-  const v = 'one\ntwo\nthree';
-  assert.deepEqual(lineRange(v, 5, 5), [0, 2]);
-  assert.deepEqual(lineRange(v, 5, 6), [1, 1]);
-  assert.deepEqual(lineRange(v, 2, 9), [0, 2]);
-  assert.deepEqual(lineRange(v, 4, 8), [1, 1], 'ends right after the line break');
-});
 
 /* ── convertLines ────────────────────────────────────────────────────── */
 
@@ -104,81 +83,33 @@ test('image, table, video, FAQ and divider blocks are never touched; an unknown 
   assert.equal(convertLines(blocks, 'p', 1, 1, 'h2').blocks, blocks, 'a blank line');
 });
 
-/* ── inline helpers ──────────────────────────────────────────────────── */
 
-const edit = (r: TextEditResult) => {
-  assert.ok(!('error' in r), JSON.stringify(r));
-  return r as Exclude<TextEditResult, { error: string }>;
-};
-/** No marker the page would show as text: everything outside matched parts is free of `*` and `[..](`. */
-const clean = (v: string) => assert.equal(v.split(INLINE_PATTERN).filter((_, i) => i % 2 === 0).join('').match(/\*|\]\(/), null, v);
+/* ── H4 and list levels (D049) ───────────────────────────────────────── */
 
-test('Bold toggles on and off: selection, the selection inside the markers, the cursor inside, the markers selected', () => {
-  const v = 'make this bold';
-  const on = edit(toggleEmphasis(v, 5, 9, 'bold'));
-  assert.equal(on.value, 'make **this** bold');
-  assert.equal(on.value.slice(on.start, on.end), 'this');
-  assert.equal(edit(toggleEmphasis(on.value, on.start, on.end, 'bold')).value, v);
-  assert.equal(edit(toggleEmphasis(on.value, 9, 9, 'bold')).value, v, 'cursor inside');
-  assert.equal(edit(toggleEmphasis(on.value, 5, 13, 'bold')).value, v, 'markers selected');
+test('Turn into Heading 4: a paragraph line, and a heading changing level, keeping its id', () => {
+  const r = convertLines([text('a', 'one\n**two**\nthree')], 'a', 1, 1, 'h4');
+  assert.deepEqual(view(r.blocks, ['a']), [text('a', 'one'), heading('new', 'two', 4), text('new', 'three')]);
+  assert.deepEqual(convertLines([heading('h', 'T', 2)], 'h', 0, 0, 'h4').blocks, [heading('h', 'T', 4)]);
+  assert.deepEqual(convertLines([heading('h', 'T', 4)], 'h', 0, 0, 'h3').blocks, [heading('h', 'T', 3)]);
 });
 
-test('Italic toggles; bold wins: bold replaces italic, italic on bold text is refused', () => {
-  const on = edit(toggleEmphasis('a word here', 2, 6, 'italic'));
-  assert.equal(on.value, 'a *word* here');
-  assert.equal(edit(toggleEmphasis(on.value, 4, 4, 'italic')).value, 'a word here');
-  assert.equal(edit(toggleEmphasis(on.value, 4, 4, 'bold')).value, 'a **word** here');
-  assert.ok('error' in toggleEmphasis('a **word** here', 5, 5, 'italic'));
+test('Turn into on a nested list: the parts before and after keep their levels; converted lines lose theirs', () => {
+  const r = convertLines([list('l', 'a\n\tb\n\t\tc\nd')], 'l', 1, 2, 'paragraph');
+  assert.deepEqual(view(r.blocks, ['l']), [list('l', 'a'), text('new', 'b\nc'), list('new', 'd')]);
+  const flip = convertLines([list('l', 'a\n\tb')], 'l', 0, 1, 'numbered');
+  assert.deepEqual(flip.blocks, [list('l', 'a\n\tb', true)], 'bulleted to numbered flips the sub-levels too');
 });
 
-test('Bold over links, several lines, spaces and existing markers never nests markers', () => {
-  const v = 'see [docs](/x) now\nand *this* line ';
-  const r = edit(toggleEmphasis(v, 0, v.length, 'bold'));
-  assert.equal(r.value, '**see** [docs](/x) **now**\n**and this line** ');
-  for (const line of r.value.split('\n')) clean(line);
-  assert.equal(edit(toggleEmphasis('ab **cd** ef', 1, 6, 'bold')).value, 'a**b cd** ef', 'a selection cutting a bold span widens to it');
+test('Sources blocks are never touched by Turn into', () => {
+  const blocks: StudioBlock[] = [{ id: 's', type: 'sources', heading: 'Sources and reading', items: [] }];
+  assert.equal(convertLines(blocks, 's', 0, 0, 'paragraph').blocks, blocks);
 });
 
-test('Bold with no selection inserts selected placeholder text', () => {
-  const r = edit(toggleEmphasis('x ', 2, 2, 'bold'));
-  assert.equal(r.value, 'x **bold text**');
-  assert.equal(r.value.slice(r.start, r.end), 'bold text');
-});
+/* ── Links ───────────────────────────────────────────────────────────── */
 
-test('Clear formatting removes bold and italic in the selection and leaves links', () => {
-  const v = '**a** *b* [c](/c) **d**';
-  assert.equal(edit(clearFormatting(v, 0, 17)).value, 'a b [c](/c) **d**');
-  assert.equal(edit(clearFormatting(v, 2, 2)).value, 'a *b* [c](/c) **d**', 'cursor inside');
-  assert.ok('error' in clearFormatting('plain', 2, 2));
-});
-
-test('Remove link: the link under the cursor, or every link the selection touches', () => {
-  assert.equal(edit(removeLinks('go [here](/a) now', 6, 6)).value, 'go here now');
-  const two = edit(removeLinks('[one](/1) and [two](https://x.example) end', 3, 18));
-  assert.equal(two.value, 'one and two end');
-  assert.equal(two.value.slice(two.start, two.end), 'one and two');
-  assert.ok('error' in removeLinks('no links', 1, 3));
-});
-
-test('Link: prefill and edit the URL of the link the cursor is in; make a new link; split bold around it', () => {
-  assert.deepEqual(linkAt('go [here](/a) now', 5, 5), { start: 3, end: 13, label: 'here', url: '/a' });
-  assert.equal(linkAt('plain', 1, 1), null);
-  assert.equal(edit(applyLink('go [here](/a) now', 5, 5, 'https://www.sagekite.com/book')).value, 'go [here](https://www.sagekite.com/book) now');
-  assert.equal(edit(applyLink('read the guide', 5, 14, '/blog/x')).value, 'read [the guide](/blog/x)');
-  const inBold = edit(applyLink('**see the guide now**', 6, 15, '/g'));
-  assert.equal(inBold.value, '**see** [the guide](/g) **now**');
-  clean(inBold.value);
-  const empty = edit(applyLink('x ', 2, 2, '/a'));
-  assert.equal(empty.value, 'x [link text](/a)');
-  assert.equal(empty.value.slice(empty.start, empty.end), 'link text');
-});
-
-test('Link refuses what the page would not render, with a reason', () => {
+test('linkProblem refuses what the page would not render, with a reason', () => {
   for (const url of ['', 'javascript:alert(1)', '//evil.com', '/\\evil.com', 'www.example.com', 'https://a b', 'ftp://x']) {
-    const r = applyLink('text', 0, 4, url);
-    assert.ok('error' in r, url);
-    assert.equal(r.error, linkProblem(url));
+    assert.ok(linkProblem(url), url);
   }
   for (const url of ['/blog/x', '#faq', 'https://x.example/a_(b)', 'mailto:hi@sagekite.com']) assert.equal(linkProblem(url), null, url);
-  assert.ok('error' in applyLink('one\ntwo', 0, 7, '/a'), 'one line only');
 });

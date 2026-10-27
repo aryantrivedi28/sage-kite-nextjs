@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFileSync } from 'node:fs';
 import { APPLE_PASTE_NOTE, MAX_PASTE_BLOCKS, articleFromClipboard, articleText, describeBlocks, looksLikeArticle } from '@/components/blog-studio/articlePaste';
-import { INLINE_PATTERN, MAX_TABLE_ROWS } from '@/components/blog-studio/postUtils';
+import { inlinePlainText, parseInline } from '@/components/blog-studio/inline';
+import { MAX_TABLE_ROWS } from '@/components/blog-studio/postUtils';
 import type { StudioBlock } from '@/components/blog-studio/types';
 
 // Pasting a whole article (decision.md D047). The HTML below is generated in the shape each program puts on the
@@ -13,8 +14,8 @@ import type { StudioBlock } from '@/components/blog-studio/types';
 /** Blocks without their random ids, for comparison. */
 const shape = (blocks: StudioBlock[]) => blocks.map(({ id: _id, ...rest }) => rest);
 
-/** Text the page would show with a stray marker: anything outside a matched **bold**, *italic* or [link](url) part. */
-const strayMarkers = (text: string) => text.split(INLINE_PATTERN).filter((_, i) => i % 2 === 0).join('').match(/\*|\[[^\]]*\]\(/g);
+/** Markers the page would show as text: a `*` or `[..](` left in the text a reader sees. */
+const strayMarkers = (text: string) => inlinePlainText(parseInline(text)).match(/\*|\[[^\]]*\]\(/g);
 
 /* ── Google Docs ─────────────────────────────────────────────────────── */
 
@@ -29,7 +30,7 @@ test('Google Docs: title, headings, styled spans, link, line break, nested list,
       text: 'Most small teams pick a CRM by **price**, then regret it. Read [our Dubsado guide](https://www.sagekite.com/blog/what-is-dubsado) first.\n*Second paragraph* with a line\nbreak & an entity.',
     },
     { type: 'heading', level: 2, text: 'What to compare' },
-    { type: 'list', ordered: false, items: 'Pipelines\nStages per pipeline\n**Automations**' },
+    { type: 'list', ordered: false, items: 'Pipelines\n\tStages per pipeline\n**Automations**' },
     { type: 'heading', level: 3, text: 'Steps' },
     { type: 'list', ordered: true, items: 'List your stages\nMap them' },
     { type: 'table', rows: '| **Tool** | **Price** |\n| Dubsado | $20 |' },
@@ -43,11 +44,11 @@ test('Google Docs: title, headings, styled spans, link, line break, nested list,
   assert.ok(looksLikeArticle(r));
 });
 
-test('Google Docs: bold and italic on one span keeps only bold; font-weight 400 inside headings is not kept', () => {
+test('Google Docs: bold and italic on one span keep both (D049); font-weight 400 inside headings is not kept', () => {
   const html = '<b style="font-weight:normal;" id="docs-internal-guid-1"><h2><span style="font-weight:700;">Bold heading</span></h2><p><span style="font-weight:700;font-style:italic;">both</span><span style="font-weight:400;"> plain</span></p></b>';
   assert.deepEqual(shape(articleFromClipboard(html, '').blocks), [
     { type: 'heading', level: 2, text: 'Bold heading' },
-    { type: 'text', text: '**both** plain' },
+    { type: 'text', text: '***both*** plain' },
   ]);
 });
 
@@ -74,7 +75,7 @@ test('Word desktop: H1 title, mso-bidi bold and italic, MsoListParagraph bullets
   assert.deepEqual(shape(r.blocks), [
     { type: 'text', text: 'Good onboarding starts **before** the first call, and *keeps going* after it.' },
     { type: 'heading', level: 2, text: 'The checklist' },
-    { type: 'list', ordered: false, items: 'Send the welcome email\nBook the **kickoff**\nShare the portal' },
+    { type: 'list', ordered: false, items: 'Send the welcome email\nBook the **kickoff**\n\tShare the portal' },
     { type: 'text', text: 'Then, in order:' },
     { type: 'list', ordered: true, items: 'Collect the contract\nTake the deposit' },
     { type: 'quote', text: 'Clients remember how the first week felt.', cite: '' },
@@ -104,7 +105,7 @@ test('Word for the web: role="heading" aria-level, TextRun spans, one-item lists
   assert.deepEqual(shape(r.blocks), [
     { type: 'heading', level: 2, text: 'Why it matters' },
     { type: 'text', text: 'Plain text with **bold** and *italic*' },
-    { type: 'list', ordered: false, items: 'First\nSecond' },
+    { type: 'list', ordered: false, items: 'First\n\tSecond' },
     { type: 'list', ordered: true, items: 'One' },
   ]);
 });
@@ -193,9 +194,9 @@ test('scripts, event attributes and unsafe links are reduced to text; nothing bu
   assert.equal((plain.blocks[0] as { text: string }).text, 'x and y and [z](https://ok.example)');
 });
 
-test('a link inside bold text stays outside the markers, so the page shows both', () => {
+test('a link inside bold or italic text keeps both (D049)', () => {
   const r = articleFromClipboard('<p><b>Read <a href="/blog/x">the guide</a> today</b></p><p><i><a href="/a">Only a link</a></i></p>', '');
-  assert.equal((r.blocks[0] as { text: string }).text, '**Read** [the guide](/blog/x) **today**\n[Only a link](/a)');
+  assert.equal((r.blocks[0] as { text: string }).text, '**Read [the guide](/blog/x) today**\n*[Only a link](/a)*');
   assert.equal(strayMarkers((r.blocks[0] as { text: string }).text), null);
 });
 
@@ -204,7 +205,7 @@ test('a link inside bold text stays outside the markers, so the page shows both'
 test('title rule: one leading H1 is the title; several H1s, or an H1 after text, are H2 sections', () => {
   const one = articleFromClipboard('<h1>Title</h1><h2>Part</h2><h3>Sub</h3><h4>Deeper</h4><p>x</p>', '');
   assert.equal(one.title, 'Title');
-  assert.deepEqual(shape(one.blocks).map((b) => ('level' in b ? b.level : b.type)), [2, 3, 3, 'text']);
+  assert.deepEqual(shape(one.blocks).map((b) => ('level' in b ? b.level : b.type)), [2, 3, 4, 'text'], 'h4 to h6 are H4 (D049)');
 
   const several = articleFromClipboard('<h1>A</h1><p>x</p><h1>B</h1><h2>C</h2>', '');
   assert.equal(several.title, undefined);
@@ -295,7 +296,7 @@ test('Pages: no DOCTYPE text, flagged as Apple with the note; lists, numbered li
 
   const lists = r.blocks.filter((b) => b.type === 'list') as Extract<StudioBlock, { type: 'list' }>[];
   assert.deepEqual(lists.map((l) => [l.ordered, l.items.split('\n').length]), [[false, 4], [true, 4]]);
-  assert.ok(lists[0].items.includes('A sub-point that should be flattened into the list above'), 'sub-point flattened into the list');
+  assert.ok(lists[0].items.includes('\tA sub-point that should be flattened into the list above'), 'the sub-point keeps its level (D049)');
   assert.ok(lists[1].items.includes('Add the stages to the CRM and **assign an owner** to each deal.'), 'bold run in the numbered list');
 
   const table = r.blocks.find((b) => b.type === 'table') as Extract<StudioBlock, { type: 'table' }>;
@@ -339,4 +340,48 @@ test('Google Docs: an image between paragraphs becomes an empty Image block in t
     { type: 'text', text: 'After.' },
   ]);
   assert.ok(!JSON.stringify(r).includes('googleusercontent'));
+});
+
+/* ── Code, levels, H4, dropped styling (decision.md D049) ────────────── */
+
+test('<code>, <kbd> and monospace fonts (Google Docs, Word) become inline code; bold and italic together are kept', () => {
+  const html = '<p>Run <code>npm test</code>, press <kbd>Ctrl</kbd>, set <span style="font-family:\'Courier New\',monospace;font-weight:400">MAX_ROWS</span> and <span style="font-family:&quot;Roboto Mono&quot;">x</span>.</p>'
+    + '<p><b><i>both</i></b> and <span style="font-weight:700;font-style:italic">both again</span></p>';
+  assert.deepEqual(shape(articleFromClipboard(html, '').blocks), [
+    { type: 'text', text: 'Run `npm test`, press `Ctrl`, set `MAX_ROWS` and `x`.\n***both*** and ***both again***' },
+  ]);
+});
+
+test('Markdown text: indentation is the list level, sub-items join the list whatever their marker, and #### is H4', () => {
+  const md = '#### Small heading\n- top\n  - second\n    - third\n      - fourth is clamped\n  - back to second\n- top again\n1. numbered\n   - bullet under a number';
+  assert.deepEqual(shape(articleFromClipboard('', md).blocks), [
+    { type: 'heading', level: 4, text: 'Small heading' },
+    { type: 'list', ordered: false, items: 'top\n\tsecond\n\t\tthird\n\t\tfourth is clamped\n\tback to second\ntop again' },
+    { type: 'list', ordered: true, items: 'numbered\n\tbullet under a number' },
+  ]);
+});
+
+test('h4, h5 and h6 become H4; Word desktop level 3 lists keep their level', () => {
+  assert.deepEqual(shape(articleFromClipboard('<h2>A</h2><h4>B</h4><h5>C</h5><h6>D</h6>', '').blocks).map((b) => ('level' in b ? b.level : 0)), [2, 4, 4, 4]);
+  const item = (level: number, text: string) =>
+    `<p class=MsoListParagraph style='mso-list:l0 level${level} lfo1'><![if !supportLists]><span style='mso-list:Ignore'>·<span>&nbsp;</span></span><![endif]>${text}</p>`;
+  assert.deepEqual(shape(articleFromClipboard(item(1, 'one') + item(2, 'two') + item(3, 'three') + item(1, 'four'), '').blocks), [
+    { type: 'list', ordered: false, items: 'one\n\ttwo\n\t\tthree\nfour' },
+  ]);
+});
+
+test('underline, colours, fonts, sizes, highlights and strikethrough are dropped; the text stays', () => {
+  const html = '<p><u>underlined</u> <span style="text-decoration:underline;color:#ff0000;background-color:#ffff00;font-size:20pt;font-family:Georgia">styled</span> <s>struck</s> <del>deleted</del> <font color="red" face="Comic Sans MS">old font</font> <mark>marked</mark></p>';
+  const r = articleFromClipboard(html, '');
+  assert.deepEqual(shape(r.blocks), [{ type: 'text', text: 'underlined styled struck deleted old font marked' }]);
+  // A link keeps its address but not its colour or underline.
+  assert.deepEqual(shape(articleFromClipboard('<p><a href="/x"><span style="color:#1155cc;text-decoration:underline">link</span></a></p>', '').blocks), [
+    { type: 'text', text: '[link](/x)' },
+  ]);
+});
+
+test('text that looks like markers in a document is kept as characters (escaped), not read as formatting', () => {
+  const r = articleFromClipboard('<p>5*3 = 15 and [draft] and `tick` and back\\slash</p>', '');
+  assert.equal((r.blocks[0] as { text: string }).text, '5\\*3 = 15 and \\[draft\\] and \\`tick\\` and back\\\\slash');
+  assert.equal(inlinePlainText(parseInline((r.blocks[0] as { text: string }).text)), '5*3 = 15 and [draft] and `tick` and back\\slash');
 });

@@ -1,6 +1,7 @@
+import { inlineRuns, parseInline, serializeRuns, withoutEmphasis } from './inline';
 import {
   ACCEPTED_IMAGE_TYPES,
-  LINK_ANYWHERE,
+  MAX_LIST_LEVEL,
   MAX_TABLE_COLUMNS,
   MAX_TABLE_ROWS,
   cleanCell,
@@ -12,8 +13,6 @@ import {
   htmlTokenizer,
   inlineCollector,
   newId,
-  safeHref,
-  stripEmphasis,
   stripInline,
   tableFromClipboard,
   tableRows,
@@ -67,7 +66,8 @@ export function isAppleHtml(html: string): boolean {
 type Piece =
   | { kind: 'heading'; level: number; text: string }
   | { kind: 'text' | 'quote'; text: string }
-  | { kind: 'item'; ordered: boolean; text: string }
+  /** `level`: 0 for a top-level item, 1 and 2 for sub-levels (deeper levels are clamped later). */
+  | { kind: 'item'; ordered: boolean; level: number; text: string }
   | { kind: 'table'; rows: string }
   | { kind: 'image'; alt: string }
   | { kind: 'divider' };
@@ -92,7 +92,8 @@ function frameFor(tag: string, attrs: string): Frame {
   const heading = tag.match(/^h([1-6])$/);
   if (heading) return { tag, role: 'heading', level: Number(heading[1]) };
   if (tag === 'ul' || tag === 'ol') return { tag, role: 'list', ordered: tag === 'ol' };
-  if (tag === 'li') return { tag, role: 'item' };
+  // Google Docs and Word for the web give each item its level (1 = top), even when every item is in its own list.
+  if (tag === 'li') return { tag, role: 'item', level: Number(htmlAttr(attrs, 'aria-level') ?? htmlAttr(attrs, 'data-aria-level')) || undefined };
   if (tag === 'blockquote') return { tag, role: 'quote' };
   if (tag !== 'p' && tag !== 'div') return { tag };
   // Word for the web marks headings with a role; Word desktop uses class names.
@@ -103,7 +104,10 @@ function frameFor(tag: string, attrs: string): Frame {
   if (msoHeading) return { tag, role: 'heading', level: Number(msoHeading[1]) };
   if (/\bMso(Intense)?Quote\b/i.test(className)) return { tag, role: 'quote' };
   const style = (htmlAttr(attrs, 'style') ?? '').toLowerCase();
-  if (/\bMsoListParagraph/i.test(className) || /(^|;|\s)mso-list\s*:\s*l\d/.test(style)) return { tag, role: 'word-item' };
+  if (/\bMsoListParagraph/i.test(className) || /(^|;|\s)mso-list\s*:\s*l\d/.test(style)) {
+    // Word desktop: `mso-list:l0 level2 lfo1` is the second level.
+    return { tag, role: 'word-item', level: Number(style.match(/mso-list\s*:\s*l\d+\s+level(\d)/)?.[1]) || 1 };
+  }
   return { tag };
 }
 
@@ -136,9 +140,16 @@ function piecesFromHtml(html: string, notes: string[]): { pieces: Piece[]; image
     if (!text) return;
     const heading = innermost('heading');
     const list = frames.find((f) => f.role === 'list');
+    const item = innermost('item');
+    const wordItem = innermost('word-item');
     if (heading) pieces.push({ kind: 'heading', level: heading.level ?? 2, text });
-    else if (list && innermost('item')) pieces.push({ kind: 'item', ordered: !!list.ordered, text });
-    else if (innermost('word-item') || wordMarker) pieces.push({ kind: 'item', ordered: ORDERED_MARKER.test(wordMarker), text });
+    else if (list && item) {
+      // Nested <ul>/<ol> (Google Docs) or an item's aria-level (Word for the web): whichever is deeper.
+      const depth = frames.filter((f) => f.role === 'list').length - 1;
+      pieces.push({ kind: 'item', ordered: !!list.ordered, level: Math.max(depth, (item.level ?? 1) - 1), text });
+    } else if (wordItem || wordMarker) {
+      pieces.push({ kind: 'item', ordered: ORDERED_MARKER.test(wordMarker), level: (wordItem?.level ?? 1) - 1, text });
+    }
     else if (innermost('quote')) pieces.push({ kind: 'quote', text });
     else pieces.push({ kind: 'text', text });
   };
@@ -233,21 +244,33 @@ function tablePieces(grid: Grid | null, notes: string[]): Piece[] {
     .map((text) => ({ kind: 'text' as const, text }));
 }
 
-/** Markdown links whose URL the page would not render become their text; Markdown `__bold__` becomes `**bold**`. */
+/**
+ * Markdown text in the studio's written form (inline.ts): `__bold__` becomes `**bold**`, and links whose URL the page
+ * would not render become their text.
+ */
 function plainInline(text: string): string {
-  return cleanCell(
-    text
-      .replace(/__([^_\n]+)__/g, '**$1**')
-      .replace(LINK_ANYWHERE, (whole, label: string, url: string) => (safeHref(url) ? whole : label)),
-  );
+  return serializeRuns(inlineRuns(parseInline(cleanCell(text.replace(/__([^_\n]+)__/g, '**$1**')))));
 }
+
+/** Width of a line's indentation, a tab counting as four spaces. */
+const indentWidth = (line: string) => line.match(/^[ \t]*/)![0].replace(/\t/g, '    ').length;
 
 const TABLE_SEPARATOR = /^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?$/;
 
 /** The pieces of plain or Markdown text (ChatGPT, Notion, a text editor), in order. */
 function piecesFromPlain(plain: string, notes: string[]): Piece[] {
   const pieces: Piece[] = [];
-  const rows = plain.replace(/\r\n?/g, '\n').split('\n').map((l) => l.trim());
+  const raw = plain.replace(/\r\n?/g, '\n').split('\n');
+  const rows = raw.map((l) => l.trim());
+  // Indentation widths of the list being read: deeper indentation is a sub-level.
+  let indents: number[] = [];
+  const itemLevel = (i: number) => {
+    if (pieces[pieces.length - 1]?.kind !== 'item') indents = [];
+    const width = indentWidth(raw[i]);
+    while (indents.length && width < indents[indents.length - 1]) indents.pop();
+    if (!indents.length || width > indents[indents.length - 1]) indents.push(width);
+    return indents.length - 1;
+  };
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i];
     if (!row) continue;
@@ -266,8 +289,8 @@ function piecesFromPlain(plain: string, notes: string[]): Piece[] {
     let m: RegExpMatchArray | null;
     if ((m = row.match(/^(#{1,6})\s+(.*?)(\s+#+)?$/))) pieces.push({ kind: 'heading', level: m[1].length, text: plainInline(m[2]) });
     else if (/^(-{3,}|\*{3,}|_{3,})$/.test(row)) pieces.push({ kind: 'divider' });
-    else if ((m = row.match(/^[-*•]\s+(.*)$/))) pieces.push({ kind: 'item', ordered: false, text: plainInline(m[1]) });
-    else if ((m = row.match(/^\d+[.)]\s+(.*)$/))) pieces.push({ kind: 'item', ordered: true, text: plainInline(m[1]) });
+    else if ((m = row.match(/^[-*•+]\s+(.*)$/))) pieces.push({ kind: 'item', ordered: false, level: itemLevel(i), text: plainInline(m[1]) });
+    else if ((m = row.match(/^\d+[.)]\s+(.*)$/))) pieces.push({ kind: 'item', ordered: true, level: itemLevel(i), text: plainInline(m[1]) });
     else if ((m = row.match(/^>\s?(.*)$/))) pieces.push({ kind: 'quote', text: plainInline(m[1]) });
     else pieces.push({ kind: 'text', text: plainInline(row) });
   }
@@ -281,9 +304,10 @@ function blocksFromPieces(pieces: Piece[]): StudioBlock[] {
     const last = blocks[blocks.length - 1];
     switch (p.kind) {
       case 'heading': {
-        // Formatting inside a heading comes from the source's heading style (Google Docs wraps headings in font-weight spans).
-        const text = cleanCell(stripEmphasis(p.text));
-        if (text) blocks.push({ id: newId(), type: 'heading', level: p.level >= 3 ? 3 : 2, text });
+        // Bold and italic inside a heading come from the source's heading style (Google Docs wraps headings in
+        // font-weight spans); code and links are kept. H1 and H2 → H2, H3 → H3, H4 to H6 → H4.
+        const text = cleanCell(withoutEmphasis(p.text));
+        if (text) blocks.push({ id: newId(), type: 'heading', level: p.level >= 4 ? 4 : p.level === 3 ? 3 : 2, text });
         break;
       }
       case 'text':
@@ -294,10 +318,15 @@ function blocksFromPieces(pieces: Piece[]): StudioBlock[] {
         if (last?.type === 'quote') last.text += `\n${p.text}`;
         else blocks.push({ id: newId(), type: 'quote', text: p.text, cite: '' });
         break;
-      case 'item':
-        if (last?.type === 'list' && last.ordered === p.ordered) last.items += `\n${p.text}`;
-        else blocks.push({ id: newId(), type: 'list', ordered: p.ordered, items: p.text });
+      case 'item': {
+        // A sub-level item belongs to the list before it, whatever its own type: sub-levels use the list's type.
+        if (last?.type === 'list' && (last.ordered === p.ordered || p.level > 0)) {
+          const previous = last.items.slice(last.items.lastIndexOf('\n') + 1).match(/^\t*/)![0].length;
+          const level = Math.min(p.level, previous + 1, MAX_LIST_LEVEL);
+          last.items += `\n${'\t'.repeat(level)}${p.text}`;
+        } else blocks.push({ id: newId(), type: 'list', ordered: p.ordered, items: p.text });
         break;
+      }
       case 'table':
         blocks.push({ id: newId(), type: 'table', rows: p.rows });
         break;

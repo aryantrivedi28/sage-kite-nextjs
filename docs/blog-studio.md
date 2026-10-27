@@ -93,9 +93,11 @@ lib/sanity/
                             apiVersion pinned to 2026-10-20) and isSanityWritable().
   blogPosts.ts              StudioPost <-> `blogPost` document mapping: published = `<id>`,
                             draft/scheduled = `drafts.<id>`; block `id` <-> `_key`.
+  inline.ts                 Pure. The inline grammar (D049): parseInline (tree), inlineRuns,
+                            serializeRuns (runs back to a string that reads back the same),
+                            escapeInline, safeHref, isExternalHref, LINK_PATTERN, URL_PART.
   postUtils.ts              Pure helpers, no React: slugify, ids, today(), emptyPost, newBlock,
-                            BLOCK_LABELS, inline-format regexes (INLINE_PATTERN, LINK_PATTERN,
-                            stripInline, safeHref, isExternalHref), list/table parsing, the
+                            BLOCK_LABELS, stripInline (from inline.ts), list (with levels) and table parsing, the
                             clipboard-HTML tokenizer and inline collector shared by the table and
                             article paste (tableFromClipboard, gridFromHtml, inlineCollector), youtubeId,
                             resolveBlocks (auto FAQ heading), headingAnchors, buildGuide,
@@ -105,15 +107,24 @@ lib/sanity/
                             Word desktop or web, Markdown / plain text) as blocks plus a detected
                             title; looksLikeArticle, describeBlocks, articleText (D047); isAppleHtml
                             and the Pages note; imageFromClipboard and the image-paste checks (D048).
-  formatting.ts             Pure. The formatting bar: convertLines ("Turn into"), lineRange, and the
-                            Bold / Italic / Link / Remove link / Clear formatting text edits (D047).
-  StudioArticle.tsx         Renders blocks as plain HTML elements (h2, h3, p, ul/ol, figure,
-                            blockquote, table, iframe, hr) that the existing .article-content
+  formatting.ts             Pure. convertLines ("Turn into", H4 and list levels) and linkProblem (D047, D049).
+  editorDoc.ts              Pure. Stored string ↔ the editor's ProseMirror JSON for each box kind
+                            (paragraphs, list, heading), and selectedLines for Turn into (D049).
+  editorSetup.ts            Tiptap set-up of the boxes: the schema per box kind, inline code, safe links,
+                            keys (Enter, Shift+Enter, Tab / Shift+Tab with canIndent / canOutdent; the
+                            list item, StudioListItem, has no Tab binding of its own). Studio only.
+  RichTextBox.tsx           'use client'. A text box that shows its formatting: the formatting bar, the link
+                            field, the paste rules, and a Tiptap editor mounted only while the box is edited.
+  clipboard.ts              Browser helpers for an image paste (clipboardFiles, imagePaste).
+  StudioArticle.tsx         Renders blocks as plain HTML elements (h2, h3, h4, p, nested ul/ol, figure,
+                            blockquote, table, iframe, hr, the Sources ol) that the existing .article-content
                             styles format. No hooks and no 'use client', so a future server
                             route can reuse it to render studio posts on the live site.
   BlogStudio.tsx            'use client'. The whole UI: BlogStudio (state, save/publish logic),
-                            PostList, Editor, BlockCard, AddBlockMenu, PasteArea, FormatTextarea,
+                            PostList, Editor, BlockCard (memoised), AddBlockMenu, PasteArea, SourcesEditor,
                             ImageField, Field, Checklist, CreateModal, ConfirmModal, Preview.
+                            Tiptap is imported only by RichTextBox.tsx and editorSetup.ts, so it loads on the
+                            studio page only; StudioArticle (public /blog pages) never imports it (D049).
   BlogStudio.module.css     Studio styles. Brand tokens only (var(--…)); tints are made with
                             color-mix from tokens; font is var(--sans). The preview uses the
                             live site's global .article-* classes from app/globals.css.
@@ -173,14 +184,15 @@ blocks (JSON) instead of a JSX function, so any backend can store it.
 
 | `type` | Fields | Renders as |
 |---|---|---|
-| `heading` | `level: 2 \| 3`, `text` | `<h2 id>` / `<h3 id>`; ids from `headingAnchors()` (slugified text, `-2`, `-3` for duplicates) |
+| `heading` | `level: 2 \| 3 \| 4`, `text` | `<h2 id>` / `<h3 id>` / `<h4 id>`; ids from `headingAnchors()` (slugified text, `-2`, `-3` for duplicates). Only H2s are in the guide |
 | `text` | `text` | One `<p>` per non-empty line |
-| `list` | `ordered`, `items` | `<ul>`/`<ol>`, one `<li>` per line; pasted `-`, `*`, `•`, `1.` markers are removed |
+| `list` | `ordered`, `items` | `<ul>`/`<ol>`, one `<li>` per line; pasted `-`, `*`, `•`, `1.` markers are removed. Each leading tab is one level deeper (at most 3 levels; a level is at most one deeper than the item before), rendered as a real sub-list (`<li>text<ul>…</ul></li>`) of the list's own type (D049) |
 | `image` | `src`, `alt`, `caption` | `<figure><img alt title></figure>` + optional `<figcaption>` |
 | `quote` | `text`, `cite` | `<blockquote>`; cite rendered as `— name` |
 | `table` | `rows` | One row per line, cells split on `\|` (a literal pipe in a cell is written `\\|`, a backslash then a pipe), first row is `<thead>`. Tables pasted from Word, Google Docs or Excel are converted to this format (see below) |
 | `video` | `url`, `title` | `<iframe>` to `youtube-nocookie.com/embed/<id>`; accepts watch, youtu.be, embed, shorts, live links. `referrerPolicy="strict-origin-when-cross-origin"`: YouTube needs the embedding origin (Error 153 without it) and the studio page is `no-referrer`; sends the origin only, never the path (D025) |
 | `faq` | `question`, `answer` | `<h3>` + `<p>` per line; also feeds `buildFaqs()` |
+| `sources` | `heading`, `items: { id, publisher, title, url, date }[]` | `<h2 id>` (default "Sources and reading"; in the guide) and `<ol class="article-sources">`, one entry per item: "Publisher: Title, date" with the title linked when the link passes `safeHref`; empty parts left out; entries with no title, publisher or link are skipped, and with none left the block renders nothing (and is not in the guide). Not counted in word count or keyword checks. Never created by paste (D049) |
 | `divider` | — | `<hr>` |
 
 **Pasting a table (D044).** Word, Google Docs and Excel put a table on the clipboard as HTML and as tab-separated
@@ -207,11 +219,16 @@ blocks. It is a tokenizer like the table paste (no DOMParser), shares its inline
   Word for the web's `<p role="heading" aria-level="N">`, Word desktop's `MsoTitle` and `MsoHeadingN`. Paragraphs:
   `p`/`div` with text; `<br>` starts a new line. Lists: `ul`/`ol`/`li`, and Word desktop's list paragraphs
   (`MsoListParagraph…` or an `mso-list:` style), whose bullet or number (between the `supportLists` conditionals) is
-  dropped: ordered when it is a number, letter or roman numeral followed by `.` or `)`. Nested lists are flattened
-  into one list of the outermost kind. Quotes: `blockquote`, `MsoQuote`, `MsoIntenseQuote`. `hr` is a Divider.
+  dropped: ordered when it is a number, letter or roman numeral followed by `.` or `)`. Nested lists keep their level,
+  up to 3 (D049): nested `ul`/`ol` and `aria-level` (Google Docs), `aria-level` / `data-aria-level` (Word for the web,
+  where every item is its own list), `mso-list:… levelN` (Word desktop), indentation (Markdown); a sub-level item joins
+  the list above it whatever its own type. Quotes: `blockquote`, `MsoQuote`, `MsoIntenseQuote`. `hr` is a Divider.
 - Title rule: if the paste starts with exactly one top-level heading (H1 or Word's Title, at most 140 characters) it
-  is the post title, not a block; otherwise H1 and H2 become H2 and H3–H6 become H3. Bold and italic inside headings
-  are dropped (Google Docs styles headings with font-weight spans).
+  is the post title, not a block; otherwise H1 and H2 become H2, H3 becomes H3, and H4–H6 become H4 (D049). Bold and
+  italic inside headings are dropped (Google Docs styles headings with font-weight spans); code and links are kept.
+- Inline (D049): bold, italic, both together (`***`), `<code>` / `<kbd>` / `<samp>` / `<tt>` and monospace fonts
+  (inline code), and safe links, also inside bold. Characters that would read as markers (`*`, `` ` ``, `[`, `]`, `\`)
+  are escaped. Underline, colours, fonts, sizes, highlights and strikethrough are dropped, as before.
 - Consecutive paragraphs merge into one Paragraphs block (one line each); consecutive lists of the same kind merge;
   consecutive quote lines merge. A heading, list, table, quote, image or divider starts a new block. FAQ blocks are
   never created. Empty lines and blocks are dropped.
@@ -273,8 +290,16 @@ pasting it uploads it.
   uploaded and the message says: "This image was copied as a web address, not as a file, so it cannot be uploaded
   from here. Download the image, then paste it or use Upload."
 
-**Inline formatting** in paragraphs, list items, quotes, captions, table cells
-and FAQ answers: `**bold**`, `*italic*`, `[text](url)`. Link URLs may contain one
+**Inline formatting** in paragraphs, list items, quotes, headings, captions, table cells and FAQ answers (the grammar
+in `inline.ts`, D049): `**bold**`, `*italic*`, `***bold italic***` (bold and italic may nest, `**a *b* c**`),
+`` `code` `` (literal inside, one line), `[text](url)` (the label may hold bold, italic and code; a link may sit inside
+bold). Escapes `\*`, `` \` ``, `\[`, `\]`, `\(`, `\)`, `\\` are literal characters; the editor writes `\*`, `` \` ``,
+`\[`, `\]` and `\\` whenever they are typed as text, so `5*3` or `[draft]` shows exactly as typed. A `*` run opens only
+before a non-space and closes only after one (as in CommonMark, with its "rule of 3"), so `5 * 3` stays text. Anything
+that does not parse is literal text. Table cells keep `\|` (read by `tableRows` first). Every string written for the
+old grammar renders as before (tests/inline.test.mts), except: text in backticks, a backslash before one of those
+characters, `***x***`, formatting inside a link label, a link inside italic, and a marker next to a space (`** x **`,
+`*a *`). None of these occurs in the one published studio post (D049 compatibility check). Link URLs may contain one
 level of parentheses. Only `/path`, `#anchor`, `http(s)://` and `mailto:` links
 are rendered as links (`safeHref`); anything else, for example `javascript:`,
 `//host` or `/\host` (browsers read both as another site), renders as plain text. External
@@ -340,22 +365,43 @@ studio posts on the live site (section 10).
   paste from Pages shows the Pages note in the dialog (section 4.2).
 - **Pasting an image** (D048): a single image (no text) pasted into an Image block's source field, the paste area or
   any box with the formatting bar is uploaded; see "Pasting an image" in section 4.2.
-- **Formatting bar** on Paragraphs, List, Quote and FAQ-answer boxes and on headings: **Turn into** (Paragraph,
-  Heading 2, Heading 3, Bulleted list, Numbered list, Quote; not on FAQ answers), **Bold**, **Italic**, **Link**,
-  **Remove link**, **Clear formatting**. Shortcuts in a box: `Cmd/Ctrl + B`, `I`, `K` (`Cmd/Ctrl + S` still saves).
-  - Turn into acts on the selected lines (whole lines), or the whole block with no selection. The block is split into
-    lines before, the converted lines and lines after, each keeping its type; each line turned into a heading is its
-    own heading (bold or italic on it is removed); a heading turned into anything else is one line; list markers are
-    removed. Bulleted ↔ numbered flips the whole list. The result merges with a neighbouring block of the same kind
-    (paragraphs, same-kind lists, quotes without attribution). A quote's attribution stays with its last part, or
-    follows the text as a `— name` line. Image, Table, Video, FAQ question and Divider blocks are never changed.
-  - Bold and Italic toggle: inside existing markers they remove them; otherwise they wrap the selection line by line,
-    with links kept outside. Bold wins: Bold replaces italic, and bold text cannot be made italic.
+- **Visual editing (D049):** Paragraphs, List, Quote, FAQ-answer and Heading boxes show their formatting; there are no
+  visible markers. Each box is a Tiptap editor (`RichTextBox.tsx`), but only while it is being edited: the rest of the
+  time it shows the same text through the page's `Inline` renderer, and clicking it starts the editor with the cursor
+  where it was clicked (Tab focus puts it at the end). Leaving the box (focus elsewhere in the page) ends editing;
+  switching windows does not. The stored value is the same marker string as before (`editorDoc.ts` converts).
+  - Paragraphs, Quote, FAQ answer: one paragraph per line; Enter and Shift+Enter both start a new paragraph (the page
+    has no line breaks inside a paragraph). List: bullet or numbered with up to 3 levels; Tab and Shift+Tab indent and
+    outdent an item, and the Indent and Outdent buttons do the same; Tab moves focus on when an item cannot be indented
+    (the first item, or the third level) and Shift+Tab on a top-level item, so the keyboard is never trapped. The
+    Bullets / Numbered choice stays. Heading: one line (Enter does nothing); italic, code and links, no Bold button.
+  - Each box's schema holds only what it may store (bold, italic, inline code, links; lists in List boxes): underline,
+    strikethrough, colours, code blocks, quotes and rules cannot be typed or pasted in. Typed `*`, `**` and backticks
+    stay characters (no Markdown shortcuts); formatting comes from the bar and its shortcuts.
+- **Formatting bar:** **Turn into** (Paragraph, Heading 2, Heading 3, Heading 4, Bulleted list, Numbered list, Quote;
+  not on FAQ answers), **Bold**, **Italic**, **Inline code**, **Link**, **Remove link**, **Clear formatting** (bold,
+  italic and code; links stay), and **Indent** / **Outdent** in lists. Buttons show their state with `aria-pressed`.
+  Shortcuts: `Cmd/Ctrl + B`, `I`, `E` (code), `K` (link), `Z` / `Shift + Z` (undo, redo); `Cmd/Ctrl + S` still saves.
+  Bold and italic together, and a link inside bold, now work.
+  - Turn into acts on the selected paragraphs or list items, or the whole block with no selection. The block is split
+    into lines before, the converted lines and lines after, each keeping its type (a list keeps its levels there;
+    converted list lines lose theirs); each line turned into a heading is its own heading (bold or italic on it is
+    removed); a heading turned into anything else is one line; list markers are removed. Bulleted ↔ numbered flips the
+    whole list. The result merges with a neighbouring block of the same kind (paragraphs, same-kind lists, quotes
+    without attribution). A quote's attribution stays with its last part, or follows the text as a `— name` line.
+    Image, Table, Video, FAQ, Sources and Divider blocks are never changed.
   - Link opens a small address field under the bar (prefilled when the cursor is in a link, which it then updates).
-    Only what `safeHref` accepts is allowed; otherwise the reason is shown under the field. A link inside bold or
-    italic text splits it. Remove link replaces every link touching the selection (or the one under the cursor) with
-    its text. Clear formatting removes bold and italic markers in the selection and leaves links.
-  - The bar wraps on narrow screens and fits at 375 px; the markers stay visible in the boxes.
+    Only what `linkProblem` / `safeHref` accept is allowed; otherwise the reason is shown under the field. Remove link
+    removes the link under the cursor or in the selection.
+  - Pasting into a box keeps every D047 / D048 rule (table dialog, "Split into blocks?", image upload, the image-address
+    and GIF messages, the Pages note). Any other paste goes in through the paste parser (bold, italic, code and safe
+    links only), never the editor's own HTML import.
+  - The bar wraps on narrow screens and fits at 375 px.
+- **Sources block (D049):** a heading field (default "Sources and reading") and rows of Publisher, Title (required),
+  Link and Date (free text, e.g. "checked 27 October 2026"), with Add row, Remove and Move up / down; at most 40 rows.
+  A link the page would not render shows its reason under the field.
+- **Long posts:** a block only re-renders when it changes (`BlockCard` is memoised) and only the box being edited has an
+  editor; with 300 blocks, a keystroke takes a median 10.6 ms from key down to the next frame (D049).
 - **SEO tab:** SEO title with a count of the full Google title out of 60, meta
   description (the same `excerpt` value), **Tags** (shown on the post), then **SEO keywords**
   (not shown on the post): focus keyword and secondary keywords, read-only canonical URL,
@@ -363,8 +409,8 @@ studio posts on the live site (section 10).
 - **Settings tab:** status, "Publish on" date and time (scheduled only), published date,
   last updated (with a "Today" button), related platform, featured checkbox (the hint
   names the post currently featured in code).
-- **Sidebar:** the guide outline (H2s with their `#id`, H3s indented; click to jump to the
-  block), the checklist, Preview and Delete buttons.
+- **Sidebar:** the guide outline (H2s and the Sources heading with their `#id`, H3s indented, H4s indented further;
+  click to jump to the block), the checklist, Preview and Delete buttons.
 - Buttons by status: Draft → "Save draft" and "Publish"; Scheduled → "Save schedule";
   Published → "Save changes".
 - `Cmd/Ctrl + S` saves with the current status. Closing with unsaved changes asks to
@@ -393,7 +439,8 @@ has a source and alt text; every FAQ has a question and an answer; every video i
 YouTube link; if a focus keyword is set, it appears in the Google title, the meta
 description, a heading and the first line of the first paragraph block, and 2–5 secondary
 keywords are expected; each secondary keyword appears in the article text (checked when any are set); no HTML entities
-like `&amp;` in title, SEO title, excerpt, alt text or tags; no `glasspane.pages.dev` links.
+like `&amp;` in title, SEO title, excerpt, alt text or tags; no `glasspane.pages.dev` links. With a Sources block (D049):
+at most one Sources block; it is the last block of the article; every source has a title and a link.
 
 ### Preview
 - Full page (not a modal) so the real `BlogGuide` scrolling works. A sticky bar says
@@ -405,6 +452,8 @@ like `&amp;` in title, SEO title, excerpt, alt text or tags; no `glasspane.pages
 - An Image block without a source shows as a dashed 16:9 box, "Image to upload", with its alt text and caption if any
   (D048), so empty Image blocks left by a pasted article are visible. Only in the preview (`StudioArticle` with
   `preview`); a published page renders nothing for an image without a source, as before.
+- H4, nested lists and the Sources block use styles in `app/globals.css` approved by the user on 27 October 2026
+  (D049). Ask before changing them.
 
 ### Images (`sanityStudioStore.uploadImage`)
 - JPG, PNG or WebP, up to 8 MB. Resized in the browser to at most 1600px wide and
@@ -834,6 +883,19 @@ before the SEO team publishes; the Sanity env vars have not been added to Vercel
 - No autosave and no version history; edits are saved only with Save, Publish or `Cmd/Ctrl+S`.
 - Two people should not edit the same post at once: posts are shared through Sanity, but there is no conflict
   handling, so the last save wins.
+- Text formatting (D049): bold, italic, both, inline code and links only. No text colour and no underline, by the brand
+  rules (an underline looks like a link). No line breaks inside a paragraph, no code blocks, no nested quotes, lists
+  at most 3 levels deep, and every level of a list has the list's type.
+- Bold and italic that overlap without nesting (italic over "ab", bold over "bc"), or that change in the middle of a
+  word right next to another change, a code span or a link edge, cannot all be written with `*` markers: on save the
+  string keeps the text, code and links, and drops bold or italic from that stretch (never adds any). Formatting that
+  starts and ends at a space is always kept.
+- Undo history belongs to a box while it is being edited: it is lost when focus leaves the box. A paste or Turn into
+  can be undone with Undo paste or by hand, not with Cmd+Z after leaving the box.
+- Pasted images still have to be uploaded again (D048); a whole Pages document has no headings or images (D048).
+- FAQs are not created by paste; Sources are not created by paste.
+- Tested in Chrome only (headless, synthetic paste events); Safari, Firefox and a real Word desktop clipboard were not
+  tested with the visual editor.
 
 ## 11a. Open security findings (D036, proposed, not implemented)
 

@@ -284,7 +284,38 @@ textarea.input { resize: vertical; line-height: 1.55; }
 }
 .formatBar button { display: grid; place-items: center; width: 30px; height: 28px; border: 0; border-radius: 4px; background: none; color: var(--dark-sage); }
 .formatBar button:hover { background: var(--pale-sage); color: var(--ink); }
-.formatHint { margin-left: auto; font-size: 0.75rem; color: var(--sage); padding: 0 4px; }
+.formatBar button.formatOn { background: var(--pale-sage); color: var(--ink); box-shadow: inset 0 0 0 1px var(--light-sage); }
+.formatBar button:disabled { opacity: 0.4; cursor: default; background: none; }
+
+/* Text boxes (RichTextBox.tsx, D049): the editor and the read-only view look the same, close to the article styles. */
+.richText {
+  display: block; width: 100%; padding: 9px 12px; background: var(--warm-white); color: var(--ink);
+  line-height: 1.6; outline: none; cursor: text; overflow-wrap: anywhere; white-space: pre-wrap;
+}
+.richText p { margin: 0 0 6px; }
+.richText p:last-child { margin-bottom: 0; }
+.richText ul, .richText ol { margin: 0; padding-left: 1.5em; }
+.richText ul { list-style: disc; }
+.richText ol { list-style: decimal; }
+.richText ul ul { list-style: circle; }
+.richText li { margin: 2px 0; }
+.richText li::marker { color: var(--sage); }
+.richText li > p { margin: 0; }
+.richText strong { font-weight: 700; }
+.richText em { font-style: italic; }
+/* The same inline code style as .article-content code in app/globals.css. */
+.richText code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em;
+  background: var(--pale-sage); padding: 0.1em 0.35em; border-radius: 4px; color: var(--dark-sage);
+}
+.richText a { color: var(--sky); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.richHeading { font-weight: 700; font-size: 1.05rem; }
+.richPlaceholder { color: color-mix(in srgb, var(--sage) 75%, var(--warm-white)); white-space: pre-line; }
+.richText :global(.is-empty.is-editor-empty)::before,
+.richText :global(p.is-editor-empty:first-child)::before {
+  content: attr(data-placeholder); float: left; height: 0; pointer-events: none; white-space: pre-line;
+  color: color-mix(in srgb, var(--sage) 75%, var(--warm-white));
+}
 .turnInto {
   height: 28px; max-width: 100%; margin-right: 4px; padding: 0 6px; border: 1px solid var(--studio-line); border-radius: 4px;
   background: var(--warm-white); color: var(--ink); font-size: 0.8125rem; font-weight: 600;
@@ -313,6 +344,12 @@ textarea.input { resize: vertical; line-height: 1.55; }
 }
 .undoBar > span { flex: 1 1 240px; min-width: 0; }
 .undoActions { display: flex; gap: 6px; align-items: center; }
+
+.sourceRows { list-style: none; margin: 4px 0 12px; padding: 0; display: grid; gap: 12px; }
+.sourceRow { border: 1px solid var(--studio-line); border-radius: var(--r); padding: 12px; background: var(--warm-white); }
+.sourceRow .twoCol { margin-bottom: 0; }
+.sourceRow .field { margin-bottom: 0; }
+.sourceHead { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 0.8125rem; font-weight: 700; color: var(--ink); }
 
 .addMenu { border: 1px dashed var(--sage); border-radius: var(--r); padding: 12px; margin-bottom: 12px; background: color-mix(in srgb, var(--pale-sage) 25%, var(--warm-white)); }
 .addMenuHead { display: flex; justify-content: space-between; align-items: center; font-size: 0.8125rem; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
@@ -352,6 +389,7 @@ textarea.input { resize: vertical; line-height: 1.55; }
 .outline button:hover { background: var(--pale-sage); }
 .outline code { font-family: var(--sans); font-size: 0.75rem; color: var(--sage); padding: 0 8px; word-break: break-all; }
 .outline .outlineSub button { padding-left: 22px; font-weight: 500; color: var(--dark-sage); }
+.outline .outlineSubSub button { padding-left: 38px; font-weight: 500; font-size: 0.8125rem; color: var(--dark-sage); }
 
 .checkGroup + .checkGroup { margin-top: 16px; }
 .checkGroupTitle { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sage); margin-bottom: 8px; }
@@ -444,7 +482,6 @@ textarea.input { resize: vertical; line-height: 1.55; }
   .editorHead { flex-wrap: wrap; }
   .editorActions { width: 100%; justify-content: flex-end; }
   .card { padding: 16px; }
-  .formatHint { display: none; }
   .formatBar button { width: 28px; }
   .turnInto { max-width: 108px; margin-right: 2px; }
 }

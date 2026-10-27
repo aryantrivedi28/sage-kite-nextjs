@@ -1,17 +1,7 @@
 import React from 'react';
-import type { StudioBlock } from './types';
-import {
-  INLINE_PATTERN,
-  LINK_PATTERN,
-  headingAnchors,
-  isExternalHref,
-  lines,
-  listItems,
-  resolveBlocks,
-  safeHref,
-  tableRows,
-  youtubeId,
-} from './postUtils';
+import type { StudioBlock, StudioSource } from './types';
+import { isExternalHref, parseInline, safeHref, type InlineNode } from './inline';
+import { SOURCES_HEADING, headingAnchors, lines, listItems, resolveBlocks, sourceItems, tableRows, youtubeId } from './postUtils';
 import { imageSrcForRender, isSanityImage, sanityImageSize, sanityImageUrl } from '@/lib/sanity/image';
 
 /** Widths offered for article images (the article column is 720px wide). */
@@ -37,26 +27,88 @@ const IMAGE_PLACEHOLDER_STYLE: React.CSSProperties = {
  * format them. No hooks: usable from server components when posts go live.
  */
 
-/** Text with **bold**, *italic* and [text](url). Unsafe links render as text. */
-export function Inline({ text }: { text: string }) {
-  const parts = text.split(INLINE_PATTERN);
+/** A link: external ones open in a new tab with rel="noopener noreferrer". `href` has passed safeHref. */
+function Link({ href, children }: { href: string; children: React.ReactNode }) {
+  return isExternalHref(href) ? (
+    <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>
+  ) : (
+    <a href={href}>{children}</a>
+  );
+}
+
+function InlineNodes({ nodes }: { nodes: InlineNode[] }) {
   return (
     <>
-      {parts.map((part, i) => {
-        if (i % 2 === 0) return part;
-        if (part.startsWith('**')) return <strong key={i}>{part.slice(2, -2)}</strong>;
-        if (part.startsWith('[')) {
-          const m = part.match(LINK_PATTERN);
-          const href = m && safeHref(m[2]);
-          if (!m || !href) return m ? m[1] : part;
-          return isExternalHref(href) ? (
-            <a key={i} href={href} target="_blank" rel="noopener noreferrer">{m[1]}</a>
-          ) : (
-            <a key={i} href={href}>{m[1]}</a>
-          );
+      {nodes.map((n, i) => {
+        switch (n.type) {
+          case 'text': return <React.Fragment key={i}>{n.text}</React.Fragment>;
+          case 'code': return <code key={i}>{n.text}</code>;
+          case 'strong': return <strong key={i}><InlineNodes nodes={n.children} /></strong>;
+          case 'em': return <em key={i}><InlineNodes nodes={n.children} /></em>;
+          case 'link': return <Link key={i} href={n.href}><InlineNodes nodes={n.children} /></Link>;
         }
-        return <em key={i}>{part.slice(1, -1)}</em>;
       })}
+    </>
+  );
+}
+
+/**
+ * Text with **bold**, *italic*, ***both***, `code` and [text](url) (the grammar in inline.ts, D049). Unsafe links
+ * render as their text; anything that does not parse is literal text, never HTML.
+ */
+export function Inline({ text }: { text: string }) {
+  return <InlineNodes nodes={parseInline(text)} />;
+}
+
+type ListNode = { text: string; children: ListNode[] };
+
+/** List items with levels as a tree: each level is a list inside the item before it. */
+function listTree(items: { level: number; text: string }[]): ListNode[] {
+  const root: ListNode[] = [];
+  const path: ListNode[] = [];
+  for (const { level, text } of items) {
+    const node = { text, children: [] };
+    (level === 0 ? root : path[level - 1].children).push(node);
+    path[level] = node;
+    path.length = level + 1;
+  }
+  return root;
+}
+
+/** A list and its sub-lists, all of the list's own type. */
+function ListNodes({ nodes, ordered }: { nodes: ListNode[]; ordered: boolean }) {
+  const L = ordered ? 'ol' : 'ul';
+  return (
+    <L>
+      {nodes.map((n, i) => (
+        <li key={i}>
+          <Inline text={n.text} />
+          {n.children.length > 0 && <ListNodes nodes={n.children} ordered={ordered} />}
+        </li>
+      ))}
+    </L>
+  );
+}
+
+/** List items with levels as nested lists of one type (the studio's read-only boxes use it too). */
+export function NestedList({ items, ordered }: { items: { level: number; text: string }[]; ordered: boolean }) {
+  return <ListNodes nodes={listTree(items)} ordered={ordered} />;
+}
+
+/** One source: "Publisher: Title, date", with the title linked when the link is safe. Empty parts are left out. */
+function Source({ item }: { item: StudioSource }) {
+  const publisher = item.publisher.trim();
+  const url = item.url.trim();
+  const href = url ? safeHref(url) : null;
+  const title = item.title.trim() || (href ? url : '');
+  const date = item.date.trim();
+  return (
+    <>
+      {publisher && <span className="article-source-meta">{publisher}{title ? ':' : ''}</span>}
+      {publisher && title && ' '}
+      {title && (href ? <Link href={href}>{title}</Link> : title)}
+      {date && (publisher || title) && ', '}
+      {date && <span className="article-source-meta">{date}</span>}
     </>
   );
 }
@@ -65,7 +117,7 @@ function Block({ block, anchor, preview }: { block: StudioBlock; anchor?: string
   switch (block.type) {
     case 'heading': {
       if (!block.text.trim()) return null;
-      const H = block.level === 2 ? 'h2' : 'h3';
+      const H = block.level === 2 ? 'h2' : block.level === 3 ? 'h3' : 'h4';
       return <H id={anchor}><Inline text={block.text} /></H>;
     }
     case 'text':
@@ -79,8 +131,7 @@ function Block({ block, anchor, preview }: { block: StudioBlock; anchor?: string
     case 'list': {
       const items = listItems(block.items);
       if (!items.length) return null;
-      const L = block.ordered ? 'ol' : 'ul';
-      return <L>{items.map((t, i) => <li key={i}><Inline text={t} /></li>)}</L>;
+      return <NestedList items={items} ordered={block.ordered} />;
     }
     case 'image': {
       // Studio preview only: show where an image is still to be uploaded (a pasted article leaves empty Image
@@ -177,6 +228,18 @@ function Block({ block, anchor, preview }: { block: StudioBlock; anchor?: string
           {lines(block.answer).map((l, i) => <p key={i}><Inline text={l} /></p>)}
         </>
       );
+    case 'sources': {
+      const items = sourceItems(block);
+      if (!items.length) return null;
+      return (
+        <>
+          <h2 id={anchor}>{block.heading.trim() || SOURCES_HEADING}</h2>
+          <ol className="article-sources">
+            {items.map((item) => <li key={item.id}><Source item={item} /></li>)}
+          </ol>
+        </>
+      );
+    }
     case 'divider':
       return <hr />;
   }

@@ -1,7 +1,8 @@
 import type { BlogFaq, BlogGuideItem } from '@/content/blog/types';
 import { isUsableFeaturedImage } from '@/lib/sanity/image';
 import { UPLOAD_IMAGE_FORMATS } from '@/lib/sanity/imageUpload';
-import type { SitePostSummary, StudioBlock, StudioBlockType, StudioPost } from './types';
+import { escapeInline, inlinePlainText, parseInline, safeHref, serializeRuns, type Run } from './inline';
+import type { SitePostSummary, StudioBlock, StudioBlockType, StudioPost, StudioSource } from './types';
 
 export const SITE_URL = 'https://www.sagekite.com';
 export const TITLE_SUFFIX = ' | Sage Kite';
@@ -103,9 +104,17 @@ export function newBlock(type: StudioBlockType): StudioBlock {
     case 'table': return { id, type, rows: '' };
     case 'video': return { id, type, url: '', title: '' };
     case 'faq': return { id, type, question: '', answer: '' };
+    case 'sources': return { id, type, heading: SOURCES_HEADING, items: [newSource()] };
     case 'divider': return { id, type };
   }
 }
+
+/** The Sources block's default heading, as the code posts use. */
+export const SOURCES_HEADING = 'Sources and reading';
+/** Most entries one Sources block may hold (checked on save in lib/sanity/postValidation.ts). */
+export const MAX_SOURCES = 40;
+
+export const newSource = (): StudioSource => ({ id: newId(), publisher: '', title: '', url: '', date: '' });
 
 export const BLOCK_LABELS: Record<StudioBlockType, string> = {
   heading: 'Heading',
@@ -116,44 +125,17 @@ export const BLOCK_LABELS: Record<StudioBlockType, string> = {
   table: 'Table',
   video: 'YouTube video',
   faq: 'FAQ',
+  sources: 'Sources',
   divider: 'Divider',
 };
 
-/* ── Inline formatting: **bold**, *italic*, [text](url) ────────────────── */
+/* ── Inline formatting (the grammar is in inline.ts, decision.md D049) ── */
 
-// A link URL may contain one level of parentheses, e.g. Wikipedia's /wiki/CRM_(software).
-const URL_PART = String.raw`(?:[^()\s]|\([^()\s]*\))+`;
-export const INLINE_PATTERN = new RegExp(String.raw`(\*\*[^*\n]+\*\*|\*[^*\s][^*\n]*\*|\[[^\]\n]+\]\(${URL_PART}\))`, 'g');
-export const LINK_PATTERN = new RegExp(String.raw`^\[([^\]\n]+)\]\((${URL_PART})\)$`);
+export { LINK_PATTERN, URL_PART, isExternalHref, safeHref } from './inline';
 
-/** Every `[text](url)` in a string; group 1 is the text, group 2 the URL. */
-export const LINK_ANYWHERE = new RegExp(String.raw`\[([^\]\n]+)\]\((${URL_PART})\)`, 'g');
-
-/** Text with the bold and italic markers removed; links are kept. */
-export function stripEmphasis(s: string): string {
-  return s.replace(/\*\*([^*\n]+)\*\*/g, '$1').replace(/\*([^*\s][^*\n]*)\*/g, '$1');
-}
-
-/** Plain text with the inline markers removed, as used in FAQ schema. */
+/** Plain text with the inline markers removed, as used in FAQ schema, the guide and keyword checks. */
 export function stripInline(s: string): string {
-  return stripEmphasis(s.replace(LINK_ANYWHERE, '$1')).trim();
-}
-
-/**
- * Internal paths, anchors, http(s) and mailto only. Anything else is rendered as text.
- * A path may not start with `//` or `/\`: browsers read both as a link to another host.
- */
-export function safeHref(href: string): string | null {
-  return /^(\/(?![/\\])|#|https?:\/\/|mailto:)/i.test(href) ? href : null;
-}
-
-/**
- * An absolute http(s) link to another site (opened in a new tab with rel="noopener noreferrer").
- * The host must be exactly www.sagekite.com to count as internal, so `https://www.sagekite.com.evil.com`
- * and `https://www.sagekite.com@evil.com` are external.
- */
-export function isExternalHref(href: string): boolean {
-  return /^https?:\/\//i.test(href) && !/^https:\/\/www\.sagekite\.com(?:[/?#]|$)/i.test(href);
+  return inlinePlainText(parseInline(s)).trim();
 }
 
 export function lines(s: string): string[] {
@@ -163,9 +145,23 @@ export function lines(s: string): string[] {
 /** A list line without a typed or pasted bullet or number marker (`- `, `* `, `• `, `1. `, `1) `). */
 export const stripListMarker = (line: string) => line.replace(/^([-*•]|\d+[.)])\s+/, '');
 
-/** List lines with any pasted bullet or number marker removed. */
-export function listItems(s: string): string[] {
-  return lines(s).map(stripListMarker);
+/** Deepest list level: 0, 1 or 2 (three levels in all). */
+export const MAX_LIST_LEVEL = 2;
+
+/**
+ * The items of a list block: one per non-empty line, with any pasted bullet or number marker removed. Each leading
+ * tab is one level deeper (D049); a level is at most one deeper than the item before it and at most MAX_LIST_LEVEL.
+ */
+export function listItems(s: string): { level: number; text: string }[] {
+  const items: { level: number; text: string }[] = [];
+  for (const raw of s.split('\n')) {
+    const text = stripListMarker(raw.trim());
+    if (!text) continue;
+    const tabs = raw.match(/^\t*/)![0].length;
+    const level = Math.min(tabs, items.length ? items[items.length - 1].level + 1 : 0, MAX_LIST_LEVEL);
+    items.push({ level, text });
+  }
+  return items;
 }
 
 /**
@@ -211,15 +207,6 @@ export function decodeEntities(text: string): string {
 }
 
 export const cleanCell = (text: string) => text.replace(/\s+/g, ' ').trim();
-
-/** Bold and italic markers with spaces moved outside them and empty pairs removed, so they match INLINE_PATTERN. */
-function tidyMarkers(text: string): string {
-  return cleanCell(
-    text
-      .replace(/\*\*(\s*)([^*\n]*?)(\s*)\*\*/g, (_m, a: string, b: string, c: string) => (b ? `${a}**${b}**${c}` : `${a}${c}`))
-      .replace(/(?<!\*)\*(?!\*)(\s*)([^*\n]*?)(\s*)\*(?!\*)/g, (_m, a: string, b: string, c: string) => (b ? `${a}*${b}*${c}` : `${a}${c}`)),
-  );
-}
 
 export type Grid = string[][];
 
@@ -336,110 +323,107 @@ export function htmlAttr(attrs: string, name: string): string | undefined {
  * `mso-bidi-font-weight:normal` on ordinary bold text, and that is not `font-weight`.
  */
 export function cssValue(style: string, property: string): string | undefined {
+  return cssDeclaration(style, property)?.split(/\s+/)[0];
+}
+
+/** The whole value of one CSS property in a style attribute, lower case (e.g. `'courier new', monospace`). */
+export function cssDeclaration(style: string, property: string): string | undefined {
   for (const declaration of style.toLowerCase().split(';')) {
     const colon = declaration.indexOf(':');
-    if (colon > 0 && declaration.slice(0, colon).trim() === property) return declaration.slice(colon + 1).trim().split(/\s+/)[0];
+    if (colon > 0 && declaration.slice(0, colon).trim() === property) return declaration.slice(colon + 1).trim();
   }
   return undefined;
 }
 
 const isBoldWeight = (w: string | undefined) => w === 'bold' || w === 'bolder' || (!!w && /^\d+$/.test(w) && parseInt(w, 10) >= 600);
+/** Font families that mean code: Google Docs and Word mark code only by its font. */
+const MONOSPACE = /courier|consolas|monaco|menlo|monospace|\bmono\b|source code|lucida console|fira code/i;
 
-type InlineMark = 'b' | 'i' | 'link' | null;
-const INLINE_TAGS = new Set(['b', 'strong', 'i', 'em', 'span', 'a']);
+type InlineMarks = { bold?: boolean; italic?: boolean; code?: boolean; link?: boolean };
+const INLINE_TAGS = new Set(['b', 'strong', 'i', 'em', 'span', 'a', 'code', 'kbd', 'samp', 'tt', 'font']);
+const CODE_TAGS = new Set(['code', 'kbd', 'samp', 'tt']);
 
 /**
- * Collects the text of one table cell, paragraph, heading or list item from clipboard HTML. Bold, italic and safe
- * links become the studio's `**`, `*` and `[text](url)` markers; everything else is text. Bold wins over italic, and a
- * link is kept outside bold or italic (the page's inline pattern can match neither nesting).
+ * Collects the text of one table cell, paragraph, heading or list item from clipboard HTML as runs of text with marks:
+ * bold, italic, code (`<code>` or a monospace font) and safe links. `finish` writes them with the studio's markers
+ * (serializeRuns in inline.ts, D049), so bold and italic together, code, and links inside bold all survive.
+ * Underline, colours, fonts, sizes and strikethrough are dropped.
  */
 export function inlineCollector() {
-  let text = '';
+  const runs: Run[] = [];
   let bold = 0;
   let italic = 0;
-  /** Where the text of the open bold or italic starts (right after its marker). */
-  let openAt = -1;
-  const marks: InlineMark[] = [];
-  /**
-   * `reopen` is the bold or italic marker ended before the link and started again after it; `cut` says how it was
-   * ended: its closing marker was added, or its opening marker was removed because nothing came after it.
-   */
-  const links: { start: number; href: string; reopen: string; cut: 'closed' | 'removed' | '' }[] = [];
-
-  /** Ends the open bold or italic; when nothing was written inside it, its opening marker is removed instead. */
-  function endEmphasis(marker: string): 'closed' | 'removed' {
-    if (text.length === openAt) {
-      text = text.slice(0, -marker.length);
-      return 'removed';
-    }
-    text += marker;
-    return 'closed';
-  }
+  let code = 0;
+  const marks: InlineMarks[] = [];
+  /** Open links: where their text starts in `runs`. A link applies only when it closes. */
+  const links: { start: number; href: string }[] = [];
 
   function open(tag: string, attrs: string) {
     const style = htmlAttr(attrs, 'style') ?? '';
     const weight = cssValue(style, 'font-weight');
     const fontStyle = cssValue(style, 'font-style');
-    let kind: InlineMark = null;
+    const family = cssDeclaration(style, 'font-family') ?? htmlAttr(attrs, 'face');
+    const m: InlineMarks = {};
     if (tag === 'a') {
       const href = (htmlAttr(attrs, 'href') ?? '').trim();
-      if (safeHref(href)) {
-        const reopen = bold > 0 ? '**' : italic > 0 ? '*' : '';
-        const cut = reopen ? endEmphasis(reopen) : '';
-        links.push({ start: text.length, href, reopen, cut });
-        kind = 'link';
+      if (safeHref(href) && !links.length) {
+        links.push({ start: runs.length, href });
+        m.link = true;
       }
     } else if (tag === 'b' || tag === 'strong') {
       // Google Docs wraps everything it copies in <b style="font-weight:normal">: that is not bold.
-      if (weight === undefined || isBoldWeight(weight)) kind = 'b';
+      m.bold = weight === undefined || isBoldWeight(weight);
     } else if (tag === 'i' || tag === 'em') {
-      if (fontStyle === undefined || fontStyle === 'italic' || fontStyle === 'oblique') kind = 'i';
-    } else if (isBoldWeight(weight)) kind = 'b';
-    else if (fontStyle === 'italic' || fontStyle === 'oblique') kind = 'i';
-    // Bold wins over italic: nesting markers would not match the page's inline pattern. Inside a link, no markers.
-    if (kind === 'b' && italic === 0 && bold === 0 && !links.length) { text += '**'; bold++; openAt = text.length; }
-    else if (kind === 'i' && bold === 0 && italic === 0 && !links.length) { text += '*'; italic++; openAt = text.length; }
-    else if (kind === 'b' || kind === 'i') kind = null;
-    marks.push(kind);
+      m.italic = fontStyle === undefined || fontStyle === 'italic' || fontStyle === 'oblique';
+    } else if (CODE_TAGS.has(tag)) m.code = true;
+    if (tag === 'span' || tag === 'font' || tag === 'a') {
+      if (isBoldWeight(weight)) m.bold = true;
+      if (fontStyle === 'italic' || fontStyle === 'oblique') m.italic = true;
+    }
+    if (family && MONOSPACE.test(family)) m.code = true;
+    if (m.bold) bold++;
+    if (m.italic) italic++;
+    if (m.code) code++;
+    marks.push(m);
   }
 
   function close() {
-    const kind = marks.pop();
-    if (kind === 'b' || kind === 'i') {
-      if (kind === 'b') bold--;
-      else italic--;
-      // Ended inside a link that already ended it (badly nested tags): nothing to write, and nothing to reopen.
-      const suspended = links.find((l) => l.reopen);
-      if (suspended) suspended.reopen = '';
-      else endEmphasis(kind === 'b' ? '**' : '*');
-    } else if (kind === 'link') {
-      const link = links.pop();
-      if (!link) return;
-      const label = text.slice(link.start).replace(/[*[\]]/g, '').trim();
-      const markdown = `[${label}](${link.href})`;
-      // Keep the link only if the page's link syntax accepts it; otherwise leave the text as it is.
-      text = text.slice(0, link.start) + (label && LINK_PATTERN.test(markdown) ? markdown : label) + link.reopen;
-      if (link.reopen) openAt = text.length;
+    const m = marks.pop();
+    if (!m) return;
+    if (m.bold) bold--;
+    if (m.italic) italic--;
+    if (m.code) code--;
+    if (m.link) {
+      const link = links.pop()!;
+      for (let k = link.start; k < runs.length; k++) runs[k].href = link.href;
     }
   }
 
   return {
-    append(t: string) { text += t; },
-    /** Handles b, strong, i, em, span and a; returns false for any other tag. */
+    append(t: string) {
+      runs.push({ text: t, bold: bold > 0, italic: italic > 0, code: code > 0 });
+    },
+    /** Handles b, strong, i, em, code, kbd, samp, tt, span, font and a; returns false for any other tag. */
     tag(tag: string, closing: boolean, attrs: string): boolean {
       if (!INLINE_TAGS.has(tag)) return false;
       if (closing) close();
       else open(tag, attrs);
       return true;
     },
-    /** The collected text, with whitespace collapsed and any marker left open closed. */
+    /** The collected text with whitespace collapsed, written with the studio's markers. A link never closed is text. */
     finish(): string {
-      // A link that was never closed stays text, inside the bold or italic it started in: undo how that was ended.
-      for (const link of links.reverse()) {
-        if (link.cut === 'closed') text = text.slice(0, link.start - link.reopen.length) + text.slice(link.start);
-        else if (link.cut === 'removed') text = text.slice(0, link.start) + link.reopen + text.slice(link.start);
+      let previousSpace = true;
+      const collapsed = runs.map((r) => {
+        let text = r.text.replace(/\s+/g, ' ');
+        if (previousSpace) text = text.replace(/^ /, '');
+        if (text) previousSpace = text.endsWith(' ');
+        return { ...r, text };
+      });
+      for (let k = collapsed.length - 1; k >= 0; k--) {
+        collapsed[k].text = collapsed[k].text.replace(/ $/, '');
+        if (collapsed[k].text) break;
       }
-      return tidyMarkers(text + (italic > 0 ? '*' : '') + (bold > 0 ? '**' : ''));
+      return serializeRuns(collapsed);
     },
   };
 }
@@ -542,7 +526,8 @@ export function tableFromClipboard(html: string, plain: string): PastedTable {
   const fromHtml = html ? gridFromHtml(html) : null;
   if (fromHtml) return finishGrid(fromHtml, { minColumns: 1 });
   if (!plain.includes('\t')) return { ok: false, reason: 'not-a-table' };
-  const grid = parseTabSeparated(plain).filter((r) => r.some((c) => c.trim()));
+  // Tab-separated cells are plain text: a `*` or `[` in them is a character, not formatting.
+  const grid = parseTabSeparated(plain).filter((r) => r.some((c) => c.trim())).map((r) => r.map(escapeInline));
   if (grid.length < 2 || grid.some((r) => r.length < 2)) return { ok: false, reason: 'not-a-table' };
   return finishGrid(grid, { dropLeadingEmptyColumns: true, minColumns: 2 });
 }
@@ -573,13 +558,28 @@ export function resolveBlocks(blocks: StudioBlock[]): StudioBlock[] {
   ];
 }
 
-/** Heading block id → unique anchor id derived from its text. */
+/** The entries of a Sources block that show on the page: those with a title, a publisher or a link. */
+export const sourceItems = (b: Extract<StudioBlock, { type: 'sources' }>): StudioSource[] =>
+  b.items.filter((i) => i.title.trim() || i.publisher.trim() || i.url.trim());
+
+/**
+ * The heading a block shows: a Heading block's text, or a Sources block's heading (an H2, shown only when the block
+ * has entries). Otherwise null.
+ */
+export function blockHeading(b: StudioBlock): { level: 2 | 3 | 4; text: string } | null {
+  if (b.type === 'heading') return { level: b.level, text: b.text };
+  if (b.type === 'sources' && sourceItems(b).length) return { level: 2, text: b.heading.trim() || SOURCES_HEADING };
+  return null;
+}
+
+/** Heading (and Sources) block id → unique anchor id derived from its text. */
 export function headingAnchors(blocks: StudioBlock[]): Map<string, string> {
   const used = new Map<string, number>();
   const anchors = new Map<string, string>();
   for (const b of blocks) {
-    if (b.type !== 'heading') continue;
-    const base = slugify(stripInline(b.text)) || 'section';
+    const heading = blockHeading(b);
+    if (!heading) continue;
+    const base = slugify(stripInline(heading.text)) || 'section';
     const n = (used.get(base) ?? 0) + 1;
     used.set(base, n);
     anchors.set(b.id, n === 1 ? base : `${base}-${n}`);
@@ -587,15 +587,16 @@ export function headingAnchors(blocks: StudioBlock[]): Map<string, string> {
   return anchors;
 }
 
-/** The sidebar guide: every H2, in order. */
+/** The sidebar guide: every H2 (a Sources block's heading included), in order. H3 and H4 are not listed. */
 export function buildGuide(blocks: StudioBlock[]): BlogGuideItem[] {
   const resolved = resolveBlocks(blocks);
   const anchors = headingAnchors(resolved);
-  return resolved.flatMap((b) =>
-    b.type === 'heading' && b.level === 2 && b.text.trim()
-      ? [{ id: anchors.get(b.id)!, title: stripInline(b.text) }]
-      : [],
-  );
+  return resolved.flatMap((b) => {
+    const heading = blockHeading(b);
+    return heading && heading.level === 2 && heading.text.trim()
+      ? [{ id: anchors.get(b.id)!, title: stripInline(heading.text) }]
+      : [];
+  });
 }
 
 /** FAQPage schema entries: the same text the page shows, without formatting markers. */
@@ -615,18 +616,22 @@ function blockText(b: StudioBlock): string {
     case 'image': return b.caption;
     case 'quote': return `${b.text} ${b.cite}`;
     case 'table': return b.rows.replace(/\\?\|/g, ' ');
-    case 'faq': return `${b.question} ${b.answer}`;
+    case 'faq': return `${b.question}\n${b.answer}`;
+    // Sources are references, not article text: they do not count for reading time or keyword checks.
     default: return '';
   }
 }
 
+/** A block's readable text: each line without its inline markers (bold and italic never span lines). */
+const blockPlainText = (b: StudioBlock) => blockText(b).split('\n').map(stripInline).join(' ');
+
 /** The article's readable text (inline markup removed), used to look for keywords. */
 export function articlePlainText(blocks: StudioBlock[]): string {
-  return blocks.map((b) => stripInline(blockText(b))).join(' ');
+  return blocks.map(blockPlainText).join(' ');
 }
 
 export function wordCount(blocks: StudioBlock[]): number {
-  const text = blocks.map((b) => stripInline(blockText(b))).join(' ');
+  const text = blocks.map(blockPlainText).join(' ');
   return text.split(/\s+/).filter(Boolean).length;
 }
 
@@ -663,6 +668,7 @@ export function checklist(
   const images = post.blocks.filter((b) => b.type === 'image');
   const faqs = post.blocks.filter((b) => b.type === 'faq');
   const videos = post.blocks.filter((b) => b.type === 'video');
+  const sources = post.blocks.filter((b): b is Extract<StudioBlock, { type: 'sources' }> => b.type === 'sources');
   const h2s = post.blocks.filter((b) => b.type === 'heading' && b.level === 2);
   const excerptLength = post.excerpt.trim().length;
   const metadata = [post.title, post.seoTitle, post.excerpt, post.imageAlt, ...post.tags].join(' ');
@@ -702,6 +708,17 @@ export function checklist(
   }
   if (faqs.length) {
     items.push({ label: 'Every FAQ has a question and an answer', ok: faqs.every((b) => b.type === 'faq' && b.question.trim() && b.answer.trim()), required: false });
+  }
+  if (sources.length) {
+    items.push(
+      { label: 'At most one Sources block', ok: sources.length === 1, required: false },
+      { label: 'Sources are the last block of the article', ok: post.blocks[post.blocks.length - 1]?.type === 'sources', required: false },
+      {
+        label: 'Every source has a title and a link',
+        ok: sources.every((b) => b.items.length > 0 && b.items.every((i) => i.title.trim() && i.url.trim() && safeHref(i.url.trim()))),
+        required: false,
+      },
+    );
   }
   if (videos.length) {
     items.push({ label: 'Every video is a valid YouTube link', ok: videos.every((b) => b.type === 'video' && youtubeId(b.url)), required: false });

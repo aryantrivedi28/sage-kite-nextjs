@@ -5,7 +5,7 @@ import {
   ArrowDown,
   ArrowLeft,
   ArrowUp,
-  Bold,
+  BookOpen,
   CircleAlert,
   CircleCheck,
   CircleQuestionMark,
@@ -17,55 +17,30 @@ import {
   Heading,
   Image as ImageIcon,
   Info,
-  Italic,
   LayoutList,
-  Link as LinkIcon,
   List,
   Lock,
   Minus,
   Pencil,
   Plus,
   Quote,
-  RemoveFormatting,
   Search,
   Table,
   Trash2,
   Type,
   Undo2,
-  Unlink,
   Upload,
   Video,
   X,
 } from 'lucide-react';
 import { BlogGuide } from '@/components/blog/BlogGuide';
 import { formatDate } from '@/components/blog/formatDate';
-import {
-  APPLE_PASTE_NOTE,
-  IMAGE_ADDRESS_MESSAGE,
-  UNSUPPORTED_IMAGE_MESSAGE,
-  articleFromClipboard,
-  articleText,
-  describeBlocks,
-  imageAddressOnly,
-  imageFromClipboard,
-  looksLikeArticle,
-  unsupportedImage,
-  type PastedArticle,
-} from './articlePaste';
+import { APPLE_PASTE_NOTE, articleFromClipboard, describeBlocks, type PastedArticle } from './articlePaste';
 import { signOutStudioAction } from './auth-actions';
-import {
-  TURN_INTO_OPTIONS,
-  applyLink,
-  clearFormatting,
-  convertLines,
-  lineRange,
-  linkAt,
-  removeLinks,
-  toggleEmphasis,
-  type TextEditResult,
-  type TurnInto,
-} from './formatting';
+import { imagePaste } from './clipboard';
+import { convertLines, linkProblem, type TurnInto } from './formatting';
 import { LoginGate } from './LoginGate';
+import { RichTextBox } from './RichTextBox';
 import { getStudioStore, onSessionEnded, type StudioStore } from './store';
 import { StudioArticle } from './StudioArticle';
 import {
@@ -74,10 +49,12 @@ import {
   MAX_KEYWORD_LENGTH,
   MAX_POST_BLOCKS,
   MAX_SECONDARY_KEYWORDS,
+  MAX_SOURCES,
   MAX_TABLE_COLUMNS,
   MAX_TABLE_ROWS,
   SLUG_PATTERN,
   TITLE_SUFFIX,
+  blockHeading,
   buildGuide,
   checklist,
   emptyPost,
@@ -85,6 +62,7 @@ import {
   headingAnchors,
   newBlock,
   newId,
+  newSource,
   parseKeywordList,
   postUrl,
   readingTime,
@@ -98,7 +76,16 @@ import {
   type CheckItem,
   type PastedTable,
 } from './postUtils';
-import type { SitePostSummary, StudioBlock, StudioBlockType, StudioPost, StudioStatus, StudioStorage } from './types';
+import type {
+  HeadingLevel,
+  SitePostSummary,
+  StudioBlock,
+  StudioBlockType,
+  StudioPost,
+  StudioSource,
+  StudioStatus,
+  StudioStorage,
+} from './types';
 import styles from './BlogStudio.module.css';
 
 /*
@@ -147,10 +134,11 @@ const BLOCK_ICONS: Record<StudioBlockType, React.ComponentType<{ size?: number }
   table: Table,
   video: Video,
   faq: CircleQuestionMark,
+  sources: BookOpen,
   divider: Minus,
 };
 
-const BLOCK_ORDER: StudioBlockType[] = ['heading', 'text', 'list', 'image', 'quote', 'table', 'video', 'faq', 'divider'];
+const BLOCK_ORDER: StudioBlockType[] = ['heading', 'text', 'list', 'image', 'quote', 'table', 'video', 'faq', 'sources', 'divider'];
 
 function cx(...names: (string | false | undefined)[]) {
   return names.filter(Boolean).join(' ');
@@ -182,30 +170,6 @@ function downloadJson(filename: string, data: unknown) {
 function isStudioPost(v: unknown): v is StudioPost {
   const p = v as StudioPost;
   return !!p && typeof p.id === 'string' && typeof p.title === 'string' && Array.isArray(p.blocks);
-}
-
-/** The files on a clipboard (some browsers list them only as items). */
-function clipboardFiles(data: DataTransfer): File[] {
-  const files = Array.from(data.files);
-  if (files.length) return files;
-  return Array.from(data.items).flatMap((item) => {
-    const file = item.kind === 'file' ? item.getAsFile() : null;
-    return file ? [file] : [];
-  });
-}
-
-/**
- * An image paste (decision.md D048): the file to upload, a message when it is an image the studio cannot upload (a
- * GIF, or only a web address such as an image copied inside Google Docs), or null for any other paste.
- */
-function imagePaste(data: DataTransfer): { file: File } | { message: string } | null {
-  const files = clipboardFiles(data);
-  const plain = data.getData('text/plain');
-  const file = imageFromClipboard(files, plain);
-  if (file) return { file };
-  if (unsupportedImage(files, plain)) return { message: UNSUPPORTED_IMAGE_MESSAGE };
-  if (imageAddressOnly(data.getData('text/html'), plain, files)) return { message: IMAGE_ADDRESS_MESSAGE };
-  return null;
 }
 
 /** After an image is uploaded into block `id`: bring it into view and put the cursor in its Alt text field. */
@@ -1055,11 +1019,8 @@ function Editor({
     setDraft((d) => ({ ...d, blocks: [...d.blocks.slice(0, at), block, ...d.blocks.slice(at)] }));
     setPasting(false);
     setAddAt(null);
-    requestAnimationFrame(() => {
-      const box = document.querySelector<HTMLTextAreaElement>(`#block-${block.id} [data-format-box]`);
-      box?.focus();
-      box?.setSelectionRange(text.length, text.length);
-    });
+    // Focusing the box starts its editor with the cursor at the end.
+    requestAnimationFrame(() => document.querySelector<HTMLElement>(`#block-${block.id} [data-format-box]`)?.focus());
   }
 
   function turnInto(blockId: string, startLine: number, endLine: number, target: TurnInto) {
@@ -1106,7 +1067,10 @@ function Editor({
 
   const resolved = resolveBlocks(draft.blocks);
   const anchors = headingAnchors(resolved);
-  const outline = resolved.filter((b): b is Extract<StudioBlock, { type: 'heading' }> => b.type === 'heading' && !!b.text.trim());
+  const outline = resolved.flatMap((b) => {
+    const heading = blockHeading(b);
+    return heading && heading.text.trim() ? [{ id: b.id, ...heading }] : [];
+  });
   const excerptLength = draft.excerpt.trim().length;
   const gTitle = googleTitle(draft);
 
@@ -1270,7 +1234,7 @@ function Editor({
                         onChange={(patch) => updateBlock(b.id, patch)}
                         onMove={(dir) => moveBlock(i, dir)}
                         onRemove={() => setDraft((d) => ({ ...d, blocks: d.blocks.filter((x) => x.id !== b.id) }))}
-                        onAddBelow={() => setAddAt(addAt === i + 1 ? null : i + 1)}
+                        onAddBelow={() => setAddAt((at) => (at === i + 1 ? null : i + 1))}
                         onUpload={upload}
                         onTablePaste={(table, pasteAsText) => askTablePaste(i, table, pasteAsText)}
                         onArticlePaste={(article, pasteAsText) => askArticlePaste(b.id, article, pasteAsText)}
@@ -1423,7 +1387,7 @@ function Editor({
               {outline.length ? (
                 <ol className={styles.outline}>
                   {outline.map((h) => (
-                    <li key={h.id} className={h.level === 3 ? styles.outlineSub : undefined}>
+                    <li key={h.id} className={h.level === 3 ? styles.outlineSub : h.level === 4 ? styles.outlineSubSub : undefined}>
                       <button
                         type="button"
                         onClick={() => {
@@ -1598,206 +1562,6 @@ function ImageField({
   );
 }
 
-/**
- * A text box with the formatting bar (decision.md D047): Turn into, Bold, Italic, Link, Remove link and Clear formatting,
- * which edit the `**`, `*` and `[text](url)` markers (formatting.ts). Cmd/Ctrl+B, I and K work inside the box.
- */
-function FormatTextarea({
-  value,
-  onChange,
-  rows = 5,
-  placeholder,
-  label,
-  singleLine,
-  kind,
-  onTurnInto,
-  onTablePaste,
-  onImagePaste,
-  onArticlePaste,
-  notify,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  rows?: number;
-  placeholder?: string;
-  label: string;
-  /** A one-line box (a heading). */
-  singleLine?: boolean;
-  /** The block type the box belongs to: a paste that is only one block of this type is pasted as text, without asking. */
-  kind?: StudioBlockType;
-  /** Turn the selected lines (or the whole block) into another type. Not offered on FAQ answers. */
-  onTurnInto?: (startLine: number, endLine: number, target: TurnInto) => void;
-  /** Called when the pasted content is a table; the paste is held back until the writer chooses. */
-  onTablePaste?: (table: Extract<PastedTable, { ok: true }>, pasteAsText: () => void) => void;
-  /** Called when the paste is a single image (no text): it is uploaded into a new Image block below. */
-  onImagePaste?: (file: File) => void;
-  /** Called when the pasted content is an article; the paste is held back until the writer chooses. */
-  onArticlePaste?: (article: PastedArticle, pasteAsText: () => void) => void;
-  notify?: (m: string) => void;
-}) {
-  const ref = useRef<HTMLTextAreaElement & HTMLInputElement>(null);
-  const [link, setLink] = useState<{ start: number; end: number; url: string; editing: boolean; error?: string } | null>(null);
-  const linkErrorId = useId();
-
-  const selection = (): [number, number] => [ref.current?.selectionStart ?? value.length, ref.current?.selectionEnd ?? value.length];
-
-  function apply(result: TextEditResult) {
-    if ('error' in result) return notify?.(result.error);
-    onChange(result.value);
-    const el = ref.current;
-    requestAnimationFrame(() => {
-      el?.focus();
-      el?.setSelectionRange(result.start, result.end);
-    });
-  }
-  const edit = (fn: (v: string, s: number, e: number) => TextEditResult) => apply(fn(value, ...selection()));
-
-  function openLink() {
-    const [start, end] = selection();
-    const existing = linkAt(value, start, end);
-    setLink({ start, end, url: existing?.url ?? '', editing: !!existing });
-  }
-  function saveLink() {
-    if (!link) return;
-    const result = applyLink(value, link.start, link.end, link.url);
-    if ('error' in result) return setLink({ ...link, error: result.error });
-    setLink(null);
-    apply(result);
-  }
-  function closeLink() {
-    setLink(null);
-    ref.current?.focus();
-  }
-
-  function onKeyDown(e: React.KeyboardEvent) {
-    if (!(e.metaKey || e.ctrlKey) || e.altKey || e.shiftKey) return;
-    const key = e.key.toLowerCase();
-    if (key === 'b') edit((v, s, end) => toggleEmphasis(v, s, end, 'bold'));
-    else if (key === 'i') edit((v, s, end) => toggleEmphasis(v, s, end, 'italic'));
-    else if (key === 'k') openLink();
-    else return;
-    e.preventDefault();
-  }
-
-  function onPaste(e: React.ClipboardEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    // A single image becomes an Image block below; the box's own text is not changed.
-    const image = onImagePaste ? imagePaste(e.clipboardData) : null;
-    if (image) {
-      e.preventDefault();
-      if ('file' in image) onImagePaste?.(image.file);
-      else notify?.(image.message);
-      return;
-    }
-    if (!onTablePaste && !onArticlePaste) return;
-    const html = e.clipboardData.getData('text/html');
-    const plain = e.clipboardData.getData('text/plain');
-    const { selectionStart, selectionEnd } = e.currentTarget;
-    const s = selectionStart ?? value.length;
-    const end = selectionEnd ?? value.length;
-    const pasteText = (text: string) => onChange(value.slice(0, s) + text + value.slice(end));
-    const table = onTablePaste ? tableFromClipboard(html, plain) : null;
-    if (table?.ok) {
-      e.preventDefault();
-      // A clipboard with only HTML has no plain text: fall back to the table's own cells, tab-separated.
-      onTablePaste?.(table, () => pasteText(plain || table.plain));
-      return;
-    }
-    if (table?.reason === 'too-large') {
-      // Not blocked: the paste goes through as text, with a note that it was too big to become a table.
-      notify?.(`That looks like a table, but ${table.rows} rows × ${table.columns} columns is more than ${MAX_TABLE_ROWS} × ${MAX_TABLE_COLUMNS}, so it was pasted as text. Split it to paste it as a table.`);
-      return;
-    }
-    if (!onArticlePaste) return;
-    const article = articleFromClipboard(html, plain);
-    if (article.refused) {
-      notify?.(`${article.notes.join(' ')} It was pasted as text.`);
-      return;
-    }
-    // A single block of this box's own kind (a list pasted into a list) is just text for this box.
-    const sameKind = article.blocks.length === 1 && article.blocks[0].type === kind && !article.title;
-    if (looksLikeArticle(article) && !sameKind) {
-      e.preventDefault();
-      onArticlePaste(article, () => pasteText(plain || articleText(article)));
-    }
-  }
-
-  // Bar buttons keep the box focused, so its selection is what they act on.
-  const keepFocus = (e: React.MouseEvent) => e.preventDefault();
-  const shortcut = (key: string) => `Ctrl+${key} / ⌘${key}`;
-  const boxProps = {
-    ref,
-    value,
-    placeholder,
-    'aria-label': label,
-    'data-format-box': '',
-    onChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => onChange(e.target.value),
-    onKeyDown,
-    onPaste,
-  };
-
-  return (
-    <div className={styles.formatBox}>
-      <div className={styles.formatBar}>
-        {onTurnInto && (
-          <select
-            className={styles.turnInto}
-            value=""
-            aria-label="Turn into"
-            title="Turn the selected lines, or the whole block, into another type"
-            onChange={(e) => {
-              const target = e.target.value as TurnInto;
-              if (!target) return;
-              const [start, end] = selection();
-              const [first, last] = lineRange(value, start, end);
-              onTurnInto(first, last, target);
-            }}
-          >
-            <option value="" disabled>Turn into…</option>
-            {TURN_INTO_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-          </select>
-        )}
-        <button type="button" title={`Bold (${shortcut('B')})`} aria-label="Bold" onMouseDown={keepFocus} onClick={() => edit((v, s, e) => toggleEmphasis(v, s, e, 'bold'))}><Bold size={15} /></button>
-        <button type="button" title={`Italic (${shortcut('I')})`} aria-label="Italic" onMouseDown={keepFocus} onClick={() => edit((v, s, e) => toggleEmphasis(v, s, e, 'italic'))}><Italic size={15} /></button>
-        <button type="button" title={`Link (${shortcut('K')})`} aria-label="Link" aria-expanded={!!link} onMouseDown={keepFocus} onClick={openLink}><LinkIcon size={15} /></button>
-        <button type="button" title="Remove link" aria-label="Remove link" onMouseDown={keepFocus} onClick={() => edit(removeLinks)}><Unlink size={15} /></button>
-        <button type="button" title="Clear bold and italic" aria-label="Clear formatting" onMouseDown={keepFocus} onClick={() => edit(clearFormatting)}><RemoveFormatting size={15} /></button>
-        <span className={styles.formatHint}>**bold** · *italic* · [text](url)</span>
-      </div>
-      {link && (
-        <div className={styles.linkRow}>
-          <input
-            className={styles.input}
-            autoFocus
-            value={link.url}
-            placeholder="https://… or /blog/…"
-            aria-label="Link address"
-            aria-invalid={!!link.error}
-            aria-describedby={link.error ? linkErrorId : undefined}
-            onChange={(e) => setLink({ ...link, url: e.target.value, error: undefined })}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                saveLink();
-              } else if (e.key === 'Escape') {
-                e.preventDefault();
-                closeLink();
-              }
-            }}
-          />
-          <button type="button" className={cx(styles.btn, styles.btnSmall)} onClick={saveLink}>{link.editing ? 'Update link' : 'Add link'}</button>
-          <button type="button" className={cx(styles.btn, styles.btnSmall)} onClick={closeLink}>Cancel</button>
-          {link.error && <span id={linkErrorId} className={styles.linkError} role="alert">{link.error}</span>}
-        </div>
-      )}
-      {singleLine ? (
-        <input {...boxProps} className={cx(styles.input, styles.headingInput)} />
-      ) : (
-        <textarea {...boxProps} className={styles.input} rows={rows} />
-      )}
-    </div>
-  );
-}
-
 /** Where a writer pastes a whole article (articlePaste.ts): it becomes blocks at once. Typing starts a Paragraphs block. */
 function PasteArea({
   large,
@@ -1873,7 +1637,14 @@ function AddBlockMenu({ onAdd, onCancel, onPasteArticle }: { onAdd: (t: StudioBl
   );
 }
 
-function BlockCard({
+/**
+ * A block only re-renders when it, its position or the number of blocks changes, so typing in one box of a long post
+ * does not re-render every other block. The callbacks read the post through state updaters or `draftRef`, never from
+ * the render that created them (decision.md D049).
+ */
+const BlockCard = React.memo(BlockCardInner, (a, b) => a.block === b.block && a.index === b.index && a.count === b.count);
+
+function BlockCardInner({
   block,
   index,
   count,
@@ -1904,7 +1675,7 @@ function BlockCard({
 }) {
   const paste = { onTablePaste, onArticlePaste, onImagePaste, notify };
   const Icon = BLOCK_ICONS[block.type];
-  const name = block.type === 'heading' ? `Heading ${block.level === 2 ? '(H2)' : '(H3)'}` : BLOCK_LABELS[block.type];
+  const name = block.type === 'heading' ? `Heading (H${block.level})` : BLOCK_LABELS[block.type];
 
   let body: React.ReactNode = null;
   switch (block.type) {
@@ -1914,14 +1685,16 @@ function BlockCard({
           <select
             className={styles.input}
             value={block.level}
-            onChange={(e) => onChange({ level: Number(e.target.value) as 2 | 3 })}
+            onChange={(e) => onChange({ level: Number(e.target.value) as HeadingLevel })}
             aria-label="Heading level"
           >
             <option value={2}>H2 section</option>
             <option value={3}>H3 sub-section</option>
+            <option value={4}>H4 minor heading</option>
           </select>
-          <FormatTextarea
-            singleLine
+          <RichTextBox
+            kind="heading"
+            blockType="heading"
             label="Heading text"
             value={block.text}
             placeholder="A heading that tells the reader what this section explains"
@@ -1935,9 +1708,10 @@ function BlockCard({
       break;
     case 'text':
       body = (
-        <FormatTextarea
+        <RichTextBox
           {...paste}
-          kind="text"
+          kind="paragraphs"
+          blockType="text"
           onTurnInto={onTurnInto}
           label="Paragraphs"
           value={block.text}
@@ -1958,7 +1732,7 @@ function BlockCard({
               <input type="radio" checked={block.ordered} onChange={() => onChange({ ordered: true })} /> Numbered
             </label>
           </div>
-          <FormatTextarea {...paste} kind="list" onTurnInto={onTurnInto} label="List items" value={block.items} placeholder={'One item per line\nSecond item\nThird item'} onChange={(items) => onChange({ items })} />
+          <RichTextBox {...paste} kind="list" blockType="list" ordered={block.ordered} rows={3} onTurnInto={onTurnInto} label="List items" value={block.items} placeholder={'One item per line\nSecond item\nThird item'} onChange={(items) => onChange({ items })} />
         </>
       );
       break;
@@ -1984,7 +1758,7 @@ function BlockCard({
     case 'quote':
       body = (
         <>
-          <FormatTextarea {...paste} kind="quote" onTurnInto={onTurnInto} label="Quote" value={block.text} rows={3} placeholder="The sharpest sentence of the section" onChange={(text) => onChange({ text })} />
+          <RichTextBox {...paste} kind="paragraphs" blockType="quote" onTurnInto={onTurnInto} label="Quote" value={block.text} rows={3} placeholder="The sharpest sentence of the section" onChange={(text) => onChange({ text })} />
           <Field label="Attribution (optional)" hint="Only quote real, sourced people.">
             <input className={styles.input} value={block.cite} onChange={(e) => onChange({ cite: e.target.value })} />
           </Field>
@@ -2042,10 +1816,13 @@ function BlockCard({
           <Field label="Question">
             <input className={styles.input} value={block.question} placeholder="A question people actually ask" onChange={(e) => onChange({ question: e.target.value })} />
           </Field>
-          <FormatTextarea {...paste} kind="faq" label="Answer" value={block.answer} rows={3} placeholder="The answer, as it should appear on the page" onChange={(answer) => onChange({ answer })} />
+          <RichTextBox {...paste} kind="paragraphs" blockType="faq" label="Answer" value={block.answer} rows={3} placeholder="The answer, as it should appear on the page" onChange={(answer) => onChange({ answer })} />
           <span className={styles.hint}>FAQs are added to the page’s FAQ schema with exactly this text.</span>
         </>
       );
+      break;
+    case 'sources':
+      body = <SourcesEditor block={block} onChange={onChange} />;
       break;
     case 'divider':
       body = <span className={styles.hint}>A horizontal line between sections.</span>;
@@ -2066,6 +1843,66 @@ function BlockCard({
       </div>
       <div className={styles.blockBody}>{body}</div>
     </div>
+  );
+}
+
+/** The rows of a Sources block (D049): publisher, title, link and date, which the page shows as one numbered list. */
+function SourcesEditor({
+  block,
+  onChange,
+}: {
+  block: Extract<StudioBlock, { type: 'sources' }>;
+  onChange: (patch: Partial<StudioBlock>) => void;
+}) {
+  const setItems = (items: StudioSource[]) => onChange({ items } as Partial<StudioBlock>);
+  const update = (id: string, patch: Partial<StudioSource>) => setItems(block.items.map((i) => (i.id === id ? { ...i, ...patch } : i)));
+  const move = (index: number, dir: -1 | 1) => {
+    const items = [...block.items];
+    [items[index], items[index + dir]] = [items[index + dir], items[index]];
+    setItems(items);
+  };
+  return (
+    <>
+      <Field label="Heading" hint="Shown as an H2 and listed in the page's guide. Keep Sources as the last block.">
+        <input className={styles.input} value={block.heading} placeholder="Sources and reading" onChange={(e) => onChange({ heading: e.target.value } as Partial<StudioBlock>)} />
+      </Field>
+      <ol className={styles.sourceRows}>
+        {block.items.map((item, i) => {
+          const problem = item.url.trim() ? linkProblem(item.url) : null;
+          const n = i + 1;
+          return (
+            <li key={item.id} className={styles.sourceRow}>
+              <div className={styles.sourceHead}>
+                <span>Source {n}</span>
+                <div className={styles.blockControls}>
+                  <IconButton label={`Move source ${n} up`} onClick={() => move(i, -1)} disabled={i === 0}><ArrowUp size={15} /></IconButton>
+                  <IconButton label={`Move source ${n} down`} onClick={() => move(i, 1)} disabled={i === block.items.length - 1}><ArrowDown size={15} /></IconButton>
+                  <IconButton label={`Remove source ${n}`} onClick={() => setItems(block.items.filter((x) => x.id !== item.id))}><Trash2 size={15} /></IconButton>
+                </div>
+              </div>
+              <div className={styles.twoCol}>
+                <Field label="Publisher">
+                  <input className={styles.input} value={item.publisher} maxLength={120} placeholder="HubSpot" onChange={(e) => update(item.id, { publisher: e.target.value })} />
+                </Field>
+                <Field label="Title" required>
+                  <input className={styles.input} value={item.title} maxLength={200} placeholder="The page or report's title" onChange={(e) => update(item.id, { title: e.target.value })} />
+                </Field>
+                <Field label="Link" hint={problem ?? undefined}>
+                  <input className={styles.input} value={item.url} maxLength={600} placeholder="https://…" aria-invalid={!!problem} onChange={(e) => update(item.id, { url: e.target.value })} />
+                </Field>
+                <Field label="Date">
+                  <input className={styles.input} value={item.date} maxLength={40} placeholder="checked 27 October 2026" onChange={(e) => update(item.id, { date: e.target.value })} />
+                </Field>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+      <button type="button" className={styles.btn} disabled={block.items.length >= MAX_SOURCES} onClick={() => setItems([...block.items, newSource()])}>
+        <Plus size={15} /> Add row
+      </button>
+      {block.items.length >= MAX_SOURCES && <span className={styles.hint}>At most {MAX_SOURCES} sources.</span>}
+    </>
   );
 }
 
