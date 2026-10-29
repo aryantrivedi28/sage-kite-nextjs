@@ -1,4 +1,5 @@
 import type { CaseStudy } from '@/content/case-studies/types';
+import { LabTheoryCover } from '@/components/case-studies/covers';
 import { ScreenshotTabs } from '@/components/case-studies/ScreenshotTabs';
 import { PdpToggle } from '@/components/case-studies/PdpToggle';
 import { RtoFlow } from '@/components/case-studies/RtoFlow';
@@ -30,6 +31,7 @@ const study: CaseStudy = {
   industry: 'Men\'s skincare',
   discipline: 'Shopify CRO and PDP redesign',
   origin: 'Previous work by a Sage Kite delivery specialist',
+  cover: <LabTheoryCover />,
   practitioner: { name: 'Apoorv Bhatt', role: 'Developer' },
   highlights: ['PDP redesign', 'CRO strategies', 'SEO-friendly content', 'Targeted payments'],
   results: [],

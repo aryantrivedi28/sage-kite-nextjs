@@ -37,6 +37,9 @@ const study: CaseStudy = {
   industry: '[Industry]',
   discipline: '[SEO / CRM / Automation]',
   origin: '[Sage Kite client engagement / Previous work by a Sage Kite delivery specialist]',
+  // An original illustration for the listing card: add one to components/case-studies/covers.tsx
+  // (drawn in code; never a photo, screenshot or logo) and set it here. Without it the card uses DefaultCover.
+  // cover: <YourCover />,
   practitioner: { name: '[Name]', role: '[Role]' },
   highlights: ['[Piece of work]', '[Piece of work]', '[Piece of work]'],
   results: [

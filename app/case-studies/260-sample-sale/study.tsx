@@ -1,4 +1,5 @@
 import type { CaseStudy } from '@/content/case-studies/types';
+import { SampleSaleCover } from '@/components/case-studies/covers';
 import { CheckoutFixFlow } from '@/components/case-studies/CheckoutFixFlow';
 import { LayerStack } from '@/components/case-studies/LayerStack';
 import { EmailToggle } from '@/components/case-studies/EmailToggle';
@@ -37,6 +38,7 @@ const study: CaseStudy = {
   industry: 'US B2C sample sales',
   discipline: 'Shopify maintenance',
   origin: 'Previous work by a Sage Kite delivery specialist',
+  cover: <SampleSaleCover />,
   practitioner: { name: 'Apoorv Bhatt', role: 'Shopify developer' },
   highlights: ['Bug resolution', 'Custom Liquid', 'Yotpo loyalty', 'Email templates', 'Operational support'],
   results: [

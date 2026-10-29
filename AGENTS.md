@@ -87,7 +87,10 @@ app/
                         Founder's Thoughts: page.tsx lists essays; <slug>/page.tsx is one essay
                         with its own layout (not a blog post). Essays are registered in
                         content/founders-thoughts.ts (homepage section + sitemap read it).
-  case-studies/page.tsx /case-studies: case study collection, built from content/case-studies/.
+  case-studies/page.tsx /case-studies: case study collection, built from content/case-studies/, in the blog
+                        listing layout (the shared .blog-hero / .featured-blog / .blog-grid / .blog-card classes,
+                        D050): the newest study (CASE_STUDIES[0]) is the featured card, the rest form the grid,
+                        each card with its cover illustration.
   case-studies/<slug>/  One folder per case study: study.tsx (all content, typed by
                         content/case-studies/types.ts) and a page.tsx identical in every folder.
                         case-studies/_template/ is the starter. Metadata, Article JSON-LD and
@@ -171,9 +174,14 @@ content/case-studies/
   index.ts                Registry of case studies, newest first. Read its header comment.
   types.ts                CaseStudy type: every section after the hero is optional. A result is
                           either before/after (bars) or a count with no starting figure (dots);
-                          `results: []` when nothing was measured (the listing shows `metrics`).
-                          `sections` adds one free-form section per part of the work.
-components/case-studies/  CaseStudyPage (renders every case study + metadata + JSON-LD),
+                          `results: []` when nothing was measured (the listing card then has no
+                          headline line; it shows only the first result, "as reported").
+                          `sections` adds one free-form section per part of the work. `cover` is the
+                          listing card's illustration from components/case-studies/covers.tsx.
+components/case-studies/  covers.tsx: one original cover illustration per study for the /case-studies cards,
+                          drawn as inline SVG with brand-token classes (never photos, screenshots, logos,
+                          brand names, text or numbers); DefaultCover for a study without one.
+                          CaseStudyPage (renders every case study + metadata + JSON-LD),
                           caseStudyStyles.ts (shared CSS), blocks.tsx (reusable content and
                           sketches, RankLadder, Journey, DotGrid, PageGridSketch, BrowserFrame,
                           PurchasePath, Checklist, CountCard, NumberedSteps, LoopSketch, PhoneFrame,

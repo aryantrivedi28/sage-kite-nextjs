@@ -1,4 +1,5 @@
 import type { CaseStudy } from '@/content/case-studies/types';
+import { EsmaCover } from '@/components/case-studies/covers';
 import { MigrationFlow } from '@/components/case-studies/MigrationFlow';
 import { ScreenshotTabs } from '@/components/case-studies/ScreenshotTabs';
 import { DashboardToggle } from '@/components/case-studies/DashboardToggle';
@@ -28,6 +29,7 @@ const study: CaseStudy = {
   industry: 'Direct-to-consumer jewellery',
   discipline: 'Shopify migration',
   origin: 'Previous work by a Sage Kite delivery specialist',
+  cover: <EsmaCover />,
   practitioner: { name: 'Apoorv Bhatt', role: 'Developer' },
   highlights: ['Platform migration', 'Prestige storefront', 'Checkout button logic', 'Custom analytics reports'],
   results: [],

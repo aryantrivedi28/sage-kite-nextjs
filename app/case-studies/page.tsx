@@ -1,24 +1,14 @@
-import React from 'react';
+import React, { cloneElement, isValidElement, type ReactElement } from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
-import { ArrowRight } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { CASE_STUDIES, CASE_STUDIES_PATH, caseStudyPath, type CaseStudyResult, type CountResult } from '@/content/case-studies';
+import { DefaultCover, type CoverProps } from '@/components/case-studies/covers';
+import { CASE_STUDIES, CASE_STUDIES_PATH, caseStudyPath } from '@/content/case-studies';
 
 const SITE_URL = 'https://www.sagekite.com';
 const PAGE_URL = `${SITE_URL}${CASE_STUDIES_PATH}`;
-/** Small print under a card's results: how the figures are drawn, then their basis. */
-function resultsNote(results: CaseStudyResult[]) {
-  const count = results.find((r): r is CountResult => 'count' in r);
-  return [
-    results.some((r) => !('count' in r)) && 'Bars drawn to scale.',
-    count && `Each dot is one ${count.unit}.`,
-    'Figures as reported for this engagement.',
-  ].filter(Boolean).join(' ');
-}
-
 const DESCRIPTION = 'Case studies from Sage Kite and its delivery specialists: the problem, the work and the results, with the origin of every example stated.';
 
 export const metadata: Metadata = {
@@ -42,7 +32,22 @@ export const metadata: Metadata = {
   },
 };
 
+/** The same arrow as the blog cards (components/blog/BlogCard.tsx). */
+const ArrowIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M5 12h14M12 5l7 7-7 7" />
+  </svg>
+);
+
 export default function CaseStudiesPage() {
+  // The newest study is featured above the grid; the grid shows the rest, so it is not repeated.
+  const [featured, ...others] = CASE_STUDIES;
+  // The featured media stretches to the text beside it, so its cover shows the whole drawing (`meet`) instead of
+  // cropping it to fill a box that is not 16:9.
+  const featuredCover =
+    featured && isValidElement(featured.cover)
+      ? cloneElement(featured.cover as ReactElement<CoverProps>, { fit: 'meet' })
+      : <DefaultCover fit="meet" />;
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -83,67 +88,49 @@ export default function CaseStudiesPage() {
       <main id="main">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <style dangerouslySetInnerHTML={{ __html: `
-          /* Case studies collection */
-          .csl-hero{padding:clamp(48px,6vw,88px) 0 clamp(56px,7vw,96px)}
-          .csl-hero-grid{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(40px,6vw,88px);align-items:center}
-          .csl-hero h1{font-size:clamp(2.6rem,5vw,4.1rem);line-height:1.02;letter-spacing:-.03em}
-          .csl-hero .sub{max-width:52ch}
-          .csl-hero .cta-row{margin-top:32px}
-
-          /* hero visual: how every case study is laid out */
-          .csl-anatomy{position:relative;background:var(--pale-sage);border-radius:var(--r);padding:clamp(24px,3vw,36px);clip-path:polygon(0 0,calc(100% - 44px) 0,100% 44px,100% 100%,0 100%)}
-          .csl-anatomy-title{display:flex;justify-content:space-between;gap:12px;font-size:.8125rem;font-weight:600;color:var(--sage);margin-bottom:16px}
-          .csl-anatomy-title b{color:var(--ink);font-weight:700}
-          .csl-steps{display:grid;gap:10px;counter-reset:step}
-          .csl-steps li{position:relative;display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;align-items:center;background:var(--warm-white);border:1px solid var(--light-sage);border-radius:var(--r);padding:14px 16px;box-shadow:4px 4px 0 var(--light-sage)}
-          .csl-steps li:nth-child(2){margin-left:18px}
-          .csl-steps li:nth-child(3){margin-left:36px}
-          .csl-steps li:nth-child(4){margin-left:54px}
-          .csl-steps li::before{counter-increment:step;content:counter(step);display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--c);color:var(--ink);font-weight:800;font-size:.95rem}
-          .csl-steps strong{display:block;color:var(--ink);font-size:1rem;line-height:1.25}
-          .csl-steps span{display:block;font-size:.8125rem;line-height:1.4;color:var(--sage)}
-
-          /* list */
-          .csl-list{padding:clamp(64px,8vw,104px) 0}
-          .csl-list-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px 32px;margin-bottom:clamp(28px,4vw,44px)}
-          .csl-list-head h2{font-size:clamp(1.9rem,3.4vw,2.7rem)}
+          /* Case studies collection: the blog listing's global classes (.blog-hero, .featured-blog, .blog-grid,
+             .blog-card) plus what only this page needs. */
           .csl-count{font-size:.875rem;font-weight:600;color:var(--sage)}
-          .csl-grid{display:grid;gap:24px}
+          /* the featured cover is drawn with overflow visible (fit="meet"); keep it inside its box */
+          .csl-listing .featured-blog-media{overflow:hidden}
+          .csl-feature-origin{font-size:.875rem;font-weight:600;color:var(--sage);margin:-18px 0 28px}
+          .csl-listing .blog-meta{flex-wrap:wrap;row-gap:6px}
+          .csl-listing .blog-chip{white-space:normal}
+          .blog-card .csl-headline{flex:none;margin:-10px 0 20px;font-size:.875rem;line-height:1.45;color:var(--sage)}
+          .csl-headline b{color:var(--ink);font-weight:800}
+          .blog-card .csl-card-origin{flex:none;margin:-10px 0 20px;font-size:.8125rem;line-height:1.45;color:var(--sage);font-weight:600}
+          /* client, dot and industry flow as one line of text; the dot is tied to the word after it, so it never ends a line */
+          .csl-meta-line .blog-meta-dot{margin-right:.15em}
+          .csl-cards .blog-card-cta{white-space:nowrap}
+          /* A long client name (e.g. Santa Barbara Trapeze) wraps beside the CTA. While cards sit side by side, every
+             footer gets room for two lines and keeps its text at the bottom, so footers in a row line up. */
+          .csl-cards .blog-card-foot{align-items:flex-end}
+          .csl-cards .blog-card-date{line-height:1.4}
+          @media (min-width:641px){.csl-cards .blog-card-foot{min-height:calc(19px + 2.8 * .8125rem)}}
 
-          .csl-card{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);border:1px solid var(--light-sage);border-top:6px solid var(--sky);border-radius:var(--r);overflow:hidden;background:var(--warm-white);text-decoration:none;color:inherit;transition:transform var(--t) var(--ease),border-color var(--t) var(--ease),box-shadow var(--t) var(--ease)}
-          .csl-card:hover{transform:translateY(-4px);border-color:var(--sage);border-top-color:var(--sky);box-shadow:8px 8px 0 var(--pale-sage)}
-          .csl-body{padding:clamp(28px,4vw,52px);display:flex;flex-direction:column;gap:18px}
-          .csl-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:.8125rem;font-weight:600;color:var(--sage)}
-          .csl-tag{padding:4px 12px;border-radius:999px;background:var(--sky-soft);color:var(--ink);font-weight:700}
-          .csl-client{font-size:.875rem;font-weight:700;color:var(--ink)}
-          .csl-card h2{font-size:clamp(1.7rem,2.8vw,2.4rem);line-height:1.08}
-          .csl-card p.csl-sum{font-size:1.0625rem;line-height:1.6;max-width:56ch}
-          .csl-chips{display:flex;flex-wrap:wrap;gap:8px}
-          .csl-origin{display:inline-flex;align-items:center;gap:10px;align-self:flex-start;padding:7px 14px;border-radius:999px;background:var(--pale-sage);color:var(--ink);font-weight:600;font-size:.8125rem;line-height:1.3}
-          .csl-origin::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--sky);flex:none}
-          .csl-more{margin-top:auto;padding-top:6px;display:inline-flex;align-items:center;gap:8px;align-self:flex-start;font-weight:700;color:var(--ink);text-decoration:underline;text-decoration-color:var(--butter);text-decoration-thickness:2px;text-underline-offset:5px}
-          .csl-more svg{transition:transform var(--t) var(--ease)}
-          .csl-card:hover .csl-more{text-decoration-color:var(--coral)}
-          .csl-card:hover .csl-more svg{transform:translateX(4px)}
-
-          .csl-results{background:var(--pale-sage);border-left:1px solid var(--light-sage);padding:clamp(24px,3.4vw,44px);display:grid;gap:16px;align-content:center}
-          .csl-results-title{font-size:.8125rem;font-weight:600;color:var(--sage)}
-          .csl-result{background:var(--warm-white);border:1px solid var(--light-sage);border-radius:var(--r);padding:20px 22px;display:grid;gap:12px}
-          .csl-result-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-          .csl-result-top span{font-size:.9rem;font-weight:700;color:var(--ink)}
-          .csl-result-top b{white-space:nowrap;font-size:clamp(1.8rem,2.8vw,2.4rem);font-weight:800;line-height:1;letter-spacing:-.04em;color:var(--coral);font-variant-numeric:tabular-nums}
-          .csl-bar{display:grid;grid-template-columns:3.4rem minmax(0,1fr) 5rem;gap:10px;align-items:center;font-size:.8125rem;font-variant-numeric:tabular-nums}
-          .csl-bar > span:first-child{color:var(--sage)}
-          .csl-bar > span:last-child{text-align:right;font-weight:700;color:var(--ink)}
-          .csl-track{height:10px;border-radius:5px;background:var(--pale-sage);overflow:hidden}
-          .csl-fill{display:block;height:100%;width:var(--w);border-radius:5px;background:var(--sage)}
-          .csl-fill.after{background:var(--sky)}
-          .csl-results .note{margin-top:2px}
-          .csl-highlight{gap:4px;padding:16px 20px}
-          .csl-highlight b{font-size:1.25rem;font-weight:800;line-height:1.15;letter-spacing:-.02em;color:var(--ink)}
-          .csl-highlight span{font-size:.875rem;color:var(--dark-sage)}
-          .csl-dots{display:grid;grid-template-columns:repeat(auto-fill,minmax(7px,1fr));gap:3px}
-          .csl-dots i{aspect-ratio:1;border-radius:50%;background:var(--sky)}
+          /* cover illustrations (components/case-studies/covers.tsx): brand tokens only */
+          .cs-cover{position:absolute;inset:0;width:100%;height:100%;display:block}
+          .cs-cover .bg{fill:var(--pale-sage)}
+          .cs-cover .f-ink{fill:var(--ink)}
+          .cs-cover .f-sage{fill:var(--sage)}
+          .cs-cover .f-light{fill:var(--light-sage)}
+          .cs-cover .f-white{fill:var(--warm-white)}
+          .cs-cover .f-coral{fill:var(--coral)}
+          .cs-cover .f-coral-soft{fill:var(--coral-soft)}
+          .cs-cover .f-butter{fill:var(--butter)}
+          .cs-cover .f-butter-soft{fill:var(--butter-soft)}
+          .cs-cover .f-sky{fill:var(--sky)}
+          .cs-cover .f-sky-soft{fill:var(--sky-soft)}
+          .cs-cover .s-ink,.cs-cover .s-sage,.cs-cover .s-light,.cs-cover .s-sky,.cs-cover .s-white{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+          .cs-cover .s-ink{stroke:var(--ink)}
+          .cs-cover .s-sage{stroke:var(--sage)}
+          .cs-cover .s-light{stroke:var(--light-sage)}
+          .cs-cover .s-sky{stroke:var(--sky)}
+          .cs-cover .s-white{stroke:var(--warm-white)}
+          .cs-cover .o-ink{stroke:var(--ink);stroke-width:3;stroke-linejoin:round}
+          .cs-cover .o-light{stroke:var(--light-sage);stroke-width:2}
+          .cs-cover .thin{stroke-width:2}
+          .cs-cover .dash{stroke-dasharray:7 8}
 
           /* how to read */
           .csl-read{padding:clamp(56px,7vw,88px) 0}
@@ -164,115 +151,84 @@ export default function CaseStudiesPage() {
           .csl-cta .cta-row{margin-top:8px;position:relative;z-index:1}
 
           @media (max-width:1040px){
-            .csl-hero-grid,.csl-read-grid{grid-template-columns:1fr}
-            .csl-anatomy{max-width:560px}
+            .csl-read-grid{grid-template-columns:1fr}
           }
           @media (max-width:900px){
-            .csl-card{grid-template-columns:1fr}
-            .csl-results{border-left:0;border-top:1px solid var(--light-sage)}
             .csl-rules{grid-template-columns:1fr}
-          }
-          @media (max-width:560px){
-            .csl-steps li:nth-child(n){margin-left:0}
-            .csl-sep{display:none}
-            .csl-meta span:last-child{flex-basis:100%}
-            .csl-bar{grid-template-columns:3rem minmax(0,1fr) 4.4rem}
           }
         ` }} />
 
         {/* Hero */}
-        <section className="csl-hero" aria-labelledby="csl-title">
-          <div className="wrap csl-hero-grid">
-            <div>
-              <div className="ribbon" aria-hidden="true">
-                <span style={{ background: 'var(--coral)' }}></span>
-                <span style={{ background: 'var(--butter)' }}></span>
-                <span style={{ background: 'var(--sky)' }}></span>
-              </div>
+        <section className="tint blog-hero" aria-labelledby="csl-title">
+          <div className="wrap">
+            <div className="head">
               <p className="label">Selected work</p>
-              <h1 id="csl-title">Case studies</h1>
-              <p className="sub">
+              <h1 id="csl-title" className="blog-hero-title">Case studies</h1>
+              <p className="sub blog-hero-sub">
                 What the problem was, what was built and what changed. Every example states where it comes from and the basis for any result, so you know exactly what you are reading.
               </p>
-              <div className="cta-row">
-                <Link href="#all-case-studies" className="link">Browse the case studies</Link>
-              </div>
             </div>
-
-            <figure className="csl-anatomy" aria-labelledby="anatomy-title">
-              <figcaption className="csl-anatomy-title"><b id="anatomy-title">Inside every case study</b><span>Same four parts</span></figcaption>
-              <ol className="csl-steps">
-                <li style={{ '--c': 'var(--coral-soft)' } as React.CSSProperties}><div><strong>The problem</strong><span>Where growth was stuck, and why</span></div></li>
-                <li style={{ '--c': 'var(--butter-soft)' } as React.CSSProperties}><div><strong>The work</strong><span>What was diagnosed and built</span></div></li>
-                <li style={{ '--c': 'var(--sky-soft)' } as React.CSSProperties}><div><strong>The results</strong><span>Before and after, drawn to scale</span></div></li>
-                <li style={{ '--c': 'var(--light-sage)' } as React.CSSProperties}><div><strong>The origin</strong><span>Who did the work, and on what basis</span></div></li>
-              </ol>
-            </figure>
           </div>
         </section>
 
         {/* Case studies */}
-        <section className="rule csl-list" id="all-case-studies" aria-labelledby="csl-list-title">
+        <section className="blog-listing csl-listing" id="all-case-studies">
           <div className="wrap">
-            <div className="csl-list-head">
-              <div>
-                <p className="label">All case studies</p>
-                <h2 id="csl-list-title">The work, in detail</h2>
-              </div>
-              <p className="csl-count">{CASE_STUDIES.length} {CASE_STUDIES.length === 1 ? 'case study' : 'case studies'}</p>
-            </div>
-            <div className="csl-grid">
-              {CASE_STUDIES.map((c) => (
-                <Link key={c.slug} href={caseStudyPath(c.slug)} className="csl-card">
-                  <div className="csl-body">
-                    <p className="csl-meta">
-                      <span className="csl-tag">{c.discipline}</span>
-                      <span className="csl-client">{c.client}</span>
-                      <span className="csl-sep" aria-hidden="true">·</span>
-                      <span>{c.industry}</span>
-                    </p>
-                    <h2>{c.title}</h2>
-                    <p className="csl-sum">{c.summary}</p>
-                    <ul className="csl-chips" aria-label="What was built">
-                      {c.highlights.map((h) => <li key={h} className="chip"><span className="dot" style={{ '--c': 'var(--sky)' } as React.CSSProperties}></span>{h}</li>)}
-                    </ul>
-                    <p className="csl-origin">{c.origin}</p>
-                    <span className="csl-more">Read the case study <ArrowRight size={18} aria-hidden="true" /></span>
+            {featured && (
+              <div className="blog-featured-wrap">
+                <Link href={caseStudyPath(featured.slug)} className="featured-blog" prefetch={false}>
+                  <div className="featured-blog-media">{featuredCover}</div>
+                  <div className="featured-blog-body">
+                    <div className="blog-meta">
+                      <span className="label featured-blog-label">Featured</span>
+                      <span className="chip blog-chip">{featured.discipline}</span>
+                    </div>
+                    <h2 className="featured-blog-title">{featured.title}</h2>
+                    <p className="featured-blog-excerpt">{featured.summary}</p>
+                    <div className="blog-meta featured-blog-meta">
+                      <span className="csl-meta-line">
+                        {featured.client} <span className="blog-meta-dot" aria-hidden="true">&bull;</span>&nbsp;{featured.industry}
+                      </span>
+                    </div>
+                    <p className="csl-feature-origin">{featured.origin}</p>
+                    <span className="btn btn-s featured-blog-cta">Read the case study</span>
                   </div>
-                  {c.results.length === 0 ? (
-                  <div className="csl-results" aria-label={`${c.client} project highlights`}>
-                    <p className="csl-results-title">Project highlights</p>
-                    {c.metrics?.items.map((m) => (
-                      <div key={m.label} className="csl-result csl-highlight">
-                        <b>{m.value}</b><span>{m.label}</span>
-                      </div>
-                    ))}
-                    <p className="note">No figures were reported for this project.</p>
-                  </div>
-                  ) : (
-                  <div className="csl-results" aria-label={`${c.client} headline results`}>
-                    <p className="csl-results-title">Headline results</p>
-                    {c.results.map((r) => (
-                      <div key={r.label} className="csl-result">
-                        <div className="csl-result-top"><span>{r.label}</span><b>{r.value}</b></div>
-                        {'count' in r ? (
-                          <span className="csl-dots" role="img" aria-label={`${r.count} dots, one for each ${r.unit}`}>
-                            {Array.from({ length: r.count }, (_, i) => <i key={i}></i>)}
-                          </span>
-                        ) : (
-                          <>
-                            <div className="csl-bar"><span>Before</span><span className="csl-track"><span className="csl-fill" style={{ '--w': `${r.scale}%` } as React.CSSProperties}></span></span><span>{r.before}</span></div>
-                            <div className="csl-bar"><span>After</span><span className="csl-track"><span className="csl-fill after" style={{ '--w': '100%' } as React.CSSProperties}></span></span><span>{r.after}</span></div>
-                          </>
-                        )}
-                      </div>
-                    ))}
-                    <p className="note">{resultsNote(c.results)}</p>
-                  </div>
-                  )}
                 </Link>
-              ))}
-            </div>
+              </div>
+            )}
+
+            {others.length > 0 && (
+              <>
+                <div className="blog-grid-head">
+                  <h2 className="blog-grid-title" id="csl-list-title">The work, in detail</h2>
+                  <p className="csl-count">{others.length} {others.length === 1 ? 'case study' : 'case studies'}</p>
+                </div>
+                <div className="blog-grid csl-cards">
+                  {others.map((c) => (
+                    <Link key={c.slug} href={caseStudyPath(c.slug)} className="blog-card" prefetch={false}>
+                      <div className="blog-card-media">{c.cover ?? <DefaultCover />}</div>
+                      <div className="blog-card-content">
+                        <div className="blog-meta">
+                          <span className="chip blog-chip">{c.discipline}</span>
+                        </div>
+                        <h3>{c.title}</h3>
+                        <p>{c.summary}</p>
+                        {c.results.length > 0 && (
+                          <p className="csl-headline"><b>{c.results[0].value}</b> {c.results[0].label}, as reported</p>
+                        )}
+                        <p className="csl-card-origin">{c.origin}</p>
+                        <div className="blog-card-foot">
+                          <span className="blog-card-date">{c.client}</span>
+                          <span className="blog-card-cta">
+                            Read the case study <ArrowIcon />
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </section>
 

@@ -1,4 +1,5 @@
 import type { CaseStudy } from '@/content/case-studies/types';
+import { LumenGrowthCover } from '@/components/case-studies/covers';
 import { PricingDemo } from '@/components/case-studies/PricingDemo';
 import { BrowserFrame, ChangeCards, Checklist, Journey, PointList, SeoSnippet, StatCard, ToolList } from '@/components/case-studies/blocks';
 
@@ -29,6 +30,7 @@ const study: CaseStudy = {
   industry: 'AI receptionist software for UK trades',
   discipline: 'GoHighLevel SaaS website',
   origin: 'A GHL Scale Up project, shared by Sage Kite',
+  cover: <LumenGrowthCover />,
   practitioner: { name: 'Pavan Kohli', role: 'GHL Expert' },
   highlights: ['Multi-currency pricing', 'Checkout wiring', 'Landing page', 'Content and trust'],
   results: [],

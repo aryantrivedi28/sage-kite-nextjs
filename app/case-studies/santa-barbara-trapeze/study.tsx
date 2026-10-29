@@ -1,4 +1,5 @@
 import type { CaseStudy } from '@/content/case-studies/types';
+import { SantaBarbaraTrapezeCover } from '@/components/case-studies/covers';
 import { SmartCollections } from '@/components/case-studies/SmartCollections';
 import { Countdown } from '@/components/case-studies/Countdown';
 import { Checklist, Journey, SeoSnippet, StatCard } from '@/components/case-studies/blocks';
@@ -27,6 +28,7 @@ const study: CaseStudy = {
   industry: 'Trapeze and acrobatics studio',
   discipline: 'Shopify store upgrade and automation',
   origin: 'A Sage Kite client project',
+  cover: <SantaBarbaraTrapezeCover />,
   highlights: ['Impulse theme', 'Smart collections', 'Data and SEO', 'Countdown timers'],
   results: [],
 

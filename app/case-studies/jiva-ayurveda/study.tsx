@@ -1,4 +1,5 @@
 import type { CaseStudy } from '@/content/case-studies/types';
+import { JivaCover } from '@/components/case-studies/covers';
 import { SearchTyper } from '@/components/case-studies/SearchTyper';
 import { SearchFlow } from '@/components/case-studies/SearchFlow';
 import { LinkingDemo } from '@/components/case-studies/LinkingDemo';
@@ -22,6 +23,7 @@ const study: CaseStudy = {
   industry: 'Healthcare and Ayurvedic treatment',
   discipline: 'SEO',
   origin: 'Previous work by a Sage Kite delivery specialist',
+  cover: <JivaCover />,
   practitioner: { name: 'Sangram Singh', role: 'SEO consultant' },
   highlights: ['Content architecture', 'City-level pages', 'Internal linking system'],
   results: [

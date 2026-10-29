@@ -66,9 +66,11 @@ export interface CaseStudy {
   discipline: string;
   /** Who did the work and on what basis, e.g. "Previous work by a Sage Kite delivery specialist". */
   origin: string;
+  /** Original illustration for the /case-studies card (components/case-studies/covers.tsx). Never a photo, screenshot or logo. */
+  cover?: ReactNode;
   /** The person who did the work, if named. Added to the Article schema. */
   practitioner?: { name: string; role: string };
-  /** The main pieces of work, shown as chips on the listing card. */
+  /** The main pieces of work, shown as chips in the homepage's featured case studies (components/home/Work.tsx). Not shown on the /case-studies listing. */
   highlights: string[];
   /**
    * Headline figures for the listing card and the Results section. Leave empty

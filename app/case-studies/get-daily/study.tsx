@@ -1,4 +1,5 @@
 import type { CaseStudy } from '@/content/case-studies/types';
+import { GetDailyCover } from '@/components/case-studies/covers';
 import { ScreenshotTabs } from '@/components/case-studies/ScreenshotTabs';
 import { BrowserFrame, Checklist, Journey, PhoneFrame, RateDots, RisingSteps, ScaleBar } from '@/components/case-studies/blocks';
 
@@ -27,6 +28,7 @@ const study: CaseStudy = {
   industry: 'Direct-to-consumer coffee',
   discipline: 'D2C website development',
   origin: 'Previous work by a Sage Kite delivery specialist',
+  cover: <GetDailyCover />,
   practitioner: { name: 'Apoorv Bhatt', role: 'Developer' },
   highlights: ['Custom UI', 'Performance', 'Pre-order and waiting list', 'Rewards loyalty'],
   results: [],

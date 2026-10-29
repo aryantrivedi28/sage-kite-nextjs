@@ -1,4 +1,5 @@
 import type { CaseStudy } from '@/content/case-studies/types';
+import { HemlockCover } from '@/components/case-studies/covers';
 import { BrowserFrame, ChangeCards, Checklist, DataTable, Journey, PointList } from '@/components/case-studies/blocks';
 
 /*
@@ -28,6 +29,7 @@ const study: CaseStudy = {
   industry: 'Vacation rentals: luxury cabins',
   discipline: 'GoHighLevel direct booking website',
   origin: 'A Sage Kite client project',
+  cover: <HemlockCover />,
   highlights: ['Cabin collection', 'Booking calendars', 'Location privacy', 'Brand story'],
   results: [],
 

@@ -12,6 +12,9 @@
  *     The folder name must equal `slug`, lowercase with hyphens.
  *  2. Fill in study.tsx. Leave out any section you don't need.
  *  3. Import it below and add it to the TOP of `caseStudies` (newest first).
+ *     The newest study is the featured card on /case-studies.
+ *  4. Add a cover in components/case-studies/covers.tsx and set `cover` in study.tsx.
+ *     Draw it in code: never a photo, screenshot, logo, brand name, text or number.
  *
  *  The /case-studies listing, the page, metadata, Article JSON-LD and the
  *  sitemap are all generated from the data.

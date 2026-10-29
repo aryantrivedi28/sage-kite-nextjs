@@ -1,4 +1,5 @@
 import type { CaseStudy } from '@/content/case-studies/types';
+import { JensonCover } from '@/components/case-studies/covers';
 import { DuplicateUrlFlow } from '@/components/case-studies/DuplicateUrlFlow';
 import { CategoryFixes } from '@/components/case-studies/CategoryFixes';
 import { Callout, Journey, PageGridSketch, RankLadder } from '@/components/case-studies/blocks';
@@ -26,6 +27,7 @@ const study: CaseStudy = {
   industry: 'Online cycling retail',
   discipline: 'SEO',
   origin: 'Previous work by a Sage Kite delivery specialist',
+  cover: <JensonCover />,
   practitioner: { name: 'Sangram Singh', role: 'SEO consultant' },
   highlights: ['Category page content', 'Internal linking', 'Duplicate URL fixes', 'Review schema'],
   results: [
