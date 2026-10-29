@@ -7,7 +7,7 @@ export const CASE_STUDY_CSS = `
           /* Shared case study styles. Rendered by CaseStudyPage; all classes are prefixed cs-. */
           .cs section{padding:clamp(56px,8vw,104px) 0}
           .cs .cs-sky-band{background:color-mix(in srgb,var(--sky-soft) 45%,var(--warm-white))}
-          .cs h2{font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.08}
+          .cs h2{font-size:clamp(1.5rem,2.3vw,1.95rem);line-height:1.12}
           .cs-head{display:grid;gap:4px;align-content:start;margin-bottom:clamp(32px,5vw,56px);max-width:820px}
           .cs-head .label{margin-bottom:6px}
           .cs-head .sub{max-width:60ch;margin-top:14px}
@@ -25,8 +25,8 @@ export const CASE_STUDY_CSS = `
           .cs-hero-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(36px,6vw,72px);align-items:start}
           .cs-hero-copy{display:grid;gap:22px}
           .cs-hero-label{justify-self:start;padding:6px 14px;border-radius:999px;background:var(--sky-soft);color:var(--ink);font-size:.85rem;font-weight:600;line-height:1.4}
-          .cs-hero h1{font-size:clamp(2.35rem,4.8vw,3.9rem);line-height:1.04;letter-spacing:-.03em}
-          .cs-dek{font-size:clamp(1.2rem,2vw,1.5rem);line-height:1.3;font-weight:600;color:var(--sage);max-width:36ch}
+          .cs-hero h1{font-size:clamp(1.85rem,3vw,2.5rem);line-height:1.08;letter-spacing:-.03em}
+          .cs-dek{font-size:clamp(1.05rem,1.4vw,1.2rem);line-height:1.3;font-weight:600;color:var(--sage);max-width:36ch}
           .cs-lede{font-size:clamp(1.1rem,1.4vw,1.2rem);line-height:1.6;max-width:60ch}
           .cs-badge{display:inline-flex;align-items:center;gap:10px;justify-self:start;padding:8px 14px;border-radius:999px;background:var(--sky-soft);color:var(--ink);font-weight:600;font-size:.86rem;line-height:1.3}
           .cs-badge::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--sky);flex:none}
@@ -494,7 +494,7 @@ export const CASE_STUDY_CSS = `
           .cs .cs-takeaway{padding-top:0}
           .cs-panel{background:var(--butter-soft);border-radius:12px;padding:clamp(28px,5vw,64px);display:grid;gap:clamp(28px,4vw,44px);color:var(--ink)}
           .cs-panel .label{color:var(--ink);margin-bottom:0}
-          .cs-panel h2{font-size:clamp(1.8rem,3.6vw,2.8rem);line-height:1.12;max-width:26ch}
+          .cs-panel h2{font-size:clamp(1.5rem,2.5vw,2rem);line-height:1.12;max-width:26ch}
           .cs-panel p.body{max-width:62ch}
           .cs-versus{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
           .cs-versus figure{background:var(--warm-white);border-radius:8px;padding:18px;display:grid;gap:10px}
@@ -711,7 +711,7 @@ export const CASE_STUDY_CSS = `
           .cs-about p{max-width:64ch}
           .cs-cta{background:var(--coral-soft);color:var(--ink);border-radius:12px;padding:clamp(28px,5vw,56px);display:grid;gap:20px;margin-top:28px;position:relative;overflow:hidden}
           .cs-cta::after{content:"";position:absolute;right:0;bottom:0;width:clamp(80px,14vw,180px);height:clamp(80px,14vw,180px);background:var(--butter);clip-path:polygon(100% 0,100% 100%,0 100%)}
-          .cs-cta h2{font-size:clamp(1.7rem,3.2vw,2.5rem);line-height:1.12;max-width:24ch}
+          .cs-cta h2{font-size:clamp(1.5rem,2.4vw,1.95rem);line-height:1.12;max-width:24ch}
           .cs-cta p{max-width:54ch}
           .cs-cta .cta-row{position:relative;z-index:1}
 

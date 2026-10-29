@@ -1745,6 +1745,22 @@ Past approval records below describe only what the supplied reports establish.
 - **Limitations:** the covers are illustrations, not photos of the work. The featured card is always the newest study. The listing no longer shows the metrics tiles, the highlight chips or the results drawn to scale; those stay on the study pages. On the featured card the drawing has extra background above and below at wide screens, because the box is taller than 16:9.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D051 — Smaller headings on the case study pages
+
+- **Date:** 29 October 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the user found the font on the case study pages too large ("not looking good", screenshot of /case-studies/lumengrowth) and asked for it to be reduced to an appropriate size without changing the content. Case study titles are 72–132 characters long; at a 1470 px window the h1 was about 62 px and the LumenGrowth title took 8 lines; section headings were about 46 px and took 3–4 lines.
+- **Approval:** user request, 29 October 2026; the sizes were chosen by Claude. A first step (h1 max about 46 px, h2 about 35 px) was reviewed by the user, who asked for "little bit only more", giving the sizes below.
+- **Change ([components/case-studies/caseStudyStyles.ts](components/case-studies/caseStudyStyles.ts) only, so every case study page):**
+  - h1 `.cs-hero h1`: `clamp(2.35rem,4.8vw,3.9rem)`, line-height 1.04 → `clamp(1.85rem,3vw,2.5rem)`, line-height 1.08 (max 40 px).
+  - Line under the h1 `.cs-dek`: `clamp(1.2rem,2vw,1.5rem)` → `clamp(1.05rem,1.4vw,1.2rem)`.
+  - Section headings `.cs h2`: `clamp(1.9rem,3.6vw,2.9rem)`, line-height 1.08 → `clamp(1.5rem,2.3vw,1.95rem)`, line-height 1.12 (max about 31 px).
+  - Takeaway heading `.cs-panel h2`: `clamp(1.8rem,3.6vw,2.8rem)` → `clamp(1.5rem,2.5vw,2rem)`; closing CTA heading `.cs-cta h2`: `clamp(1.7rem,3.2vw,2.5rem)` → `clamp(1.5rem,2.4vw,1.95rem)`, so neither is larger than the section headings.
+  - No copy, colour, font or layout change.
+- **Observed effects:** at 1470 px the LumenGrowth title is 40 px and takes 5 lines instead of 8 (the global `text-wrap: balance` on headings keeps lines even); its section headings are about 31 px.
+- **Validation (run by Claude):** `npx tsc --noEmit` and `npm run build` pass; screenshots of /case-studies/lumengrowth at 1470 px on the local dev server (the first step was also checked at 375 px on /case-studies/santa-barbara-trapeze). Other case study pages were not opened one by one; they share the same styles.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
