@@ -10,9 +10,9 @@ const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services/consultancy`;
 
 export const metadata: Metadata = {
-  title: "Business Growth Consulting & Fractional CMO | Sage Kite",
-  description: "Business growth consulting for SMEs: go-to-market strategy, AI consulting and fractional CMO support, with a clear diagnosis and a roadmap to act on.",
-  keywords: ["business growth consulting", "growth consultancy", "GTM consultancy", "go-to-market consulting", "fractional CMO", "AI consultancy"],
+  title: "Business Strategy Consulting for SMEs | Sage Kite Experts",
+  description: "Sage Kite provides business strategy consulting to help companies set priorities, assess challenges, and build practical plans for sustainable business growth.",
+  keywords: ["Business Strategy Consulting", "Strategic Planning Services", "Business Advisory Services", "Go-to-Market Consulting", "Business Performance Consulting", "Growth Strategy Services"],
   alternates: {
     canonical: PAGE_URL,
   },
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "Business Growth Consulting & Fractional CMO | Sage Kite",
-    description: "Find what is holding growth back and what to fix first, with GTM consultancy, AI consultancy and fractional CMO support from Sage Kite.",
+    title: "Business Strategy Consulting for SMEs | Sage Kite",
+    description: "See how Sage Kite business strategy consulting helps companies assess challenges, set priorities, and develop practical plans for long-term performance.",
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {
