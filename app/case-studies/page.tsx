@@ -98,15 +98,10 @@ export default function CaseStudiesPage() {
           .csl-listing .blog-chip{white-space:normal}
           .blog-card .csl-headline{flex:none;margin:-10px 0 20px;font-size:.875rem;line-height:1.45;color:var(--sage)}
           .csl-headline b{color:var(--ink);font-weight:800}
-          .blog-card .csl-card-origin{flex:none;margin:-10px 0 20px;font-size:.8125rem;line-height:1.45;color:var(--sage);font-weight:600}
           /* client, dot and industry flow as one line of text; the dot is tied to the word after it, so it never ends a line */
           .csl-meta-line .blog-meta-dot{margin-right:.15em}
           .csl-cards .blog-card-cta{white-space:nowrap}
-          /* A long client name (e.g. Santa Barbara Trapeze) wraps beside the CTA. While cards sit side by side, every
-             footer gets room for two lines and keeps its text at the bottom, so footers in a row line up. */
-          .csl-cards .blog-card-foot{align-items:flex-end}
-          .csl-cards .blog-card-date{line-height:1.4}
-          @media (min-width:641px){.csl-cards .blog-card-foot{min-height:calc(19px + 2.8 * .8125rem)}}
+          .csl-cards .blog-card-foot{justify-content:flex-end}
 
           /* cover illustrations (components/case-studies/covers.tsx): brand tokens only */
           .cs-cover{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -211,14 +206,13 @@ export default function CaseStudiesPage() {
                         <div className="blog-meta">
                           <span className="chip blog-chip">{c.discipline}</span>
                         </div>
-                        <h3>{c.title}</h3>
-                        <p>{c.summary}</p>
+                        {/* The full titles run to six lines on a card, so the grid shows the client and the study's dek. */}
+                        <h3>{c.client}</h3>
+                        <p>{c.hero.dek}</p>
                         {c.results.length > 0 && (
                           <p className="csl-headline"><b>{c.results[0].value}</b> {c.results[0].label}, as reported</p>
                         )}
-                        <p className="csl-card-origin">{c.origin}</p>
                         <div className="blog-card-foot">
-                          <span className="blog-card-date">{c.client}</span>
                           <span className="blog-card-cta">
                             Read the case study <ArrowIcon />
                           </span>

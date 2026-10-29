@@ -1761,6 +1761,17 @@ Past approval records below describe only what the supplied reports establish.
 - **Validation (run by Claude):** `npx tsc --noEmit` and `npm run build` pass; screenshots of /case-studies/lumengrowth at 1470 px on the local dev server (the first step was also checked at 375 px on /case-studies/santa-barbara-trapeze). Other case study pages were not opened one by one; they share the same styles.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D052 — /case-studies grid cards: client name and dek instead of the full title and summary
+
+- **Date:** 29 October 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the user found the grid cards (D050) carried too much text: a title of up to six lines, a summary of up to five, the origin and the client.
+- **Approval:** the user chose this option on 29 October 2026 from three offered (client + short line; title only; title + summary without origin). No new copy: the card uses wording that already exists in each study.
+- **Change ([app/case-studies/page.tsx](app/case-studies/page.tsx) only):** on the eight grid cards the h3 is now `client` (was `title`) and the paragraph is `hero.dek`, the line under the h1 on the study page (was `summary`). The client is no longer repeated in the footer, which now holds only "Read the case study" on the right; the two-line footer height from the D050 follow-up is removed. The discipline chip, the headline result line (three studies) and the origin line are unchanged. The featured card, the hero, metadata and JSON-LD (whose ItemList still names each study by its full title) are unchanged.
+- **Follow-up, same day:** the user asked for the origin line ("A Sage Kite client project", "A GHL Scale Up project, shared by Sage Kite", "Previous work by a Sage Kite delivery specialist") to be removed from the grid cards too. Removed with its `.csl-card-origin` rule. The origin still appears on the featured card and on every study page (hero badge and the About section), so each example still states its origin before a reader relies on it.
+- **Validation (run by Claude):** `npx tsc --noEmit` and `npm run build` pass; screenshots of /case-studies at 1440 px and 375 px on the local dev server.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
