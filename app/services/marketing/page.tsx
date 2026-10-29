@@ -10,9 +10,9 @@ const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services/marketing`;
 
 export const metadata: Metadata = {
-  title: "Digital Marketing Services: SEO, AI SEO & Ads | Sage Kite",
-  description: "Digital marketing services: SEO, AI SEO, Google, Meta and LinkedIn Ads, social and email, connected to your CRM so you can see what each channel returns.",
-  keywords: ["marketing services", "SEO services", "AI SEO", "Google Ads management", "Meta Ads management", "email marketing services"],
+  title: "Digital Marketing Services for Business Growth | Sage Kite",
+  description: "Sage Kite provides digital marketing services across SEO, paid media, social, and email to help businesses attract qualified leads and measure campaign results.",
+  keywords: ["Digital Marketing Services", "SEO Services", "Paid Media Services", "Social Media Marketing Services", "Email Marketing Services", "Marketing Automation Services"],
   alternates: {
     canonical: PAGE_URL,
   },
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "Digital Marketing Services: SEO, AI SEO & Ads | Sage Kite",
-    description: "SEO, AI SEO, paid media, social and email marketing, planned around your priorities and connected to your CRM.",
+    title: "Digital Marketing Services That Generate Leads | Sage Kite",
+    description: "See how Sage Kite digital marketing services connect SEO, paid campaigns, social media, and email to reach relevant audiences and track lead generation.",
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {

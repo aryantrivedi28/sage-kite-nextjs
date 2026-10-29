@@ -10,9 +10,9 @@ const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services/specialist-staffing`;
 
 export const metadata: Metadata = {
-  title: "Virtual Assistant Services: CRM & Marketing VAs | Sage Kite",
-  description: "Virtual assistant services: Tier 1 VAs for CRM and automation, marketing operations, email, social media and lead generation, working inside your systems.",
-  keywords: ["specialist staffing", "virtual assistant services", "CRM virtual assistant", "marketing operations VA", "email marketing VA", "lead generation VA"],
+  title: "Marketing Virtual Assistant Services | Sage Kite",
+  description: "Sage Kite offers marketing virtual assistant services to help businesses manage campaigns, CRM tasks, email follow-ups, and daily marketing operations.",
+  keywords: ["Marketing Virtual Assistant Services", "Marketing Virtual Assistant", "Virtual Marketing Assistant", "Marketing Support Services", "CRM Administrative Support", "Marketing Operations Support"],
   alternates: {
     canonical: PAGE_URL,
   },
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "Virtual Assistant Services: CRM & Marketing VAs | Sage Kite",
-    description: "Tier 1 virtual assistants who run your CRM, campaigns and follow-up day to day, inside your systems, to a scope agreed before they start.",
+    title: "Revised: Marketing Virtual Assistant Support | Sage Kite Experts",
+    description: "See how Sage Kite provides marketing virtual assistant support for campaign coordination, CRM updates, email follow-ups, and routine marketing tasks.",
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {
