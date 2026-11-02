@@ -1772,6 +1772,40 @@ Past approval records below describe only what the supplied reports establish.
 - **Validation (run by Claude):** `npx tsc --noEmit` and `npm run build` pass; screenshots of /case-studies at 1440 px and 375 px on the local dev server.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D053 — New metadata for /services/white-label
+
+- **Date:** 2 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the user supplied new SEO metadata for the page (screenshot, stated as the source of truth), targeting the primary keyword "White Label Agency Services".
+- **Approval:** the user supplied the exact wording on 2 November 2026 and asked for it to be applied. Page copy, headings and JSON-LD were not part of the request and are unchanged.
+- **Change ([app/services/white-label/page.tsx](app/services/white-label/page.tsx), metadata only):**
+  - `title`: "White-Label CRM & Marketing for Agencies | Sage Kite" → "White Label Agency Services for Growth" (as supplied; the root layout has no title template, so no "| Sage Kite" is added).
+  - `description`: "White-label CRM implementation, marketing and specialist VA support for agencies, delivered under your brand, with scope agreed before work begins." → "Sage Kite provides white-label agency services for CRM and automation delivery, helping agencies fulfil client projects under their brand without permanent hires."
+  - `openGraph.title` and `twitter.title`: "White-Label CRM & Marketing for Agencies | Sage Kite" → "White Label CRM and Automation Support for Agencies | Sage Kite".
+  - `openGraph.description` and `twitter.description`: "More delivery capacity for your agency, under your brand, with scope, client communication, ownership and handover agreed before work begins." → "Sage Kite helps marketing agencies deliver CRM and automation projects under their own brand, with agreed scope, project ownership, and clear client handovers."
+  - `keywords`: white-label services for agencies, white-label CRM implementation, white-label marketing fulfilment, agency delivery partner, white-label automation → White Label Agency Services (primary), White Label CRM Services, White Label Automation Services, Agency Fulfilment Services, CRM Implementation for Agencies, Outsourced CRM Services.
+- **Expected effects:** search results and social shares show the new title and descriptions after the next deploy and recrawl. Not measured.
+- **Limitations:** the meta title has no brand suffix, as supplied. The Twitter card reuses the OG title and description (none were supplied separately). The `keywords` tag is ignored by Google.
+- **Validation (run by Claude):** `npx tsc --noEmit` and `npm run build` pass; the built page's `<title>`, meta description, `og:*` and `twitter:*` tags checked.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D054 — New metadata for /contact
+
+- **Date:** 2 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the user supplied new SEO metadata for /contact (screenshot, stated as the source of truth), targeting the primary keyword "Business Growth Consultancy".
+- **Approval:** the user supplied the exact wording on 2 November 2026. Claude pointed out that the wording describes Sage Kite's approach (the /about page's subject) rather than contacting Sage Kite; the user confirmed it goes on /contact, as linked. /about is unchanged. Page copy, headings and JSON-LD on /contact are unchanged.
+- **Change ([app/contact/page.tsx](app/contact/page.tsx), metadata only):**
+  - `title`: "Contact Us: Book a Discovery Call | Sage Kite" → "Business Growth Consultancy and Our Approach" (as supplied; no title template adds "| Sage Kite").
+  - `description`: "Contact Sage Kite about consultancy, CRM implementation, marketing, staffing or white-label delivery. Send an enquiry and we reply within 24 hours." → "Sage Kite explains its approach to business systems, CRM, marketing and people, helping growing companies connect strategy with practical execution every day."
+  - `openGraph.title` and `twitter.title`: "Contact Us: Book a Discovery Call | Sage Kite" → "Business Growth Systems and Strategy for SMEs | Sage Kite".
+  - `openGraph.description` and `twitter.description`: "Tell us where growth is getting stuck. Send an enquiry and we reply within 24 hours on business days." → "See how Sage Kite connects strategy, CRM, marketing, automation, and people to help growing businesses improve operations and put practical plans into action."
+  - `keywords`: contact Sage Kite, book a discovery call, business growth consultancy contact, CRM implementation enquiry → Business Growth Consultancy (primary), Business Systems Consulting, Business Strategy and Planning, CRM and Marketing Consulting, Business Process Improvement, Business Operations Consulting.
+- **Expected effects:** search results and social shares for /contact show the new title and descriptions after the next deploy and recrawl. Not measured.
+- **Limitations:** the new title and description no longer mention contacting Sage Kite, so a search for "contact Sage Kite" may match this page less clearly. "Business Growth Consultancy" is also the focus of the homepage and /about metadata, so these pages may compete for the same term. The Twitter card reuses the OG title and description (none were supplied separately). The `keywords` tag is ignored by Google.
+- **Validation (run by Claude):** `npx tsc --noEmit` and `npm run build` pass; the built page's `<title>`, meta description, `og:*` and `twitter:*` tags checked.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

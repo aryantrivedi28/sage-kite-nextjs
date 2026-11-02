@@ -10,9 +10,9 @@ const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services/white-label`;
 
 export const metadata: Metadata = {
-  title: "White-Label CRM & Marketing for Agencies | Sage Kite",
-  description: "White-label CRM implementation, marketing and specialist VA support for agencies, delivered under your brand, with scope agreed before work begins.",
-  keywords: ["white-label services for agencies", "white-label CRM implementation", "white-label marketing fulfilment", "agency delivery partner", "white-label automation"],
+  title: "White Label Agency Services for Growth",
+  description: "Sage Kite provides white-label agency services for CRM and automation delivery, helping agencies fulfil client projects under their brand without permanent hires.",
+  keywords: ["White Label Agency Services", "White Label CRM Services", "White Label Automation Services", "Agency Fulfilment Services", "CRM Implementation for Agencies", "Outsourced CRM Services"],
   alternates: {
     canonical: PAGE_URL,
   },
@@ -20,14 +20,14 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "White-Label CRM & Marketing for Agencies | Sage Kite",
-    description: "More delivery capacity for your agency, under your brand, with scope, client communication, ownership and handover agreed before work begins.",
+    title: "White Label CRM and Automation Support for Agencies | Sage Kite",
+    description: "Sage Kite helps marketing agencies deliver CRM and automation projects under their own brand, with agreed scope, project ownership, and clear client handovers.",
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {
     card: "summary_large_image",
-    title: "White-Label CRM & Marketing for Agencies | Sage Kite",
-    description: "More delivery capacity for your agency, under your brand, with scope, client communication, ownership and handover agreed before work begins.",
+    title: "White Label CRM and Automation Support for Agencies | Sage Kite",
+    description: "Sage Kite helps marketing agencies deliver CRM and automation projects under their own brand, with agreed scope, project ownership, and clear client handovers.",
     images: DEFAULT_TWITTER_IMAGES,
   },
 };

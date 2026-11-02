@@ -12,9 +12,9 @@ const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/contact`;
 
 export const metadata: Metadata = {
-  title: "Contact Us: Book a Discovery Call | Sage Kite",
-  description: "Contact Sage Kite about consultancy, CRM implementation, marketing, staffing or white-label delivery. Send an enquiry and we reply within 24 hours.",
-  keywords: ["contact Sage Kite", "book a discovery call", "business growth consultancy contact", "CRM implementation enquiry"],
+  title: "Business Growth Consultancy and Our Approach",
+  description: "Sage Kite explains its approach to business systems, CRM, marketing and people, helping growing companies connect strategy with practical execution every day.",
+  keywords: ["Business Growth Consultancy", "Business Systems Consulting", "Business Strategy and Planning", "CRM and Marketing Consulting", "Business Process Improvement", "Business Operations Consulting"],
   alternates: {
     canonical: PAGE_URL,
   },
@@ -22,14 +22,14 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: PAGE_URL,
-    title: "Contact Us: Book a Discovery Call | Sage Kite",
-    description: "Tell us where growth is getting stuck. Send an enquiry and we reply within 24 hours on business days.",
+    title: "Business Growth Systems and Strategy for SMEs | Sage Kite",
+    description: "See how Sage Kite connects strategy, CRM, marketing, automation, and people to help growing businesses improve operations and put practical plans into action.",
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Contact Us: Book a Discovery Call | Sage Kite",
-    description: "Tell us where growth is getting stuck. Send an enquiry and we reply within 24 hours on business days.",
+    title: "Business Growth Systems and Strategy for SMEs | Sage Kite",
+    description: "See how Sage Kite connects strategy, CRM, marketing, automation, and people to help growing businesses improve operations and put practical plans into action.",
     images: DEFAULT_TWITTER_IMAGES,
   },
 };
