@@ -5,10 +5,13 @@
  * (w, h, fit, fm, auto=format).
  */
 
+import { safeFileBase } from './imageUpload';
+
 const SITE_URL = 'https://www.sagekite.com';
 
-// https://cdn.sanity.io/images/<project>/<dataset>/<hash>-<width>x<height>.<ext>, no query string
-const SANITY_IMAGE = /^https:\/\/cdn\.sanity\.io\/images\/([a-z0-9]+)\/[\w-]+\/[a-f0-9]+-(\d+)x(\d+)\.[a-z]+$/;
+// https://cdn.sanity.io/images/<project>/<dataset>/<hash>-<width>x<height>.<ext>, no query string.
+// Stays strict: stored post data never holds a vanity URL (decision.md D061); names are added at render time.
+const SANITY_IMAGE = /^https:\/\/cdn\.sanity\.io\/images\/([a-z0-9]+)\/[\w-]+\/[a-f0-9]+-(\d+)x(\d+)\.([a-z]+)$/;
 
 /** An unmodified image URL from this project's Sanity CDN (what next.config.ts allows). */
 export function isSanityImage(src: string): boolean {
@@ -23,9 +26,23 @@ export function sanityImageSize(src: string): { width: number; height: number } 
   return m ? { width: Number(m[2]), height: Number(m[3]) } : null;
 }
 
+/**
+ * A Sanity image URL with a readable file name ("vanity filename", decision.md D061): Sanity's CDN ignores
+ * an extra path segment after its own file name, so `.../<hash>-1600x900.webp/crm-for-coaches.webp` serves
+ * the same image. `name` is reduced to a-z, 0-9 and dashes; the extension is the asset's own. Any other
+ * source (a site path such as /images/blog/x.jpg) is returned unchanged. Render-time only: never store it.
+ */
+export function namedImageUrl(src: string, name: string): string {
+  if (!isSanityImage(src)) return src;
+  const ext = SANITY_IMAGE.exec(src)![4];
+  return `${src}/${safeFileBase(name)}.${ext}`;
+}
+
+/** A resized Sanity image. With `name`, the vanity file name goes before the query string (Sanity rejects it after). */
 export function sanityImageUrl(
   src: string,
   params: { w?: number; h?: number; fit?: 'max' | 'crop'; fm?: 'jpg' | 'webp' },
+  name?: string,
 ): string {
   const q = new URLSearchParams();
   if (params.w) q.set('w', String(params.w));
@@ -33,7 +50,7 @@ export function sanityImageUrl(
   if (params.fit) q.set('fit', params.fit);
   if (params.fm) q.set('fm', params.fm);
   else q.set('auto', 'format');
-  return `${src}?${q}`;
+  return `${name === undefined ? src : namedImageUrl(src, name)}?${q}`;
 }
 
 /**
@@ -76,7 +93,7 @@ export function absoluteImageUrl(src: string): string {
   return src.startsWith('/') ? `${SITE_URL}${src}` : src;
 }
 
-/** Social share image: Sanity images are cropped to the 1200 × 675 size the metadata declares. */
-export function shareImageUrl(src: string): string {
-  return isSanityImage(src) ? sanityImageUrl(src, { w: 1200, h: 675, fit: 'crop', fm: 'jpg' }) : absoluteImageUrl(src);
+/** Social share image: Sanity images are cropped to the 1200 × 675 size the metadata declares, named `name` if given. */
+export function shareImageUrl(src: string, name?: string): string {
+  return isSanityImage(src) ? sanityImageUrl(src, { w: 1200, h: 675, fit: 'crop', fm: 'jpg' }, name) : absoluteImageUrl(src);
 }

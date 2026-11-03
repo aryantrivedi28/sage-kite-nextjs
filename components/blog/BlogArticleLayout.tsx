@@ -10,6 +10,7 @@ import { buildBlogJsonLd } from '@/components/blog/blogJsonLd';
 import { JsonLd } from '@/components/blog/JsonLd';
 import type { BlogPost } from '@/content/blog';
 import { getPublishedPosts } from '@/content/blog/live';
+import { namedImageUrl } from '@/lib/sanity/image';
 
 /**
  * Page shell shared by every blog post (code and Sanity): header, hero, guide
@@ -80,7 +81,8 @@ export async function BlogArticleLayout({
           <div className="wrap">
             <figure className="article-hero-img">
               <Image
-                src={post.featuredImage}
+                // Sanity uploads get a readable file name, the post's slug (decision.md D061).
+                src={namedImageUrl(post.featuredImage, post.slug)}
                 alt={post.imageAlt ?? post.title} title={post.imageAlt ?? post.title}
                 fill
                 sizes="(max-width: 1040px) 100vw, 1000px"

@@ -113,7 +113,7 @@ function Source({ item }: { item: StudioSource }) {
   );
 }
 
-function Block({ block, anchor, preview }: { block: StudioBlock; anchor?: string; preview: boolean }) {
+function Block({ block, anchor, preview, imageName }: { block: StudioBlock; anchor?: string; preview: boolean; imageName?: string }) {
   switch (block.type) {
     case 'heading': {
       if (!block.text.trim()) return null;
@@ -156,8 +156,8 @@ function Block({ block, anchor, preview }: { block: StudioBlock; anchor?: string
         <figure>
           {size ? (
             <img
-              src={sanityImageUrl(src, { w: 1440, fit: 'max' })}
-              srcSet={ARTICLE_IMAGE_WIDTHS.map((w) => `${sanityImageUrl(src, { w, fit: 'max' })} ${w}w`).join(', ')}
+              src={sanityImageUrl(src, { w: 1440, fit: 'max' }, imageName)}
+              srcSet={ARTICLE_IMAGE_WIDTHS.map((w) => `${sanityImageUrl(src, { w, fit: 'max' }, imageName)} ${w}w`).join(', ')}
               sizes="(max-width: 760px) 100vw, 720px"
               width={size.width}
               height={size.height}
@@ -245,15 +245,33 @@ function Block({ block, anchor, preview }: { block: StudioBlock; anchor?: string
   }
 }
 
-/** The article body. Place inside an element with className="article-content". */
-/** `preview` is true only in the studio, where images picked in this browser are shown before they are uploaded. */
-export function StudioArticle({ blocks, preview = false }: { blocks: StudioBlock[]; preview?: boolean }) {
+/**
+ * Readable file names for the article's Sanity images (decision.md D061): `<slug>-2`, `<slug>-3`, ... in
+ * reading order (the featured image is `<slug>`). Only image blocks that render a Sanity image are counted.
+ */
+function articleImageNames(blocks: StudioBlock[], slug: string, preview: boolean): Map<string, string> {
+  const names = new Map<string, string>();
+  for (const b of blocks) {
+    if (b.type !== 'image') continue;
+    const src = imageSrcForRender(b.src, preview);
+    if (src && isSanityImage(src)) names.set(b.id, `${slug}-${names.size + 2}`);
+  }
+  return names;
+}
+
+/**
+ * The article body. Place inside an element with className="article-content".
+ * `preview` is true only in the studio, where images picked in this browser are shown before they are uploaded.
+ * `imageName` (the post's slug) gives Sanity images readable file names; without it their URLs are unchanged.
+ */
+export function StudioArticle({ blocks, preview = false, imageName }: { blocks: StudioBlock[]; preview?: boolean; imageName?: string }) {
   const resolved = resolveBlocks(blocks);
   const anchors = headingAnchors(resolved);
+  const names = imageName ? articleImageNames(resolved, imageName, preview) : undefined;
   return (
     <>
       {resolved.map((b) => (
-        <Block key={b.id} block={b} anchor={anchors.get(b.id)} preview={preview} />
+        <Block key={b.id} block={b} anchor={anchors.get(b.id)} preview={preview} imageName={names?.get(b.id)} />
       ))}
     </>
   );

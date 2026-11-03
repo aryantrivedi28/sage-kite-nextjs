@@ -69,7 +69,7 @@ function toBlogPost(p: StudioPost): BlogPost | null {
     relatedPlatform: PLATFORM_PAGE_SLUGS.includes(p.relatedPlatform) ? p.relatedPlatform : undefined,
     featured: p.featured || undefined,
     content: function StudioPostContent() {
-      return <StudioArticle blocks={blocks} />;
+      return <StudioArticle blocks={blocks} imageName={p.slug} />;
     },
   };
 }

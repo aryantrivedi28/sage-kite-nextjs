@@ -76,14 +76,21 @@ export function checkUploadedImage(
   return { ok: true, type: detected };
 }
 
-/** A safe file name for Sanity: the browser's name reduced to letters, digits and dashes, with the detected format's extension. */
-export function uploadFileName(name: string, type: UploadImageType): string {
+/**
+ * A file name without extension, reduced to a-z, 0-9 and single dashes (at most 80 characters), or 'image'
+ * when nothing is left. Shared by upload names and the vanity names on published image URLs (lib/sanity/image.ts).
+ */
+export function safeFileBase(name: string): string {
   const base = name
-    .replace(/\.[^.]*$/, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 80)
     .replace(/-+$/, '');
-  return `${base || 'image'}.${UPLOAD_IMAGE_FORMATS[type]}`;
+  return base || 'image';
+}
+
+/** A safe file name for Sanity: the browser's name reduced to letters, digits and dashes, with the detected format's extension. */
+export function uploadFileName(name: string, type: UploadImageType): string {
+  return `${safeFileBase(name.replace(/\.[^.]*$/, ''))}.${UPLOAD_IMAGE_FORMATS[type]}`;
 }

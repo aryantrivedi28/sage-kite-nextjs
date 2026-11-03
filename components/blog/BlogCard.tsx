@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { BlogPost } from '@/content/blog';
 import { formatDate } from './formatDate';
+import { namedImageUrl } from '@/lib/sanity/image';
 
 const ArrowIcon = () => (
   <svg
@@ -29,7 +30,8 @@ export function BlogCard({ post }: { post: BlogPost }) {
     <Link href={`/blog/${post.slug}`} className="blog-card" prefetch={false}>
       <div className="blog-card-media">
         <Image
-          src={post.featuredImage}
+          // Sanity uploads get a readable file name, the post's slug (decision.md D061).
+          src={namedImageUrl(post.featuredImage, post.slug)}
           alt={post.imageAlt ?? post.title} title={post.imageAlt ?? post.title}
           fill
           sizes="(max-width: 680px) 100vw, (max-width: 1040px) 50vw, 33vw"

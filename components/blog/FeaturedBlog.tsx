@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { BlogPost } from '@/content/blog';
 import { formatDate } from './formatDate';
+import { namedImageUrl } from '@/lib/sanity/image';
 
 /**
  * The headline article, shown above the grid in a larger two-column layout.
@@ -13,7 +14,8 @@ export function FeaturedBlog({ post }: { post: BlogPost }) {
     <Link href={`/blog/${post.slug}`} className="featured-blog" prefetch={false}>
       <div className="featured-blog-media">
         <Image
-          src={post.featuredImage}
+          // Sanity uploads get a readable file name, the post's slug (decision.md D061).
+          src={namedImageUrl(post.featuredImage, post.slug)}
           alt={post.imageAlt ?? post.title} title={post.imageAlt ?? post.title}
           fill
           sizes="(max-width: 1040px) 100vw, 58vw"

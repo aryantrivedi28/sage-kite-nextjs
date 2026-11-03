@@ -159,7 +159,8 @@ components/
 lib/sanity/               Server-only Sanity connection: client.ts (read client without token, write
                           client with token, pinned apiVersion), blogPosts.ts (StudioPost <-> `blogPost`
                           document; drafts as drafts.<id>; queries), image.ts (Sanity CDN URLs,
-                          absolute image URLs for metadata/JSON-LD, 1200x675 share crop) and
+                          absolute image URLs for metadata/JSON-LD, 1200x675 share crop; `namedImageUrl`
+                          adds a readable "vanity" file name, the post's slug, at render time, D061) and
                           imageUpload.ts (what an uploaded file really is, read from its bytes).
 content/blog/
   index.tsx               Registry of code posts (`posts`). Read its header comment.
@@ -335,6 +336,8 @@ The essentials:
   with the detected type and `uploadFileName`. Add a format there (with a structure check and tests), not to a list.
 - Let a post use any image source except `isAllowedImageSrc` (lib/sanity/image.ts): a file under
   /images/ or the site root, or an upload to this project's Sanity CDN. Never an arbitrary URL.
+- Store a vanity image URL (`…/<hash>-WxH.webp/<name>.webp`) as a post's src, or loosen `SANITY_IMAGE` to accept one.
+  Names are added only at render time (`namedImageUrl`, D061); validation always runs on the plain stored URL.
 
 ## Known gaps (do not "fix" these without asking)
 

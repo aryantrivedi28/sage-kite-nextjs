@@ -7,8 +7,8 @@ const SITE_URL = 'https://www.sagekite.com';
 /** Page metadata (title, canonical, Open Graph, Twitter) for a blog post. */
 export function buildBlogMetadata(post: BlogPost): Metadata {
   const url = `${SITE_URL}/blog/${post.slug}`;
-  // /public paths become absolute; Sanity uploads are cropped to 1200 × 675.
-  const image = shareImageUrl(post.featuredImage);
+  // /public paths become absolute; Sanity uploads are cropped to 1200 × 675 and named after the slug (D061).
+  const image = shareImageUrl(post.featuredImage, post.slug);
 
   return {
     title: `${post.seoTitle ?? post.title} | Sage Kite`,
