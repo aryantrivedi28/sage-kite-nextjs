@@ -47,8 +47,8 @@ npm test             # unit tests for the blog studio security code (tests/, nod
 
 There is no lint script. The only tests are the blog studio tests in `tests/`: security (they run the real
 Server Actions against a fake Sanity client and never touch the network) and paste / formatting. tests/hooks.mjs
-compiles `.tsx` files with the project's TypeScript, so a test can render a component (e.g. StudioArticle) with
-react-dom/server. "Done" means typecheck + build + `npm test` pass and the changed page has been opened in the browser.
+compiles `.tsx` files with the project's TypeScript (and maps CSS modules to their class names), so a test can render a
+component (e.g. StudioArticle, or the studio's fields.tsx) with react-dom/server. "Done" means typecheck + build + `npm test` pass and the changed page has been opened in the browser.
 
 ## Where things live
 
@@ -146,6 +146,11 @@ components/
                           `code`, [text](url), escapes) that StudioArticle, stripInline and the paste
                           parser share. Fields are still plain strings; headings are H2-H4; list items
                           nest by leading tabs; the `sources` block renders an H2 and an <ol>.
+                          Every image has an optional "Image file name" (`imageFileName` on the post,
+                          `fileName` on an image block, D062): stored as typed, cleaned only when rendered;
+                          empty, or nothing left after cleaning (D063), = the slug names of D061. postUtils holds suggestedImageFileName (the
+                          upload prefill, skipping camera / OS names) and articleImageNames (`<slug>-<n>`).
+                          fields.tsx holds Field and ImageFileNameField (hook-free, so tests can render them).
   Header.tsx, Footer.tsx  Shared header/footer.
   GoogleAnalytics.tsx     The GA4 tag (client component in the root layout); skipped on pages
                           with a `data-no-analytics` element (the blog studio).
@@ -160,7 +165,8 @@ lib/sanity/               Server-only Sanity connection: client.ts (read client 
                           client with token, pinned apiVersion), blogPosts.ts (StudioPost <-> `blogPost`
                           document; drafts as drafts.<id>; queries), image.ts (Sanity CDN URLs,
                           absolute image URLs for metadata/JSON-LD, 1200x675 share crop; `namedImageUrl`
-                          adds a readable "vanity" file name, the post's slug, at render time, D061) and
+                          adds a readable "vanity" file name at render time, D061: the editor's
+                          `imageFileName` / block `fileName`, else the slug, D062 (`featuredImageName`)) and
                           imageUpload.ts (what an uploaded file really is, read from its bytes).
 content/blog/
   index.tsx               Registry of code posts (`posts`). Read its header comment.

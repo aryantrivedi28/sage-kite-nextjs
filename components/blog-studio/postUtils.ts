@@ -1,6 +1,6 @@
 import type { BlogFaq, BlogGuideItem } from '@/content/blog/types';
-import { isUsableFeaturedImage } from '@/lib/sanity/image';
-import { UPLOAD_IMAGE_FORMATS } from '@/lib/sanity/imageUpload';
+import { chosenImageName, featuredImageName, isSanityImage, isUsableFeaturedImage, liveImageFileName } from '@/lib/sanity/image';
+import { MAX_IMAGE_FILE_NAME, UPLOAD_IMAGE_FORMATS, safeFileBase } from '@/lib/sanity/imageUpload';
 import { escapeInline, inlinePlainText, parseInline, safeHref, serializeRuns, type Run } from './inline';
 import type { SitePostSummary, StudioBlock, StudioBlockType, StudioPost, StudioSource } from './types';
 
@@ -101,6 +101,73 @@ export function compareListRows(a: { day: string; stamp: string; title: string }
   return b.day.localeCompare(a.day) || b.stamp.localeCompare(a.stamp) || a.title.localeCompare(b.title);
 }
 
+export { MAX_IMAGE_FILE_NAME };
+
+/*
+ * Image file names on the live site (decision.md D062). The editor may type one per image; when it is empty the
+ * featured image is named after the slug and article images `<slug>-<n>`, as D061. Names are cleaned (safeFileBase)
+ * only when rendered, so the field keeps what the editor wrote.
+ */
+
+/** Names that cameras, phones, apps and the OS give files: never worth keeping as an image's file name. */
+const GENERIC_FILE_NAMES = [
+  /^[\d-]+$/, // only digits and dashes: 20261003-101500
+  /^(image|img|blob|photo|picture|pic|pasted|file|download|upload|clipboard|copy|new|untitled)(-[\d-]*)?$/,
+  /^(img|dsc[nf]?|pxl|mvimg|gopr|dji|vid|sam|wp)-?\d[\w-]*$/, // IMG_1234, DSC01234, PXL_20231005_123456789
+  /^(screenshot|screen-shot|screen-capture|screen-recording|capture|scan|untitled-design|pasted-image|pasted-graphic)(-.*)?$/,
+  /^whatsapp-image(-.*)?$/,
+];
+
+/**
+ * The file name to prefill after an upload (D062): the picked file's name without its extension, cleaned, or ''
+ * when it is a generic camera / OS name ("IMG_1234.jpg", "Screenshot 2026-10-03 at 10.15.00.png", "image.png").
+ */
+export function suggestedImageFileName(fileName: string): string {
+  const base = fileName.replace(/\.[^.]*$/, '');
+  const clean = safeFileBase(base);
+  if (clean === 'image' || GENERIC_FILE_NAMES.some((re) => re.test(clean))) return '';
+  return clean;
+}
+
+/**
+ * Every article image block's file name (D062): `name` is what renders (the typed name, else `fallback`). The fallback
+ * is `<slug>-<n>`; n counts every image block that renders a Sanity image, in reading order, named or not, so naming
+ * one image never renumbers the others. A block that is not (yet) a Sanity image gets the number it would take.
+ */
+export function articleImageNames(blocks: StudioBlock[], slug: string): Map<string, { name: string; fallback: string; sanity: boolean }> {
+  const out = new Map<string, { name: string; fallback: string; sanity: boolean }>();
+  let n = 0;
+  for (const b of blocks) {
+    if (b.type !== 'image') continue;
+    const sanity = isSanityImage(b.src);
+    const fallback = `${slug}-${n + 2}`;
+    if (sanity) n++;
+    out.set(b.id, { name: chosenImageName(b.fileName, fallback), fallback, sanity });
+  }
+  return out;
+}
+
+/** Live file names that two or more of the post's Sanity images would share (featured image included). */
+export function duplicateImageFileNames(post: StudioPost): string[] {
+  const names: string[] = [];
+  if (isSanityImage(post.featuredImage)) names.push(liveImageFileName(post.featuredImage, featuredImageName(post)));
+  const blocks = new Map(post.blocks.map((b) => [b.id, b]));
+  for (const [id, n] of articleImageNames(post.blocks, post.slug)) {
+    const b = blocks.get(id);
+    if (n.sanity && b?.type === 'image') names.push(liveImageFileName(b.src, n.name));
+  }
+  return [...new Set(names.filter((n, i) => names.indexOf(n) !== i))];
+}
+
+/** A post from an old export or browser storage, given the file-name fields it predates (D062). */
+export function withImageFileNameDefaults(post: StudioPost): StudioPost {
+  return {
+    ...post,
+    imageFileName: post.imageFileName ?? '',
+    blocks: post.blocks.map((b) => (b.type === 'image' && typeof b.fileName !== 'string' ? { ...b, fileName: '' } : b)),
+  };
+}
+
 export function emptyPost(title: string, category: string, author: string, authorImage: string): StudioPost {
   const now = new Date().toISOString();
   return {
@@ -118,6 +185,7 @@ export function emptyPost(title: string, category: string, author: string, autho
     scheduledFor: '',
     featuredImage: '',
     imageAlt: '',
+    imageFileName: '',
     tags: [],
     focusKeyword: '',
     secondaryKeywords: [],
@@ -135,7 +203,7 @@ export function newBlock(type: StudioBlockType): StudioBlock {
     case 'heading': return { id, type, level: 2, text: '' };
     case 'text': return { id, type, text: '' };
     case 'list': return { id, type, ordered: false, items: '' };
-    case 'image': return { id, type, src: '', alt: '', caption: '' };
+    case 'image': return { id, type, src: '', alt: '', caption: '', fileName: '' };
     case 'quote': return { id, type, text: '', cite: '' };
     case 'table': return { id, type, rows: '' };
     case 'video': return { id, type, url: '', title: '' };
@@ -739,6 +807,9 @@ export function checklist(
     { label: 'At least one H2 section heading', ok: h2s.length > 0, required: false },
     { label: 'Tags: 3 to 6 phrases', ok: post.tags.length >= 3 && post.tags.length <= 6, required: false },
   );
+  if (duplicateImageFileNames(post).length) {
+    items.push({ label: 'Image file names are different from each other', ok: false, required: false });
+  }
   if (images.length) {
     items.push({ label: 'Every image has alt text', ok: images.every((b) => b.type === 'image' && b.src && b.alt.trim()), required: false });
   }

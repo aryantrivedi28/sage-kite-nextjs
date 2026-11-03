@@ -76,18 +76,28 @@ export function checkUploadedImage(
   return { ok: true, type: detected };
 }
 
+/** Longest image file name: what safeFileBase keeps, and what an editor may type (D062). */
+export const MAX_IMAGE_FILE_NAME = 80;
+
 /**
- * A file name without extension, reduced to a-z, 0-9 and single dashes (at most 80 characters), or 'image'
- * when nothing is left. Shared by upload names and the vanity names on published image URLs (lib/sanity/image.ts).
+ * A file name without extension, reduced to a-z, 0-9 and single dashes (at most 80 characters), or '' when nothing is
+ * left (e.g. "!!!", or a name only in a non-Latin script). Lets a typed name that cleans to nothing fall back (D063).
  */
-export function safeFileBase(name: string): string {
-  const base = name
+export function cleanFileBase(name: string): string {
+  return name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
-    .slice(0, 80)
+    .slice(0, MAX_IMAGE_FILE_NAME)
     .replace(/-+$/, '');
-  return base || 'image';
+}
+
+/**
+ * cleanFileBase, or 'image' when nothing is left. Shared by upload names and the vanity names on published image
+ * URLs (lib/sanity/image.ts).
+ */
+export function safeFileBase(name: string): string {
+  return cleanFileBase(name) || 'image';
 }
 
 /** A safe file name for Sanity: the browser's name reduced to letters, digits and dashes, with the detected format's extension. */

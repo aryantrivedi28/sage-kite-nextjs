@@ -61,6 +61,7 @@ function toBlogPost(p: StudioPost): BlogPost | null {
     readingTime,
     featuredImage: p.featuredImage,
     imageAlt: p.imageAlt.trim() || undefined,
+    imageFileName: p.imageFileName.trim() || undefined,
     tags: p.tags.length ? p.tags : undefined,
     focusKeyword: p.focusKeyword.trim() || undefined,
     secondaryKeywords: p.secondaryKeywords.length ? p.secondaryKeywords : undefined,

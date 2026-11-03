@@ -34,7 +34,7 @@ test('Google Docs: title, headings, styled spans, link, line break, nested list,
     { type: 'heading', level: 3, text: 'Steps' },
     { type: 'list', ordered: true, items: 'List your stages\nMap them' },
     { type: 'table', rows: '| **Tool** | **Price** |\n| Dubsado | $20 |' },
-    { type: 'image', src: '', alt: '', caption: '' },
+    { type: 'image', src: '', alt: '', caption: '', fileName: '' },
     { type: 'text', text: 'After the image.' },
   ]);
   assert.equal(r.droppedImages, 1);
@@ -79,7 +79,7 @@ test('Word desktop: H1 title, mso-bidi bold and italic, MsoListParagraph bullets
     { type: 'text', text: 'Then, in order:' },
     { type: 'list', ordered: true, items: 'Collect the contract\nTake the deposit' },
     { type: 'quote', text: 'Clients remember how the first week felt.', cite: '' },
-    { type: 'image', src: '', alt: 'Onboarding timeline', caption: '' },
+    { type: 'image', src: '', alt: 'Onboarding timeline', caption: '', fileName: '' },
   ]);
   assert.equal(r.droppedImages, 1);
   assert.ok(!JSON.stringify(r).includes('file:'), 'the file:/// path is never copied');
@@ -186,7 +186,7 @@ test('scripts, event attributes and unsafe links are reduced to text; nothing bu
   const r = articleFromClipboard(html, '');
   assert.deepEqual(shape(r.blocks), [
     { type: 'text', text: 'Hi' },
-    { type: 'image', src: '', alt: '', caption: '' },
+    { type: 'image', src: '', alt: '', caption: '', fileName: '' },
     { type: 'text', text: 'link other third <b>literal</b>' },
   ]);
   assert.ok(!/alert|onerror|onclick|evil|color/.test(JSON.stringify(r.blocks)));
@@ -336,7 +336,7 @@ test('Google Docs: an image between paragraphs becomes an empty Image block in t
   assert.deepEqual(shape(r.blocks), [
     { type: 'heading', level: 2, text: 'Image test' },
     { type: 'text', text: 'Before.' },
-    { type: 'image', src: '', alt: '', caption: '' },
+    { type: 'image', src: '', alt: '', caption: '', fileName: '' },
     { type: 'text', text: 'After.' },
   ]);
   assert.ok(!JSON.stringify(r).includes('googleusercontent'));

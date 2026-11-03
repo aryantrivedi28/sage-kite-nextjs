@@ -1,4 +1,4 @@
-import { BLOCK_LABELS, MAX_KEYWORD_LENGTH, MAX_POST_BLOCKS, MAX_SECONDARY_KEYWORDS, MAX_SOURCES, safeHref } from '@/components/blog-studio/postUtils';
+import { BLOCK_LABELS, MAX_IMAGE_FILE_NAME, MAX_KEYWORD_LENGTH, MAX_POST_BLOCKS, MAX_SECONDARY_KEYWORDS, MAX_SOURCES, safeHref } from '@/components/blog-studio/postUtils';
 import { CATEGORIES } from '@/content/blog/types';
 import { PLATFORM_PAGE_SLUGS } from '@/content/platforms';
 import { BLOCK_KEY_PATTERN, POST_ID_PATTERN } from './blogPosts';
@@ -17,6 +17,7 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const MAX = { slug: 120, title: 200, seoTitle: 200, excerpt: 400, short: 160, url: 600, text: 40000, tags: 20, tag: 60, blocks: MAX_POST_BLOCKS, stamp: 40 };
 
 const isString = (v: unknown, max: number): v is string => typeof v === 'string' && v.length <= max;
+const FILE_NAME_PROBLEM = `Image file names can be at most ${MAX_IMAGE_FILE_NAME} characters.`;
 
 function blockProblem(b: unknown): string | null {
   const bad = 'Invalid block in the article.';
@@ -33,7 +34,9 @@ function blockProblem(b: unknown): string | null {
     case 'list':
       return typeof block.ordered === 'boolean' && text('items') ? null : bad;
     case 'image':
-      return isString(block.src, MAX.url) && isString(block.alt, MAX.short) && isString(block.caption, MAX.excerpt) ? null : bad;
+      if (!(isString(block.src, MAX.url) && isString(block.alt, MAX.short) && isString(block.caption, MAX.excerpt))) return bad;
+      // Optional: posts exported before file names existed (D062) have none. Cleaned when rendered, so only the length matters here.
+      return block.fileName === undefined || isString(block.fileName, MAX_IMAGE_FILE_NAME) ? null : FILE_NAME_PROBLEM;
     case 'quote':
       return text('text') && isString(block.cite, MAX.short) ? null : bad;
     case 'table':
@@ -83,6 +86,7 @@ export function postShapeProblem(input: unknown): string | null {
     if (typeof post[key] !== 'string' || (post[key] !== '' && !ISO_DATE.test(post[key] as string))) return 'Invalid post content.';
   }
   if (post.firstPublishedAt !== undefined && !isString(post.firstPublishedAt, MAX.stamp)) return 'Invalid post content.';
+  if (post.imageFileName !== undefined && !isString(post.imageFileName, MAX_IMAGE_FILE_NAME)) return FILE_NAME_PROBLEM;
   if (typeof post.featured !== 'boolean') return 'Invalid post content.';
 
   if (post.category !== '' && !(CATEGORIES as readonly string[]).includes(post.category as string)) return 'Choose one of the listed categories.';

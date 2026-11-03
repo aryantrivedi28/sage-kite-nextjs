@@ -36,6 +36,8 @@ export interface BlogPost {
   featuredImage: string;
   /** Alt text for the featured image. */
   imageAlt?: string;
+  /** Studio posts: the featured image's file name on the live site (D062); the slug when unset. */
+  imageFileName?: string;
   /** Labels that group the post. Shown on the page; also the meta keywords tag and, without keywords below, the schema keywords. */
   tags?: string[];
   /** SEO phrases for the studio's blog posts. Not shown on the page. Used in the Article schema `keywords`. */

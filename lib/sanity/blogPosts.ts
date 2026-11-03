@@ -50,7 +50,8 @@ function toSanityBlock(block: StudioBlock): SanityBlock {
     case 'list':
       return { _key, type: 'list', ordered: block.ordered, items: block.items };
     case 'image':
-      return { _key, type: 'image', src: block.src, alt: block.alt, caption: block.caption };
+      // fileName: what the editor typed, trimmed (D062); a post exported before the field existed has none.
+      return { _key, type: 'image', src: block.src, alt: block.alt, caption: block.caption, fileName: (block.fileName ?? '').trim() };
     case 'quote':
       return { _key, type: 'quote', text: block.text, cite: block.cite };
     case 'table':
@@ -93,6 +94,7 @@ export function toBlogPostDocument(post: StudioPost): BlogPostDocument {
     scheduledFor: post.scheduledFor,
     featuredImage: post.featuredImage,
     imageAlt: post.imageAlt,
+    imageFileName: (post.imageFileName ?? '').trim(),
     tags: [...post.tags],
     focusKeyword: post.focusKeyword,
     secondaryKeywords: normalizeKeywords(post.secondaryKeywords ?? []),
@@ -118,6 +120,7 @@ function fromSanityBlock({ _key, ...block }: Record<string, unknown>): StudioBlo
       items: items.map((i) => ({ id: str(i._key), publisher: str(i.publisher), title: str(i.title), url: str(i.url), date: str(i.date) })),
     };
   }
+  if (block.type === 'image') return { ...block, id: str(_key), fileName: str(block.fileName) } as StudioBlock;
   return { ...block, id: str(_key) } as StudioBlock;
 }
 
@@ -140,6 +143,8 @@ export function fromBlogPostDocument(doc: Record<string, unknown>): StudioPost {
     scheduledFor: str(doc.scheduledFor),
     featuredImage: str(doc.featuredImage),
     imageAlt: str(doc.imageAlt),
+    // Posts saved before this field existed (D062) have none.
+    imageFileName: str(doc.imageFileName),
     tags: Array.isArray(doc.tags) ? doc.tags.filter((t): t is string => typeof t === 'string') : [],
     focusKeyword: str(doc.focusKeyword),
     // Posts saved before this field existed have none.

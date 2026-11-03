@@ -25,7 +25,8 @@ export type StudioBlock =
   | { id: string; type: 'text'; text: string }
   /** One item per line; each leading tab is one level deeper (at most two, D049). Sub-levels use the list's type. */
   | { id: string; type: 'list'; ordered: boolean; items: string }
-  | { id: string; type: 'image'; src: string; alt: string; caption: string }
+  /** `fileName`: the image's file name on the live site, as typed (D062); '' = `<slug>-<n>`. Cleaned only when rendered. */
+  | { id: string; type: 'image'; src: string; alt: string; caption: string; fileName: string }
   | { id: string; type: 'quote'; text: string; cite: string }
   /** One row per line, cells separated by |. The first row is the header. */
   | { id: string; type: 'table'; rows: string }
@@ -58,6 +59,8 @@ export interface StudioPost {
   /** Path under /public, a URL, or an uploaded image. */
   featuredImage: string;
   imageAlt: string;
+  /** The featured image's file name on the live site, as typed (D062); '' = the slug. Cleaned only when rendered. */
+  imageFileName: string;
   tags: string[];
   /** The one phrase the post should rank for. Checked by the checklist and used in the structured data. Not shown on the page. */
   focusKeyword: string;

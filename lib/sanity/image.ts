@@ -5,7 +5,7 @@
  * (w, h, fit, fm, auto=format).
  */
 
-import { safeFileBase } from './imageUpload';
+import { cleanFileBase, safeFileBase } from './imageUpload';
 
 const SITE_URL = 'https://www.sagekite.com';
 
@@ -36,6 +36,30 @@ export function namedImageUrl(src: string, name: string): string {
   if (!isSanityImage(src)) return src;
   const ext = SANITY_IMAGE.exec(src)![4];
   return `${src}/${safeFileBase(name)}.${ext}`;
+}
+
+/** The extension of a Sanity image ('webp', 'png', ...), or null for any other source. */
+export function sanityImageExtension(src: string): string | null {
+  return isSanityImage(src) ? SANITY_IMAGE.exec(src)![4] : null;
+}
+
+/** The file name an image gets on the live site for `name` (D062): the cleaned name plus the asset's extension ('webp' when unknown). */
+export function liveImageFileName(src: string, name: string): string {
+  return `${safeFileBase(name)}.${sanityImageExtension(src) ?? 'webp'}`;
+}
+
+/**
+ * The name an image is given (D062, D063): what the editor typed, if it cleans to at least one letter or digit, else
+ * `fallback` (the slug, or `<slug>-<n>`). A typed "!!!" or a name only in another script therefore falls back.
+ */
+export function chosenImageName(typed: string | undefined, fallback: string): string {
+  const name = (typed ?? '').trim();
+  return cleanFileBase(name) ? name : fallback;
+}
+
+/** The featured image's name on the live site (D062): the editor's file name if usable, else the post's slug. */
+export function featuredImageName(post: { slug: string; imageFileName?: string }): string {
+  return chosenImageName(post.imageFileName, post.slug);
 }
 
 /** A resized Sanity image. With `name`, the vanity file name goes before the query string (Sanity rejects it after). */

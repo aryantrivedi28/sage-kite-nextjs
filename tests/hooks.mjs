@@ -43,6 +43,10 @@ export async function resolve(specifier, context, next) {
 }
 
 export async function load(url, context, next) {
+  // A CSS module (e.g. components/blog-studio/fields.tsx's styles): every class name maps to itself.
+  if (url.startsWith('file://') && url.endsWith('.module.css')) {
+    return { format: 'module', source: 'export default new Proxy({}, { get: (_, k) => (typeof k === "string" ? k : undefined) });', shortCircuit: true };
+  }
   if (url.startsWith('file://') && url.endsWith('.tsx') && !url.includes('/node_modules/')) {
     const { default: ts } = await import('typescript');
     const { outputText } = ts.transpileModule(await readFile(fileURLToPath(url), 'utf8'), {

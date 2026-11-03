@@ -171,6 +171,7 @@ blocks (JSON) instead of a JSX function, so any backend can store it.
 | `scheduledFor` | `datetime-local` string or `''` | **No time zone** (see 9.4) |
 | `featuredImage` | string | `/public` path, `https://` URL, or `data:image/webp;base64,…` from an upload |
 | `imageAlt` | string | |
+| `imageFileName` | string | The featured image's file name on the live site, as typed; '' = the slug (D062). Optional in old data. |
 | `tags` | string[] | Comma-separated in the UI |
 | `focusKeyword` | string | The phrase the post should rank for. The checklist checks it; it is the first schema `keyword` when the post has secondary keywords. Never shown on a page |
 | `secondaryKeywords` | string[] | 0–8 related SEO phrases (80 characters each at most), comma-separated in the UI, separate from `tags`. Used in the Article schema `keywords` when present. Never shown on a page. Posts saved before this field existed have none (D043) |
@@ -187,7 +188,7 @@ blocks (JSON) instead of a JSX function, so any backend can store it.
 | `heading` | `level: 2 \| 3 \| 4`, `text` | `<h2 id>` / `<h3 id>` / `<h4 id>`; ids from `headingAnchors()` (slugified text, `-2`, `-3` for duplicates). Only H2s are in the guide |
 | `text` | `text` | One `<p>` per non-empty line |
 | `list` | `ordered`, `items` | `<ul>`/`<ol>`, one `<li>` per line; pasted `-`, `*`, `•`, `1.` markers are removed. Each leading tab is one level deeper (at most 3 levels; a level is at most one deeper than the item before), rendered as a real sub-list (`<li>text<ul>…</ul></li>`) of the list's own type (D049) |
-| `image` | `src`, `alt`, `caption` | `<figure><img alt title></figure>` + optional `<figcaption>` |
+| `image` | `src`, `alt`, `caption`, `fileName` | `<figure><img alt title></figure>` + optional `<figcaption>`; `fileName` names a Sanity image's URL (D062) |
 | `quote` | `text`, `cite` | `<blockquote>`; cite rendered as `— name` |
 | `table` | `rows` | One row per line, cells split on `\|` (a literal pipe in a cell is written `\\|`, a backslash then a pipe), first row is `<thead>`. Tables pasted from Word, Google Docs or Excel are converted to this format (see below) |
 | `video` | `url`, `title` | `<iframe>` to `youtube-nocookie.com/embed/<id>`; accepts watch, youtu.be, embed, shorts, live links. `referrerPolicy="strict-origin-when-cross-origin"`: YouTube needs the embedding origin (Error 153 without it) and the studio page is `no-referrer`; sends the origin only, never the path (D025) |
@@ -469,6 +470,16 @@ at most one Sources block; it is the last block of the article; every source has
 - JPG, PNG or WebP, up to 8 MB. Resized in the browser to at most 1600px wide and
   re-encoded as WebP at quality 0.82, then stored as a data URL inside the post.
 - Paths and URLs can be typed instead of uploading, and an image can be pasted (section 4.2, "Pasting an image").
+- **Image file name (optional)** (D062), under each image's Alt text, featured image included: the image's file name
+  on the live site, which search engines read. Type a short, descriptive name such as `crm-pipeline-stages`; the line
+  "Live file name: …" shows what the page will use (lowercase letters, digits and dashes, plus the image's extension).
+  A name with no Latin letters or digits (such as `!!!`, or one written only in Hindi) counts as empty (D063). Left empty, the featured image is named after the post's slug and article images `<slug>-2`, `<slug>-3`, … in
+  order (the placeholder shows which). Uploading a file with a real name fills an empty field from it
+  (`CRM Dashboard Setup.jpg` → `crm-dashboard-setup`); pasted images and camera / OS names such as `IMG_1234.jpg` or
+  `Screenshot …` do not, and a name you typed is never overwritten. Only images uploaded to Sanity are renamed; site
+  images (`/images/…`) keep their own names, so the "Live file name" line is not shown for them. If two images would get the same name, the checklist says so
+  (recommended, not required). Existing posts keep their slug names until a name is typed, and search engines pick up
+  a change when they recrawl the page.
 - The studio uses plain `<img>` (not `next/image`) because sources can be data URLs or
   any external URL, which `next/image` would reject without `remotePatterns`.
 

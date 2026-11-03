@@ -1,5 +1,5 @@
 import type { BlogPost } from '@/content/blog';
-import { absoluteImageUrl, namedImageUrl } from '@/lib/sanity/image';
+import { absoluteImageUrl, featuredImageName, namedImageUrl } from '@/lib/sanity/image';
 
 const SITE_URL = 'https://www.sagekite.com';
 
@@ -56,7 +56,7 @@ export function buildBlogJsonLd(post: BlogPost) {
       '@id': `${url}#article`,
       headline: post.title,
       description: post.excerpt,
-      image: [absoluteImageUrl(namedImageUrl(post.featuredImage, post.slug))],
+      image: [absoluteImageUrl(namedImageUrl(post.featuredImage, featuredImageName(post)))],
       datePublished: post.publishedAt,
       dateModified: post.updatedAt ?? post.publishedAt,
       author: {

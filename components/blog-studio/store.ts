@@ -1,5 +1,5 @@
 import type { ActionResult, StudioPost, StudioStorage } from './types';
-import { ACCEPTED_IMAGE_TYPES, MAX_UPLOAD_BYTES } from './postUtils';
+import { ACCEPTED_IMAGE_TYPES, MAX_UPLOAD_BYTES, withImageFileNameDefaults } from './postUtils';
 import {
   deleteStudioPostAction,
   listStudioPostsAction,
@@ -100,8 +100,9 @@ export const sanityStudioStore: StudioStore = {
   async save(post) {
     // Sanity document ids must be UUIDs (lib/sanity/blogPosts.ts); a post that never reached Sanity gets one.
     const withId = POST_UUID.test(post.id) ? post : { ...post, id: crypto.randomUUID() };
-    // A post exported before secondary keywords existed has no such field.
-    return unwrap(await saveStudioPostAction(await uploadInlineImages({ ...withId, secondaryKeywords: withId.secondaryKeywords ?? [] })));
+    // A post exported before secondary keywords or image file names (D062) existed has no such fields.
+    const complete = withImageFileNameDefaults({ ...withId, secondaryKeywords: withId.secondaryKeywords ?? [] });
+    return unwrap(await saveStudioPostAction(await uploadInlineImages(complete)));
   },
   async remove(id) {
     unwrap(await deleteStudioPostAction(id));

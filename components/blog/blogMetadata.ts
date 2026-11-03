@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 import type { BlogPost } from '@/content/blog';
-import { shareImageUrl } from '@/lib/sanity/image';
+import { featuredImageName, shareImageUrl } from '@/lib/sanity/image';
 
 const SITE_URL = 'https://www.sagekite.com';
 
 /** Page metadata (title, canonical, Open Graph, Twitter) for a blog post. */
 export function buildBlogMetadata(post: BlogPost): Metadata {
   const url = `${SITE_URL}/blog/${post.slug}`;
-  // /public paths become absolute; Sanity uploads are cropped to 1200 × 675 and named after the slug (D061).
-  const image = shareImageUrl(post.featuredImage, post.slug);
+  // /public paths become absolute; Sanity uploads are cropped to 1200 × 675 and named (the editor's name, else the slug; D061, D062).
+  const image = shareImageUrl(post.featuredImage, featuredImageName(post));
 
   return {
     title: `${post.seoTitle ?? post.title} | Sage Kite`,

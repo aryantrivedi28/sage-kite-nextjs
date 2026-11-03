@@ -56,6 +56,7 @@ import {
   TITLE_SUFFIX,
   blockHeading,
   buildGuide,
+  articleImageNames,
   checklist,
   compareListRows,
   emptyPost,
@@ -71,8 +72,10 @@ import {
   resolveBlocks,
   slugify,
   stripInline,
+  suggestedImageFileName,
   tableFromClipboard,
   today,
+  withImageFileNameDefaults,
   wordCount,
   youtubeId,
   type CheckItem,
@@ -89,6 +92,7 @@ import type {
   StudioStorage,
 } from './types';
 import styles from './BlogStudio.module.css';
+import { Field, ImageFileNameField } from './fields';
 
 /*
  * Blog studio: list, editor and preview for blog posts written outside the
@@ -391,7 +395,8 @@ function StudioApp({ storage, sitePosts, categories, platforms, author, authorIm
   async function importFile(file: File) {
     try {
       const data: unknown = JSON.parse(await file.text());
-      const incoming = (Array.isArray(data) ? data : [data]).filter(isStudioPost);
+      // Posts exported before image file names existed (D062) get empty ones.
+      const incoming = (Array.isArray(data) ? data : [data]).filter(isStudioPost).map(withImageFileNameDefaults);
       if (!incoming.length) return notify('No studio posts found in that file.');
       const existing = new Set(posts.map((p) => p.id));
       const replacing = incoming.filter((p) => existing.has(p.id)).length;
@@ -885,6 +890,20 @@ function Editor({
     }
   }
 
+  /**
+   * After an upload (not a paste): fill an EMPTY image file name from the picked file's name, unless that name is a
+   * generic camera / OS one (D062). Reads the latest draft, so a name typed while the upload ran is never overwritten.
+   */
+  function prefillFileName(file: File, blockId?: string) {
+    const name = suggestedImageFileName(file.name);
+    if (!name) return;
+    setDraft((d) =>
+      blockId === undefined
+        ? d.imageFileName.trim() ? d : { ...d, imageFileName: name }
+        : { ...d, blocks: d.blocks.map((b) => (b.id === blockId && b.type === 'image' && !b.fileName.trim() ? { ...b, fileName: name } : b)) },
+    );
+  }
+
   function updateBlock(id: string, patch: Partial<StudioBlock>) {
     setDraft((d) => ({
       ...d,
@@ -1082,6 +1101,8 @@ function Editor({
   });
   const excerptLength = draft.excerpt.trim().length;
   const gTitle = googleTitle(draft);
+  // Each image block's fallback file name, `<slug>-<n>` (D062), for its placeholder.
+  const imageNames = useMemo(() => articleImageNames(draft.blocks, draft.slug), [draft.blocks, draft.slug]);
 
   return (
     <div className={styles.overlay} onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
@@ -1192,12 +1213,19 @@ function Editor({
                     value={draft.featuredImage}
                     onChange={(v) => set('featuredImage', v)}
                     onUpload={upload}
+                    onFileChosen={(file) => prefillFileName(file)}
                     notify={notify}
                     hint="16:9, about 1200 × 675. Used at the top of the post, on blog cards and in social shares."
                   />
                   <Field label="Alt text" required hint="Describe what the image shows, for screen readers and search engines.">
                     <input className={styles.input} value={draft.imageAlt} onChange={(e) => set('imageAlt', e.target.value)} />
                   </Field>
+                  <ImageFileNameField
+                    value={draft.imageFileName}
+                    fallback={draft.slug}
+                    src={draft.featuredImage}
+                    onChange={(v) => set('imageFileName', v)}
+                  />
                 </div>
 
                 <div className={styles.card}>
@@ -1245,6 +1273,8 @@ function Editor({
                         onRemove={() => setDraft((d) => ({ ...d, blocks: d.blocks.filter((x) => x.id !== b.id) }))}
                         onAddBelow={() => setAddAt((at) => (at === i + 1 ? null : i + 1))}
                         onUpload={upload}
+                        onFileChosen={(file) => prefillFileName(file, b.id)}
+                        fileNameFallback={imageNames.get(b.id)?.fallback ?? ''}
                         onTablePaste={(table, pasteAsText) => askTablePaste(i, table, pasteAsText)}
                         onArticlePaste={(article, pasteAsText) => askArticlePaste(b.id, article, pasteAsText)}
                         onImagePaste={(file) => pasteImageBlock(file, afterBlock(b.id))}
@@ -1457,41 +1487,12 @@ function Checklist({ items }: { items: CheckItem[] }) {
   );
 }
 
-function Field({
-  label,
-  required,
-  hint,
-  count,
-  countState,
-  children,
-}: {
-  label: string;
-  required?: boolean;
-  hint?: string;
-  count?: string;
-  countState?: 'ok' | 'warn';
-  children: React.ReactNode;
-}) {
-  // The hint sits outside the <label> so it is not read as part of the field's name.
-  return (
-    <div className={styles.field}>
-      <label className={styles.fieldInner}>
-        <span className={styles.fieldLabel}>
-          <span>{label}{required && <span className={styles.req}> *</span>}</span>
-          {count && <span className={cx(styles.fieldCount, countState === 'warn' && styles.warn)}>{count}</span>}
-        </span>
-        {children}
-      </label>
-      {hint && <span className={styles.hint}>{hint}</span>}
-    </div>
-  );
-}
-
 function ImageField({
   value,
   onChange,
   onUpload,
   onUploaded,
+  onFileChosen,
   notify,
   hint,
 }: {
@@ -1500,6 +1501,8 @@ function ImageField({
   onUpload: (f: File) => Promise<string | null>;
   /** Called after an image was uploaded and set (by Upload or by pasting). */
   onUploaded?: () => void;
+  /** Called after an image picked with Upload (not pasted) was uploaded and set, with that file (D062). */
+  onFileChosen?: (file: File) => void;
   notify: (m: string) => void;
   hint?: string;
 }) {
@@ -1520,6 +1523,8 @@ function ImageField({
     if (!url) return;
     onChange(url);
     if (pasted) notify('Image uploaded. Add its alt text.');
+    // A pasted image has no meaningful name (D062); only a picked file's name may fill the file-name field.
+    else onFileChosen?.(file);
     onUploaded?.();
   }
   return (
@@ -1651,7 +1656,10 @@ function AddBlockMenu({ onAdd, onCancel, onPasteArticle }: { onAdd: (t: StudioBl
  * does not re-render every other block. The callbacks read the post through state updaters or `draftRef`, never from
  * the render that created them (decision.md D049).
  */
-const BlockCard = React.memo(BlockCardInner, (a, b) => a.block === b.block && a.index === b.index && a.count === b.count);
+const BlockCard = React.memo(
+  BlockCardInner,
+  (a, b) => a.block === b.block && a.index === b.index && a.count === b.count && a.fileNameFallback === b.fileNameFallback,
+);
 
 function BlockCardInner({
   block,
@@ -1662,6 +1670,8 @@ function BlockCardInner({
   onRemove,
   onAddBelow,
   onUpload,
+  onFileChosen,
+  fileNameFallback,
   onTablePaste,
   onArticlePaste,
   onImagePaste,
@@ -1676,6 +1686,10 @@ function BlockCardInner({
   onRemove: () => void;
   onAddBelow: () => void;
   onUpload: (f: File) => Promise<string | null>;
+  /** An image was uploaded from a picked file (not pasted): prefill its file name if empty (D062). */
+  onFileChosen: (file: File) => void;
+  /** The image's file name on the live site when its field is empty: `<slug>-<n>` (D062). */
+  fileNameFallback: string;
   onTablePaste: (table: Extract<PastedTable, { ok: true }>, pasteAsText: () => void) => void;
   onArticlePaste: (article: PastedArticle, pasteAsText: () => void) => void;
   onImagePaste: (file: File) => void;
@@ -1753,11 +1767,13 @@ function BlockCardInner({
             onChange={(src) => onChange({ src })}
             onUpload={onUpload}
             onUploaded={() => focusAltText(block.id)}
+            onFileChosen={onFileChosen}
             notify={notify}
           />
           <Field label="Alt text" required hint="Describe what the image shows. Also used as the image title.">
             <input className={styles.input} data-alt-input="" value={block.alt} onChange={(e) => onChange({ alt: e.target.value })} />
           </Field>
+          <ImageFileNameField value={block.fileName} fallback={fileNameFallback} src={block.src} onChange={(fileName) => onChange({ fileName })} />
           <Field label="Caption (optional)">
             <input className={styles.input} value={block.caption} onChange={(e) => onChange({ caption: e.target.value })} />
           </Field>

@@ -331,7 +331,7 @@ function blocksFromPieces(pieces: Piece[]): StudioBlock[] {
         blocks.push({ id: newId(), type: 'table', rows: p.rows });
         break;
       case 'image':
-        blocks.push({ id: newId(), type: 'image', src: '', alt: p.alt, caption: '' });
+        blocks.push({ id: newId(), type: 'image', src: '', alt: p.alt, caption: '', fileName: '' });
         break;
       case 'divider':
         blocks.push({ id: newId(), type: 'divider' });

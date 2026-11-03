@@ -1,7 +1,7 @@
 import React from 'react';
 import type { StudioBlock, StudioSource } from './types';
 import { isExternalHref, parseInline, safeHref, type InlineNode } from './inline';
-import { SOURCES_HEADING, headingAnchors, lines, listItems, resolveBlocks, sourceItems, tableRows, youtubeId } from './postUtils';
+import { SOURCES_HEADING, articleImageNames, headingAnchors, lines, listItems, resolveBlocks, sourceItems, tableRows, youtubeId } from './postUtils';
 import { imageSrcForRender, isSanityImage, sanityImageSize, sanityImageUrl } from '@/lib/sanity/image';
 
 /** Widths offered for article images (the article column is 720px wide). */
@@ -246,32 +246,19 @@ function Block({ block, anchor, preview, imageName }: { block: StudioBlock; anch
 }
 
 /**
- * Readable file names for the article's Sanity images (decision.md D061): `<slug>-2`, `<slug>-3`, ... in
- * reading order (the featured image is `<slug>`). Only image blocks that render a Sanity image are counted.
- */
-function articleImageNames(blocks: StudioBlock[], slug: string, preview: boolean): Map<string, string> {
-  const names = new Map<string, string>();
-  for (const b of blocks) {
-    if (b.type !== 'image') continue;
-    const src = imageSrcForRender(b.src, preview);
-    if (src && isSanityImage(src)) names.set(b.id, `${slug}-${names.size + 2}`);
-  }
-  return names;
-}
-
-/**
  * The article body. Place inside an element with className="article-content".
  * `preview` is true only in the studio, where images picked in this browser are shown before they are uploaded.
- * `imageName` (the post's slug) gives Sanity images readable file names; without it their URLs are unchanged.
+ * `imageName` (the post's slug) gives Sanity images readable file names (D061, D062): each image's own file name, else
+ * `<slug>-2`, `<slug>-3`, ... (articleImageNames in postUtils.ts). Without it their URLs are unchanged (the studio preview).
  */
 export function StudioArticle({ blocks, preview = false, imageName }: { blocks: StudioBlock[]; preview?: boolean; imageName?: string }) {
   const resolved = resolveBlocks(blocks);
   const anchors = headingAnchors(resolved);
-  const names = imageName ? articleImageNames(resolved, imageName, preview) : undefined;
+  const names = imageName ? articleImageNames(resolved, imageName) : undefined;
   return (
     <>
       {resolved.map((b) => (
-        <Block key={b.id} block={b} anchor={anchors.get(b.id)} preview={preview} imageName={names?.get(b.id)} />
+        <Block key={b.id} block={b} anchor={anchors.get(b.id)} preview={preview} imageName={names?.get(b.id)?.name} />
       ))}
     </>
   );
