@@ -185,7 +185,7 @@ export default function CaseStudiesPage() {
                         {featured.client} <span className="blog-meta-dot" aria-hidden="true">&bull;</span>&nbsp;{featured.industry}
                       </span>
                     </div>
-                    <p className="csl-feature-origin">{featured.origin}</p>
+                    {featured.origin && <p className="csl-feature-origin">{featured.origin}</p>}
                     <span className="btn btn-s featured-blog-cta">Read the case study</span>
                   </div>
                 </Link>

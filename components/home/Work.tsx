@@ -53,7 +53,7 @@ function WorkCard({ study, accent }: { study: CaseStudy; accent: string }) {
           <li key={h} className="chip">{h}</li>
         ))}
       </ul>
-      <p className="work-origin">{study.origin}</p>
+      {study.origin && <p className="work-origin">{study.origin}</p>}
       <span className="work-more">
         Read the case study <ArrowRight size={18} aria-hidden="true" />
       </span>

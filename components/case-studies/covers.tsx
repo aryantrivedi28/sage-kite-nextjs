@@ -444,6 +444,37 @@ export function JivaCover({ fit }: CoverProps) {
   );
 }
 
+/* ── Croma: a retail store and a page-speed gauge in the good band ───── */
+export function CromaCover({ fit }: CoverProps) {
+  const stripes = [120, 164, 208, 252, 296];
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-sky-soft" cx="560" cy="70" r="110" />
+      <circle className="f-butter-soft" cx="90" cy="320" r="90" />
+      {/* store front with a striped awning */}
+      <rect className="f-white o-ink" x="130" y="146" width="200" height="154" rx="4" />
+      {stripes.map((x, i) => (
+        <path key={x} className={`${i % 2 === 0 ? 'f-coral' : 'f-white'} o-ink thin`} d={`M${x} 116 H${x + 44} V146 A22 14 0 0 1 ${x} 146 Z`} />
+      ))}
+      <rect className="f-sky-soft o-ink thin" x="150" y="180" width="94" height="72" rx="3" />
+      <rect className="f-white o-ink thin" x="170" y="192" width="24" height="52" rx="3" />
+      <path className="s-ink thin" d="M170 210 H194 M189 198 V204 M189 216 V226" />
+      <rect className="f-light o-ink thin" x="204" y="214" width="30" height="30" rx="3" />
+      <rect className="f-ink" x="262" y="192" width="48" height="108" rx="3" />
+      <circle className="f-butter" cx="300" cy="248" r="4" />
+      {/* speed gauge: three bands, needle in the first */}
+      <path className="f-sky-soft o-ink thin" d="M364 236 A86 86 0 0 1 427.7 152.9 L434 176.1 A62 62 0 0 0 388 236 Z" />
+      <path className="f-butter-soft o-ink thin" d="M427.7 152.9 A86 86 0 0 1 493 161.5 L481 182.3 A62 62 0 0 0 434 176.1 Z" />
+      <path className="f-coral-soft o-ink thin" d="M493 161.5 A86 86 0 0 1 536 236 L512 236 A62 62 0 0 0 481 182.3 Z" />
+      <path className="s-ink" d="M450 236 L398 192" />
+      <circle className="f-ink" cx="450" cy="236" r="8" />
+      {/* ground */}
+      <path className="s-ink" d="M110 300 H540" />
+      <path className="s-sky" d="M372 280 C410 276 440 262 470 266 S514 258 532 248" />
+    </CoverFrame>
+  );
+}
+
 /* ── Default: for a study without its own cover ────────────────────────── */
 export function DefaultCover({ fit }: CoverProps) {
   return (

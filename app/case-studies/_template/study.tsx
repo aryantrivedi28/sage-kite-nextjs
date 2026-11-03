@@ -17,7 +17,9 @@ import { Callout, Drivers, PageSketch } from '@/components/case-studies/blocks';
  * PageGridSketch, BrowserFrame, PurchasePath, Checklist, CountCard, NumberedSteps,
  * LoopSketch), SearchTyper, SearchFlow, LinkingDemo, DuplicateUrlFlow,
  * CategoryFixes, MigrationFlow, ScreenshotTabs, DashboardToggle, CheckoutFixFlow,
- * LayerStack and EmailToggle. A one-off visual can be written as JSX right here.
+ * LayerStack, EmailToggle, AuditConsole, AuditToggle, LcpWaterfall, LcpSlider,
+ * SchemaToggle, RobotsTester, StagePipeline and CodeBlock (see app/case-studies/croma).
+ * A one-off visual can be written as JSX right here.
  * A result with no starting figure (e.g. "120+ keywords into the top 3") uses
  * { count, unit } instead of before/after; see app/case-studies/jenson-usa.
  * If nothing was measured, set `results: []`; see app/case-studies/esma, which

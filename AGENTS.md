@@ -181,7 +181,9 @@ content/case-studies/
 components/case-studies/  covers.tsx: one original cover illustration per study for the /case-studies cards,
                           drawn as inline SVG with brand-token classes (never photos, screenshots, logos,
                           brand names, text or numbers); DefaultCover for a study without one.
-                          CaseStudyPage (renders every case study + metadata + JSON-LD),
+                          CaseStudyPage (renders every case study + metadata + JSON-LD; a study with
+                          `technical` set is drawn by TechnicalCaseStudyPage + TechNav instead: the
+                          interactive layout (optional sticky section menu; Croma has none), D057, D058),
                           caseStudyStyles.ts (shared CSS), blocks.tsx (reusable content and
                           sketches, RankLadder, Journey, DotGrid, PageGridSketch, BrowserFrame,
                           PurchasePath, Checklist, CountCard, NumberedSteps, LoopSketch, PhoneFrame,
@@ -190,7 +192,9 @@ components/case-studies/  covers.tsx: one original cover illustration per study 
                           and the interactive SearchTyper, SearchFlow, LinkingDemo, DuplicateUrlFlow,
                           CategoryFixes, MigrationFlow, ScreenshotTabs, DashboardToggle,
                           CheckoutFixFlow, LayerStack, EmailToggle, PdpToggle, RtoFlow,
-                          SmartCollections, Countdown, PricingDemo.
+                          SmartCollections, Countdown, PricingDemo, AuditToggle, LcpWaterfall,
+                          LcpSlider, SchemaToggle, RobotsTester, StagePipeline; AuditConsole (CSS-only
+                          typed console) and CodeBlock / Tok (code samples, in blocks.tsx).
 content/founders-thoughts.ts
                           Founder's Thoughts essays, newest first. Add a new essay here
                           and create app/insights/founders-thoughts/<slug>/page.tsx.
@@ -279,7 +283,8 @@ The essentials:
   `components/blog/BlogPostPage.tsx` instead.
   The same applies to a case study's `page.tsx` (`components/case-studies/CaseStudyPage.tsx`).
 - Publish a case study without its origin, or with figures nobody reported. Results are
-  "as reported" unless Sage Kite measured them.
+  "as reported" unless Sage Kite measured them. The one approved exception is Croma (decision.md D056):
+  the user asked for it to match its source, which states no origin. Ask before adding another.
 - Use a blog `guide` id that does not match an `id` on a heading in the article.
 - Change a heading or FAQ answer without updating `guide` / `faqs` to match.
 - Add Tailwind, CSS frameworks or component libraries. (Tiptap in the blog studio is the one approved exception, D049.)

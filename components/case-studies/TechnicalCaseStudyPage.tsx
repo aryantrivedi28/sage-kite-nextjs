@@ -1,0 +1,195 @@
+import type React from 'react';
+import Link from 'next/link';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { CASE_STUDIES_PATH, type CaseStudy } from '@/content/case-studies';
+import { CASE_STUDY_CSS } from './caseStudyStyles';
+import { TechNav } from './TechNav';
+
+const cssVars = (v: Record<string, string>) => v as React.CSSProperties;
+
+function Ribbon() {
+  return <span className="cs-tech-ribbon" aria-hidden="true"><i></i><i></i><i></i></span>;
+}
+
+function Head({ id, label, heading, intro }: { id?: string; label: string; heading: string; intro?: string }) {
+  return (
+    <div className="cs-tech-head">
+      <p className="cs-tech-sec">{label}</p>
+      <h2 id={id}>{heading}</h2>
+      {intro && <p className="cs-tech-lede">{intro}</p>}
+    </div>
+  );
+}
+
+/**
+ * The interactive technical case study layout (first used for Croma), chosen by `study.technical`.
+ * Same data as the standard layout, laid out like the supplied interactive HTML: a grid-paper hero
+ * with a kicker, chips and the console beside it; numbered sections, each with its demo card;
+ * results beside their points; impact cards; stack chips; the takeaway panel and the CTA.
+ * Brand fonts and colours only (see caseStudyStyles.ts, "technical layout").
+ */
+export function TechnicalCaseStudyPage({ study, jsonLd }: { study: CaseStudy; jsonLd: object }) {
+  const { hero, metrics, sections, resultsSection, changes, methods, takeaway, about, cta } = study;
+  const technical = study.technical!;
+  const [firstCrumb, ...restCrumbs] = technical.crumbs ?? [];
+  const result = study.results[0];
+
+  return (
+    <>
+      <Header />
+      <main id="main" className="cs cs-tech">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <style dangerouslySetInnerHTML={{ __html: CASE_STUDY_CSS }} />
+        <TechNav items={technical.nav} />
+
+        {/* Overview */}
+        <section className="cs-tech-hero" id="overview" aria-labelledby="title">
+          <div className="wrap">
+            {firstCrumb && (
+              <nav className="cs-tech-crumbs" aria-label="Breadcrumb">
+                <Link href={CASE_STUDIES_PATH}>{firstCrumb}</Link>
+                {restCrumbs.map((c) => (
+                  <span key={c}><span aria-hidden="true">/</span> {c}</span>
+                ))}
+              </nav>
+            )}
+            <div className="cs-tech-hero-grid">
+              <div className="cs-tech-hero-copy">
+                {hero.label && <p className="cs-tech-kicker"><Ribbon />{hero.label}</p>}
+                <h1 id="title">{study.title}</h1>
+                <p className="cs-tech-dek">{hero.dek}</p>
+                <p className="cs-tech-lede">{hero.lede}</p>
+                <ul className="cs-tech-glance" aria-label="Project summary">
+                  {hero.glance.map((g) => (
+                    <li key={g.label}><span>{g.label.toLowerCase()}</span> {g.value}</li>
+                  ))}
+                </ul>
+                {study.origin && <p className="cs-badge">{study.origin}</p>}
+              </div>
+              {hero.visual && <div className="cs-tech-hero-visual">{hero.visual}</div>}
+            </div>
+          </div>
+        </section>
+
+        {/* Highlights */}
+        {metrics && (
+          <section className="cs-tech-metrics-sec" aria-label="Project highlights">
+            <div className="wrap">
+              <div className="cs-tech-metrics" style={cssVars({ '--n': String(metrics.items.length) })}>
+                {metrics.items.map((m) => (
+                  <div key={m.label} className={`cs-tech-metric ${m.tone}`}><b>{m.value}</b><span>{m.label}</span></div>
+                ))}
+              </div>
+              {metrics.note && <p className="note cs-footnote">{metrics.note}</p>}
+            </div>
+          </section>
+        )}
+
+        {/* Parts of the work, each with its demo */}
+        {sections?.map((sec) => (
+          <section key={sec.id} id={sec.id} className={`cs-tech-band${sec.band ? ` ${sec.band}` : ''}`} aria-labelledby={`${sec.id}-title`}>
+            <div className="wrap">
+              <Head id={`${sec.id}-title`} label={sec.label} heading={sec.heading} intro={sec.intro} />
+              {sec.content}
+            </div>
+          </section>
+        ))}
+
+        {/* Results, impact and stack share one band, as in the source */}
+        {(resultsSection || changes || methods) && (
+          <section className="cs-tech-band" id="results" aria-labelledby="results-title">
+            <div className="wrap">
+              {resultsSection && (
+                <>
+                  <Head id="results-title" label={resultsSection.label ?? 'Results'} heading={resultsSection.heading} />
+                  <div className="cs-tech-results">
+                    {result && !('count' in result) && (
+                      <div className="cs-tech-rcard">
+                        <p className="cs-tech-mult" aria-label={result.valueLabel}>{result.value}</p>
+                        <div className="cs-bars" role="img" aria-label={`${result.label}: ${result.before} before, ${result.after} ${(result.afterLabel ?? 'after').toLowerCase()}`}>
+                          <div className="cs-bar">
+                            <div className="cs-bar-label"><span>Before</span><span>{result.before}</span></div>
+                            <div className="cs-bar-track"><div className="cs-bar-fill" style={cssVars({ '--w': `${result.scale}%` })}></div></div>
+                          </div>
+                          <div className="cs-bar">
+                            <div className="cs-bar-label"><span>{result.afterLabel ?? 'After'}</span><span>{result.after}</span></div>
+                            <div className="cs-bar-track"><div className="cs-bar-fill after" style={cssVars({ '--w': '100%' })}></div></div>
+                          </div>
+                        </div>
+                        {result.note && <p className="note">{result.note}</p>}
+                      </div>
+                    )}
+                    {resultsSection.points && (
+                      <div className="cs-tech-rlist">
+                        {resultsSection.points.map((p) => (
+                          <div key={p.title} className="cs-tech-rtext"><h3>{p.title}</h3><p>{p.text}</p></div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {changes && (
+                <div className="cs-tech-more">
+                  <Head label={changes.label ?? 'What changed for the business'} heading={changes.heading} />
+                  <div className="cs-tech-changes">
+                    {changes.items.map((c) => (
+                      <article key={c.title} className="cs-tech-change"><h3>{c.title}</h3><p>{c.text}</p></article>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {methods && (
+                <div className="cs-tech-more">
+                  <Head label={methods.label ?? 'Tools and methods'} heading={methods.heading} />
+                  <ul className="cs-tech-tools">
+                    {methods.items.map((m) => <li key={m.title}>{m.title}{m.text && <span> · {m.text}</span>}</li>)}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Takeaway, origin and CTA */}
+        <section className="cs-tech-band pale" aria-labelledby={takeaway ? 'takeaway-title' : 'cta-title'}>
+          <div className="wrap">
+            {takeaway && (
+              <div className="cs-tech-panel">
+                <p className="cs-tech-kicker"><Ribbon />{takeaway.label ?? 'Takeaway'}</p>
+                <h2 id="takeaway-title">{takeaway.heading}</h2>
+                <p>{takeaway.body}</p>
+                {takeaway.fit && (
+                  <ul className="cs-fit" aria-label="Where the same approach applies">
+                    {takeaway.fit.map((f) => <li key={f}>{f}</li>)}
+                  </ul>
+                )}
+                {takeaway.link && <p><Link href={takeaway.link.href} className="link">{takeaway.link.label}</Link></p>}
+              </div>
+            )}
+            {about && (
+              <div className="cs-about cs-tech-about">
+                {study.origin && <p className="cs-badge">{study.origin}</p>}
+                <h2>{about.heading}</h2>
+                <p>{about.text}</p>
+                <p><Link href={CASE_STUDIES_PATH} className="link">See all case studies</Link></p>
+              </div>
+            )}
+            <div className="cs-cta cs-tech-cta">
+              <h2 id="cta-title">{cta.heading}</h2>
+              <p>{cta.text}</p>
+              <div className="cta-row">
+                <Link href={cta.primary?.href ?? '/book'} className="btn">{cta.primary?.label ?? 'Book a discovery call'}</Link>
+                {cta.secondary && <Link href={cta.secondary.href} className="link">{cta.secondary.label}</Link>}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
+}

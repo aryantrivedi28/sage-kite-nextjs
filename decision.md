@@ -1806,6 +1806,73 @@ Past approval records below describe only what the supplied reports establish.
 - **Validation (run by Claude):** `npx tsc --noEmit` and `npm run build` pass; the built page's `<title>`, meta description, `og:*` and `twitter:*` tags checked.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D055 — Croma technical SEO case study added as a draft (origin to confirm)
+
+- **Date:** 3 November 2026.
+- **Status:** Implemented and verified locally. Superseded in part by D056 the same day: the study is now live (no draft flag) without an origin or About box. Not committed, pushed or deployed.
+- **Why:** the user supplied `Croma_Sage-Kite_Interactive-Technical.html` and asked for it to be made into a case study on the site.
+- **Approval:** user request, 3 November 2026. Copy kept word for word from the source (US spelling included); only the site's brand colours, font and case study template are applied, as for the earlier supplied studies.
+- **Blocked on:** the source does not say who did the work. AGENTS.md forbids publishing a case study without its origin, so `origin` and `about` hold visible `[... to confirm]` placeholders. The user is asking a team mate. To publish: fill in `origin`, `about` (and `practitioner` if a person is named), adjust the metrics note if needed, remove `draft: true`.
+- **Change:**
+  - New [app/case-studies/croma/](app/case-studies/croma/) (`study.tsx` + the standard `page.tsx`), registered first in [content/case-studies/index.ts](content/case-studies/index.ts), so once live it becomes the featured card on /case-studies.
+  - Mapping: hero (h1, dek, lede, glance Client / Type / Timeframe, the console as the hero visual); the three highlight tiles as `metrics`; Diagnostics, Performance, Structured data, Crawl control and Execution approach as five `sections` with their demos; Results, Impact, Stack and Key takeaway in the template's sections; the closing CTA.
+  - New interactive components in components/case-studies/: `AuditConsole` (typed console, CSS only, every line in the HTML), `AuditToggle`, `LcpWaterfall`, `LcpSlider`, `SchemaToggle`, `RobotsTester`, `StagePipeline`; `CodeBlock` and `Tok` in blocks.tsx. Every state's copy is in the server HTML (hidden states use `hidden` or CSS), not only the first one. Styles appended to caseStudyStyles.ts with brand tokens only; code uses `var(--sans)` with ligatures off (Manrope turned `--` into a dash).
+  - New `CromaCover` in covers.tsx (a shop front and a speed gauge; no text, digits or logos).
+  - Template additions (no change to existing studies): `BeforeAfterResult.afterLabel` and `.note` (for "After 6 months" and the source's index note); `methods` items' `text` is optional (the source's stack is a plain list); a single before/after result card spans the results row.
+  - Left out or replaced, as for earlier studies: the source's own header, footer, sticky section nav, reading progress bar, the "Technical case study · ..." kicker, the `/work` links (the page's "See all case studies" link), the count-up animation on +100%. Section labels are in sentence case ("01 / Diagnostics") rather than capitals. The source's CTA button "Book a free consultation" becomes the template's "Book a discovery call" (to /book); the source's text "Contact Sage Kite and book a free consultation..." is kept, with "Contact Sage Kite" as the secondary link to /contact.
+  - Written by Claude (not in the source): meta title "Enterprise Ecommerce SEO Case Study: Croma" (source title was 63 characters with the suffix), description shortened from the source's to 149 characters, listing summary, keywords, industry "Consumer electronics retail", discipline "Technical SEO", highlights, and the metrics note "Figures are as reported for this engagement."
+- **Validation (run by Claude, with the draft flag temporarily off):** `npx tsc --noEmit`, `npm run build` and `npm test` (204/204) pass. On a local production server: 200, one h1, canonical / og:url `https://www.sagekite.com/case-studies/croma`, in sitemap.xml, featured on /case-studies ("9 case studies" in the grid). A script compared every text segment of the source with the built page: all present except the deliberate omissions above. Headless Chrome at 1440 and 375 px: no horizontal scroll, every demo switched and checked (robots tester results for all five samples and typed paths; Play steps through the four stages and stops; LCP slider shows Poor at 4.8 s); no console errors. Found and fixed during testing: console lines stuck invisible (a 1 ms `steps(1)` animation ended at 0.9999 progress); a global `.u` class underlined the search preview URL.
+- **Not tested:** Safari, Firefox, screen readers; the page with its real origin.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D056 — Croma case study published without an origin, as in its source
+
+- **Date:** 3 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** D055 held the Croma study as a draft because its source does not say who did the work. The user's teammate said to leave that section out, and the user asked for the page to look as it does in `Croma_Sage-Kite_Interactive-Technical.html`.
+- **Approval:** user instruction, 3 November 2026. This is an exception to the AGENTS.md rule against publishing a case study without its origin; AGENTS.md now names it as the only approved exception.
+- **Change:**
+  - [content/case-studies/types.ts](content/case-studies/types.ts): `origin` and `about` are optional; new optional `takeaway.link`.
+  - [components/case-studies/CaseStudyPage.tsx](components/case-studies/CaseStudyPage.tsx): the hero badge and the About box (with its "See all case studies" link) render only when present; without About, the closing section holds only the CTA (`.cs-cta.alone`, no top margin) and is labelled by the CTA heading. Takeaway link rendered when set.
+  - [app/case-studies/page.tsx](app/case-studies/page.tsx) and [components/home/Work.tsx](components/home/Work.tsx): the origin line renders only when present.
+  - [app/case-studies/croma/study.tsx](app/case-studies/croma/study.tsx): `draft` removed (live), `origin` and `about` removed, the metrics note Claude had added ("Figures are as reported for this engagement.") removed, and the source's "See more work" link restored at the end of the Key takeaway panel (to /case-studies, as the source's /work does not exist).
+  - Every other study has an origin and an About box, so its page, listing card and homepage card are unchanged.
+- **Limitations:** the Croma page no longer says who did the work or that its figures are as reported. The /case-studies meta description ("…with the origin of every example stated") and the homepage line "Every example states its origin and the basis for any result." are no longer true for every study on /case-studies; they were not changed (site copy needs approval). Croma is not one of the homepage's featured studies.
+- **Validation (run by Claude):** `npx tsc --noEmit`, `npm run build` and `npm test` pass. On the user's dev server: /case-studies/croma returns 200 with no origin badge, no About box and "See more work" in the takeaway; /case-studies/jiva-ayurveda still shows its badge twice and its About box; /case-studies shows Croma as the featured card without an origin line; no horizontal scroll at 1440 px.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D057 — Croma case study laid out like its source HTML (technical layout)
+
+- **Date:** 3 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the user sent screenshots of `Croma_Sage-Kite_Interactive-Technical.html` and asked for the page to look like them, keeping the brand colours and brand rules.
+- **Approval:** user instruction with screenshots, 3 November 2026. This includes the hero kicker "Technical case study · Enterprise ecommerce SEO", which other supplied case studies leave out (user's request of 15 October 2026), and the CTA button "Book a free consultation" to /contact as in the source.
+- **Change:**
+  - New [components/case-studies/TechnicalCaseStudyPage.tsx](components/case-studies/TechnicalCaseStudyPage.tsx) and [TechNav.tsx](components/case-studies/TechNav.tsx). `CaseStudyPage` hands a study with `technical` set to this layout; metadata, JSON-LD, the folder's page.tsx and every other study are unchanged.
+  - Layout as in the source: grid-paper hero with path breadcrumb ("work / croma / technical-seo", "work" linking to /case-studies), ribbon kicker, h1, dek, lede, client / type / timeframe chips and the console beside them; reading progress bar; sticky "On this page" menu (Overview, Diagnostics, Performance, Structured data, Crawl control, Pipeline, Results) under the site's sticky header, highlighting the section in view; three highlight tiles with uppercase labels; numbered uppercase section labels; demo cards with a sky offset shadow; bands plain / pale / plain / pale / sky as in the source; results card beside three stacked points; impact cards with a coloured bar; stack chips with coloured left borders; takeaway panel with ribbon kicker and "See more work"; CTA panel with an ink button.
+  - [types.ts](content/case-studies/types.ts): optional `technical` (crumbs, nav), `sections[].band`, `cta.primary`. `CaseStudyPage` also honours `cta.primary` (default unchanged: "Book a discovery call" to /book).
+  - Brand rules kept: Manrope only (the source's Newsreader serif and monospace are not used, so headings are Manrope bold, not light serif, and the dek is not italic); colours only from brand tokens or `color-mix` of tokens (section labels a darker coral, the kicker a darker sky, for contrast on small text); heading sizes follow D051.
+- **Validation (run by Claude):** `npx tsc --noEmit`, `npm run build` and `npm test` pass. On the user's dev server at 1440 and 375 px: no horizontal scroll; the menu sits directly under the header (97 px at 1440), highlights "Crawl control" when that section is in view, and section headings land below it; progress bar moves with scroll; all demos as in D055. Compared with the user's screenshots by eye.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D058 — Croma: sticky section menu removed
+
+- **Date:** 3 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why / approval:** the user asked for the "Overview · Diagnostics · … · Results" menu bar to be removed from the page (screenshot, 3 November 2026).
+- **Change:** `technical.nav` is optional ([types.ts](content/case-studies/types.ts)); [TechNav.tsx](components/case-studies/TechNav.tsx) draws the menu only when items are given and always draws the reading progress bar; Croma's `nav` list removed from [study.tsx](app/case-studies/croma/study.tsx). Section anchors (`#diagnostics` etc.) still exist and now land 16 px below the site header. Nothing else on the page changed.
+- **Validation (run by Claude):** `npx tsc --noEmit`, `npm run build` and `npm test` pass; on the dev server the page has no `.cs-tech-subnav`, the progress bar still moves, no horizontal scroll at 1440 px.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D059 — Croma: breadcrumb removed
+
+- **Date:** 3 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why / approval:** the user asked for the "work / croma / technical-seo" line above the kicker to be removed (screenshot, 3 November 2026).
+- **Change:** `technical.crumbs` is optional ([types.ts](content/case-studies/types.ts)); [TechnicalCaseStudyPage.tsx](components/case-studies/TechnicalCaseStudyPage.tsx) draws the breadcrumb only when crumbs are given; Croma sets none ([study.tsx](app/case-studies/croma/study.tsx)). The page's BreadcrumbList JSON-LD (Home › Case studies › Croma) is unchanged; it is structured data, not the visible line.
+- **Validation (run by Claude):** `npx tsc --noEmit`, `npm run build` and `npm test` pass; on the dev server the page has no `.cs-tech-crumbs` and the hero starts with the kicker.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

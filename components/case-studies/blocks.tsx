@@ -694,3 +694,21 @@ export function DataTable({ caption, columns, rows, note }: { caption: string; c
     </figure>
   );
 }
+
+/**
+ * A code sample on a dark panel, with a small label above it. Write the code as children
+ * inside a template string or with {'\n'} line breaks; wrap parts in <Tok> to colour them.
+ */
+export function CodeBlock({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="cs-code">
+      <p className="cs-code-lab">{label}</p>
+      <pre>{children}</pre>
+    </div>
+  );
+}
+
+/** A coloured token inside a CodeBlock: `k` key or keyword, `s` string, `c` comment, `h` highlighted. */
+export function Tok({ t, children }: { t: 'k' | 's' | 'c' | 'h'; children: React.ReactNode }) {
+  return <span className={`cs-${t}`}>{children}</span>;
+}

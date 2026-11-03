@@ -23,6 +23,10 @@ export interface BeforeAfterResult extends CaseStudyResultBase {
   scale: number;
   /** If `before` is a range, the share of the before bar that is solid (lower ÷ upper × 100). */
   rangeSolid?: number;
+  /** Label of the after bar. Defaults to "After". */
+  afterLabel?: string;
+  /** Small print under the bars. Defaults to "Bars drawn to scale." */
+  note?: string;
 }
 
 /** A count with no starting figure, e.g. "120+ keywords into the top 3". Drawn as one dot per item. */
@@ -64,8 +68,11 @@ export interface CaseStudy {
   industry: string;
   /** Type of work, shown as the listing card tag, e.g. "SEO". */
   discipline: string;
-  /** Who did the work and on what basis, e.g. "Previous work by a Sage Kite delivery specialist". */
-  origin: string;
+  /**
+   * Who did the work and on what basis, e.g. "Previous work by a Sage Kite delivery specialist".
+   * Required by default (AGENTS.md); leave it out only when the user has approved a study without one (Croma, D056).
+   */
+  origin?: string;
   /** Original illustration for the /case-studies card (components/case-studies/covers.tsx). Never a photo, screenshot or logo. */
   cover?: ReactNode;
   /** The person who did the work, if named. Added to the Article schema. */
@@ -79,6 +86,13 @@ export interface CaseStudy {
   results: CaseStudyResult[];
   /** Draft case studies are left out of the listing, sitemap and routes. */
   draft?: boolean;
+  /**
+   * Renders the page in the interactive technical layout (components/case-studies/TechnicalCaseStudyPage.tsx,
+   * first used for Croma): a path-style breadcrumb, `hero.label` as a kicker, `hero.glance` as chips, an optional
+   * sticky on-page menu (`nav`) and a reading progress bar. The first of `crumbs` links to /case-studies; `nav` lists the menu
+   * (the hero is "overview", the results section "results", the rest are `sections` ids).
+   */
+  technical?: { crumbs?: string[]; nav?: { id: string; label: string }[] };
 
   /* ── Page sections ───────────────────────────────────────────────────── */
   hero: {
@@ -125,7 +139,15 @@ export interface CaseStudy {
    * Free-form sections shown after the approach, one per part of the work, e.g.
    * migration, storefront, analytics. `id` is the anchor for an approach step `href`.
    */
-  sections?: { id: string; label: string; heading: string; intro?: string; content: ReactNode }[];
+  sections?: {
+    id: string;
+    label: string;
+    heading: string;
+    intro?: string;
+    content: ReactNode;
+    /** Background in the technical layout. Defaults to none. (The standard layout alternates pale bands.) */
+    band?: 'pale' | 'sky';
+  }[];
   delivered?: {
     label?: string;
     heading: string;
@@ -156,7 +178,8 @@ export interface CaseStudy {
     columns?: 2 | 3 | 4;
     items: { icon: ChangeIconKind; title: string; text: string }[];
   };
-  methods?: { label?: string; heading: string; items: { title: string; text: string }[] };
+  /** `text` is optional: leave it out for a plain list of tools. */
+  methods?: { label?: string; heading: string; items: { title: string; text?: string }[] };
   takeaway?: {
     /** Eyebrow above the heading. Defaults to "Takeaway". */
     label?: string;
@@ -168,8 +191,16 @@ export interface CaseStudy {
     };
     body: string;
     fit?: string[];
+    /** A text link at the end of the panel, e.g. "See more work". */
+    link?: { label: string; href: string };
   };
-  /** Origin statement. Required whenever the work was not a Sage Kite client engagement. */
-  about: { heading: string; text: string };
-  cta: { heading: string; text: string; secondary?: { label: string; href: string } };
+  /** Origin statement. Required whenever the work was not a Sage Kite client engagement; left out only with the user's approval (D056). */
+  about?: { heading: string; text: string };
+  cta: {
+    heading: string;
+    text: string;
+    /** The button. Defaults to "Book a discovery call" linking to /book. */
+    primary?: { label: string; href: string };
+    secondary?: { label: string; href: string };
+  };
 }

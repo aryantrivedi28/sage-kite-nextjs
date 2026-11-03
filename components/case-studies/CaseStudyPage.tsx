@@ -8,6 +8,7 @@ import { Footer } from '@/components/Footer';
 import { CASE_STUDIES_PATH, caseStudyPath, type CaseStudy } from '@/content/case-studies';
 import { CASE_STUDY_CSS } from './caseStudyStyles';
 import { ChangeCards, DotGrid } from './blocks';
+import { TechnicalCaseStudyPage } from './TechnicalCaseStudyPage';
 
 const SITE_URL = 'https://www.sagekite.com';
 
@@ -104,6 +105,7 @@ const cssVars = (v: Record<string, string>) => v as React.CSSProperties;
 
 export function CaseStudyPage({ study }: { study: CaseStudy }) {
   if (study.draft) notFound();
+  if (study.technical) return <TechnicalCaseStudyPage study={study} jsonLd={caseStudyJsonLd(study)} />;
 
   const { hero, metrics, startingPoint, problem, approach, sections, delivered, resultsSection, changes, methods, takeaway, about, cta } = study;
 
@@ -131,7 +133,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
                 <h1 id="title">{study.title}</h1>
                 <p className="cs-dek">{hero.dek}</p>
                 <p className="cs-lede">{hero.lede}</p>
-                <p className="cs-badge">{study.origin}</p>
+                {study.origin && <p className="cs-badge">{study.origin}</p>}
               </div>
               <div className="cs-hero-visual">
                 {!hero.visualBelow && hero.visual}
@@ -301,12 +303,12 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
                             </div>
                           </div>
                           <div className="cs-bar">
-                            <div className="cs-bar-label"><span>After</span><span>{r.after}</span></div>
+                            <div className="cs-bar-label"><span>{r.afterLabel ?? 'After'}</span><span>{r.after}</span></div>
                             <div className="cs-bar-track"><div className="cs-bar-fill after" style={cssVars({ '--w': '100%' })}></div></div>
                           </div>
                         </div>
                         <p className="note">
-                          Bars drawn to scale.{r.rangeSolid !== undefined && ' The lighter segment marks the range in the starting figure.'}
+                          {r.note ?? <>Bars drawn to scale.{r.rangeSolid !== undefined && ' The lighter segment marks the range in the starting figure.'}</>}
                         </p>
                       </>
                     )}
@@ -340,7 +342,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
             <div className="wrap cs-split">
               <Head id="tools-title" label={methods.label ?? 'Tools and methods'} heading={methods.heading} />
               <ul className="cs-tools">
-                {methods.items.map((m) => <li key={m.title}><b>{m.title}</b><span>{m.text}</span></li>)}
+                {methods.items.map((m) => <li key={m.title}><b>{m.title}</b>{m.text && <span>{m.text}</span>}</li>)}
               </ul>
             </div>
           </section>
@@ -380,25 +382,28 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
                     {takeaway.fit.map((f) => <li key={f}>{f}</li>)}
                   </ul>
                 )}
+                {takeaway.link && <p><Link href={takeaway.link.href} className="link">{takeaway.link.label}</Link></p>}
               </div>
             </div>
           </section>
         )}
 
         {/* Origin + CTA */}
-        <section className="cs-close" aria-labelledby="about-title">
+        <section className="cs-close" aria-labelledby={about ? 'about-title' : 'cta-title'}>
           <div className="wrap">
-            <div className="cs-about">
-              <p className="cs-badge">{study.origin}</p>
-              <h2 id="about-title">{about.heading}</h2>
-              <p>{about.text}</p>
-              <p><Link href={CASE_STUDIES_PATH} className="link">See all case studies</Link></p>
-            </div>
-            <div className="cs-cta">
-              <h2>{cta.heading}</h2>
+            {about && (
+              <div className="cs-about">
+                {study.origin && <p className="cs-badge">{study.origin}</p>}
+                <h2 id="about-title">{about.heading}</h2>
+                <p>{about.text}</p>
+                <p><Link href={CASE_STUDIES_PATH} className="link">See all case studies</Link></p>
+              </div>
+            )}
+            <div className={`cs-cta${about ? '' : ' alone'}`}>
+              <h2 id="cta-title">{cta.heading}</h2>
               <p>{cta.text}</p>
               <div className="cta-row">
-                <Link href="/book" className="btn">Book a discovery call</Link>
+                <Link href={cta.primary?.href ?? '/book'} className="btn">{cta.primary?.label ?? 'Book a discovery call'}</Link>
                 {cta.secondary && <Link href={cta.secondary.href} className="link">{cta.secondary.label}</Link>}
               </div>
             </div>
