@@ -335,6 +335,16 @@ studio posts on the live site (section 10).
 - The existing code posts (non-draft posts from `content/blog`) are listed
   read-only with an "In code" tag and a link to the live page, so writers can
   see which slugs are taken. Counts include them.
+- Order (D060): one list, newest first, studio and code posts mixed, each row by a date that saving does
+  not change (`listSortKey` / `compareListRows` in `postUtils.ts`): a scheduled post by its scheduled date,
+  a published post (studio or code) by its publish date, a draft by the local day it was created
+  ("Started <date>"). Same-day ties: the later created time (a scheduled post: the later scheduled time)
+  first, then title A-Z; code posts have no created date, so they follow studio posts on the same day.
+  Saving or republishing never moves a post. First-publishing a draft does (from its created date to its
+  publish date), and so does changing its Published date or scheduled date.
+  For posts with different dates the published order matches /blog; same-day ties may differ, and the
+  studio also lists Sanity posts that /blog hides (missing title, excerpt or category, no usable featured
+  image, an invalid date, or a slug a code post already uses; `content/blog/live.tsx`).
 - Studio posts show "Ready" or "N to review" (failed checklist items).
 - Row actions for studio posts: Edit, Preview, Duplicate (new draft, title
   "(copy)", slug `-copy`, unfeatured, unlocked), Delete (with confirmation).

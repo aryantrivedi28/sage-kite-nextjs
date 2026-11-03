@@ -58,11 +58,47 @@ export function newId(): string {
     : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-/** Today as YYYY-MM-DD in the editor's local time zone. */
-export function today(): string {
-  const d = new Date();
+/** A date as YYYY-MM-DD in the editor's local time zone. */
+function localDay(d: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+/** Today as YYYY-MM-DD in the editor's local time zone. */
+export function today(): string {
+  return localDay(new Date());
+}
+
+/**
+ * The local calendar day of an ISO timestamp (createdAt etc. are UTC; slicing would show the previous
+ * day for a draft started in India before 05:30). '' for an empty or invalid timestamp.
+ */
+export function localDayOf(stamp: string): string {
+  if (!stamp) return '';
+  const d = new Date(stamp);
+  return Number.isNaN(d.getTime()) ? '' : localDay(d);
+}
+
+/**
+ * Where a studio post sits in the "Blog posts" list (decision.md D060): by a date that saving does not change.
+ * `day` is the scheduled date, the publish date, or for a draft the day it was created; `stamp` breaks
+ * ties within a day.
+ */
+export function listSortKey(post: StudioPost): { day: string; stamp: string } {
+  const scheduled = post.status === 'scheduled' && !!post.scheduledFor;
+  const day = scheduled
+    ? post.scheduledFor.slice(0, 10)
+    : post.status === 'published' && post.publishedAt
+      ? post.publishedAt
+      : // savedAt is a last resort for posts with no other date: it changes on every save.
+        localDayOf(post.createdAt) || localDayOf(post.firstPublishedAt ?? '') || localDayOf(post.savedAt);
+  const stamp = scheduled ? post.scheduledFor : post.createdAt || post.firstPublishedAt || '';
+  return { day, stamp };
+}
+
+/** List order: newest day first, then the later stamp, then title A-Z. Every tie is resolved. */
+export function compareListRows(a: { day: string; stamp: string; title: string }, b: { day: string; stamp: string; title: string }): number {
+  return b.day.localeCompare(a.day) || b.stamp.localeCompare(a.stamp) || a.title.localeCompare(b.title);
 }
 
 export function emptyPost(title: string, category: string, author: string, authorImage: string): StudioPost {

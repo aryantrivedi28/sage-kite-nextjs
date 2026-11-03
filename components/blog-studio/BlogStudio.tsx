@@ -57,9 +57,11 @@ import {
   blockHeading,
   buildGuide,
   checklist,
+  compareListRows,
   emptyPost,
   googleTitle,
   headingAnchors,
+  listSortKey,
   newBlock,
   newId,
   newSource,
@@ -541,7 +543,9 @@ interface Row {
   category: string;
   status: StudioStatus;
   date: string;
-  sortDate: string;
+  /** Sort keys (listSortKey / compareListRows): a date saving does not change, and a tie-breaker. */
+  day: string;
+  stamp: string;
   source: 'studio' | 'site';
   issues?: number;
   post?: StudioPost;
@@ -580,12 +584,13 @@ function PostList({
   const rows = useMemo<Row[]>(() => {
     const studio: Row[] = posts.map((p) => {
       const checks = checklist(p, { studio: posts, site: sitePosts });
+      const { day, stamp } = listSortKey(p);
       const date =
         p.status === 'scheduled' && p.scheduledFor
           ? `For ${formatDate(p.scheduledFor.slice(0, 10))}`
           : p.status === 'published' && p.publishedAt
             ? formatDate(p.publishedAt)
-            : `Edited ${formatDate(p.savedAt.slice(0, 10))}`;
+            : `Started ${formatDate(day)}`;
       return {
         key: p.id,
         title: p.title || 'Untitled post',
@@ -593,7 +598,8 @@ function PostList({
         category: p.category,
         status: p.status,
         date,
-        sortDate: p.savedAt,
+        day,
+        stamp,
         source: 'studio',
         issues: checks.filter((c) => !c.ok).length,
         post: p,
@@ -606,10 +612,13 @@ function PostList({
       category: p.category,
       status: 'published',
       date: formatDate(p.publishedAt),
-      sortDate: p.publishedAt,
+      // Code posts have no created date, so on the same day they follow studio posts.
+      day: p.publishedAt,
+      stamp: '',
       source: 'site',
     }));
-    return [...studio.sort((a, b) => b.sortDate.localeCompare(a.sortDate)), ...site];
+    // One timeline, studio and code posts mixed (decision.md D060).
+    return [...studio, ...site].sort(compareListRows);
   }, [posts, sitePosts]);
 
   const counts = {
