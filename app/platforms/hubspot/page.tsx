@@ -5,32 +5,34 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'HubSpot Implementation & Consulting Services | Sage Kite',
+  title: 'HubSpot Implementation Services for SMEs | Sage Kite',
   description:
-    'HubSpot implementation from Sage Kite: we map your sales and marketing process, then build the CRM, pipelines, workflows, reporting and migrations.',
+    'Sage Kite provides HubSpot implementation services for CRM setup, sales pipelines, lead management, workflow automation, reporting, and data migration.',
   keywords: [
-    'HubSpot implementation services',
-    'HubSpot consultant',
-    'HubSpot CRM setup',
-    'HubSpot migration',
-    'HubSpot portal audit',
-    'HubSpot onboarding',
+    'HubSpot Implementation Services',
+    'HubSpot Consulting Services',
+    'HubSpot CRM Setup',
+    'HubSpot Implementation Consultant',
+    'HubSpot Workflow Automation',
+    'HubSpot CRM Migration',
+    'HubSpot Sales Pipeline Setup',
+    'HubSpot Marketing Automation',
   ],
   alternates: { canonical: 'https://www.sagekite.com/platforms/hubspot' },
   openGraph: {
     type: 'website',
     siteName: 'Sage Kite',
     url: 'https://www.sagekite.com/platforms/hubspot',
-    title: 'HubSpot implementation and consulting services | Sage Kite',
+    title: 'HubSpot CRM Implementation and Consulting | Sage Kite',
     description:
-      'Sage Kite implements HubSpot around your sales and marketing process: CRM architecture, pipelines, workflows, reporting, migration and integrations.',
+      'Get HubSpot configured around your sales process. Sage Kite builds CRM pipelines, lead routing, workflows, dashboards, and integrations, with testing and handover.',
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'HubSpot implementation and consulting services | Sage Kite',
+    title: 'HubSpot CRM Implementation and Consulting | Sage Kite',
     description:
-      'Process-first HubSpot implementation: CRM architecture, pipelines, workflows, reporting, migration and integrations, tested and handed over.',
+      'Get HubSpot configured around your sales process. Sage Kite builds CRM pipelines, lead routing, workflows, dashboards, and integrations, with testing and handover.',
     images: DEFAULT_TWITTER_IMAGES,
   },
 };

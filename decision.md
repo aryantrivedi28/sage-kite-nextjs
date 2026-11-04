@@ -2022,6 +2022,24 @@ Past approval records below describe only what the supplied reports establish.
 - **Validation (run by Claude, 4 November 2026):** `npx tsc --noEmit` and `npm run build` pass; the page on the user's dev server (:3000) renders the new title, description, keywords, og:title, og:description, twitter:title and twitter:description exactly as above (lengths 59 / 153 / 60 / 155, as in the screenshot), with canonical and og:url `https://www.sagekite.com/platforms/activecampaign` unchanged.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D067 — /platforms/hubspot: new meta title, description, keywords and social text
+
+- **Date:** 4 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the user supplied updated metadata for https://www.sagekite.com/platforms/hubspot as a screenshot (primary keyword "HubSpot Implementation Services"), the same way as D065 and D066.
+- **Change** ([app/platforms/hubspot/page.tsx](app/platforms/hubspot/page.tsx), `metadata` only):
+  - Meta title. Before: `HubSpot Implementation & Consulting Services | Sage Kite`. After: `HubSpot Implementation Services for SMEs | Sage Kite` (52 characters).
+  - Meta description. Before: `HubSpot implementation from Sage Kite: we map your sales and marketing process, then build the CRM, pipelines, workflows, reporting and migrations.` After: `Sage Kite provides HubSpot implementation services for CRM setup, sales pipelines, lead management, workflow automation, reporting, and data migration.` (151 characters).
+  - Keywords. Before: `HubSpot implementation services`, `HubSpot consultant`, `HubSpot CRM setup`, `HubSpot migration`, `HubSpot portal audit`, `HubSpot onboarding`. After (the screenshot's primary and secondary keywords): `HubSpot Implementation Services`, `HubSpot Consulting Services`, `HubSpot CRM Setup`, `HubSpot Implementation Consultant`, `HubSpot Workflow Automation`, `HubSpot CRM Migration`, `HubSpot Sales Pipeline Setup`, `HubSpot Marketing Automation`.
+  - OG title. Before: `HubSpot implementation and consulting services | Sage Kite`. After: `HubSpot CRM Implementation and Consulting | Sage Kite` (53 characters).
+  - OG description. Before: `Sage Kite implements HubSpot around your sales and marketing process: CRM architecture, pipelines, workflows, reporting, migration and integrations.` After: `Get HubSpot configured around your sales process. Sage Kite builds CRM pipelines, lead routing, workflows, dashboards, and integrations, with testing and handover.` (163 characters).
+  - Twitter title and description: not in the screenshot; set to the new OG title and description, as the user chose for D065. Before: `HubSpot implementation and consulting services | Sage Kite` / `Process-first HubSpot implementation: CRM architecture, pipelines, workflows, reporting, migration and integrations, tested and handed over.`
+  - Unchanged: canonical, og:url, share images, twitter card type, the Service JSON-LD and all page content.
+- **Approval:** the user, 4 November 2026, in chat (the screenshot as the exact wording).
+- **Expected effects (not measured):** search results and social previews show the new text after the page is recrawled. The OG description (163 characters) may be cut short in some previews.
+- **Validation (run by Claude, 4 November 2026):** `npx tsc --noEmit` and `npm run build` pass; the page on the user's dev server (:3000) renders the new title, description, keywords, og:title, og:description, twitter:title and twitter:description exactly as above, with canonical and og:url `https://www.sagekite.com/platforms/hubspot` unchanged.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
