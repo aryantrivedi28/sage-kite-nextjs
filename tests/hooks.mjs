@@ -1,7 +1,8 @@
 /*
  * Module hooks for the unit tests (run with `npm test`). They let Node load the app's
  * TypeScript directly: `@/` imports are resolved, extensionless imports get .ts/.tsx, and
- * the pieces that need Next.js or the network are replaced with stubs in tests/stubs.
+ * the pieces that need Next.js or the network are replaced with stubs in tests/stubs (next/link and next/image
+ * are thin shims over the real components). Statically imported images become { src, width, height }.
  * .tsx files (JSX, which Node cannot strip) are compiled with the project's own TypeScript.
  * Nothing here talks to Sanity: @sanity/client is a recording fake.
  */
@@ -17,6 +18,9 @@ const STUBS = {
   'next/cache': 'stubs/next-cache.mjs',
   '@sanity/client': 'stubs/sanity-client.mjs',
   '@/content/blog': 'stubs/content-blog.mjs',
+  'next/navigation': 'stubs/next-navigation.mjs',
+  'next/link': 'stubs/next-link.mjs',
+  'next/image': 'stubs/next-image.mjs',
 };
 const SUFFIXES = ['.ts', '.tsx', '/index.ts', '/index.tsx'];
 
@@ -43,6 +47,15 @@ export async function resolve(specifier, context, next) {
 }
 
 export async function load(url, context, next) {
+  // A statically imported image (e.g. the header logo): the object next/image expects, with the real size of a PNG.
+  if (url.startsWith('file://') && /\.(png|jpe?g|webp|gif|svg)$/i.test(url)) {
+    const file = fileURLToPath(url);
+    const bytes = await readFile(file);
+    const png = bytes.length > 24 && bytes.readUInt32BE(12) === 0x49484452;
+    const size = png ? { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) } : { width: 1, height: 1 };
+    const src = '/' + path.relative(path.join(ROOT, 'public'), file).split(path.sep).join('/');
+    return { format: 'module', source: `export default ${JSON.stringify({ src, ...size })};`, shortCircuit: true };
+  }
   // A CSS module (e.g. components/blog-studio/fields.tsx's styles): every class name maps to itself.
   if (url.startsWith('file://') && url.endsWith('.module.css')) {
     return { format: 'module', source: 'export default new Proxy({}, { get: (_, k) => (typeof k === "string" ? k : undefined) });', shortCircuit: true };

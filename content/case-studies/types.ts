@@ -70,7 +70,7 @@ export interface CaseStudy {
   discipline: string;
   /**
    * Who did the work and on what basis, e.g. "Previous work by a Sage Kite delivery specialist".
-   * Required by default (AGENTS.md); leave it out only when the user has approved a study without one (Croma, D056).
+   * Required by default (AGENTS.md); leave it out only when the user has approved a study without one (Croma, D056; Maruti Suzuki, D069).
    */
   origin?: string;
   /** Original illustration for the /case-studies card (components/case-studies/covers.tsx). Never a photo, screenshot or logo. */
@@ -91,8 +91,10 @@ export interface CaseStudy {
    * first used for Croma): a path-style breadcrumb, `hero.label` as a kicker, `hero.glance` as chips, an optional
    * sticky on-page menu (`nav`) and a reading progress bar. The first of `crumbs` links to /case-studies; `nav` lists the menu
    * (the hero is "overview", the results section "results", the rest are `sections` ids).
+   * `plainHero` drops the grid-paper background (Maruti Suzuki). `odometer` adds a floating pill naming the section
+   * being read and the share of the page read (same ids as `nav`).
    */
-  technical?: { crumbs?: string[]; nav?: { id: string; label: string }[] };
+  technical?: { crumbs?: string[]; nav?: { id: string; label: string }[]; plainHero?: boolean; odometer?: { id: string; label: string }[] };
 
   /* ── Page sections ───────────────────────────────────────────────────── */
   hero: {
@@ -111,6 +113,8 @@ export interface CaseStudy {
     visualBelow?: boolean;
     /** "At a glance" rows, e.g. Client, Industry, Engagement. A value can be a link. */
     glance: { label: string; value: ReactNode }[];
+    /** Small print under the hero, e.g. that its visual is illustrative. Technical layout only. */
+    note?: string;
   };
   /** Coloured headline tiles under the hero. */
   metrics?: { items: { value: string; label: string; tone: Tone }[]; note?: string };
@@ -170,7 +174,18 @@ export interface CaseStudy {
     content?: ReactNode;
   };
   /** Uses `results` above for the bars. */
-  resultsSection?: { label?: string; heading: string; points?: { title: string; text: string }[] };
+  resultsSection?: {
+    label?: string;
+    heading: string;
+    points?: { title: string; text: string }[];
+    /** Technical layout only: a graphic above the points (e.g. <ResultDials />), used when there is no before/after figure. */
+    visual?: ReactNode;
+    /**
+     * Technical layout only: give the results a band of their own in this colour; impact and stack then follow in a
+     * plain band (Maruti Suzuki). Without it, results, impact and stack share one plain band (Croma).
+     */
+    band?: 'pale' | 'sky';
+  };
   changes?: {
     label?: string;
     heading: string;

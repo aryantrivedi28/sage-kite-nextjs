@@ -22,6 +22,31 @@ function Head({ id, label, heading, intro }: { id?: string; label: string; headi
   );
 }
 
+/** Impact cards. `first`: at the top of its own band, so without the gap above. */
+function Changes({ changes, first }: { changes: NonNullable<CaseStudy['changes']>; first?: boolean }) {
+  return (
+    <div className={first ? undefined : 'cs-tech-more'}>
+      <Head id={first ? 'impact-title' : undefined} label={changes.label ?? 'What changed for the business'} heading={changes.heading} />
+      <div className="cs-tech-changes">
+        {changes.items.map((c) => (
+          <article key={c.title} className="cs-tech-change"><h3>{c.title}</h3><p>{c.text}</p></article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Methods({ methods }: { methods: NonNullable<CaseStudy['methods']> }) {
+  return (
+    <div className="cs-tech-more">
+      <Head label={methods.label ?? 'Tools and methods'} heading={methods.heading} />
+      <ul className="cs-tech-tools">
+        {methods.items.map((m) => <li key={m.title}>{m.title}{m.text && <span> · {m.text}</span>}</li>)}
+      </ul>
+    </div>
+  );
+}
+
 /**
  * The interactive technical case study layout (first used for Croma), chosen by `study.technical`.
  * Same data as the standard layout, laid out like the supplied interactive HTML: a grid-paper hero
@@ -33,7 +58,41 @@ export function TechnicalCaseStudyPage({ study, jsonLd }: { study: CaseStudy; js
   const { hero, metrics, sections, resultsSection, changes, methods, takeaway, about, cta } = study;
   const technical = study.technical!;
   const [firstCrumb, ...restCrumbs] = technical.crumbs ?? [];
-  const result = study.results[0];
+  // The before/after card; a count result has no card in this layout.
+  const first = study.results[0];
+  const result = first && !('count' in first) ? first : undefined;
+
+  const results = resultsSection && (
+    <>
+      <Head id="results-title" label={resultsSection.label ?? 'Results'} heading={resultsSection.heading} />
+      {resultsSection.visual}
+      <div className={`cs-tech-results${result ? '' : ' single'}`}>
+        {result && (
+          <div className="cs-tech-rcard">
+            <p className="cs-tech-mult" aria-label={result.valueLabel}>{result.value}</p>
+            <div className="cs-bars" role="img" aria-label={`${result.label}: ${result.before} before, ${result.after} ${(result.afterLabel ?? 'after').toLowerCase()}`}>
+              <div className="cs-bar">
+                <div className="cs-bar-label"><span>Before</span><span>{result.before}</span></div>
+                <div className="cs-bar-track"><div className="cs-bar-fill" style={cssVars({ '--w': `${result.scale}%` })}></div></div>
+              </div>
+              <div className="cs-bar">
+                <div className="cs-bar-label"><span>{result.afterLabel ?? 'After'}</span><span>{result.after}</span></div>
+                <div className="cs-bar-track"><div className="cs-bar-fill after" style={cssVars({ '--w': '100%' })}></div></div>
+              </div>
+            </div>
+            {result.note && <p className="note">{result.note}</p>}
+          </div>
+        )}
+        {resultsSection.points && (
+          <div className="cs-tech-rlist">
+            {resultsSection.points.map((p) => (
+              <div key={p.title} className="cs-tech-rtext"><h3>{p.title}</h3><p>{p.text}</p></div>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
+  );
 
   return (
     <>
@@ -41,10 +100,10 @@ export function TechnicalCaseStudyPage({ study, jsonLd }: { study: CaseStudy; js
       <main id="main" className="cs cs-tech">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <style dangerouslySetInnerHTML={{ __html: CASE_STUDY_CSS }} />
-        <TechNav items={technical.nav} />
+        <TechNav items={technical.nav} odometer={technical.odometer} />
 
         {/* Overview */}
-        <section className="cs-tech-hero" id="overview" aria-labelledby="title">
+        <section className={`cs-tech-hero${technical.plainHero ? ' plain' : ''}`} id="overview" aria-labelledby="title">
           <div className="wrap">
             {firstCrumb && (
               <nav className="cs-tech-crumbs" aria-label="Breadcrumb">
@@ -69,6 +128,7 @@ export function TechnicalCaseStudyPage({ study, jsonLd }: { study: CaseStudy; js
               </div>
               {hero.visual && <div className="cs-tech-hero-visual">{hero.visual}</div>}
             </div>
+            {hero.note && <p className="note cs-tech-hero-note">{hero.note}</p>}
           </div>
         </section>
 
@@ -96,60 +156,27 @@ export function TechnicalCaseStudyPage({ study, jsonLd }: { study: CaseStudy; js
           </section>
         ))}
 
-        {/* Results, impact and stack share one band, as in the source */}
-        {(resultsSection || changes || methods) && (
+        {/* Results, impact and stack: one plain band (Croma), or results in a band of their own (resultsSection.band) */}
+        {resultsSection?.band ? (
+          <>
+            <section className={`cs-tech-band ${resultsSection.band}`} id="results" aria-labelledby="results-title">
+              <div className="wrap">{results}</div>
+            </section>
+            {(changes || methods) && (
+              <section className="cs-tech-band" aria-labelledby={changes ? 'impact-title' : undefined}>
+                <div className="wrap">
+                  {changes && <Changes changes={changes} first />}
+                  {methods && <Methods methods={methods} />}
+                </div>
+              </section>
+            )}
+          </>
+        ) : (resultsSection || changes || methods) && (
           <section className="cs-tech-band" id="results" aria-labelledby="results-title">
             <div className="wrap">
-              {resultsSection && (
-                <>
-                  <Head id="results-title" label={resultsSection.label ?? 'Results'} heading={resultsSection.heading} />
-                  <div className="cs-tech-results">
-                    {result && !('count' in result) && (
-                      <div className="cs-tech-rcard">
-                        <p className="cs-tech-mult" aria-label={result.valueLabel}>{result.value}</p>
-                        <div className="cs-bars" role="img" aria-label={`${result.label}: ${result.before} before, ${result.after} ${(result.afterLabel ?? 'after').toLowerCase()}`}>
-                          <div className="cs-bar">
-                            <div className="cs-bar-label"><span>Before</span><span>{result.before}</span></div>
-                            <div className="cs-bar-track"><div className="cs-bar-fill" style={cssVars({ '--w': `${result.scale}%` })}></div></div>
-                          </div>
-                          <div className="cs-bar">
-                            <div className="cs-bar-label"><span>{result.afterLabel ?? 'After'}</span><span>{result.after}</span></div>
-                            <div className="cs-bar-track"><div className="cs-bar-fill after" style={cssVars({ '--w': '100%' })}></div></div>
-                          </div>
-                        </div>
-                        {result.note && <p className="note">{result.note}</p>}
-                      </div>
-                    )}
-                    {resultsSection.points && (
-                      <div className="cs-tech-rlist">
-                        {resultsSection.points.map((p) => (
-                          <div key={p.title} className="cs-tech-rtext"><h3>{p.title}</h3><p>{p.text}</p></div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
-
-              {changes && (
-                <div className="cs-tech-more">
-                  <Head label={changes.label ?? 'What changed for the business'} heading={changes.heading} />
-                  <div className="cs-tech-changes">
-                    {changes.items.map((c) => (
-                      <article key={c.title} className="cs-tech-change"><h3>{c.title}</h3><p>{c.text}</p></article>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {methods && (
-                <div className="cs-tech-more">
-                  <Head label={methods.label ?? 'Tools and methods'} heading={methods.heading} />
-                  <ul className="cs-tech-tools">
-                    {methods.items.map((m) => <li key={m.title}>{m.title}{m.text && <span> · {m.text}</span>}</li>)}
-                  </ul>
-                </div>
-              )}
+              {results}
+              {changes && <Changes changes={changes} />}
+              {methods && <Methods methods={methods} />}
             </div>
           </section>
         )}

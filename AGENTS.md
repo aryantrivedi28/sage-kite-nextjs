@@ -45,10 +45,13 @@ npm run build        # production build; must pass before committing
 npm test             # unit tests for the blog studio security code (tests/, node:test, no Sanity)
 ```
 
-There is no lint script. The only tests are the blog studio tests in `tests/`: security (they run the real
-Server Actions against a fake Sanity client and never touch the network) and paste / formatting. tests/hooks.mjs
-compiles `.tsx` files with the project's TypeScript (and maps CSS modules to their class names), so a test can render a
-component (e.g. StudioArticle, or the studio's fields.tsx) with react-dom/server. "Done" means typecheck + build + `npm test` pass and the changed page has been opened in the browser.
+There is no lint script. The tests in `tests/` are mostly the blog studio's: security (they run the real
+Server Actions against a fake Sanity client and never touch the network) and paste / formatting; platform-nav.test.mts
+checks the header's Platforms dropdown and the /services platform strip. tests/hooks.mjs
+compiles `.tsx` files with the project's TypeScript (and maps CSS modules to their class names, and a static image
+import to `{ src, width, height }`), so a test can render a component (e.g. StudioArticle, the studio's fields.tsx, or
+Header) with react-dom/server. `next/link` and `next/image` are the real components (via thin shims in tests/stubs);
+`next/navigation`'s usePathname returns `globalThis.__testPathname` (default `/`). "Done" means typecheck + build + `npm test` pass and the changed page has been opened in the browser.
 
 ## Where things live
 
@@ -151,7 +154,19 @@ components/
                           empty, or nothing left after cleaning (D063), = the slug names of D061. postUtils holds suggestedImageFileName (the
                           upload prefill, skipping camera / OS names) and articleImageNames (`<slug>-<n>`).
                           fields.tsx holds Field and ImageFileNameField (hook-free, so tests can render them).
-  Header.tsx, Footer.tsx  Shared header/footer.
+  Header.tsx, Footer.tsx  Shared header/footer. Header's "Platforms" item has a chevron button that opens a
+                          dropdown (disclosure pattern, not role="menu"; hover with a mouse on desktop, an
+                          accordion in the mobile menu) listing every platform page, built from
+                          content/platforms.ts, slugged platforms only, so a platform appears once it gets a
+                          `slug`. Two sections (D071): "General CRMs" = the cross-industry group (with "All
+                          platforms"), "By industry" = every other group, in PLATFORM_GROUPS then PLATFORMS order.
+                          Each row is the name over its group's `navLabel ?? label`. The panel is always in the
+                          HTML (hidden by CSS) so every page links to every platform page (D070). Styles: the
+                          "Platforms dropdown" block in globals.css.
+  services/PlatformStrip.tsx
+                          The "Platforms we implement" chip strip at the bottom of the /services hero: every entry
+                          in PLATFORMS (GoHighLevel as plain text, no page), "Custom CRM", "See all platforms" and
+                          the trademark line (D070). Styled by the .sv-plat rules in app/services/page.tsx.
   GoogleAnalytics.tsx     The GA4 tag (client component in the root layout); skipped on pages
                           with a `data-no-analytics` element (the blog studio).
   home/                   Homepage sections. Work.tsx is the featured case studies
@@ -175,8 +190,11 @@ content/blog/
   types.ts                BlogPost type + CATEGORIES.
   authors.ts              Author name/avatar.
 content/platforms.ts      Platform list and industry groups: homepage "Platforms" grid,
-                          /platforms directory and sitemap. A platform with a `slug` links
-                          to /platforms/<slug> and is in the sitemap.
+                          /platforms directory, sitemap, the header's Platforms dropdown and the
+                          /services platform strip. A platform with a `slug` links to
+                          /platforms/<slug>, is in the sitemap and the header dropdown. A group's
+                          optional `navLabel` is its shorter name in the header dropdown only
+                          ("Any industry", "Coaching and courses"); `label` is what /platforms shows.
 content/case-studies/
   index.ts                Registry of case studies, newest first. Read its header comment.
   types.ts                CaseStudy type: every section after the hero is optional. A result is
@@ -190,7 +208,9 @@ components/case-studies/  covers.tsx: one original cover illustration per study 
                           brand names, text or numbers); DefaultCover for a study without one.
                           CaseStudyPage (renders every case study + metadata + JSON-LD; a study with
                           `technical` set is drawn by TechnicalCaseStudyPage + TechNav instead: the
-                          interactive layout (optional sticky section menu; Croma has none), D057, D058),
+                          interactive layout (optional sticky section menu; Croma has none), D057, D058;
+                          options `plainHero`, `odometer`, `hero.note`, `resultsSection.band` / `.visual`
+                          for Maruti Suzuki, D069),
                           caseStudyStyles.ts (shared CSS), blocks.tsx (reusable content and
                           sketches, RankLadder, Journey, DotGrid, PageGridSketch, BrowserFrame,
                           PurchasePath, Checklist, CountCard, NumberedSteps, LoopSketch, PhoneFrame,
@@ -200,7 +220,9 @@ components/case-studies/  covers.tsx: one original cover illustration per study 
                           CategoryFixes, MigrationFlow, ScreenshotTabs, DashboardToggle,
                           CheckoutFixFlow, LayerStack, EmailToggle, PdpToggle, RtoFlow,
                           SmartCollections, Countdown, PricingDemo, AuditToggle, LcpWaterfall,
-                          LcpSlider, SchemaToggle, RobotsTester, StagePipeline; AuditConsole (CSS-only
+                          LcpSlider, SchemaToggle, RobotsTester, StagePipeline, and for local SEO ShowroomMap,
+                          NetworkAudit, NapConsistency, LandingPagePreview, ReviewLane, RoadStops,
+                          ResultDials (with the shared Car.tsx); AuditConsole (CSS-only
                           typed console) and CodeBlock / Tok (code samples, in blocks.tsx).
 content/founders-thoughts.ts
                           Founder's Thoughts essays, newest first. Add a new essay here
@@ -290,8 +312,8 @@ The essentials:
   `components/blog/BlogPostPage.tsx` instead.
   The same applies to a case study's `page.tsx` (`components/case-studies/CaseStudyPage.tsx`).
 - Publish a case study without its origin, or with figures nobody reported. Results are
-  "as reported" unless Sage Kite measured them. The one approved exception is Croma (decision.md D056):
-  the user asked for it to match its source, which states no origin. Ask before adding another.
+  "as reported" unless Sage Kite measured them. The approved exceptions are Croma (decision.md D056) and
+  Maruti Suzuki (D069): the user asked for them to match their sources, which state no origin. Ask before adding another.
 - Use a blog `guide` id that does not match an `id` on a heading in the article.
 - Change a heading or FAQ answer without updating `guide` / `faqs` to match.
 - Add Tailwind, CSS frameworks or component libraries. (Tiptap in the blog studio is the one approved exception, D049.)

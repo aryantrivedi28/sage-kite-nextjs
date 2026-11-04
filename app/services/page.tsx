@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from 'next';
 import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
+import { PlatformStrip } from '@/components/services/PlatformStrip';
 
 const SITE_URL = "https://www.sagekite.com";
 const PAGE_URL = `${SITE_URL}/services`;
@@ -286,6 +287,18 @@ export default function ServicesPage() {
           .hero-facts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:22px;font-size:.875rem;color:var(--sage);font-weight:600}
           .hero-facts span{display:inline-flex;align-items:center;gap:8px}
 
+          /* Hero: platforms we implement (components/services/PlatformStrip.tsx) */
+          .sv-plat{margin-top:clamp(28px,3vw,40px);padding-top:20px;border-top:1px solid var(--light-sage)}
+          .sv-plat .label{margin-bottom:12px}
+          .sv-chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+          .sv-chip{display:inline-flex;align-items:center;padding:6px 12px;border:1px solid var(--light-sage);border-radius:999px;background:var(--warm-white);font-size:.875rem;font-weight:600;line-height:1.3;color:var(--ink);text-decoration:none}
+          a.sv-chip{transition:border-color var(--t) var(--ease),background-color var(--t) var(--ease)}
+          a.sv-chip:hover,a.sv-chip:focus-visible{border-color:var(--sage);background:var(--pale-sage)}
+          .sv-plat-all{margin-left:8px;font-size:.925rem}
+          .sv-plat-note{margin-top:12px;font-size:.8rem;color:var(--sage)}
+          @media (prefers-reduced-motion:reduce){a.sv-chip{transition:none}}
+          @media (max-width:680px){.sv-plat-all{margin-left:0}}
+
           /* Hero index: the five service areas */
           .sv-index{background:var(--pale-sage);border-radius:var(--r);padding:clamp(22px,3vw,34px);clip-path:polygon(0 0,calc(100% - 48px) 0,100% 48px,100% 100%,0 100%)}
           .sv-index .ui{box-shadow:8px 8px 0 var(--light-sage);padding:18px 20px 10px}
@@ -419,6 +432,9 @@ export default function ServicesPage() {
               </div>
               <figcaption>Each can be engaged on its own or combined.</figcaption>
             </figure>
+          </div>
+          <div className="wrap">
+            <PlatformStrip />
           </div>
         </section>
 

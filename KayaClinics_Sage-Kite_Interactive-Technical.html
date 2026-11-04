@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kaya Clinics Healthcare and Local SEO: Technical Case Study | Sage Kite</title>
+<meta name="description" content="An interactive look at how clinic landing page optimization, doctor schema, deeper treatment content and internal linking grew Kaya Clinics' organic traffic 120% and drove higher appointment leads.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<style>
+:root{--bg:#F7F5EE;--fg:#344033;--muted:#566456;--line:#D5DDD2;--pale:#E9EEE7;--sage:#596B57;--ink:#243746;--coral:#D96F4F;--coral-hover:#c75f40;--on-coral:#1d2b36;--sky:#4F82A3;--sky-text:#2f5f80;--butter:#EFC75E;--coral-soft:#F5D6CA;--sky-soft:#C9E0EB;--sky-wash:#E4EFF5;--butter-soft:#F7E6A8;--card:#fff;--font-display:"Newsreader",Georgia,serif;--font-body:"Manrope",Arial,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color-scheme:light}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 1.0625rem/1.7 var(--font-body);-webkit-font-smoothing:antialiased}
+h1,h2,h3,p,ul,ol,dl,dd,pre{margin:0}ul,ol{padding:0;list-style:none}a{color:inherit}
+:focus-visible{outline:3px solid var(--sky);outline-offset:3px;border-radius:4px}
+.wrap{width:100%;max-width:1180px;margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+.band{padding-block:clamp(52px,7vw,96px);scroll-margin-top:110px}.band--pale{background:var(--pale)}.band--sky{background:var(--sky-wash)}
+.display{font-family:var(--font-display);font-weight:400;letter-spacing:-.02em;text-wrap:balance;color:var(--ink)}
+h1.display{font-size:clamp(2.1rem,4.6vw,3.6rem);line-height:1.07}
+h2.display{font-size:clamp(1.7rem,3.3vw,2.6rem);line-height:1.12}
+h3{font-weight:700;font-size:1.05rem;line-height:1.35;color:var(--ink)}
+.lede{font-size:clamp(1.05rem,1.5vw,1.18rem);line-height:1.65;color:var(--muted);max-width:64ch}
+.kicker{display:flex;align-items:center;gap:12px;font:600 .82rem/1.2 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--sky-text)}
+.ribbon{display:inline-flex;gap:3px}.ribbon i{display:block;width:18px;height:6px;border-radius:2px;transform-origin:left;animation:ribbon 700ms cubic-bezier(.2,.7,.2,1) both}
+.ribbon i:nth-child(1){background:var(--coral)}.ribbon i:nth-child(2){background:var(--butter);animation-delay:90ms}.ribbon i:nth-child(3){background:var(--sky);animation-delay:180ms}
+@keyframes ribbon{from{transform:scaleX(0)}}
+.section-head{display:grid;gap:16px;margin-bottom:clamp(28px,4vw,48px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 24px;border-radius:999px;font:700 .98rem/1 var(--font-body);text-decoration:none;background:var(--coral);color:var(--on-coral);border:0;cursor:pointer;transition:background 180ms,transform 180ms}
+.btn:hover{background:var(--coral-hover);transform:translateY(-1px)}
+.btn--ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink);min-height:42px;padding:9px 18px;font-size:.9rem}.btn--ghost:hover{background:var(--ink);color:var(--bg)}
+.btn:disabled{opacity:.5;cursor:default;transform:none}
+.link-quiet{font-weight:600;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1.5px}.link-quiet:hover{color:var(--coral)}
+.note{font-size:.82rem;color:var(--muted)}
+code{font:600 .86em var(--mono);background:var(--pale);padding:2px 6px;border-radius:4px;color:var(--ink)}
+.progress{position:fixed;inset:0 0 auto 0;height:4px;background:var(--coral);transform:scaleX(0);transform-origin:left;z-index:60}
+
+/* header + sticky section nav */
+.site-header{border-top:5px solid var(--butter);border-bottom:1px solid var(--line);background:var(--bg)}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:72px}
+.wordmark{font-family:var(--font-display);font-weight:500;font-size:1.55rem;letter-spacing:-.02em;color:var(--sage);text-decoration:none}
+.nav{display:none;gap:28px;font-weight:600;font-size:.95rem}.nav a{text-decoration:none}.nav a:hover{color:var(--coral)}
+@media(min-width:960px){.nav{display:flex}}
+.site-header .btn{min-height:44px;padding:10px 20px;font-size:.92rem}
+.subnav{position:sticky;top:0;z-index:40;background:rgba(247,245,238,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.subnav .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:none}.subnav .wrap::-webkit-scrollbar{display:none}
+.subnav a{flex:none;font:600 .78rem/1 var(--mono);letter-spacing:.03em;text-transform:uppercase;text-decoration:none;color:var(--muted);padding:9px 13px;border-radius:999px;border:1px solid transparent;transition:background 160ms,color 160ms}
+.subnav a:hover{border-color:var(--line)}.subnav a.on{background:var(--ink);color:#F7F5EE}
+
+/* hero */
+.hero{padding-block:clamp(32px,5vw,72px) clamp(44px,6vw,80px);background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;background-position:-1px -1px;position:relative}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(247,245,238,.55),var(--bg) 96%);pointer-events:none}.hero>.wrap{position:relative;z-index:1}
+.crumbs{font-size:.88rem;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px;font-family:var(--mono)}
+.hero-grid{display:grid;gap:clamp(32px,5vw,64px);align-items:center}@media(min-width:960px){.hero-grid{grid-template-columns:minmax(0,6fr) minmax(0,5fr)}}
+.hero-copy{display:grid;gap:22px}
+.hero-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(1.2rem,2vw,1.5rem);line-height:1.3;color:var(--sage);max-width:38ch}
+.term{background:var(--ink);border-radius:10px;overflow:hidden;box-shadow:8px 8px 0 var(--butter-soft);color:#F7F5EE}
+.term-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:#1b2b38}.term-bar i{width:10px;height:10px;border-radius:50%;background:var(--coral)}.term-bar i:nth-child(2){background:var(--butter)}.term-bar i:nth-child(3){background:var(--sage)}
+.term-bar span{margin-left:10px;font:600 .76rem var(--mono);color:var(--sky-soft)}
+.term-body{padding:18px 20px;font:500 .84rem/1.85 var(--mono);min-height:262px;overflow-x:auto;white-space:pre}
+.term-body .p{color:var(--butter)}.term-body .ok{color:var(--sky-soft)}.term-body .dim{color:#98AA97}.term-body .hi{color:var(--coral-soft);font-weight:700}
+.caret{display:inline-block;width:8px;height:1em;background:var(--butter);vertical-align:-2px;animation:blink 1s steps(1) infinite}@keyframes blink{50%{opacity:0}}
+.term-foot{padding:9px 20px;font:500 .72rem var(--mono);color:#98AA97;border-top:1px solid #344c5e}
+
+.glance{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:4px}.glance li{font:600 .76rem var(--mono);padding:7px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--ink)}.glance li span{color:var(--muted);font-weight:500}
+
+/* metrics */
+.metrics{display:grid;gap:14px}@media(min-width:760px){.metrics{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.metric{padding:26px 24px;border-radius:6px;color:var(--ink);display:grid;gap:10px;min-height:150px;align-content:space-between;position:relative;overflow:hidden}
+.metric--sky{background:var(--sky-soft)}.metric--butter{background:var(--butter-soft)}.metric--coral{background:var(--coral-soft)}
+.metric b{font-family:var(--font-display);font-weight:400;font-size:clamp(2.2rem,3.6vw,3rem);line-height:1.05;letter-spacing:-.02em}
+.metric .lab{font:600 .8rem/1.4 var(--mono);text-transform:uppercase;letter-spacing:.03em}
+
+/* section index label */
+.sec{font:700 .8rem var(--mono);color:var(--coral);letter-spacing:.06em}
+.demo{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:clamp(18px,3vw,30px);display:grid;gap:20px;box-shadow:8px 8px 0 var(--sky-soft)}
+.demo-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px}
+.demo-top h3{font-family:var(--font-display);font-weight:500;font-size:1.45rem;letter-spacing:-.01em}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:999px;overflow:hidden}
+.seg button{font:700 .84rem/1 var(--font-body);padding:11px 18px;border:0;background:transparent;color:var(--ink);cursor:pointer;min-height:42px;transition:background 160ms,color 160ms}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#F7F5EE}
+.cap{font-size:.95rem;color:var(--muted);max-width:72ch;min-height:3em}
+
+/* diagnostics */
+.diag{display:grid;gap:10px}
+.drow{display:grid;gap:8px 18px;align-items:center;padding:16px 18px;border:1px solid var(--line);border-radius:8px;background:var(--bg);grid-template-columns:minmax(0,1fr) auto}
+@media(min-width:760px){.drow{grid-template-columns:minmax(0,220px) minmax(0,1fr) auto}}
+.drow h3{font-size:1rem}.drow p{font-size:.92rem;color:var(--muted);line-height:1.5}
+.status{font:700 .74rem/1 var(--mono);letter-spacing:.05em;padding:8px 12px;border-radius:999px;text-transform:uppercase;white-space:nowrap;min-width:116px;text-align:center;transition:background 300ms,color 300ms}
+.diag[data-s="before"] .status{background:var(--coral-soft);color:var(--ink)}
+.diag[data-s="after"] .status{background:var(--sky-soft);color:var(--ink)}
+.diag[data-s="before"] .t-after,.diag[data-s="after"] .t-before{display:none}
+
+/* waterfall */
+.wf{display:grid;gap:10px;position:relative;padding-top:26px}
+.wf-row{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:center;font:600 .78rem var(--mono);color:var(--ink)}
+@media(min-width:700px){.wf-row{grid-template-columns:150px minmax(0,1fr)}}
+.wf-track{position:relative;height:26px;background:var(--pale);border-radius:4px}
+.wf-bar{position:absolute;top:3px;bottom:3px;border-radius:3px;left:var(--s);width:var(--w);transition:left 700ms cubic-bezier(.2,.7,.2,1),width 700ms cubic-bezier(.2,.7,.2,1)}
+.b1{background:var(--sky)}.b2{background:var(--butter)}.b3{background:var(--coral)}.b4{background:var(--sage)}
+.wf[data-s="before"] .b1{--s:0%;--w:12%}.wf[data-s="before"] .b2{--s:12%;--w:24%}.wf[data-s="before"] .b3{--s:36%;--w:26%}.wf[data-s="before"] .b4{--s:62%;--w:22%}
+.wf[data-s="after"] .b1{--s:0%;--w:12%}.wf[data-s="after"] .b2{--s:12%;--w:7%}.wf[data-s="after"] .b3{--s:30%;--w:26%}.wf[data-s="after"] .b4{--s:12%;--w:20%}
+.wf-lcp{position:absolute;top:0;bottom:0;left:calc(150px + 12px);right:0;pointer-events:none}
+@media(max-width:699px){.wf-lcp{left:calc(96px + 12px)}}
+.wf-lcp i{position:absolute;top:22px;bottom:0;width:0;border-left:2px dashed var(--ink);left:var(--x);transition:left 700ms cubic-bezier(.2,.7,.2,1)}
+.wf-lcp b{position:absolute;top:0;left:var(--x);transform:translateX(-50%);font:700 .72rem var(--mono);background:var(--ink);color:#F7F5EE;padding:3px 8px;border-radius:4px;transition:left 700ms cubic-bezier(.2,.7,.2,1)}
+.wf[data-s="before"] .wf-lcp{--x:84%}.wf[data-s="after"] .wf-lcp{--x:32%}
+.wf-tags{display:flex;flex-wrap:wrap;gap:6px 18px;font:600 .74rem var(--mono);color:var(--muted)}.wf-tags span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.wf-tags .a::before{background:var(--sky)}.wf-tags .b::before{background:var(--butter)}.wf-tags .c::before{background:var(--coral)}.wf-tags .d::before{background:var(--sage)}
+.split{display:grid;gap:20px}@media(min-width:900px){.split{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
+.code{background:var(--ink);color:#F7F5EE;border-radius:8px;overflow:hidden;min-width:0}
+.code-lab{padding:9px 16px;font:700 .74rem var(--mono);letter-spacing:.04em;color:var(--butter-soft);border-bottom:1px solid #344c5e}
+.code pre{padding:14px 16px;overflow-x:auto;font:500 .8rem/1.65 var(--mono)}
+.k{color:var(--butter)}.s{color:var(--sky-soft)}.c{color:#98AA97}.h{background:rgba(239,199,94,.22);border-radius:3px;padding:1px 0}
+
+/* vitals slider */
+.vital{display:grid;gap:14px}
+.slider-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.slider-row output{font:700 1.6rem var(--font-display);color:var(--ink);min-width:3.6ch}
+input[type=range]{flex:1 1 260px;accent-color:var(--coral);height:28px}
+.verdict{font:700 .78rem var(--mono);padding:8px 14px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em;transition:background 200ms;color:var(--ink)}
+.v-g{background:var(--sky-soft)}.v-m{background:var(--butter-soft)}.v-p{background:var(--coral-soft)}
+.scale{position:relative;display:grid;grid-template-columns:41.67fr 25fr 33.33fr;gap:3px}.scale i{font:700 .76rem var(--mono);font-style:normal;padding:12px 8px;text-align:center;color:var(--ink);border-radius:4px}
+.scale .g{background:var(--sky-soft)}.scale .m{background:var(--butter-soft)}.scale .p{background:var(--coral-soft)}
+.pin{position:absolute;top:-8px;bottom:-8px;width:3px;background:var(--ink);border-radius:2px;left:var(--x,0);transform:translateX(-50%);transition:left 80ms linear}
+
+/* SERP */
+.serp{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:18px 20px;display:grid;gap:4px;font-family:Arial,sans-serif}
+.serp .u{font-size:.82rem;color:var(--muted)}.serp .t{font-size:1.2rem;color:var(--sky-text);line-height:1.3}.serp .d{font-size:.9rem;color:var(--fg);line-height:1.5}
+.serp .rich{display:none;font-size:.86rem;color:var(--ink);gap:10px;flex-wrap:wrap;align-items:center;margin-top:2px}.serp .rich .st{color:#b8860b;letter-spacing:2px}
+.pg[data-s="with"] .serp .rich{display:flex}
+.pg[data-s="without"] .code-with{display:none}.pg[data-s="with"] .code-without{display:none}
+
+/* robots tester */
+.rt{display:grid;gap:14px}
+.rt-in{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.rt-in label{font:700 .8rem var(--mono);color:var(--muted)}
+.rt-in input{flex:1 1 240px;min-height:46px;padding:10px 14px;border:1.5px solid var(--ink);border-radius:8px;font:600 .95rem var(--mono);background:var(--card);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chips button{font:600 .78rem var(--mono);padding:8px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-height:38px}.chips button:hover{border-color:var(--ink)}
+.rt-out{padding:16px 18px;border-radius:8px;font:600 .92rem/1.5 var(--mono);color:var(--ink);transition:background 200ms}
+.rt-out.ok{background:var(--sky-soft)}.rt-out.no{background:var(--coral-soft)}
+.rt-out b{display:block;font-size:1.05rem}
+
+/* pipeline */
+.pipe{display:grid;gap:10px}@media(min-width:900px){.pipe{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stage{font:inherit;text-align:left;padding:18px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;display:grid;gap:4px;color:var(--ink);transition:background 200ms,border-color 200ms,transform 200ms}
+.stage:hover{transform:translateY(-2px)}.stage small{font:700 .72rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.stage b{font-family:var(--font-display);font-weight:500;font-size:1.35rem}
+.stage[aria-pressed="true"]{border-color:var(--ink)}
+.stage[data-c="1"][aria-pressed="true"]{background:var(--sky-soft)}.stage[data-c="2"][aria-pressed="true"]{background:var(--butter-soft)}.stage[data-c="3"][aria-pressed="true"]{background:var(--coral-soft)}.stage[data-c="4"][aria-pressed="true"]{background:var(--pale)}
+.track{height:6px;border-radius:3px;background:var(--pale);position:relative;overflow:hidden}.track i{position:absolute;inset:0 auto 0 0;width:var(--p,25%);background:var(--coral);border-radius:3px;transition:width 500ms}
+.pbox{display:grid;gap:14px}@media(min-width:760px){.pbox{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pbox div{padding:16px 18px;border-radius:8px;background:var(--bg);border:1px solid var(--line)}.pbox .lab2{font:700 .72rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--sky-text);margin-bottom:4px}.pbox p{font-size:.95rem;color:var(--fg);line-height:1.55}
+
+/* results */
+.results{display:grid;gap:18px}@media(min-width:900px){.results{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}
+.rcard{background:var(--card);border:1px solid var(--sky-soft);border-radius:10px;padding:clamp(20px,3vw,30px);display:grid;gap:20px;align-content:start}
+.mult{font-family:var(--font-display);font-size:clamp(3rem,6vw,4.6rem);line-height:1;letter-spacing:-.03em;color:var(--coral)}
+.bars{display:grid;gap:14px}.bar{display:grid;gap:6px}.bar-label{display:flex;justify-content:space-between;font:700 .8rem var(--mono);color:var(--ink)}.bar-label span:first-child{color:var(--muted);font-weight:500}
+.bar-track{height:22px;border-radius:4px;background:var(--pale);overflow:hidden}.bar-fill{height:100%;width:var(--w);background:#98AA97;transform-origin:left;transform:scaleX(0);transition:transform 1000ms cubic-bezier(.2,.7,.2,1)}.bar-fill--after{background:var(--sky)}
+.in .bar-fill{transform:scaleX(1)}
+.rlist{display:grid;gap:14px;align-content:start}
+.rtext{background:var(--card);border-radius:10px;padding:20px 22px;border-left:6px solid var(--sky);display:grid;gap:4px}.rtext:nth-child(2){border-left-color:var(--coral)}.rtext:nth-child(3){border-left-color:var(--butter)}
+.rtext h3{font-family:var(--font-display);font-weight:500;font-size:1.25rem}.rtext p{color:var(--muted);font-size:.97rem}
+.changes{display:grid;gap:14px}@media(min-width:720px){.changes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.change{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:clamp(20px,3vw,28px);display:grid;gap:8px;align-content:start}
+.change h3{font-family:var(--font-display);font-weight:500;font-size:1.35rem;line-height:1.2}.change p{color:var(--muted)}
+.change::before{content:"";width:44px;height:8px;border-radius:2px;background:var(--sky)}.change:nth-child(2)::before{background:var(--butter)}.change:nth-child(3)::before{background:var(--coral)}.change:nth-child(4)::before{background:var(--sage)}
+.tools{display:flex;flex-wrap:wrap;gap:10px}.tools li{font:600 .82rem var(--mono);padding:10px 14px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--sky);border-radius:6px;color:var(--ink)}
+.tools li:nth-child(2){border-left-color:var(--butter)}.tools li:nth-child(3){border-left-color:var(--coral)}.tools li:nth-child(4){border-left-color:var(--sage)}
+
+.takeaway-panel{background:var(--butter-soft);border-radius:12px;padding:clamp(28px,5vw,60px);display:grid;gap:22px;color:var(--ink)}
+.takeaway-panel h2{font-family:var(--font-display);font-weight:400;font-size:clamp(1.8rem,3.6vw,2.9rem);line-height:1.12;letter-spacing:-.02em;max-width:24ch;text-wrap:balance}.takeaway-panel p{max-width:62ch}
+.cta{background:var(--coral-soft);color:var(--ink);border-radius:12px;padding:clamp(28px,5vw,56px);display:grid;gap:20px;margin-top:28px;position:relative;overflow:hidden}
+.cta::after{content:"";position:absolute;right:0;bottom:0;width:clamp(80px,14vw,180px);height:clamp(80px,14vw,180px);background:var(--butter);clip-path:polygon(100% 0,100% 100%,0 100%)}
+.cta .display{font-size:clamp(1.8rem,3.4vw,2.6rem);line-height:1.12;max-width:24ch}.cta p{max-width:54ch}
+.cta-actions{display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;position:relative;z-index:1}.cta .btn{background:var(--ink);color:#F7F5EE}.cta .btn:hover{background:#344c5e}
+.footer{padding-block:40px;border-top:1px solid var(--line);margin-top:clamp(48px,7vw,88px);font-size:.9rem;color:var(--muted)}.footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.footer strong{font-family:var(--font-display);font-weight:500;font-size:1.1rem;color:var(--sage)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+
+[data-s="before"] .t-after,[data-s="after"] .t-before{display:none}
+.bars-title{font:700 .8rem var(--mono);color:var(--ink);text-transform:uppercase;letter-spacing:.04em}
+.log{background:var(--ink);color:#F7F5EE;border-radius:8px;font:500 .8rem/1.75 var(--mono);padding:14px 16px;min-height:236px;overflow-x:auto;white-space:pre}
+.log .bad{color:var(--coral-soft);font-weight:700}.log .good{color:var(--sky-soft);font-weight:700}.log .dim{color:#98AA97}
+.stats{display:flex;flex-wrap:wrap;gap:10px}.stats li{font:700 .78rem var(--mono);padding:8px 12px;border-radius:999px;background:var(--pale);color:var(--ink)}.stats b{font-size:1rem}
+.sig{display:grid;gap:10px}.sig-row{display:grid;grid-template-columns:minmax(0,120px) minmax(0,1fr) 46px;gap:10px;align-items:center;font:600 .74rem var(--mono);color:var(--ink)}
+@media(min-width:700px){.sig-row{grid-template-columns:minmax(0,190px) minmax(0,1fr) 46px}}
+.sig-track{height:20px;background:var(--pale);border-radius:4px;overflow:hidden}.sig-fill{height:100%;width:var(--w);background:var(--sky);transition:width 700ms cubic-bezier(.2,.7,.2,1)}
+[data-s="before"] .sig-fill{--w:33%}[data-s="after"] .sig-row:nth-child(1) .sig-fill{--w:100%;background:var(--sage)}[data-s="after"] .sig-row:nth-child(n+2) .sig-fill{--w:0%}
+.desc{border:1.5px dashed var(--ink);border-radius:8px;padding:16px 18px;display:grid;gap:6px;background:var(--bg)}.desc .lab2{font:700 .72rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--sky-text)}.desc p{font-size:.95rem}
+.boxes{display:grid;gap:12px}@media(min-width:760px){.boxes.three{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.box{border:1.5px dashed var(--ink);border-radius:8px;padding:12px;display:grid;gap:10px;align-content:start;min-height:110px}.box h4{margin:0;font:700 .76rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink)}
+.dots{display:flex;flex-wrap:wrap;gap:6px}.dot{width:18px;height:18px;border-radius:4px;animation:pop 400ms both}.dot.p{background:var(--sky)}.dot.c{background:var(--butter)}.dot.b{background:var(--coral)}
+@keyframes pop{from{transform:scale(.3);opacity:0}}
+.keys{display:flex;flex-wrap:wrap;gap:6px 16px;font:600 .74rem var(--mono);color:var(--muted)}.keys span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}.keys .p::before{background:var(--sky)}.keys .c::before{background:var(--butter)}.keys .b::before{background:var(--coral)}
+@media(min-width:900px){.pipe.three{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+.chips button[aria-pressed="true"]{background:var(--ink);color:#F7F5EE;border-color:var(--ink)}
+.rk{display:grid;gap:10px}
+.rk-row{display:grid;grid-template-columns:minmax(0,110px) minmax(0,1fr) 40px;gap:10px;align-items:center;font:600 .76rem var(--mono);color:var(--ink)}
+@media(min-width:700px){.rk-row{grid-template-columns:minmax(0,200px) minmax(0,1fr) 40px}}
+.rk-axis{color:var(--muted);font-weight:500}.rk-axis .ax{display:grid;grid-template-columns:repeat(10,1fr);text-align:center}
+.rk-track{position:relative;height:30px;border-radius:4px;background:linear-gradient(90deg,var(--sky-soft) 0 30%,var(--pale) 30% 70%,var(--coral-soft) 70% 100%)}
+.rk-dot{position:absolute;top:4px;width:22px;height:22px;border-radius:50%;background:var(--ink);left:calc((var(--pos) - 1) * 10% + 5%);transform:translateX(-50%);transition:left 900ms cubic-bezier(.2,.7,.2,1)}
+.rk-pos{text-align:right}
+.wire{border:1.5px solid var(--ink);border-radius:10px;background:var(--bg);overflow:hidden}
+.w-bar{display:flex;gap:10px;align-items:center;padding:10px 12px;background:var(--pale);border-bottom:1px solid var(--line);font:600 .78rem var(--mono);color:var(--ink)}
+.w-url{flex:1;min-width:0;background:#fff;border-radius:999px;padding:6px 12px;border:1px solid var(--line);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.w-badge{font:700 .66rem var(--mono);padding:5px 9px;border-radius:999px;background:var(--coral-soft);white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+.wire[data-url="1"] .w-badge{background:var(--sky-soft)}
+.w-body{padding:16px;display:grid;gap:14px}
+.w-h1{height:22px;width:55%;background:var(--ink);border-radius:4px;opacity:.85}
+.w-content{padding:14px;border:1.5px dashed var(--sage);border-radius:8px;display:grid;gap:7px;background:var(--sky-wash)}
+.w-content i{display:block;height:8px;border-radius:3px;background:var(--sage);opacity:.45}.w-content i:nth-of-type(2){width:92%}.w-content i:nth-of-type(3){width:76%}
+.w-content .tg,.w-lk .tg{font:700 .68rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--sky-text)}
+.w-lk{display:grid;gap:6px}.w-links{display:flex;flex-wrap:wrap;gap:8px}.w-links span{font:600 .72rem var(--mono);padding:6px 10px;border-radius:999px;border:1.5px solid var(--sky);background:var(--sky-wash);color:var(--ink)}
+.w-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.w-card{border:1px solid var(--line);background:#fff;border-radius:8px;padding:10px;display:grid;gap:7px}
+.w-img{height:44px;border-radius:4px;background:var(--pale)}.w-line{height:8px;border-radius:3px;background:var(--line)}.w-line.s{width:60%}
+.w-stars{display:none;font:700 .7rem var(--mono);color:var(--ink)}
+.wire[data-content="0"] .w-content,.wire[data-links="0"] .w-lk{display:none}
+.wire[data-schema="1"] .w-stars{display:block}
+.layers{display:flex;flex-wrap:wrap;gap:8px}.layers button{font:700 .82rem var(--font-body);padding:11px 16px;min-height:44px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.layers button[aria-pressed="true"]{background:var(--ink);color:#F7F5EE}
+.pos{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+.pos i{display:grid;place-items:center;height:34px;border-radius:4px;background:var(--pale);font:700 .78rem/1 var(--font-body);font-style:normal;color:var(--muted)}
+.pos i.on{background:#98AA97;color:var(--ink)}.pos--after i.on{background:var(--sky);color:#fff;animation:pop 600ms 300ms both}
+.sg4[data-s="before"] .sig-fill{--w:25%}
+
+.hero{background-image:none}.hero::after{display:none}
+.dotnav{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:45;display:none;gap:10px;flex-direction:column}
+@media(min-width:1180px){.dotnav{display:flex}}
+.dotnav a{display:flex;align-items:center;justify-content:flex-end;gap:10px;text-decoration:none;font:700 .68rem var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.dotnav a span{opacity:0;transform:translateX(6px);transition:opacity 160ms,transform 160ms;background:var(--ink);color:#F7F5EE;padding:4px 8px;border-radius:4px}
+.dotnav a i{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);background:var(--bg);transition:background 160ms,transform 160ms}
+.dotnav a:hover span,.dotnav a:focus-visible span{opacity:1;transform:none}.dotnav a.on i{background:var(--coral);border-color:var(--coral);transform:scale(1.25)}
+.sq{background:var(--card);border:1.5px solid var(--ink);border-radius:14px;padding:18px;display:grid;gap:14px;box-shadow:8px 8px 0 var(--butter-soft)}
+.sq-in{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:999px;padding:12px 16px;font:600 .95rem var(--mono);color:var(--ink);min-height:50px;background:var(--bg)}
+.sq-in svg{flex:none;width:18px;height:18px}.sq-q{overflow:hidden;white-space:nowrap}
+.sq-res{display:grid;gap:10px}
+.sr{display:grid;gap:2px;padding:12px 14px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg);opacity:.45;transition:opacity 300ms,background 300ms,border-color 300ms}
+.sr.on{opacity:1;border-color:var(--ink)}.sr.on[data-t="blog"]{background:var(--sky-soft)}.sr.on[data-t="treat"]{background:var(--butter-soft)}.sr.on[data-t="clinic"]{background:var(--coral-soft)}
+.sr small{font:700 .68rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.sr b{color:var(--ink);font-size:.98rem}.sr span{font-size:.86rem;color:var(--muted)}
+.jr{display:grid;gap:22px}
+.jr-nodes{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.jr-nodes::before{content:"";position:absolute;left:10%;right:10%;top:22px;height:4px;background:var(--pale);border-radius:2px}
+.jr-fill{position:absolute;left:10%;top:22px;height:4px;background:var(--coral);border-radius:2px;width:calc(var(--p,0) * .8%);transition:width 600ms cubic-bezier(.2,.7,.2,1)}
+.jn{position:relative;z-index:1;display:grid;justify-items:center;gap:8px;background:none;border:0;cursor:pointer;font:inherit;color:var(--ink);padding:0 2px}
+.jn i{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font:700 1rem var(--mono);font-style:normal;background:var(--card);border:2px solid var(--ink);transition:background 250ms,color 250ms,transform 250ms}
+.jn span{font:700 .72rem/1.25 var(--mono);text-align:center;text-transform:uppercase;letter-spacing:.03em}
+.jn[aria-pressed="true"] i{background:var(--ink);color:#F7F5EE;transform:scale(1.12)}.jn.done i{background:var(--coral-soft)}
+.jr-panel{display:grid;gap:14px}@media(min-width:760px){.jr-panel{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.jr-panel>div{padding:18px;border-radius:8px;background:var(--bg);border:1px solid var(--line)}.jr-panel .lab2{font:700 .72rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--sky-text);margin-bottom:4px}
+.jr-panel p{font-size:.95rem;line-height:1.55}.jr-panel a{font-weight:700}
+.jr-ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.qb{display:grid;gap:18px}.qb-g{display:grid;gap:8px}.qb-g>b{font:700 .74rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.serp{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:16px 18px;display:grid;gap:4px;font-family:Arial,sans-serif}
+.serp .u{font-size:.8rem;color:var(--muted)}.serp .t{font-size:1.15rem;color:var(--sky-text);line-height:1.3}.serp .d{font-size:.88rem;color:var(--fg);line-height:1.5}
+.why{display:grid;gap:8px;padding-left:1.1em;list-style:disc;color:var(--muted);font-size:.95rem}.why li::marker{color:var(--coral)}
+.fields{display:grid;gap:8px}.fld{display:flex;align-items:center;gap:12px;text-align:left;font:600 .92rem var(--font-body);padding:12px 14px;min-height:48px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;transition:background 200ms,border-color 200ms}
+.fld i{flex:none;width:22px;height:22px;border-radius:5px;border:2px solid var(--ink);display:grid;place-items:center;font:700 .8rem var(--mono);font-style:normal;color:transparent}
+.fld[aria-pressed="true"]{background:var(--sky-soft);border-color:var(--ink)}.fld[aria-pressed="true"] i{background:var(--ink);color:#F7F5EE}
+.ringwrap{display:flex;align-items:center;gap:16px}.ring{width:96px;height:96px;flex:none}.ring circle{fill:none;stroke-width:10}
+.ring .bg{stroke:var(--pale)}.ring .fg{stroke:var(--coral);stroke-linecap:round;transition:stroke-dashoffset 600ms cubic-bezier(.2,.7,.2,1);transform:rotate(-90deg);transform-origin:50% 50%}
+.ring text{font:700 20px var(--font-display);fill:var(--ink);text-anchor:middle}.ringwrap p{font-size:.92rem;color:var(--muted);max-width:30ch}
+.slide{display:grid;gap:8px}.slide input{width:100%}.slide .ticks{display:flex;justify-content:space-between;font:600 .7rem var(--mono);color:var(--muted)}
+.outline{display:grid;gap:8px}.ol{border:1.5px solid var(--line);border-radius:8px;padding:12px 14px;background:var(--card);display:grid;gap:6px;transition:opacity 300ms,transform 300ms,background 300ms,border-color 300ms}
+.ol.off{opacity:.28;transform:scale(.985);background:var(--pale);border-style:dashed}.ol.off i{opacity:.4}
+.ol b{font-size:.92rem;color:var(--ink)}.ol i{display:block;height:7px;border-radius:3px;background:var(--line)}.ol i:nth-of-type(2){width:70%}
+.ol.on{border-color:var(--sky)}
+.graph{width:100%;height:auto;display:block;overflow:visible}
+.ge{stroke:var(--line);stroke-width:2;fill:none;transition:stroke 250ms,opacity 250ms,stroke-width 250ms}.ge.hl{stroke:var(--coral);stroke-width:3.5}.ge.dim{opacity:.18}
+.gn rect{stroke:var(--ink);stroke-width:1.5;transition:opacity 250ms,stroke-width 250ms}.gn text{font:700 12px var(--mono);fill:var(--ink);text-anchor:middle;pointer-events:none}
+.gn.b rect{fill:var(--sky-soft)}.gn.t rect{fill:var(--butter-soft)}.gn.c rect{fill:var(--coral-soft)}.gn.a rect{fill:var(--ink)}.gn.a text{fill:#F7F5EE}
+.gn{cursor:pointer;outline:none}.gn.dim{opacity:.3}.gn.hl rect,.gn:focus-visible rect{stroke-width:3.5}
+.gcols{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;font:700 .7rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.steps4{display:grid;gap:12px}@media(min-width:760px){.steps4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.steps4 a{display:grid;gap:6px;padding:18px;border-radius:8px;text-decoration:none;color:var(--ink);transition:transform 180ms,box-shadow 180ms}.steps4 a:hover{transform:translateY(-3px);box-shadow:0 6px 0 rgba(36,55,70,.12)}
+.steps4 a:nth-child(1){background:var(--sky-soft)}.steps4 a:nth-child(2){background:var(--butter-soft)}.steps4 a:nth-child(3){background:var(--coral-soft)}.steps4 a:nth-child(4){background:var(--card);border:1px solid var(--line)}
+.steps4 small{font:700 .72rem var(--mono);letter-spacing:.06em;text-transform:uppercase}.steps4 b{font-family:var(--font-display);font-weight:500;font-size:1.3rem;line-height:1.15}.steps4 span{font-size:.92rem}
+.big{display:grid;gap:18px;justify-items:center;text-align:center}.bigring{width:min(240px,70%);height:auto}.bigring circle{fill:none;stroke-width:14}.bigring .bg{stroke:var(--pale)}
+.bigring .r1{stroke:var(--sky);stroke-dasharray:var(--c);stroke-dashoffset:var(--c);transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1200ms cubic-bezier(.2,.7,.2,1)}
+.bigring .r2{stroke:var(--coral);stroke-linecap:round;stroke-dasharray:var(--c);stroke-dashoffset:var(--c);transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 800ms 1100ms cubic-bezier(.2,.7,.2,1)}
+.in .bigring .r1{stroke-dashoffset:0}.in .bigring .r2{stroke-dashoffset:calc(var(--c) * .8)}
+.bigring text{font:400 34px var(--font-display);fill:var(--ink);text-anchor:middle}
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="/" aria-label="Sage Kite home">Sage Kite</a>
+    <nav class="nav" aria-label="Primary"><a href="/services">Services</a><a href="/platforms">Platforms</a><a href="/industries">Industries</a><a href="/for-agencies">For agencies</a><a href="/insights">Insights</a><a href="/about">About</a></nav>
+    <a class="btn" href="/contact">Book a free consultation</a>
+  </div>
+</header>
+
+<nav class="dotnav" aria-label="On this page">
+  <a href="#overview"><span>Overview</span><i></i></a><a href="#journey"><span>Patient journey</span><i></i></a><a href="#local"><span>Local search</span><i></i></a><a href="#trust"><span>Trust signals</span><i></i></a><a href="#depth"><span>Treatment depth</span><i></i></a><a href="#links"><span>Connected content</span><i></i></a><a href="#results"><span>Results</span><i></i></a>
+</nav>
+
+<main>
+  <section class="hero" id="overview" aria-labelledby="title">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/work">work</a><span aria-hidden="true">/</span><span>kaya-clinics</span><span aria-hidden="true">/</span><span>healthcare-local-seo</span></nav>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Case study · Healthcare and local SEO</p>
+          <h1 id="title" class="display">Growing organic traffic 120% and driving appointment leads for a multi-clinic healthcare brand</h1>
+          <p class="hero-sub">Patients search for a treatment, then for a clinic near them. Both steps had to work.</p>
+          <p class="lede">Kaya Clinics, a chain of skin and aesthetic treatment clinics, had clinic pages that weren't optimized for local search, treatment pages that lacked depth and missing medical trust signals. Explore the fixes through the patient's journey.</p>
+          <ul class="glance" aria-label="Project summary"><li><span>client</span> Kaya Clinics</li><li><span>type</span> Healthcare and local SEO</li><li><span>result</span> +120% organic traffic</li></ul>
+        </div>
+        <div class="sq" aria-label="Illustrative patient search">
+          <div class="sq-in"><svg viewBox="0 0 20 20" fill="none" stroke="#243746" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l5 5"/></svg><span class="sq-q" id="sq-q"></span><span class="caret"></span></div>
+          <div class="sq-res" id="sq-res">
+            <div class="sr" data-t="blog"><small>Learn</small><b>Blog: understand the treatment</b><span>Answers the patient's first questions</span></div>
+            <div class="sr" data-t="treat"><small>Compare</small><b>Treatment page</b><span>In-depth information to decide</span></div>
+            <div class="sr" data-t="clinic"><small>Choose</small><b>Clinic page</b><span>Optimized for the location search</span></div>
+          </div>
+          <p class="note">Illustrative searches, showing which page type meets each patient need.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Project highlights">
+    <div class="wrap">
+      <div class="metrics">
+        <div class="metric metric--sky"><b>+<span id="count">120</span>%</b><span class="lab">Organic traffic growth</span></div>
+        <div class="metric metric--butter"><b>Higher</b><span class="lab">Clinic appointment leads</span></div>
+        <div class="metric metric--coral"><b>Strong</b><span class="lab">Treatment keyword rankings</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="journey" aria-labelledby="j-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="sec">01 / THE PATIENT JOURNEY</p>
+        <h2 id="j-title" class="display">The website wasn't set up to meet patients at either step of their search</h2>
+        <p class="lede">Healthcare is a trust-sensitive category. Search engines and patients both look for credibility, such as qualified doctors and clear, in-depth treatment information. Walk the journey and see what was missing at each stop.</p>
+      </div>
+      <div class="demo">
+        <div class="jr">
+          <div class="jr-ctl"><button class="btn btn--ghost" type="button" id="walk">Walk the journey</button><span class="note">or select any stop</span></div>
+          <div class="jr-nodes" id="jn">
+            <span class="jr-fill" id="jfill"></span>
+            <button class="jn" type="button" aria-pressed="true"><i>1</i><span>Learn</span></button>
+            <button class="jn" type="button" aria-pressed="false"><i>2</i><span>Compare</span></button>
+            <button class="jn" type="button" aria-pressed="false"><i>3</i><span>Trust</span></button>
+            <button class="jn" type="button" aria-pressed="false"><i>4</i><span>Find a clinic</span></button>
+            <button class="jn" type="button" aria-pressed="false"><i>5</i><span>Book</span></button>
+          </div>
+          <div class="jr-panel" aria-live="polite">
+            <div><p class="lab2">What the patient needs</p><p id="j-need"></p></div>
+            <div><p class="lab2">What was missing</p><p id="j-miss"></p></div>
+            <div><p class="lab2">The fix</p><p id="j-fix"></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--pale" aria-labelledby="ap-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="sec">02 / EXECUTION APPROACH</p>
+        <h2 id="ap-title" class="display">Follow how patients actually search, from treatment interest to clinic selection</h2>
+        <p class="lede">Healthcare-specific trust elements were treated as core requirements, not extras, since credibility strongly influences both rankings and patient decisions. Jump to any step.</p>
+      </div>
+      <div class="steps4">
+        <a href="#local"><small>Step 1</small><b>Capture local intent</b><span>Optimize clinic pages around location keywords.</span></a>
+        <a href="#trust"><small>Step 2</small><b>Build trust</b><span>Add doctor schema and medical structured data.</span></a>
+        <a href="#depth"><small>Step 3</small><b>Add depth</b><span>Improve treatment pages to answer real patient questions.</span></a>
+        <a href="#links"><small>Step 4</small><b>Connect the journey</b><span>Link blogs, treatments and clinics into one path.</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="local" aria-labelledby="l-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="sec">03 / LOCAL INTENT</p>
+        <h2 id="l-title" class="display">Capture local intent with clinic landing pages</h2>
+        <p class="lede">Patients typically search for a treatment, then look for a clinic near them. Build a search and see which page needs to answer it.</p>
+      </div>
+      <div class="demo">
+        <div class="split">
+          <div class="qb">
+            <div class="qb-g"><b>Treatment</b><div class="chips" data-g="t" role="group" aria-label="Treatment"><button type="button" aria-pressed="true">Treatment A</button><button type="button" aria-pressed="false">Treatment B</button><button type="button" aria-pressed="false">Treatment C</button></div></div>
+            <div class="qb-g"><b>Location intent</b><div class="chips" data-g="l" role="group" aria-label="Location"><button type="button" aria-pressed="true">No location</button><button type="button" aria-pressed="false">near me</button><button type="button" aria-pressed="false">in City A</button></div></div>
+          </div>
+          <div style="display:grid;gap:14px">
+            <div class="sq-in" style="box-shadow:none"><span class="sq-q" id="qb-q"></span></div>
+            <div class="serp"><span class="u" id="qb-u"></span><span class="t" id="qb-t"></span><span class="d" id="qb-d"></span></div>
+            <ul class="why" id="qb-why"></ul>
+          </div>
+        </div>
+        <p class="note">Treatments and cities are placeholders. Page titles and URLs are representative, not Kaya's actual pages.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--pale" id="trust" aria-labelledby="t-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="sec">04 / MEDICAL TRUST SIGNALS</p>
+        <h2 id="t-title" class="display">Build trust with doctor schema and medical structured data</h2>
+        <p class="lede">The trust signals required for healthcare SEO, such as doctor information and medical structured data, were absent. Switch on the details a doctor page should communicate and watch the markup build.</p>
+      </div>
+      <div class="demo">
+        <div class="split">
+          <div style="display:grid;gap:16px">
+            <div class="fields" id="fields" role="group" aria-label="Doctor details">
+              <button type="button" class="fld" data-k="name" aria-pressed="true"><i>✓</i>Doctor name</button>
+              <button type="button" class="fld" data-k="spec" aria-pressed="false"><i>✓</i>Medical specialty</button>
+              <button type="button" class="fld" data-k="cred" aria-pressed="false"><i>✓</i>Credentials and qualifications</button>
+              <button type="button" class="fld" data-k="loc" aria-pressed="false"><i>✓</i>Clinic location</button>
+              <button type="button" class="fld" data-k="svc" aria-pressed="false"><i>✓</i>Treatments offered</button>
+              <button type="button" class="fld" data-k="url" aria-pressed="false"><i>✓</i>Doctor profile page</button>
+            </div>
+            <div class="ringwrap"><svg class="ring" viewBox="0 0 100 100" role="img" aria-label="Trust signals communicated"><circle class="bg" cx="50" cy="50" r="40"/><circle class="fg" id="ring" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="251.3"/><text x="50" y="57" id="ring-t">0/6</text></svg><p id="ring-p"></p></div>
+          </div>
+          <div class="code"><p class="code-lab">JSON-LD · doctor markup with placeholders</p><pre id="jsonld"></pre></div>
+        </div>
+        <p class="note">Representative markup with placeholder values. It illustrates the kind of information communicated, not Kaya's real doctor data.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="depth" aria-labelledby="d-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="sec">05 / TREATMENT CONTENT DEPTH</p>
+        <h2 id="d-title" class="display">Add depth: treatment pages that answer real patient questions</h2>
+        <p class="lede">Treatment content lacked the depth needed to answer patient questions and compete in search. Drag the slider to deepen a treatment page.</p>
+      </div>
+      <div class="demo">
+        <div class="slide"><label for="dp" class="qb-g"><b>Content depth</b></label><input type="range" id="dp" min="1" max="6" value="1" aria-describedby="dp-cap"><div class="ticks" aria-hidden="true"><span>Shallow</span><span>In-depth</span></div></div>
+        <div class="split">
+          <div class="outline" id="outline"></div>
+          <div style="display:grid;gap:14px;align-content:start">
+            <ul class="stats"><li>Sections: <b id="dp-n">1</b> / 6</li><li>Patient questions answered: <b id="dp-q">1</b> / 6</li></ul>
+            <p class="cap" id="dp-cap" aria-live="polite"></p>
+          </div>
+        </div>
+        <p class="note">Representative page sections, not Kaya's actual treatment content.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--pale" id="links" aria-labelledby="g-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="sec">06 / CONNECTED CONTENT</p>
+        <h2 id="g-title" class="display">Connect the journey: blogs, treatments and clinics as one path</h2>
+        <p class="lede">Blogs, treatments and clinics weren't linked in a way that guided patients or search engines between them. Hover or focus a page to see its connections, or trace a patient's path to an appointment.</p>
+      </div>
+      <div class="demo">
+        <div class="jr-ctl"><button class="btn btn--ghost" type="button" id="trace">Trace a patient path</button><span class="note" id="g-cap" aria-live="polite">Hover or focus any page.</span></div>
+        <div>
+          <div class="gcols" aria-hidden="true"><span>Blogs</span><span>Treatments</span><span>Clinics</span><span>Outcome</span></div>
+          <svg class="graph" id="graph" viewBox="0 0 720 330" role="group" aria-label="Internal linking between blogs, treatments and clinics"></svg>
+        </div>
+        <p class="note">Illustrative link structure with generic page names.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="results" aria-labelledby="r-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="sec">07 / RESULTS</p>
+        <h2 id="r-title" class="display">Search growth tied to actual patient inquiries</h2>
+      </div>
+      <div class="results">
+        <div class="rcard big" id="big">
+          <svg class="bigring" viewBox="0 0 160 160" role="img" aria-label="Organic traffic growth of 120 percent" style="--c:408.4"><circle class="bg" cx="80" cy="80" r="65"/><circle class="r1" cx="80" cy="80" r="65"/><circle class="r2" cx="80" cy="80" r="65"/><text x="80" y="92">+120%</text></svg>
+          <p class="note">Illustration of a 120% increase: one full lap for the original traffic, plus 20% more in the second color.</p>
+        </div>
+        <div class="rlist">
+          <div class="rtext"><h3>+120% organic traffic</h3><p>Organic traffic increased 120%.</p></div>
+          <div class="rtext"><h3>Strong treatment rankings</h3><p>Treatment keywords began ranking strongly.</p></div>
+          <div class="rtext"><h3>Higher clinic appointment leads</h3><p>Linking search growth to actual patient inquiries.</p></div>
+        </div>
+      </div>
+
+      <div class="section-head" style="margin-top:clamp(48px,6vw,80px)">
+        <p class="sec">08 / IMPACT</p>
+        <h2 class="display">A clear path from search to appointment</h2>
+      </div>
+      <div class="changes">
+        <article class="change"><h3>A clear path from search to appointment</h3><p>Linked blogs, treatments and clinics guide patients toward booking.</p></article>
+        <article class="change"><h3>Stronger credibility signals</h3><p>Doctor schema and medical structured data help communicate trust to search engines.</p></article>
+        <article class="change"><h3>Consistent structure across clinic pages</h3><p>Location-optimized pages follow a repeatable pattern that can extend to new clinics.</p></article>
+        <article class="change"><h3>Lead-focused measurement</h3><p>Tying SEO growth to appointment leads keeps the focus on outcomes that matter to the business.</p></article>
+      </div>
+
+      <div class="section-head" style="margin-top:clamp(48px,6vw,80px)">
+        <p class="sec">09 / STACK</p>
+        <h2 class="display">Tools and tech used</h2>
+      </div>
+      <ul class="tools"><li>Local SEO landing page optimization</li><li>Doctor schema and medical structured data</li><li>Treatment page content optimization</li><li>Internal linking strategy</li><li>Healthcare SEO (trust signal implementation)</li></ul>
+    </div>
+  </section>
+
+  <section class="band band--pale" aria-labelledby="take-title">
+    <div class="wrap">
+      <div class="takeaway-panel">
+        <p class="kicker"><span class="ribbon" aria-hidden="true"><i></i><i></i><i></i></span>Key takeaway</p>
+        <h2 id="take-title">Healthcare brands can turn search into appointments</h2>
+        <p>Combining local optimization, trust signals and connected content links visibility directly to patient leads. For any multi-location clinic or service business, this approach works the same way.</p>
+        <p><a class="link-quiet" href="/work">See more work</a></p>
+      </div>
+      <div class="cta">
+        <h2 class="display">Want search to bring in more patient appointments?</h2>
+        <p>Contact Sage Kite and book a free consultation. We'll look at how your clinics and treatments show up in search.</p>
+        <div class="cta-actions"><a class="btn" href="/contact">Book a free consultation</a><a class="link-quiet" href="/contact">Contact Sage Kite</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"><div class="wrap"><strong>Sage Kite</strong><span>Make selling easier.</span></div></footer>
+
+<script>
+(function(){
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function $(s,r){return (r||document).querySelector(s)}function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+var bar=$('.progress');function onS(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.transform='scaleX('+(m>0?h.scrollTop/m:0)+')'}
+addEventListener('scroll',onS,{passive:true});onS();
+
+/* dot nav scrollspy */
+var dl=$$('.dotnav a'),ds=dl.map(function(a){return $(a.getAttribute('href'))});
+if('IntersectionObserver' in window){var so=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){dl.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-35% 0px -55% 0px'});ds.forEach(function(s){so.observe(s)})}
+
+/* counter + in-view */
+var cnt=$('#count');if(!reduce&&'IntersectionObserver' in window){cnt.textContent='0';var co=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){co.disconnect();var t0=null;(function f(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/1200);cnt.textContent=Math.round(120*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(performance.now())}})},{threshold:.6});co.observe(cnt)}else{cnt.textContent='120'}
+var big=$('#big');if('IntersectionObserver' in window){var bo=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){big.classList.add('in');bo.disconnect()}})},{threshold:.4});bo.observe(big)}else{big.classList.add('in')}
+
+/* hero search */
+var Q=[['skin treatment',['blog','treat']],['aesthetic treatment near me',['clinic']],['skin clinic in City A',['clinic']]],qi=0,qel=$('#sq-q'),rows=$$('#sq-res .sr');
+function mark(t){rows.forEach(function(r){r.classList.toggle('on',t.indexOf(r.getAttribute('data-t'))>-1)})}
+function typeQ(){var q=Q[qi][0],n=0;mark([]);qel.textContent='';(function t(){n++;qel.textContent=q.slice(0,n);if(n<q.length)setTimeout(t,55);else{mark(Q[qi][1]);setTimeout(function(){qi=(qi+1)%Q.length;typeQ()},2600)}})()}
+if(reduce){qel.textContent=Q[1][0];mark(Q[1][1])}else{typeQ()}
+
+/* journey */
+var J=[
+ {n:'To understand a treatment before deciding.',m:'Blogs, treatments and clinics weren\'t linked together in a way that guided patients or search engines between them.',f:'Internal linking strengthened links between blogs, treatments and clinics.',h:'#links',l:'See connected content'},
+ {n:'Clear, in-depth answers to patient questions.',m:'Treatment content lacked the depth needed to answer patient questions and compete in search.',f:'Treatment pages were expanded with more depth.',h:'#depth',l:'See treatment depth'},
+ {n:'Signs of credibility, such as qualified doctors and clear information.',m:'The trust signals required for healthcare SEO, such as doctor information and medical structured data, were absent.',f:'Doctor schema and medical structured data communicate credentials and medical information.',h:'#trust',l:'See trust signals'},
+ {n:'A clinic near them.',m:'Clinic pages weren\'t optimized for the location-based searches patients use to find nearby clinics.',f:'Clinic landing pages were optimized for location keywords.',h:'#local',l:'See local intent'},
+ {n:'Enough confidence to book an appointment.',m:'Patients searching for treatments and nearby clinics were not finding Kaya, or were not getting enough confidence to book.',f:'A connected, trusted journey led to higher clinic appointment leads.',h:'#results',l:'See results'}];
+var jn=$$('.jn'),cur=0,jt=null,wk=$('#walk');
+function jsel(i){cur=i;jn.forEach(function(b,k){b.setAttribute('aria-pressed',k===i);b.classList.toggle('done',k<i)});$('#j-need').textContent=J[i].n;$('#j-miss').textContent=J[i].m;$('#j-fix').innerHTML=esc(J[i].f)+' <a class="link-quiet" href="'+J[i].h+'">'+J[i].l+'</a>';$('#jfill').style.setProperty('--p',i*25)}
+function jstop(){clearInterval(jt);jt=null;wk.textContent='Walk the journey'}
+jn.forEach(function(b,k){b.addEventListener('click',function(){jstop();jsel(k)})});
+wk.addEventListener('click',function(){if(jt){jstop();return}wk.textContent='Pause';jsel(0);var k=0;jt=setInterval(function(){k++;if(k>4){jstop();return}jsel(k)},2600)});
+jsel(0);
+
+/* query builder */
+var tr='Treatment A',lo='No location';
+function pick(g,fn){var bs=$$('[data-g="'+g+'"] button');bs.forEach(function(b){b.addEventListener('click',function(){bs.forEach(function(x){x.setAttribute('aria-pressed',x===b)});fn(b.textContent);qb()})})}
+pick('t',function(v){tr=v});pick('l',function(v){lo=v});
+function qb(){var q=tr.toLowerCase()+(lo==='No location'?'':' '+lo),loc=lo!=='No location',city=lo==='in City A'?'City A':'your area';
+ $('#qb-q').textContent=q;
+ if(loc){$('#qb-u').textContent='example.com › clinics › city-a';$('#qb-t').textContent=tr+' in '+(lo==='in City A'?'City A':'Your Area')+' | Kaya Clinics';$('#qb-d').textContent='Clinic landing page: location, doctors and appointment details for '+tr+'.';
+  $('#qb-why').innerHTML='<li>Location intent matches a <b>clinic landing page</b>.</li><li>Pages optimized for location keywords can meet patients searching for nearby clinics.</li><li>The same pattern repeats for each clinic, so it can extend to new ones.</li>'}
+ else{$('#qb-u').textContent='example.com › treatments › '+tr.toLowerCase().replace(' ','-');$('#qb-t').textContent=tr+': what to expect | Kaya Clinics';$('#qb-d').textContent='Treatment page: in-depth information that answers patient questions.';
+  $('#qb-why').innerHTML='<li>Treatment-only intent matches a <b>treatment page</b>.</li><li>Depth is what lets the page answer patient questions and compete in search.</li><li>Links to clinic pages carry the patient to the next step.</li>'}}
+qb();
+
+/* doctor schema builder */
+var F={name:['"name"','"{{ doctor.name }}"'],spec:['"medicalSpecialty"','"{{ doctor.specialty }}"'],cred:['"hasCredential"','"{{ doctor.credentials }}"'],loc:['"address"','"{{ clinic.address }}"'],svc:['"availableService"','"{{ treatments }}"'],url:['"url"','"{{ doctor.profile_url }}"']};
+var order=['name','spec','cred','loc','svc','url'],on={name:true},C=251.3;
+var msgs=['Add details to communicate credentials and medical information.','A basic identity, but little else for search engines to trust.','Getting clearer. Credentials and specialty build credibility.','Good coverage of who the doctor is and where they practice.','Nearly complete: doctors, locations and treatments are connected.','Complete markup communicates trust to search engines.'];
+function sch(){var keys=order.filter(function(k){return on[k]}),lines=['<span class="k">"@context"</span>: <span class="s">"https://schema.org"</span>','<span class="k">"@type"</span>: <span class="s">"Physician"</span>'];
+ keys.forEach(function(k){lines.push('<span class="k">'+esc(F[k][0])+'</span>: <span class="s">'+esc(F[k][1])+'</span>')});
+ $('#jsonld').innerHTML='{\n  '+lines.join(',\n  ')+'\n}';
+ var n=keys.length;$('#ring').style.strokeDashoffset=C*(1-n/6);$('#ring-t').textContent=n+'/6';$('#ring-p').textContent=msgs[n-0>5?5:n]}
+$$('#fields .fld').forEach(function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-k'),v=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',v);on[k]=v;sch()})});
+sch();
+
+/* treatment depth */
+var S=[['What the treatment is','Overview'],['Who it is for','Suitability'],['What to expect','The process'],['Aftercare','Recovery guidance'],['Common questions','FAQs'],['Doctor information','Credibility']];
+var ol=$('#outline');ol.innerHTML=S.map(function(s){return '<div class="ol"><b>'+s[0]+'</b><i></i><i></i></div>'}).join('');
+var dc=['A shallow page covers little, leaving patient questions unanswered.','Starting to answer the basic question: what is this treatment?','Patients can now see whether it is right for them.','The page explains the process, so patients know what to expect.','Aftercare guidance helps patients feel prepared.','Common questions are answered on the page itself.','An in-depth page answers real patient questions and can compete in search.'];
+function dp(){var v=+$('#dp').value;$$('.ol',ol).forEach(function(e,i){e.classList.toggle('off',i>=v);e.classList.toggle('on',i<v)});$('#dp-n').textContent=v;$('#dp-q').textContent=v;$('#dp-cap').textContent=dc[v===6?6:v]}
+$('#dp').addEventListener('input',dp);dp();
+
+/* link graph */
+var NS='http://www.w3.org/2000/svg',g=$('#graph'),X=[90,270,450,630],nodes=[],edges=[];
+function add(id,t,col,y,label){nodes.push({id:id,t:t,x:X[col],y:y,label:label})}
+[[55,'Blog 1'],[165,'Blog 2'],[275,'Blog 3']].forEach(function(a,i){add('b'+i,'b',0,a[0],a[1])});
+[[55,'Treatment 1'],[165,'Treatment 2'],[275,'Treatment 3']].forEach(function(a,i){add('t'+i,'t',1,a[0],a[1])});
+[[55,'Clinic 1'],[165,'Clinic 2'],[275,'Clinic 3']].forEach(function(a,i){add('c'+i,'c',2,a[0],a[1])});
+add('a','a',3,165,'Appointment');
+for(var i=0;i<3;i++){edges.push(['b'+i,'t'+i]);edges.push(['b'+i,'t'+((i+1)%3)]);edges.push(['t'+i,'c'+i]);edges.push(['t'+i,'c'+((i+1)%3)]);edges.push(['c'+i,'a'])}
+function nd(id){return nodes.filter(function(n){return n.id===id})[0]}
+var eEls=edges.map(function(e){var a=nd(e[0]),b=nd(e[1]),p=document.createElementNS(NS,'path');p.setAttribute('class','ge');p.setAttribute('d','M'+(a.x+50)+' '+a.y+' C '+(a.x+110)+' '+a.y+' '+(b.x-110)+' '+b.y+' '+(b.x-50)+' '+b.y);g.appendChild(p);return p});
+var nEls={};nodes.forEach(function(n){var el=document.createElementNS(NS,'g');el.setAttribute('class','gn '+n.t);el.setAttribute('tabindex','0');el.setAttribute('role','img');el.setAttribute('aria-label',n.label);
+ el.innerHTML='<rect x="'+(n.x-50)+'" y="'+(n.y-18)+'" width="100" height="36" rx="8"/><text x="'+n.x+'" y="'+(n.y+4)+'">'+n.label+'</text>';g.appendChild(el);nEls[n.id]=el;
+ el.addEventListener('mouseenter',function(){hl(n.id)});el.addEventListener('focus',function(){hl(n.id)});el.addEventListener('mouseleave',clr);el.addEventListener('blur',clr)});
+var tracing=false;
+function clr(){if(tracing)return;eEls.forEach(function(e){e.setAttribute('class','ge')});Object.keys(nEls).forEach(function(k){nEls[k].setAttribute('class','gn '+nd(k).t)});$('#g-cap').textContent='Hover or focus any page.'}
+function hl(id){if(tracing)return;var con={};con[id]=1;eEls.forEach(function(e,i){var on=edges[i][0]===id||edges[i][1]===id;e.setAttribute('class','ge '+(on?'hl':'dim'));if(on){con[edges[i][0]]=1;con[edges[i][1]]=1}});
+ Object.keys(nEls).forEach(function(k){nEls[k].setAttribute('class','gn '+nd(k).t+' '+(con[k]?'hl':'dim'))});var c=Object.keys(con).length-1;$('#g-cap').textContent=nd(id).label+' connects to '+c+' other page'+(c===1?'':'s')+'.'}
+var path=['b1','t1','c1','a'],tt=null,tb=$('#trace');
+function trace(){if(tt){clearTimeout(tt);tt=null}tracing=true;eEls.forEach(function(e){e.setAttribute('class','ge dim')});Object.keys(nEls).forEach(function(k){nEls[k].setAttribute('class','gn '+nd(k).t+' dim')});tb.disabled=true;var k=0;
+ (function step(){var id=path[k];nEls[id].setAttribute('class','gn '+nd(id).t+' hl');
+  if(k>0){edges.forEach(function(e,i){if(e[0]===path[k-1]&&e[1]===id)eEls[i].setAttribute('class','ge hl')})}
+  $('#g-cap').textContent=['A patient starts with a blog.','The blog links to a treatment page.','The treatment page links to a clinic.','The clinic page leads to an appointment.'][k];
+  k++;if(k<path.length){tt=setTimeout(step,reduce?0:1000)}else{tracing=false;tb.disabled=false}})()}
+tb.addEventListener('click',trace);
+})();
+</script>
+</body>
+</html>

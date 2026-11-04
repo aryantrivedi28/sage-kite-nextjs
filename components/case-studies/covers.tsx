@@ -475,6 +475,45 @@ export function CromaCover({ fit }: CoverProps) {
   );
 }
 
+/* ── Maruti Suzuki: a street map with showroom pins and a car on its way ─── */
+export function MarutiSuzukiCover({ fit }: CoverProps) {
+  const pin = (x: number, y: number, tone: string) => (
+    <g key={`${x}-${y}`}>
+      <path className={`${tone} o-ink thin`} d={`M${x} ${y} C${x - 22} ${y - 20} ${x - 20} ${y - 44} ${x} ${y - 44} C${x + 20} ${y - 44} ${x + 22} ${y - 20} ${x} ${y}Z`} />
+      <circle className="f-white" cx={x} cy={y - 27} r="7" />
+    </g>
+  );
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-butter-soft" cx="570" cy="60" r="110" />
+      <circle className="f-sky-soft" cx="70" cy="320" r="95" />
+      {/* map */}
+      <rect className="f-white o-ink" x="140" y="56" width="360" height="248" rx="14" />
+      <rect className="f-light" x="142" y="138" width="356" height="18" />
+      <rect className="f-light" x="142" y="226" width="356" height="18" />
+      <rect className="f-light" x="244" y="58" width="18" height="244" />
+      <rect className="f-light" x="384" y="58" width="18" height="244" />
+      <rect className="f-sky-soft" x="160" y="74" width="66" height="48" rx="6" />
+      <rect className="f-butter-soft" x="420" y="172" width="60" height="38" rx="6" />
+      <rect className="f-coral-soft" x="280" y="260" width="86" height="30" rx="6" />
+      {/* route from the car to a pin */}
+      <path className="s-sky" strokeDasharray="8 8" d="M300 235 H393 V160" />
+      {pin(253, 147, 'f-coral')}
+      {pin(393, 147, 'f-butter')}
+      {pin(253, 235, 'f-coral')}
+      {/* car */}
+      <g transform="translate(262 214) scale(1.9)">
+        <path className="f-coral o-ink thin" vectorEffect="non-scaling-stroke" d="M2 13 L5 8 Q6 6 9 6 H24 Q27 6 29 9 L34 11 Q38 12 38 14 V16 H2 Z" />
+        <path className="f-sky-soft" d="M10.5 7.4 H23 Q25 7.4 26.4 9.6 H9.2 Z" />
+        <circle className="f-ink" cx="10" cy="16" r="3.3" />
+        <circle className="f-ink" cx="29" cy="16" r="3.3" />
+        <circle className="f-white" cx="10" cy="16" r="1.2" />
+        <circle className="f-white" cx="29" cy="16" r="1.2" />
+      </g>
+    </CoverFrame>
+  );
+}
+
 /* ── Default: for a study without its own cover ────────────────────────── */
 export function DefaultCover({ fit }: CoverProps) {
   return (

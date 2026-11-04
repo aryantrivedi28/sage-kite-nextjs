@@ -2,10 +2,15 @@
  * The platforms Sage Kite implements, in homepage order.
  *
  * Used by the homepage "Platforms" grid (components/home/PlatformsAndIndustries.tsx),
- * the /platforms directory (app/platforms/page.tsx) and app/sitemap.ts.
+ * the /platforms directory (app/platforms/page.tsx), app/sitemap.ts, the header's
+ * Platforms dropdown (components/Header.tsx: slugged platforms only; the cross-industry
+ * group under "General CRMs", the rest under "By industry", each row labelled with its
+ * group's `navLabel`, else `label`) and the /services hero strip (components/services/PlatformStrip.tsx:
+ * every platform, in this order).
  * When a platform page is published at app/platforms/<slug>/page.tsx, add its
- * `slug` here: the name becomes a link on the homepage and the directory, and the
- * page is added to the sitemap. Leave `slug` off until the page exists.
+ * `slug` here: the name becomes a link on the homepage, the directory, the header
+ * dropdown and the /services strip, and the page is added to the sitemap. Leave
+ * `slug` off until the page exists.
  */
 export type PlatformGroupId =
   | 'cross-industry'
@@ -30,6 +35,8 @@ export interface Platform {
 export interface PlatformGroup {
   id: PlatformGroupId;
   label: string;
+  /** Short label for the header Platforms menu, shown under each platform name. Defaults to `label`. */
+  navLabel?: string;
   description: string;
   /** Brand colour token for the group's accent, e.g. 'var(--sage)'. */
   color: string;
@@ -37,10 +44,10 @@ export interface PlatformGroup {
 
 /** Directory groups on /platforms, in display order. Groupings are positioning, not limits. */
 export const PLATFORM_GROUPS: PlatformGroup[] = [
-  { id: 'cross-industry', label: 'Cross-industry', color: 'var(--sage)', description: 'CRM and marketing automation platforms that suit many kinds of business.' },
+  { id: 'cross-industry', label: 'Cross-industry', navLabel: 'Any industry', color: 'var(--sage)', description: 'CRM and marketing automation platforms that suit many kinds of business.' },
   { id: 'real-estate', label: 'Real estate', color: 'var(--coral)', description: 'Lead routing, agent follow-up and pipeline visibility for agents, teams and brokerages.' },
   { id: 'home-services', label: 'Home services', color: 'var(--sky)', description: 'Booking, estimates, service plans and follow-up for trade and home service businesses.' },
-  { id: 'coaching', label: 'Coaches and course businesses', color: 'var(--butter)', description: 'Enquiries, enrolment and student communication for people who sell knowledge.' },
+  { id: 'coaching', label: 'Coaches and course businesses', navLabel: 'Coaching and courses', color: 'var(--butter)', description: 'Enquiries, enrolment and student communication for people who sell knowledge.' },
   { id: 'law-firms', label: 'Law firms', color: 'var(--ink)', description: 'Client intake, consultation booking and follow-up before a matter is opened.' },
   { id: 'service-businesses', label: 'Service businesses', color: 'var(--sage)', description: 'Enquiries, proposals, contracts and onboarding for client-based service businesses.' },
   { id: 'fitness-wellness', label: 'Fitness and wellness', color: 'var(--coral)', description: 'Intro offers, memberships and retention for studios, gyms and wellness centres.' },
