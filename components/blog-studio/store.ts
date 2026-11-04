@@ -1,5 +1,5 @@
 import type { ActionResult, StudioPost, StudioStorage } from './types';
-import { ACCEPTED_IMAGE_TYPES, MAX_UPLOAD_BYTES, withImageFileNameDefaults } from './postUtils';
+import { ACCEPTED_IMAGE_TYPES, MAX_UPLOAD_BYTES, resizedImageType, withImageFileNameDefaults } from './postUtils';
 import {
   deleteStudioPostAction,
   listStudioPostsAction,
@@ -31,14 +31,27 @@ export interface StudioStore {
   uploadImage(file: File): Promise<string>;
 }
 
-const MAX_IMAGE_WIDTH = 1600;
+/** Widest image the studio stores (decision.md D064): about 2x the widest place a blog image is shown. */
+const MAX_IMAGE_WIDTH = 2000;
+/** Encoder quality for the stored WebP (or the JPEG fallback) (D064). */
+const IMAGE_QUALITY = 0.9;
 
 function checkImageFile(file: File) {
   if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) throw new Error('Use a JPG, PNG or WebP image.');
   if (file.size > MAX_UPLOAD_BYTES) throw new Error('Images must be 8 MB or smaller.');
 }
 
-/** Resizes to at most 1600px wide and re-encodes as WebP. */
+function encodeCanvas(canvas: HTMLCanvasElement, type: string): Promise<Blob> {
+  return new Promise((resolve, reject) =>
+    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Could not process this image.'))), type, IMAGE_QUALITY),
+  );
+}
+
+/**
+ * Resizes to at most 2000px wide (never enlarges) and re-encodes as WebP at quality 0.9. A browser that cannot encode
+ * WebP (Safari) silently returns a PNG, which can be several MB at this width, so the image is then encoded as JPEG at
+ * the same quality instead (resizedImageType). JPEG has no transparency: transparent areas get the page background.
+ */
 async function toWebpBlob(file: Blob): Promise<Blob> {
   const bitmap = await createImageBitmap(file);
   const scale = Math.min(1, MAX_IMAGE_WIDTH / bitmap.width);
@@ -48,10 +61,16 @@ async function toWebpBlob(file: Blob): Promise<Blob> {
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('This browser cannot process images.');
   ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  const webp = await encodeCanvas(canvas, 'image/webp');
+  if (resizedImageType(webp.type) === 'image/webp') {
+    bitmap.close();
+    return webp;
+  }
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--warm-white').trim() || 'white';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
   bitmap.close();
-  return new Promise((resolve, reject) =>
-    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Could not process this image.'))), 'image/webp', 0.82),
-  );
+  return encodeCanvas(canvas, 'image/jpeg');
 }
 
 /* Called when a Server Action says the session is missing or has ended, so the UI can ask for the password again. */
@@ -109,7 +128,8 @@ export const sanityStudioStore: StudioStore = {
   },
   async uploadImage(file) {
     checkImageFile(file);
-    return uploadBlob(await toWebpBlob(file), file.name.replace(/\.[^.]+$/, '') + '.webp');
+    const blob = await toWebpBlob(file);
+    return uploadBlob(blob, file.name.replace(/\.[^.]+$/, '') + (blob.type === 'image/jpeg' ? '.jpg' : '.webp'));
   },
 };
 

@@ -1215,7 +1215,7 @@ function Editor({
                     onUpload={upload}
                     onFileChosen={(file) => prefillFileName(file)}
                     notify={notify}
-                    hint="16:9, about 1200 × 675. Used at the top of the post, on blog cards and in social shares."
+                    hint="16:9, 1600 × 900 or larger. Used at the top of the post, on blog cards and in social shares."
                   />
                   <Field label="Alt text" required hint="Describe what the image shows, for screen readers and search engines.">
                     <input className={styles.input} value={draft.imageAlt} onChange={(e) => set('imageAlt', e.target.value)} />

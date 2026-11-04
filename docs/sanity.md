@@ -361,7 +361,7 @@ OAuth client, environment variables.
 - `components/blog-studio/actions.ts` with server-side validation (slug pattern,
   slug not used by a code post or another Sanity post, required checklist items
   before publish, role check).
-- Image uploads: keep the browser resize to 1600px WebP in `store.ts`, but send the
+- Image uploads: keep the browser resize to 2000px WebP at quality 0.9 (D064) in `store.ts`, but send the
   **Blob** to `app/api/admin/images/route.ts` instead of storing a data URL. Two
   limits make this necessary: Server Action bodies are capped at 1 MB by default
   (`serverActions.bodySizeLimit`), and Vercel Functions cap request bodies at

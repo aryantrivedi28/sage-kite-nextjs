@@ -81,7 +81,8 @@ components/blog-studio/
   LoginGate.tsx             The mandatory full-screen sign-in dialog (D035).
   store.ts                  StudioStore interface, sanityStudioStore (calls actions.ts), a
                             refusing store for blocked/locked, and getStudioStore(storage).
-                            Images are resized to 1600px WebP in the browser.
+                            Images are resized to at most 2000px wide and saved as WebP (quality
+                            0.9; JPEG where the browser cannot encode WebP) in the browser (D064).
   actions.ts                'use server'. list / save / delete / upload-image for Sanity. Each
                             re-checks the storage mode and validates input (id format, block
                             types, no data: images, required checklist items before publishing,
@@ -467,8 +468,14 @@ at most one Sources block; it is the last block of the article; every source has
   (D049). Ask before changing them.
 
 ### Images (`sanityStudioStore.uploadImage`)
-- JPG, PNG or WebP, up to 8 MB. Resized in the browser to at most 1600px wide and
-  re-encoded as WebP at quality 0.82, then stored as a data URL inside the post.
+- JPG, PNG or WebP, up to 8 MB. Resized in the browser to at most 2000px wide (never enlarged) and
+  re-encoded as WebP at quality 0.9 (D064), then stored as a data URL inside the post. A browser that cannot
+  encode WebP (Safari returns a PNG instead) gets JPEG at the same quality, on the page background colour where
+  the image was transparent, so a large PNG never fails the 3.5 MB upload limit.
+- The featured image should be 16:9, 1600 × 900 or larger (its hint says so). The checklist warns, without blocking
+  publishing, when an uploaded featured image is narrower than 1600px ("Featured image is at least 1600px wide") or an
+  uploaded article image is narrower than 1440px ("Images in the article are at least 1440px wide"); the width is read
+  from the Sanity URL, so site files (`/images/…`) and images not yet uploaded are not checked (D064).
 - Paths and URLs can be typed instead of uploading, and an image can be pasted (section 4.2, "Pasting an image").
 - **Image file name (optional)** (D062), under each image's Alt text, featured image included: the image's file name
   on the live site, which search engines read. Type a short, descriptive name such as `crm-pipeline-stages`; the line

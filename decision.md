@@ -1958,6 +1958,34 @@ Past approval records below describe only what the supplied reports establish.
   - Not checked: the production dataset or a deployed build.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D064 — Blog studio: sharper uploaded images (2000px, quality 0.9) and warnings for small ones
+
+- **Date:** 4 November 2026.
+- **Status:** Implemented and checked locally (see Validation). Not committed, pushed or deployed.
+- **Problem (measured 4 November 2026, reported in the brief):** blog graphics look soft on the live site, especially small text (e.g. the laptop screen in the GoHighLevel featured image). The live images are 891px wide (some 1200px), but a post's featured image is shown up to about 1000 CSS px, about 2000 device px on high-resolution screens, so browsers stretch it more than 2x. The studio also capped uploads at 1600px wide and re-encoded them as WebP at quality 0.82, and the featured image hint said "about 1200 × 675", which is too small. The main fix is bigger sources (the team will re-export at 1600 × 900 or larger); this change keeps that detail and warns when an image is too small.
+- **Changes:**
+  - [components/blog-studio/store.ts](components/blog-studio/store.ts): `MAX_IMAGE_WIDTH` 1600 → 2000; WebP quality 0.82 → 0.9, now the named constant `IMAGE_QUALITY`. Images narrower than the limit are still never enlarged; the 8 MB pick limit, the 3.5 MB `MAX_RESIZED_BYTES` and the 4 MB `bodySizeLimit` are unchanged.
+  - Safari fallback: `canvas.toBlob(…, 'image/webp', …)` does not produce WebP in Safari (caniuse lists it as unsupported through Safari 26.5; the HTML spec says an unsupported type falls back to PNG, silently). Not tested in Safari itself (see Limitations). The studio now checks the type the browser actually returned (`resizedImageType` in [postUtils.ts](components/blog-studio/postUtils.ts): WebP when it is WebP, JPEG otherwise) and re-encodes as JPEG at quality 0.9 when it is not WebP, so a large PNG never exceeds the upload limit. `checkUploadedImage` already accepts JPEG. JPEG has no transparency, so transparent areas are filled with the page background (`--warm-white`, read from brand.css at run time) before encoding. The upload is named `.jpg` in that case (the server names it from the detected type anyway).
+  - Featured image hint ([BlogStudio.tsx](components/blog-studio/BlogStudio.tsx)):
+    - Before: `16:9, about 1200 × 675. Used at the top of the post, on blog cards and in social shares.`
+    - After: `16:9, 1600 × 900 or larger. Used at the top of the post, on blog cards and in social shares.`
+    - The generic line after it ("JPG, PNG or WebP up to 8 MB; resized and saved as WebP.") is unchanged.
+  - Two new non-required checklist items in `checklist()` ([postUtils.ts](components/blog-studio/postUtils.ts)), shown only when they apply, never blocking publishing. The width is read from the Sanity URL with `sanityImageSize`; site files (`/images/…`), empty images and images not yet uploaded are not checked:
+    - `Featured image is at least 1600px wide`: the featured image is a Sanity upload narrower than 1600px (`MIN_FEATURED_IMAGE_WIDTH`).
+    - `Images in the article are at least 1440px wide`: any article image is a Sanity upload narrower than 1440px (`MIN_ARTICLE_IMAGE_WIDTH`, the largest article srcset width).
+  - Unchanged: article srcset widths (720/1080/1440), the 1200 × 675 share crop, next/image settings, vanity file names (D061–D063) and stored data.
+- **Affected files:** components/blog-studio/store.ts, components/blog-studio/postUtils.ts, components/blog-studio/BlogStudio.tsx, new tests/image-sharpness.test.mts; docs/blog-studio.md, docs/sanity.md. AGENTS.md does not mention these values, so it is unchanged.
+- **Approval:** the user, 4 November 2026, in chat (the brief, including the exact hint and checklist wording).
+- **Expected effects (not measured on the live site):** sharper images once the sources are 1600px or wider; stored files roughly 1.5–2x bigger than before for the same source. Visitors still get resized copies from Sanity's CDN (srcset), so small screens download about the same.
+- **Limitations:** existing images stay as they are until re-uploaded, and the change cannot add detail that a small source does not have (an 891px source stays 891px). Safari's behaviour comes from caniuse and the HTML spec, not from a Safari test: Safari WebDriver needs "Allow remote automation" turned on in Safari's settings, which was off. An upload from Safari is stored as JPEG (no transparency).
+- **Validation (run by Claude, 4 November 2026):**
+  - `npx tsc --noEmit` and `npm run build` pass; `npm test` 239/239 (4 new in tests/image-sharpness.test.mts: the featured item at 891 and 1599px, not at 1600 / 2000px, not for a site file, an empty image or a `data:` URL; the article item at 1200px and when any one image is small, not at 1440px, not for site files or empty images, and independent of the featured image; both never required, and all required items still pass; `resizedImageType` gives WebP for `image/webp`, JPEG for `image/png` and '').
+  - Bundle: the only chunk containing "tiptap" / "prosemirror" is referenced only by the studio's client reference manifest; no /blog page references it.
+  - Sizes in headless Chrome, 2000 × 1125 at quality 0.9: a UI-style graphic with small text: WebP 194 KB (JPEG 308 KB, PNG 592 KB); a real photo drawn at 2000px with added grain: WebP 576 KB (JPEG 595 KB, PNG 4,251 KB, over the 3.5 MB limit, which is why the fallback is JPEG); worst case, pure random noise: WebP 1,847 KB, JPEG 1,820 KB. All far below 3.5 MB.
+  - User's dev server on :3000, development dataset, Chrome (headless), signed in, an unsaved new draft (`zz test d064 unsaved`; never saved or published): the featured image hint shows the new text followed by the unchanged generic line. A generated 2400 × 1350 PNG with small text was stored as `…-2000x1125.webp`, `image/webp`, 146 KB (149,654 bytes), with no width warning. An 891 × 520 PNG was stored as `…-891x520.webp` (not enlarged); as the featured image, "Featured image is at least 1600px wide" appeared, and in an Image block "Images in the article are at least 1440px wide" appeared too. Cleanup: the two test assets were deleted by exact id (`image-c217d960…-2000x1125-webp`, `image-dbf985c5…-891x520-webp`); the asset list is again exactly the 5 from before, with 0 blog posts.
+  - Not checked: Safari, the production dataset or a deployed build.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

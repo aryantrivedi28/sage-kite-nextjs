@@ -1,5 +1,5 @@
 import type { BlogFaq, BlogGuideItem } from '@/content/blog/types';
-import { chosenImageName, featuredImageName, isSanityImage, isUsableFeaturedImage, liveImageFileName } from '@/lib/sanity/image';
+import { chosenImageName, featuredImageName, isSanityImage, isUsableFeaturedImage, liveImageFileName, sanityImageSize } from '@/lib/sanity/image';
 import { MAX_IMAGE_FILE_NAME, UPLOAD_IMAGE_FORMATS, safeFileBase } from '@/lib/sanity/imageUpload';
 import { escapeInline, inlinePlainText, parseInline, safeHref, serializeRuns, type Run } from './inline';
 import type { SitePostSummary, StudioBlock, StudioBlockType, StudioPost, StudioSource } from './types';
@@ -37,6 +37,18 @@ export const parseKeywordList = (text: string): string[] => normalizeKeywords(te
 export const ACCEPTED_IMAGE_TYPES: string[] = Object.keys(UPLOAD_IMAGE_FORMATS);
 /** Largest file a writer may pick; it is resized in the browser before saving. */
 export const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
+/**
+ * The type the studio stores a resized image as (decision.md D064), given the type the browser actually returned when
+ * asked for WebP: WebP when it is supported, otherwise JPEG. A browser that cannot encode WebP (Safari) silently returns
+ * a PNG instead, which can be several MB at 2000px wide and fail the upload limit.
+ */
+export function resizedImageType(returnedType: string): 'image/webp' | 'image/jpeg' {
+  return returnedType === 'image/webp' ? 'image/webp' : 'image/jpeg';
+}
+/** Narrowest featured image that stays sharp where it is shown (up to about 1000 CSS px wide) (D064). */
+export const MIN_FEATURED_IMAGE_WIDTH = 1600;
+/** Narrowest article image that fills the largest srcset width (1440) (D064). */
+export const MIN_ARTICLE_IMAGE_WIDTH = 1440;
 /** Largest resized image sent to the server (Server Action limit is set to 4mb in next.config.ts). */
 export const MAX_RESIZED_BYTES = 3.5 * 1024 * 1024;
 
@@ -809,6 +821,14 @@ export function checklist(
   );
   if (duplicateImageFileNames(post).length) {
     items.push({ label: 'Image file names are different from each other', ok: false, required: false });
+  }
+  // Too-small uploads (D064): only Sanity uploads are measured (the width is in their URL); never required.
+  const featuredWidth = sanityImageSize(post.featuredImage)?.width;
+  if (featuredWidth !== undefined && featuredWidth < MIN_FEATURED_IMAGE_WIDTH) {
+    items.push({ label: 'Featured image is at least 1600px wide', ok: false, required: false });
+  }
+  if (images.some((b) => b.type === 'image' && (sanityImageSize(b.src)?.width ?? Infinity) < MIN_ARTICLE_IMAGE_WIDTH)) {
+    items.push({ label: 'Images in the article are at least 1440px wide', ok: false, required: false });
   }
   if (images.length) {
     items.push({ label: 'Every image has alt text', ok: images.every((b) => b.type === 'image' && b.src && b.alt.trim()), required: false });
