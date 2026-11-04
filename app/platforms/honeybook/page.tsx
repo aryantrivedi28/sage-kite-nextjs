@@ -8,9 +8,9 @@ import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image
 import styles from './honeybook.module.css';
 
 export const metadata: Metadata = {
-  title: "HoneyBook Setup & Implementation Services | Sage Kite",
-  description: "HoneyBook setup from Sage Kite: we map your clientflow, then configure lead capture, Smart Files, contracts, payments, scheduling and automations.",
-  keywords: ["HoneyBook setup", "HoneyBook implementation", "HoneyBook automation", "HoneyBook specialist", "client management CRM"],
+  title: "HoneyBook Setup Services for Service Businesses | Sage Kite",
+  description: "Sage Kite sets up HoneyBook for lead capture, Smart Files, proposals, contracts, payments, scheduling, and client workflows, with testing and team handover.",
+  keywords: ["HoneyBook Setup Services", "HoneyBook Implementation Services", "HoneyBook CRM Setup", "HoneyBook Specialist", "HoneyBook Workflow Automation", "HoneyBook Client Onboarding", "HoneyBook Smart Files Setup", "HoneyBook Account Setup"],
   alternates: {
     canonical: "https://www.sagekite.com/platforms/honeybook",
   },
@@ -18,14 +18,14 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: "https://www.sagekite.com/platforms/honeybook",
-    title: "HoneyBook setup and implementation services | Sage Kite",
-    description: "Sage Kite maps your clientflow, then configures HoneyBook around it: Smart Files, contracts, payments, scheduling and automations.",
+    title: "HoneyBook Setup and CRM Workflows for Clients | Sage Kite",
+    description: "Sage Kite configures HoneyBook forms, Smart Files, contracts, invoices, scheduling and automations around your client journey, with testing before handover.",
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {
     card: "summary_large_image",
-    title: "HoneyBook setup and implementation services | Sage Kite",
-    description: "Process-first HoneyBook implementation: Smart Files, contracts, payments, scheduling and automations, tested and handed over.",
+    title: "HoneyBook Setup and CRM Workflows for Clients | Sage Kite",
+    description: "Sage Kite configures HoneyBook forms, Smart Files, contracts, invoices, scheduling and automations around your client journey, with testing before handover.",
     images: DEFAULT_TWITTER_IMAGES,
   },
 };

@@ -2040,6 +2040,24 @@ Past approval records below describe only what the supplied reports establish.
 - **Validation (run by Claude, 4 November 2026):** `npx tsc --noEmit` and `npm run build` pass; the page on the user's dev server (:3000) renders the new title, description, keywords, og:title, og:description, twitter:title and twitter:description exactly as above, with canonical and og:url `https://www.sagekite.com/platforms/hubspot` unchanged.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D068 — /platforms/honeybook: new meta title, description, keywords and social text
+
+- **Date:** 4 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the user supplied updated metadata for https://www.sagekite.com/platforms/honeybook as a screenshot (primary keyword "HoneyBook Setup Services"), the same way as D065 to D067.
+- **Change** ([app/platforms/honeybook/page.tsx](app/platforms/honeybook/page.tsx), `metadata` only):
+  - Meta title. Before: `HoneyBook Setup & Implementation Services | Sage Kite`. After: `HoneyBook Setup Services for Service Businesses | Sage Kite` (59 characters).
+  - Meta description. Before: `HoneyBook setup from Sage Kite: we map your clientflow, then configure lead capture, Smart Files, contracts, payments, scheduling and automations.` After: `Sage Kite sets up HoneyBook for lead capture, Smart Files, proposals, contracts, payments, scheduling, and client workflows, with testing and team handover.` (156 characters).
+  - Keywords. Before: `HoneyBook setup`, `HoneyBook implementation`, `HoneyBook automation`, `HoneyBook specialist`, `client management CRM`. After (the screenshot's primary and secondary keywords): `HoneyBook Setup Services`, `HoneyBook Implementation Services`, `HoneyBook CRM Setup`, `HoneyBook Specialist`, `HoneyBook Workflow Automation`, `HoneyBook Client Onboarding`, `HoneyBook Smart Files Setup`, `HoneyBook Account Setup`.
+  - OG title. Before: `HoneyBook setup and implementation services | Sage Kite`. After: `HoneyBook Setup and CRM Workflows for Clients | Sage Kite` (57 characters).
+  - OG description. Before: `Sage Kite maps your clientflow, then configures HoneyBook around it: Smart Files, contracts, payments, scheduling and automations.` After: `Sage Kite configures HoneyBook forms, Smart Files, contracts, invoices, scheduling and automations around your client journey, with testing before handover.` (156 characters).
+  - Twitter title and description: not in the screenshot; set to the new OG title and description, as the user chose for D065. Before: `HoneyBook setup and implementation services | Sage Kite` / `Process-first HoneyBook implementation: Smart Files, contracts, payments, scheduling and automations, tested and handed over.`
+  - Unchanged: canonical, og:url, share images, twitter card type, the Service JSON-LD, honeybook.module.css and all page content.
+- **Approval:** the user, 4 November 2026, in chat (the screenshot as the exact wording).
+- **Expected effects (not measured):** search results and social previews show the new text after the page is recrawled.
+- **Validation (run by Claude, 4 November 2026):** `npx tsc --noEmit` and `npm run build` pass; the page on the user's dev server (:3000) renders the new title, description, keywords, og:title, og:description, twitter:title and twitter:description exactly as above, with canonical and og:url `https://www.sagekite.com/platforms/honeybook` unchanged.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
