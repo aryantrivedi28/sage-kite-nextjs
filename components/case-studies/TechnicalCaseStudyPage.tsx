@@ -66,8 +66,9 @@ export function TechnicalCaseStudyPage({ study, jsonLd }: { study: CaseStudy; js
     <>
       <Head id="results-title" label={resultsSection.label ?? 'Results'} heading={resultsSection.heading} />
       {resultsSection.visual}
-      <div className={`cs-tech-results${result ? '' : ' single'}`}>
-        {result && (
+      <div className={`cs-tech-results${result || resultsSection.card ? '' : ' single'}`}>
+        {resultsSection.card && <div className="cs-tech-rcard">{resultsSection.card}</div>}
+        {result && !resultsSection.card && (
           <div className="cs-tech-rcard">
             <p className="cs-tech-mult" aria-label={result.valueLabel}>{result.value}</p>
             <div className="cs-bars" role="img" aria-label={`${result.label}: ${result.before} before, ${result.after} ${(result.afterLabel ?? 'after').toLowerCase()}`}>
@@ -100,7 +101,7 @@ export function TechnicalCaseStudyPage({ study, jsonLd }: { study: CaseStudy; js
       <main id="main" className="cs cs-tech">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <style dangerouslySetInnerHTML={{ __html: CASE_STUDY_CSS }} />
-        <TechNav items={technical.nav} odometer={technical.odometer} />
+        <TechNav items={technical.nav} odometer={technical.odometer} dotnav={technical.dotnav} />
 
         {/* Overview */}
         <section className={`cs-tech-hero${technical.plainHero ? ' plain' : ''}`} id="overview" aria-labelledby="title">

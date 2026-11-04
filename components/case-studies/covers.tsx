@@ -514,6 +514,36 @@ export function MarutiSuzukiCover({ fit }: CoverProps) {
   );
 }
 
+/* ── Kaya Clinics: a search, three result cards and a clinic with a pin ── */
+export function KayaClinicsCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-coral-soft" cx="575" cy="70" r="105" />
+      <circle className="f-butter-soft" cx="70" cy="310" r="95" />
+      {/* search bar */}
+      <rect className="f-white o-ink" x="130" y="52" width="250" height="44" rx="22" />
+      <circle className="s-ink" cx="158" cy="72" r="9" />
+      <path className="s-ink" d="M165 79 L174 88" />
+      <path className="s-light" d="M190 74 H320" />
+      {/* result cards: learn, compare, choose */}
+      <rect className="f-sky-soft o-ink thin" x="130" y="116" width="250" height="52" rx="8" />
+      <rect className="f-butter-soft o-ink thin" x="130" y="182" width="250" height="52" rx="8" />
+      <rect className="f-coral-soft o-ink thin" x="130" y="248" width="250" height="52" rx="8" />
+      <path className="s-ink" d="M150 136 H260 M150 202 H240 M150 268 H280" />
+      <path className="s-sage" d="M150 152 H330 M150 218 H310 M150 284 H340" />
+      {/* clinic building with a cross, and a pin above it */}
+      <rect className="f-white o-ink" x="410" y="178" width="110" height="122" rx="4" />
+      <path className="f-light o-ink thin" d="M402 182 L465 140 L528 182 Z" />
+      <rect className="f-coral" x="457" y="196" width="16" height="44" rx="2" />
+      <rect className="f-coral" x="443" y="210" width="44" height="16" rx="2" />
+      <rect className="f-sky-soft o-ink thin" x="448" y="256" width="34" height="44" rx="3" />
+      <path className="f-coral o-ink thin" d="M465 128 C443 108 445 84 465 84 C485 84 487 108 465 128Z" />
+      <circle className="f-white" cx="465" cy="101" r="7" />
+      <path className="s-ink" d="M390 300 H540" />
+    </CoverFrame>
+  );
+}
+
 /* ── Default: for a study without its own cover ────────────────────────── */
 export function DefaultCover({ fit }: CoverProps) {
   return (

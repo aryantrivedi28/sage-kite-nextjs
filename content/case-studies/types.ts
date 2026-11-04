@@ -70,7 +70,7 @@ export interface CaseStudy {
   discipline: string;
   /**
    * Who did the work and on what basis, e.g. "Previous work by a Sage Kite delivery specialist".
-   * Required by default (AGENTS.md); leave it out only when the user has approved a study without one (Croma, D056; Maruti Suzuki, D069).
+   * Required by default (AGENTS.md); leave it out only when the user has approved a study without one (Croma, D056; Maruti Suzuki, D069; Kaya Clinics, D072).
    */
   origin?: string;
   /** Original illustration for the /case-studies card (components/case-studies/covers.tsx). Never a photo, screenshot or logo. */
@@ -92,9 +92,16 @@ export interface CaseStudy {
    * sticky on-page menu (`nav`) and a reading progress bar. The first of `crumbs` links to /case-studies; `nav` lists the menu
    * (the hero is "overview", the results section "results", the rest are `sections` ids).
    * `plainHero` drops the grid-paper background (Maruti Suzuki). `odometer` adds a floating pill naming the section
-   * being read and the share of the page read (same ids as `nav`).
+   * being read and the share of the page read (same ids as `nav`). `dotnav` adds a column of dots on the right edge
+   * of wide screens, one per section (Kaya Clinics; same ids as `nav`).
    */
-  technical?: { crumbs?: string[]; nav?: { id: string; label: string }[]; plainHero?: boolean; odometer?: { id: string; label: string }[] };
+  technical?: {
+    crumbs?: string[];
+    nav?: { id: string; label: string }[];
+    plainHero?: boolean;
+    odometer?: { id: string; label: string }[];
+    dotnav?: { id: string; label: string }[];
+  };
 
   /* ── Page sections ───────────────────────────────────────────────────── */
   hero: {
@@ -180,6 +187,8 @@ export interface CaseStudy {
     points?: { title: string; text: string }[];
     /** Technical layout only: a graphic above the points (e.g. <ResultDials />), used when there is no before/after figure. */
     visual?: ReactNode;
+    /** Technical layout only: drawn in the results card beside the points instead of the before/after bars (e.g. <GrowthRing />). */
+    card?: ReactNode;
     /**
      * Technical layout only: give the results a band of their own in this colour; impact and stack then follow in a
      * plain band (Maruti Suzuki). Without it, results, impact and stack share one plain band (Croma).
