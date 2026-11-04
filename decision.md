@@ -1986,6 +1986,42 @@ Past approval records below describe only what the supplied reports establish.
   - Not checked: Safari, the production dataset or a deployed build.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D065 — /platforms/dubsado: new meta title, description, keywords and social text
+
+- **Date:** 4 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the user supplied updated metadata for https://www.sagekite.com/platforms/dubsado as a screenshot (primary keyword "Dubsado Setup Services") and asked for it to be treated as the source of truth, with nothing else on the page changed.
+- **Change** ([app/platforms/dubsado/page.tsx](app/platforms/dubsado/page.tsx), `metadata` only):
+  - Meta title. Before: `Dubsado Setup & Implementation Services | Sage Kite`. After: `Dubsado Setup Services for Growing Businesses | Sage Kite` (57 characters).
+  - Meta description. Before: `Dubsado setup from Sage Kite: we map your client process, then configure lead capture, proposals, contracts, payments, scheduling and workflows.` After: `Sage Kite provides Dubsado setup services for lead capture, proposals, contracts, payments, and automated workflows, with testing and team handover included.` (157 characters).
+  - Keywords. Before: `Dubsado setup`, `Dubsado implementation`, `Dubsado workflows`, `Dubsado specialist`, `client onboarding automation`. After (the screenshot's primary and secondary keywords): `Dubsado Setup Services`, `Dubsado Implementation Services`, `Dubsado Workflow Automation`, `Dubsado Specialist`, `Dubsado Account Setup`, `Dubsado Forms and Templates`, `Dubsado Client Onboarding`.
+  - OG title. Before: `Dubsado setup and implementation services | Sage Kite`. After: `Dubsado Implementation for Client Workflows | Sage Kite`.
+  - OG description. Before: `Process mapped first, then Dubsado built around it: forms, proposals, contracts, payments, scheduling and workflows, tested before launch.` After: `Get Dubsado configured around your client journey. Sage Kite maps, builds and tests forms, proposals, contracts, payments, and workflows before handover.`
+  - Twitter title and description: the screenshot has none; the user chose to copy the new OG title and description. Before: `Dubsado setup and implementation services | Sage Kite` / `Sage Kite maps your client process, then configures Dubsado around it, tests it and hands it over.`
+  - Unchanged: canonical, og:url, share images, twitter card type, the Service JSON-LD (its description text included) and all page content.
+- **Approval:** the user, 4 November 2026, in chat (the screenshot as the exact wording; copying OG text to Twitter and replacing the keywords list were the user's answers to two questions).
+- **Expected effects (not measured):** search results and social previews show the new text after the page is recrawled. Google does not use the keywords meta tag for ranking.
+- **Validation (run by Claude, 4 November 2026):** `npx tsc --noEmit` passes; the page on the user's dev server (:3000) renders the new `<title>`, description, keywords, og:title, og:description, twitter:title and twitter:description exactly as above, with the canonical `https://www.sagekite.com/platforms/dubsado` and the default share image unchanged. `npm run build` passes (/platforms/dubsado still static).
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D066 — /platforms/activecampaign: new meta title, description, keywords and social text
+
+- **Date:** 4 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the user supplied updated metadata for https://www.sagekite.com/platforms/activecampaign as a screenshot (primary keyword "ActiveCampaign Implementation Services"), the same way as D065.
+- **Change** ([app/platforms/activecampaign/page.tsx](app/platforms/activecampaign/page.tsx), `metadata` only):
+  - Meta title. Before: `ActiveCampaign Implementation Services | Sage Kite`. After: `ActiveCampaign Implementation Services for SMEs | Sage Kite` (59 characters).
+  - Meta description. Before: `ActiveCampaign implementation from Sage Kite: we map your customer journey, then build contacts, segments, email, automations and sales CRM around it.` After: `Sage Kite implements ActiveCampaign for contact management, segmentation, email campaigns, CRM pipelines and automations, with testing and team handover.` (153 characters).
+  - Keywords. Before: `ActiveCampaign setup`, `ActiveCampaign implementation`, `ActiveCampaign automation`, `ActiveCampaign consultant`, `email marketing automation`. After (the screenshot's primary and secondary keywords): `ActiveCampaign Implementation Services`, `ActiveCampaign Automation Services`, `ActiveCampaign CRM Setup`, `ActiveCampaign Consultant`, `ActiveCampaign Email Marketing`, `ActiveCampaign Workflow Automation`, `ActiveCampaign Lead Nurturing`.
+  - OG title. Before: `ActiveCampaign Implementation & Automation Services | Sage Kite`. After: `ActiveCampaign CRM and Automation Setup for SMEs | Sage Kite` (60 characters).
+  - OG description. Before: the same text as the old meta description. After: `See how Sage Kite sets up ActiveCampaign contacts, email campaigns, sales pipelines and customer journeys, with tested workflows and a clear team handover.` (155 characters).
+  - Twitter title and description: not in the screenshot; set to the new OG title and description, as the user chose for D065 (they already matched the OG text before).
+  - Unchanged: canonical, og:url, share images, twitter card type, the Service JSON-LD and all page content.
+- **Approval:** the user, 4 November 2026, in chat (the screenshot as the exact wording, "change for this also").
+- **Expected effects (not measured):** search results and social previews show the new text after the page is recrawled.
+- **Validation (run by Claude, 4 November 2026):** `npx tsc --noEmit` and `npm run build` pass; the page on the user's dev server (:3000) renders the new title, description, keywords, og:title, og:description, twitter:title and twitter:description exactly as above (lengths 59 / 153 / 60 / 155, as in the screenshot), with canonical and og:url `https://www.sagekite.com/platforms/activecampaign` unchanged.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

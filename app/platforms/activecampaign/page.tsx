@@ -6,9 +6,9 @@ import type { Metadata } from 'next';
 import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 export const metadata: Metadata = {
-  title: "ActiveCampaign Implementation Services | Sage Kite",
-  description: "ActiveCampaign implementation from Sage Kite: we map your customer journey, then build contacts, segments, email, automations and sales CRM around it.",
-  keywords: ["ActiveCampaign setup", "ActiveCampaign implementation", "ActiveCampaign automation", "ActiveCampaign consultant", "email marketing automation"],
+  title: "ActiveCampaign Implementation Services for SMEs | Sage Kite",
+  description: "Sage Kite implements ActiveCampaign for contact management, segmentation, email campaigns, CRM pipelines and automations, with testing and team handover.",
+  keywords: ["ActiveCampaign Implementation Services", "ActiveCampaign Automation Services", "ActiveCampaign CRM Setup", "ActiveCampaign Consultant", "ActiveCampaign Email Marketing", "ActiveCampaign Workflow Automation", "ActiveCampaign Lead Nurturing"],
   alternates: {
     canonical: "https://www.sagekite.com/platforms/activecampaign",
   },
@@ -16,14 +16,14 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: "https://www.sagekite.com/platforms/activecampaign",
-    title: "ActiveCampaign Implementation & Automation Services | Sage Kite",
-    description: "ActiveCampaign implementation from Sage Kite: we map your customer journey, then build contacts, segments, email, automations and sales CRM around it.",
+    title: "ActiveCampaign CRM and Automation Setup for SMEs | Sage Kite",
+    description: "See how Sage Kite sets up ActiveCampaign contacts, email campaigns, sales pipelines and customer journeys, with tested workflows and a clear team handover.",
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {
     card: "summary_large_image",
-    title: "ActiveCampaign Implementation & Automation Services | Sage Kite",
-    description: "ActiveCampaign implementation from Sage Kite: we map your customer journey, then build contacts, segments, email, automations and sales CRM around it.",
+    title: "ActiveCampaign CRM and Automation Setup for SMEs | Sage Kite",
+    description: "See how Sage Kite sets up ActiveCampaign contacts, email campaigns, sales pipelines and customer journeys, with tested workflows and a clear team handover.",
     images: DEFAULT_TWITTER_IMAGES,
   },
 };

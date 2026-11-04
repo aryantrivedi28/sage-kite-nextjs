@@ -7,9 +7,9 @@ import type { Metadata } from 'next';
 import { DEFAULT_OG_IMAGES, DEFAULT_TWITTER_IMAGES } from '@/content/share-image';
 
 export const metadata: Metadata = {
-  title: "Dubsado Setup & Implementation Services | Sage Kite",
-  description: "Dubsado setup from Sage Kite: we map your client process, then configure lead capture, proposals, contracts, payments, scheduling and workflows.",
-  keywords: ["Dubsado setup", "Dubsado implementation", "Dubsado workflows", "Dubsado specialist", "client onboarding automation"],
+  title: "Dubsado Setup Services for Growing Businesses | Sage Kite",
+  description: "Sage Kite provides Dubsado setup services for lead capture, proposals, contracts, payments, and automated workflows, with testing and team handover included.",
+  keywords: ["Dubsado Setup Services", "Dubsado Implementation Services", "Dubsado Workflow Automation", "Dubsado Specialist", "Dubsado Account Setup", "Dubsado Forms and Templates", "Dubsado Client Onboarding"],
   alternates: {
     canonical: "https://www.sagekite.com/platforms/dubsado",
   },
@@ -17,14 +17,14 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Sage Kite",
     url: "https://www.sagekite.com/platforms/dubsado",
-    title: "Dubsado setup and implementation services | Sage Kite",
-    description: "Process mapped first, then Dubsado built around it: forms, proposals, contracts, payments, scheduling and workflows, tested before launch.",
+    title: "Dubsado Implementation for Client Workflows | Sage Kite",
+    description: "Get Dubsado configured around your client journey. Sage Kite maps, builds and tests forms, proposals, contracts, payments, and workflows before handover.",
     images: DEFAULT_OG_IMAGES,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dubsado setup and implementation services | Sage Kite",
-    description: "Sage Kite maps your client process, then configures Dubsado around it, tests it and hands it over.",
+    title: "Dubsado Implementation for Client Workflows | Sage Kite",
+    description: "Get Dubsado configured around your client journey. Sage Kite maps, builds and tests forms, proposals, contracts, payments, and workflows before handover.",
     images: DEFAULT_TWITTER_IMAGES,
   },
 };
