@@ -1,6 +1,6 @@
 export function Systems() {
   return (
-    <section style={{ background: 'var(--dark-sage)', color: 'var(--warm-white)', padding: 'clamp(72px,10vw,120px) 0' }}>
+    <section id="system" style={{ background: 'var(--dark-sage)', color: 'var(--warm-white)', padding: 'clamp(72px,10vw,120px) 0' }}>
       <div className="wrap reveal">
         <div style={{ textAlign: 'center' }}>
           <p className="label" style={{ color: 'var(--butter)' }}>Systems that scale</p>

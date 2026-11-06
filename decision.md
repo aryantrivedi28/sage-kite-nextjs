@@ -2159,6 +2159,32 @@ Past approval records below describe only what the supplied reports establish.
 - **Not tested:** Safari, Firefox.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D074 — Homepage "See the growth system" button scrolls to "Systems that scale"
+
+- **Date:** 6 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** a full check of the live site on 6 November 2026 (64 pages, every link and 471 buttons) found the hero's "See the growth system" link ([Hero.tsx](components/home/Hero.tsx), `href="#system"`) did nothing: no element on the homepage had `id="system"`.
+- **Approval:** the user approved the proposal on 6 November 2026 ("do this first").
+- **Change (no visible change):** [Systems.tsx](components/home/Systems.tsx): the "Systems that scale / Turn the moving parts into one operating system." section gets `id="system"`. [globals.css](app/globals.css): `#system` added to the anchors with `scroll-margin-top:96px`, so the sticky header does not cover the section. That rule also applies to the `id="system"` sections on the service and platform pages (they now stop below the header when linked to directly).
+- **Not changed (proposed separately, awaiting a decision):** the homepage Library links (`#library` on itself, `#lib-1` to `#lib-6`, which have no targets) and the two dead Dubsado links in /blog/dubsado-for-interior-designers and /blog/dubsado-setup-services.
+- **Files:** components/home/Systems.tsx, app/globals.css, decision.md.
+- **Validation (run by Claude):** on the dev server, clicking the link scrolls to the section (its top at 96 px, below the 97 px header; URL hash `#system`), screenshot checked; `npx tsc --noEmit`, `npm test` and `npm run build` pass.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D075 — Homepage Library: "Read the Library" and "What real work reveals." link to real pages
+
+- **Date:** 6 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the site check of 6 November 2026 (D074) found the homepage Library links lead nowhere: "Read the Library" pointed at its own section (`#library`) and the six topic links at `#lib-1` to `#lib-6`, which do not exist (the Library articles were never written).
+- **Approval:** the user chose two of the proposed targets on 6 November 2026 and asked for "these changes only".
+- **Change ([Library.tsx](components/home/Library.tsx), link targets only; wording and design unchanged):**
+  - "Read the Library": `#library` → `/insights/founders-thoughts`.
+  - "What real work reveals.": `#lib-6` → `/case-studies`.
+- **Not changed:** the other five topic links (`#lib-1` to `#lib-5`) still lead nowhere; the final CTA's "Read the Library first" still scrolls to the Library section (`#library`, which works); the two dead Dubsado links in the blog posts.
+- **Files:** components/home/Library.tsx, decision.md.
+- **Validation (run by Claude):** on the dev server, clicking each link opens the page (Founder's Thoughts, Case studies); `npx tsc --noEmit`, `npm test` and `npm run build` pass.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

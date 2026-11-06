@@ -12,7 +12,7 @@ export function Library() {
             </h2>
           </div>
           <div>
-            <Link href="#library" className="link" style={{ textDecoration: 'underline', textUnderlineOffset: '4px' }}>Read the Library</Link>
+            <Link href="/insights/founders-thoughts" className="link" style={{ textDecoration: 'underline', textUnderlineOffset: '4px' }}>Read the Library</Link>
           </div>
         </div>
         
@@ -32,7 +32,7 @@ export function Library() {
           <Link href="#lib-5" className="stream" style={{ '--c': 'var(--sage)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
             The roles that matter more now.
           </Link>
-          <Link href="#lib-6" className="stream" style={{ '--c': 'var(--ink)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
+          <Link href="/case-studies" className="stream" style={{ '--c': 'var(--ink)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
             What real work reveals.
           </Link>
         </div>
