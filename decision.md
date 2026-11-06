@@ -2141,6 +2141,24 @@ Past approval records below describe only what the supplied reports establish.
 - **Not tested:** Safari, Firefox, screen readers.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D073 — Dark covers (option A, ink with bright accents) for five case study cards
+
+- **Date:** 6 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the team leader asked for darker colours in the /case-studies cover illustrations. Claude made four sample options from brand tokens only (A ink with bright accents, B dark sage tonal, C light card with dark circles, D ink tonal).
+- **Approval:** on 6 November 2026 the user reported the team leader's choice: option A, applied first to five covers only (Get Daily, 260 Sample Sale, Esma, Jenson USA, Jiva Ayurveda).
+- **Change (design only, no copy):**
+  - [covers.tsx](components/case-studies/covers.tsx): `CoverFrame` takes `dark`, which adds the class `cs-cover-dark`. The five covers use it.
+  - Background: `--pale-sage` → `--ink`. Big circles: soft tints → full accents (Get Daily, Esma, Jiva `--butter`; Jenson `--sky`; 260 Sample Sale `--butter` instead of sky, because its sky loyalty card overlaps the circle).
+  - Lines drawn straight on the background, which ink would hide: 260 Sample Sale bag handle, Esma migration arrow → `--warm-white`; Jenson bicycle wheels, handlebar, seat and hubs → `--warm-white`, frame `--sky` → `--butter`; Jiva growth line and points → `--sky-soft`, sprigs and leaves `--sage` → `--light-sage`, mortar base `--ink` → `--sage`; Get Daily's ink coffee bean → `--light-sage`.
+  - [app/case-studies/page.tsx](app/case-studies/page.tsx): new cover classes `s-sky-soft`, `s-butter` and `.cs-cover-dark .bg{fill:var(--ink)}`.
+  - The other covers (Hemlock, LumenGrowth, Santa Barbara Trapeze, LabTheory, Croma, Maruti Suzuki, Kaya Clinics, Default) are unchanged.
+- **Limitations:** on the ink background the ink outline of white panels blends in; the panels still stand out by their fill (as in the approved sample). The listing now mixes light and dark covers until the rest are decided.
+- **Files:** components/case-studies/covers.tsx, app/case-studies/page.tsx, AGENTS.md, decision.md.
+- **Validation (run by Claude):** `npx tsc --noEmit`, `npm test` and `npm run build` pass; on the dev server (:3000) /case-studies has five `cs-cover-dark` covers, checked at 1300 px and at the pane's narrow width; no console errors.
+- **Not tested:** Safari, Firefox.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

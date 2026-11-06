@@ -11,6 +11,10 @@ import type { ReactNode } from 'react';
  * under .cs-cover and mapped to the brand tokens (f-* fills, s-* strokes with no fill, o-*
  * outlines for filled shapes, thin = 2px). Never a hex value or a fill attribute.
  *
+ * `dark` on CoverFrame gives the cover an --ink background (decision.md D073). On a dark cover, the big circles use
+ * the full accents (f-butter, f-sky, f-coral) and anything drawn straight on the background (not on a white panel)
+ * uses s-white / f-white / the light tints, because ink lines would disappear.
+ *
  * The viewBox is 16:9 like the card media. With `slice`, a wider or taller box crops the
  * edges, so the main subject stays inside x 120–520, y 40–320.
  *
@@ -27,10 +31,10 @@ export interface CoverProps {
   fit?: 'slice' | 'meet';
 }
 
-function CoverFrame({ children, fit = 'slice' }: { children: ReactNode; fit?: CoverProps['fit'] }) {
+function CoverFrame({ children, fit = 'slice', dark = false }: { children: ReactNode; fit?: CoverProps['fit']; dark?: boolean }) {
   return (
     <svg
-      className="cs-cover"
+      className={dark ? 'cs-cover cs-cover-dark' : 'cs-cover'}
       viewBox="0 0 640 360"
       preserveAspectRatio={`xMidYMid ${fit}`}
       overflow={fit === 'meet' ? 'visible' : 'hidden'}
@@ -269,8 +273,8 @@ export function LabTheoryCover({ fit }: CoverProps) {
 /* ── Get Daily: fitness coffee D2C site, pre-orders, waiting list, rewards ── */
 export function GetDailyCover({ fit }: CoverProps) {
   return (
-    <CoverFrame fit={fit}>
-      <circle className="f-butter-soft" cx="80" cy="300" r="110" />
+    <CoverFrame fit={fit} dark>
+      <circle className="f-butter" cx="80" cy="300" r="110" />
       {/* a plain drinks can */}
       <rect className="f-light o-ink" x="178" y="78" width="80" height="18" rx="7" />
       <rect className="f-sky-soft o-ink" x="170" y="90" width="96" height="198" rx="18" />
@@ -279,7 +283,7 @@ export function GetDailyCover({ fit }: CoverProps) {
       <rect className="f-white" x="186" y="108" width="10" height="52" rx="5" />
       {/* coffee beans */}
       <Bean cx={292} cy={268} angle={-20} tone="f-sage" />
-      <Bean cx={318} cy={290} angle={15} tone="f-ink" />
+      <Bean cx={318} cy={290} angle={15} tone="f-light" />
       <Bean cx={286} cy={296} angle={40} tone="f-sage" />
       {/* phone with the waiting-list form */}
       <rect className="f-white o-ink" x="348" y="72" width="120" height="228" rx="18" />
@@ -301,10 +305,10 @@ export function SampleSaleCover({ fit }: CoverProps) {
   const rows = [118, 152, 186, 220, 254];
   const widths = [110, 88, 120, 96, 104];
   return (
-    <CoverFrame fit={fit}>
-      <circle className="f-sky-soft" cx="600" cy="300" r="120" />
+    <CoverFrame fit={fit} dark>
+      <circle className="f-butter" cx="600" cy="300" r="120" />
       {/* shopping bag behind the list */}
-      <path className="s-ink" d="M178 132 C178 92 250 92 250 132" />
+      <path className="s-white" d="M178 132 C178 92 250 92 250 132" />
       <path className="f-light o-ink" d="M140 132 H290 L302 300 H128 Z" />
       {/* the fixes checklist */}
       <rect className="f-white o-ink" x="204" y="92" width="190" height="212" rx="10" />
@@ -329,8 +333,8 @@ export function SampleSaleCover({ fit }: CoverProps) {
 /* ── Esma: WooCommerce to Shopify migration for a jewellery brand ──────── */
 export function EsmaCover({ fit }: CoverProps) {
   return (
-    <CoverFrame fit={fit}>
-      <circle className="f-butter-soft" cx="570" cy="330" r="100" />
+    <CoverFrame fit={fit} dark>
+      <circle className="f-butter" cx="570" cy="330" r="100" />
       {/* the old site: plain */}
       <Window x={120} y={100} w={150} h={170} body="f-light" />
       <rect className="f-white" x="136" y="144" width="118" height="44" rx="4" />
@@ -338,8 +342,8 @@ export function EsmaCover({ fit }: CoverProps) {
       <rect className="f-white" x="136" y="216" width="104" height="8" rx="4" />
       <rect className="f-white" x="136" y="232" width="70" height="8" rx="4" />
       {/* the move: customers, products and orders */}
-      <path className="s-ink dash" d="M278 186 H350" />
-      <path className="s-ink" d="M340 176 L352 186 L340 196" />
+      <path className="s-white dash" d="M278 186 H350" />
+      <path className="s-white" d="M340 176 L352 186 L340 196" />
       <circle className="f-white o-ink thin" cx="290" cy="186" r="12" />
       <circle className="f-sage" cx="290" cy="182" r="4" />
       <path className="f-sage" d="M282 193 a8 6 0 0 1 16 0 Z" />
@@ -377,16 +381,16 @@ export function JensonCover({ fit }: CoverProps) {
   const rows = [124, 156, 188, 220, 252];
   const widths = [104, 92, 110, 86, 98];
   return (
-    <CoverFrame fit={fit}>
-      <circle className="f-sky-soft" cx="80" cy="70" r="100" />
+    <CoverFrame fit={fit} dark>
+      <circle className="f-sky" cx="80" cy="70" r="100" />
       {/* bicycle */}
-      <circle className="s-ink" cx="160" cy="232" r="40" />
-      <circle className="s-ink" cx="272" cy="232" r="40" />
-      <path className="s-sky" d="M160 232 L212 234 L200 170 Z M200 170 L258 172 L212 234 M258 172 L272 232" />
-      <path className="s-ink" d="M190 160 H212 M258 172 L262 154 L280 150" />
+      <circle className="s-white" cx="160" cy="232" r="40" />
+      <circle className="s-white" cx="272" cy="232" r="40" />
+      <path className="s-butter" d="M160 232 L212 234 L200 170 Z M200 170 L258 172 L212 234 M258 172 L272 232" />
+      <path className="s-white" d="M190 160 H212 M258 172 L262 154 L280 150" />
       <circle className="f-white o-ink thin" cx="212" cy="234" r="8" />
-      <circle className="f-ink" cx="160" cy="232" r="4" />
-      <circle className="f-ink" cx="272" cy="232" r="4" />
+      <circle className="f-white" cx="160" cy="232" r="4" />
+      <circle className="f-white" cx="272" cy="232" r="4" />
       {/* search results */}
       <rect className="f-white o-ink" x="330" y="60" width="190" height="240" rx="10" />
       <rect className="f-white o-ink thin" x="346" y="76" width="158" height="28" rx="14" />
@@ -409,20 +413,20 @@ export function JensonCover({ fit }: CoverProps) {
 /* ── Jiva Ayurveda: organic growth beyond branded search ───────────────── */
 export function JivaCover({ fit }: CoverProps) {
   return (
-    <CoverFrame fit={fit}>
-      <circle className="f-butter-soft" cx="580" cy="300" r="110" />
+    <CoverFrame fit={fit} dark>
+      <circle className="f-butter" cx="580" cy="300" r="110" />
       {/* growth: a rising line with three points, no axis or numbers */}
-      <path className="s-sky" d="M130 296 C220 290 260 240 320 210 S440 120 510 74" />
+      <path className="s-sky-soft" d="M130 296 C220 290 260 240 320 210 S440 120 510 74" />
       {[
         [130, 296],
         [320, 210],
         [510, 74],
       ].map(([cx, cy]) => (
-        <circle key={cx} className="f-sky o-ink thin" cx={cx} cy={cy} r="7" />
+        <circle key={cx} className="f-sky-soft" cx={cx} cy={cy} r="7" />
       ))}
       {/* sprigs */}
-      <path className="s-sage" d="M236 216 C220 184 200 162 168 142" />
-      <path className="s-sage" d="M366 216 C384 182 410 162 444 146" />
+      <path className="s-light" d="M236 216 C220 184 200 162 168 142" />
+      <path className="s-light" d="M366 216 C384 182 410 162 444 146" />
       {[
         { x: 214, y: 182, a: 215 },
         { x: 196, y: 162, a: 200 },
@@ -431,7 +435,7 @@ export function JivaCover({ fit }: CoverProps) {
         { x: 412, y: 162, a: -20 },
         { x: 382, y: 196, a: 30 },
       ].map((l) => (
-        <path key={`${l.x}-${l.y}`} className="f-sage" d={LEAF} transform={`translate(${l.x} ${l.y}) rotate(${l.a})`} />
+        <path key={`${l.x}-${l.y}`} className="f-light" d={LEAF} transform={`translate(${l.x} ${l.y}) rotate(${l.a})`} />
       ))}
       {/* mortar and pestle */}
       <g transform="rotate(28 330 170)">
@@ -439,7 +443,7 @@ export function JivaCover({ fit }: CoverProps) {
       </g>
       <path className="f-sage o-ink" d="M222 222 H378 C378 280 340 300 300 300 C260 300 222 280 222 222 Z" />
       <rect className="f-light o-ink" x="210" y="208" width="180" height="18" rx="9" />
-      <rect className="f-ink" x="272" y="298" width="56" height="12" rx="4" />
+      <rect className="f-sage" x="272" y="298" width="56" height="12" rx="4" />
     </CoverFrame>
   );
 }

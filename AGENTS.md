@@ -205,7 +205,9 @@ content/case-studies/
                           listing card's illustration from components/case-studies/covers.tsx.
 components/case-studies/  covers.tsx: one original cover illustration per study for the /case-studies cards,
                           drawn as inline SVG with brand-token classes (never photos, screenshots, logos,
-                          brand names, text or numbers); DefaultCover for a study without one.
+                          brand names, text or numbers); DefaultCover for a study without one. `<CoverFrame dark>`
+                          gives a cover the ink background (D073: Get Daily, 260 Sample Sale, Esma, Jenson USA,
+                          Jiva Ayurveda); lines drawn straight on it must use s-white / f-white, not ink.
                           CaseStudyPage (renders every case study + metadata + JSON-LD; a study with
                           `technical` set is drawn by TechnicalCaseStudyPage + TechNav instead: the
                           interactive layout (optional sticky section menu; Croma has none), D057, D058;

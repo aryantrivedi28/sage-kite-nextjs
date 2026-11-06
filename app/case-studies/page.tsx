@@ -116,12 +116,16 @@ export default function CaseStudiesPage() {
           .cs-cover .f-butter-soft{fill:var(--butter-soft)}
           .cs-cover .f-sky{fill:var(--sky)}
           .cs-cover .f-sky-soft{fill:var(--sky-soft)}
-          .cs-cover .s-ink,.cs-cover .s-sage,.cs-cover .s-light,.cs-cover .s-sky,.cs-cover .s-white{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+          .cs-cover .s-ink,.cs-cover .s-sage,.cs-cover .s-light,.cs-cover .s-sky,.cs-cover .s-sky-soft,.cs-cover .s-butter,.cs-cover .s-white{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
           .cs-cover .s-ink{stroke:var(--ink)}
           .cs-cover .s-sage{stroke:var(--sage)}
           .cs-cover .s-light{stroke:var(--light-sage)}
           .cs-cover .s-sky{stroke:var(--sky)}
           .cs-cover .s-white{stroke:var(--warm-white)}
+          .cs-cover .s-sky-soft{stroke:var(--sky-soft)}
+          .cs-cover .s-butter{stroke:var(--butter)}
+          /* dark covers (option A, D073): ink background; lines on it are drawn in warm white */
+          .cs-cover-dark .bg{fill:var(--ink)}
           .cs-cover .o-ink{stroke:var(--ink);stroke-width:3;stroke-linejoin:round}
           .cs-cover .o-light{stroke:var(--light-sage);stroke-width:2}
           .cs-cover .thin{stroke-width:2}
