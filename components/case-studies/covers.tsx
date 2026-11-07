@@ -11,9 +11,9 @@ import type { ReactNode } from 'react';
  * under .cs-cover and mapped to the brand tokens (f-* fills, s-* strokes with no fill, o-*
  * outlines for filled shapes, thin = 2px). Never a hex value or a fill attribute.
  *
- * `dark` on CoverFrame gives the cover an --ink background (decision.md D073). On a dark cover, the big circles use
- * the full accents (f-butter, f-sky, f-coral) and anything drawn straight on the background (not on a white panel)
- * uses s-white / f-white / the light tints, because ink lines would disappear.
+ * Every cover has an --ink background (option A, decision.md D073 and D076). The big circles use the full accents
+ * (f-butter, f-sky, f-coral), and anything drawn straight on the background (not on a white panel) uses s-white /
+ * f-white / the light tints, because ink lines would disappear.
  *
  * The viewBox is 16:9 like the card media. With `slice`, a wider or taller box crops the
  * edges, so the main subject stays inside x 120–520, y 40–320.
@@ -31,10 +31,10 @@ export interface CoverProps {
   fit?: 'slice' | 'meet';
 }
 
-function CoverFrame({ children, fit = 'slice', dark = false }: { children: ReactNode; fit?: CoverProps['fit']; dark?: boolean }) {
+function CoverFrame({ children, fit = 'slice' }: { children: ReactNode; fit?: CoverProps['fit'] }) {
   return (
     <svg
-      className={dark ? 'cs-cover cs-cover-dark' : 'cs-cover'}
+      className="cs-cover"
       viewBox="0 0 640 360"
       preserveAspectRatio={`xMidYMid ${fit}`}
       overflow={fit === 'meet' ? 'visible' : 'hidden'}
@@ -111,7 +111,7 @@ const LEAF = 'M0 0 C8 -11 24 -11 32 0 C24 11 8 11 0 0 Z';
 export function HemlockCover({ fit }: CoverProps) {
   return (
     <CoverFrame fit={fit}>
-      <circle className="f-butter-soft" cx="560" cy="60" r="90" />
+      <circle className="f-butter" cx="560" cy="60" r="90" />
       <Window x={110} y={56} w={330} h={236} />
       {/* two cabin cards */}
       {[130, 286].map((x) => (
@@ -155,7 +155,7 @@ export function HemlockCover({ fit }: CoverProps) {
 export function LumenGrowthCover({ fit }: CoverProps) {
   return (
     <CoverFrame fit={fit}>
-      <circle className="f-sky-soft" cx="70" cy="300" r="100" />
+      <circle className="f-sky" cx="70" cy="300" r="100" />
       <Window x={110} y={52} w={300} h={256} />
       {/* currency switch: five options, one chosen */}
       <rect className="f-white o-ink thin" x="140" y="96" width="132" height="26" rx="13" />
@@ -209,10 +209,10 @@ export function SantaBarbaraTrapezeCover({ fit }: CoverProps) {
   ];
   return (
     <CoverFrame fit={fit}>
-      <circle className="f-coral-soft" cx="590" cy="320" r="110" />
+      <circle className="f-coral" cx="590" cy="320" r="110" />
       {/* the trapeze, mid-swing */}
       <g transform="rotate(8 320 0)">
-        <path className="s-ink" d="M272 -6 V106 M368 -6 V106" />
+        <path className="s-white" d="M272 -6 V106 M368 -6 V106" />
         <rect className="f-coral o-ink" x="258" y="100" width="124" height="14" rx="7" />
       </g>
       {/* store grid; the tagged tiles form one smart collection */}
@@ -245,7 +245,7 @@ export function SantaBarbaraTrapezeCover({ fit }: CoverProps) {
 export function LabTheoryCover({ fit }: CoverProps) {
   return (
     <CoverFrame fit={fit}>
-      <circle className="f-coral-soft" cx="60" cy="70" r="90" />
+      <circle className="f-coral" cx="60" cy="70" r="90" />
       <Window x={120} y={52} w={400} h={256} />
       {/* product photo tile with a plain tube */}
       <rect className="f-coral-soft" x="144" y="96" width="150" height="190" rx="10" />
@@ -273,7 +273,7 @@ export function LabTheoryCover({ fit }: CoverProps) {
 /* ── Get Daily: fitness coffee D2C site, pre-orders, waiting list, rewards ── */
 export function GetDailyCover({ fit }: CoverProps) {
   return (
-    <CoverFrame fit={fit} dark>
+    <CoverFrame fit={fit}>
       <circle className="f-butter" cx="80" cy="300" r="110" />
       {/* a plain drinks can */}
       <rect className="f-light o-ink" x="178" y="78" width="80" height="18" rx="7" />
@@ -305,7 +305,7 @@ export function SampleSaleCover({ fit }: CoverProps) {
   const rows = [118, 152, 186, 220, 254];
   const widths = [110, 88, 120, 96, 104];
   return (
-    <CoverFrame fit={fit} dark>
+    <CoverFrame fit={fit}>
       <circle className="f-butter" cx="600" cy="300" r="120" />
       {/* shopping bag behind the list */}
       <path className="s-white" d="M178 132 C178 92 250 92 250 132" />
@@ -333,7 +333,7 @@ export function SampleSaleCover({ fit }: CoverProps) {
 /* ── Esma: WooCommerce to Shopify migration for a jewellery brand ──────── */
 export function EsmaCover({ fit }: CoverProps) {
   return (
-    <CoverFrame fit={fit} dark>
+    <CoverFrame fit={fit}>
       <circle className="f-butter" cx="570" cy="330" r="100" />
       {/* the old site: plain */}
       <Window x={120} y={100} w={150} h={170} body="f-light" />
@@ -381,7 +381,7 @@ export function JensonCover({ fit }: CoverProps) {
   const rows = [124, 156, 188, 220, 252];
   const widths = [104, 92, 110, 86, 98];
   return (
-    <CoverFrame fit={fit} dark>
+    <CoverFrame fit={fit}>
       <circle className="f-sky" cx="80" cy="70" r="100" />
       {/* bicycle */}
       <circle className="s-white" cx="160" cy="232" r="40" />
@@ -413,7 +413,7 @@ export function JensonCover({ fit }: CoverProps) {
 /* ── Jiva Ayurveda: organic growth beyond branded search ───────────────── */
 export function JivaCover({ fit }: CoverProps) {
   return (
-    <CoverFrame fit={fit} dark>
+    <CoverFrame fit={fit}>
       <circle className="f-butter" cx="580" cy="300" r="110" />
       {/* growth: a rising line with three points, no axis or numbers */}
       <path className="s-sky-soft" d="M130 296 C220 290 260 240 320 210 S440 120 510 74" />
@@ -453,8 +453,8 @@ export function CromaCover({ fit }: CoverProps) {
   const stripes = [120, 164, 208, 252, 296];
   return (
     <CoverFrame fit={fit}>
-      <circle className="f-sky-soft" cx="560" cy="70" r="110" />
-      <circle className="f-butter-soft" cx="90" cy="320" r="90" />
+      <circle className="f-sky" cx="560" cy="70" r="110" />
+      <circle className="f-butter" cx="90" cy="320" r="90" />
       {/* store front with a striped awning */}
       <rect className="f-white o-ink" x="130" y="146" width="200" height="154" rx="4" />
       {stripes.map((x, i) => (
@@ -470,11 +470,11 @@ export function CromaCover({ fit }: CoverProps) {
       <path className="f-sky-soft o-ink thin" d="M364 236 A86 86 0 0 1 427.7 152.9 L434 176.1 A62 62 0 0 0 388 236 Z" />
       <path className="f-butter-soft o-ink thin" d="M427.7 152.9 A86 86 0 0 1 493 161.5 L481 182.3 A62 62 0 0 0 434 176.1 Z" />
       <path className="f-coral-soft o-ink thin" d="M493 161.5 A86 86 0 0 1 536 236 L512 236 A62 62 0 0 0 481 182.3 Z" />
-      <path className="s-ink" d="M450 236 L398 192" />
-      <circle className="f-ink" cx="450" cy="236" r="8" />
+      <path className="s-white" d="M450 236 L398 192" />
+      <circle className="f-white" cx="450" cy="236" r="8" />
       {/* ground */}
-      <path className="s-ink" d="M110 300 H540" />
-      <path className="s-sky" d="M372 280 C410 276 440 262 470 266 S514 258 532 248" />
+      <path className="s-white" d="M110 300 H540" />
+      <path className="s-sky-soft" d="M372 280 C410 276 440 262 470 266 S514 258 532 248" />
     </CoverFrame>
   );
 }
@@ -489,8 +489,8 @@ export function MarutiSuzukiCover({ fit }: CoverProps) {
   );
   return (
     <CoverFrame fit={fit}>
-      <circle className="f-butter-soft" cx="570" cy="60" r="110" />
-      <circle className="f-sky-soft" cx="70" cy="320" r="95" />
+      <circle className="f-butter" cx="570" cy="60" r="110" />
+      <circle className="f-sky" cx="70" cy="320" r="95" />
       {/* map */}
       <rect className="f-white o-ink" x="140" y="56" width="360" height="248" rx="14" />
       <rect className="f-light" x="142" y="138" width="356" height="18" />
@@ -522,8 +522,8 @@ export function MarutiSuzukiCover({ fit }: CoverProps) {
 export function KayaClinicsCover({ fit }: CoverProps) {
   return (
     <CoverFrame fit={fit}>
-      <circle className="f-coral-soft" cx="575" cy="70" r="105" />
-      <circle className="f-butter-soft" cx="70" cy="310" r="95" />
+      <circle className="f-coral" cx="575" cy="70" r="105" />
+      <circle className="f-sky" cx="70" cy="310" r="95" />
       {/* search bar */}
       <rect className="f-white o-ink" x="130" y="52" width="250" height="44" rx="22" />
       <circle className="s-ink" cx="158" cy="72" r="9" />
@@ -543,7 +543,7 @@ export function KayaClinicsCover({ fit }: CoverProps) {
       <rect className="f-sky-soft o-ink thin" x="448" y="256" width="34" height="44" rx="3" />
       <path className="f-coral o-ink thin" d="M465 128 C443 108 445 84 465 84 C485 84 487 108 465 128Z" />
       <circle className="f-white" cx="465" cy="101" r="7" />
-      <path className="s-ink" d="M390 300 H540" />
+      <path className="s-white" d="M390 300 H540" />
     </CoverFrame>
   );
 }
@@ -555,7 +555,7 @@ export function DefaultCover({ fit }: CoverProps) {
       <path className="f-coral-soft o-ink thin" d="M250 80 L330 180 L250 280 L170 180 Z" />
       <path className="f-butter-soft o-ink thin" d="M320 70 L410 180 L320 290 L230 180 Z" />
       <path className="f-sky-soft o-ink thin" d="M390 90 L470 180 L390 270 L310 180 Z" />
-      <path className="s-ink thin" d="M390 270 C400 300 380 312 396 330" />
+      <path className="s-white thin" d="M390 270 C400 300 380 312 396 330" />
     </CoverFrame>
   );
 }

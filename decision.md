@@ -2185,6 +2185,24 @@ Past approval records below describe only what the supplied reports establish.
 - **Validation (run by Claude):** on the dev server, clicking each link opens the page (Founder's Thoughts, Case studies); `npx tsc --noEmit`, `npm test` and `npm run build` pass.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D076 — Every case study cover uses option A (ink with bright accents)
+
+- **Date:** 7 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** after D073 (five covers), the user asked on 7 November 2026 to change all the cards on /case-studies to the approved option A sample ("Ink with bright accents").
+- **Approval:** the user's request of 7 November 2026, referring to the option A sample image.
+- **Change (design only, no copy):**
+  - [covers.tsx](components/case-studies/covers.tsx): the `dark` prop on `CoverFrame` is removed; every cover is now drawn on ink. The five D073 covers are unchanged.
+  - Big circles, soft tint → full accent: Hemlock Reserve `--butter`; LumenGrowth `--sky`; Santa Barbara Trapeze `--coral`; LabTheory `--coral`; Croma `--sky` and `--butter`; Maruti Suzuki `--butter` and `--sky`; Kaya Clinics `--coral` and `--sky` (its second circle was butter-soft; sky as in the approved sample).
+  - Lines drawn straight on the background → `--warm-white`: Santa Barbara Trapeze trapeze ropes; Croma ground line, gauge needle and hub; Kaya Clinics ground line; DefaultCover's curl. Croma's speed line `--sky` → `--sky-soft`.
+  - [app/case-studies/page.tsx](app/case-studies/page.tsx): `.cs-cover .bg` is `--ink`; the `.cs-cover-dark` rule is removed.
+  - AGENTS.md and the covers.tsx header comment describe the ink background.
+- **Limitations:** on ink, the ink outline of white panels blends into the background; the panels still stand out by their fill (as in the approved sample).
+- **Files:** components/case-studies/covers.tsx, app/case-studies/page.tsx, AGENTS.md, decision.md.
+- **Validation (run by Claude):** full-page screenshot of /case-studies on the dev server at 1300 px: all 12 covers (featured Kaya Clinics and the 11 grid cards) on ink; `npx tsc --noEmit`, `npm test` and `npm run build` pass.
+- **Not tested:** Safari, Firefox.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

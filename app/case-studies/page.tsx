@@ -105,7 +105,7 @@ export default function CaseStudiesPage() {
 
           /* cover illustrations (components/case-studies/covers.tsx): brand tokens only */
           .cs-cover{position:absolute;inset:0;width:100%;height:100%;display:block}
-          .cs-cover .bg{fill:var(--pale-sage)}
+          .cs-cover .bg{fill:var(--ink)}
           .cs-cover .f-ink{fill:var(--ink)}
           .cs-cover .f-sage{fill:var(--sage)}
           .cs-cover .f-light{fill:var(--light-sage)}
@@ -124,8 +124,6 @@ export default function CaseStudiesPage() {
           .cs-cover .s-white{stroke:var(--warm-white)}
           .cs-cover .s-sky-soft{stroke:var(--sky-soft)}
           .cs-cover .s-butter{stroke:var(--butter)}
-          /* dark covers (option A, D073): ink background; lines on it are drawn in warm white */
-          .cs-cover-dark .bg{fill:var(--ink)}
           .cs-cover .o-ink{stroke:var(--ink);stroke-width:3;stroke-linejoin:round}
           .cs-cover .o-light{stroke:var(--light-sage);stroke-width:2}
           .cs-cover .thin{stroke-width:2}
