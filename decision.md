@@ -2218,6 +2218,23 @@ Past approval records below describe only what the supplied reports establish.
 - **Validation (run by Claude):** on the dev server both posts link to `https://specialists.dubsado.com/` (two links each) and no longer contain the old URLs; the new sentence renders; `npx tsc --noEmit`, `npm test` and `npm run build` pass.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D078 — Homepage Library: the five remaining topic links go to existing pages
+
+- **Date:** 9 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the live link check of 9 November 2026 found the five remaining Library topic links (`#lib-1` to `#lib-5`) lead nowhere; the Library articles were never written. After D075 and D077 they were the only broken links on the site.
+- **Approval:** the user asked on 9 November 2026 to "fix the remaining links", after reviewing the proposal table that gave each link's target (option A: link to the closest existing page).
+- **Change ([Library.tsx](components/home/Library.tsx), link targets only; wording and design unchanged):**
+  - "How selling changes when building is abundant." `#lib-1` → `/insights/founders-thoughts/when-everyone-has-ai`
+  - "SEO, answer engines and AI citations." `#lib-2` → `/services/marketing`
+  - "Where systems act, and where people should." `#lib-3` → `/insights/founders-thoughts/when-everyone-has-ai#judgment` ("The human judgment layer.")
+  - "Why growth breaks between interest and revenue." `#lib-4` → `/blog/how-to-automate-lead-follow-ups-in-gohighlevel-without-missing-leads`
+  - "The roles that matter more now." `#lib-5` → `/insights/founders-thoughts/when-everyone-has-ai#changes` ("Same title. Bigger job.")
+- **Limitations:** these are the closest existing pages, not articles written for each topic. The weakest matches are the first (the essay is about how work changes with AI, not selling) and the second (a services page, not an article). Replace the targets when Library articles exist.
+- **Files:** components/home/Library.tsx, decision.md.
+- **Validation (run by Claude):** on the dev server each link was clicked: 1, 2, 3 and 5 open the right page, and 3 and 5 land on their section just below the header; 4 is a Sanity post in the production dataset, so it is 404 on the local (development dataset) server and 200 on the live site. `npx tsc --noEmit`, `npm test` and `npm run build` pass.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

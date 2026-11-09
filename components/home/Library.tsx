@@ -17,19 +17,19 @@ export function Library() {
         </div>
         
         <div className="streams">
-          <Link href="#lib-1" className="stream" style={{ '--c': 'var(--butter)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
+          <Link href="/insights/founders-thoughts/when-everyone-has-ai" className="stream" style={{ '--c': 'var(--butter)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
             How selling changes when building is abundant.
           </Link>
-          <Link href="#lib-2" className="stream" style={{ '--c': 'var(--sky)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
+          <Link href="/services/marketing" className="stream" style={{ '--c': 'var(--sky)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
             SEO, answer engines and AI citations.
           </Link>
-          <Link href="#lib-3" className="stream" style={{ '--c': 'var(--coral)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
+          <Link href="/insights/founders-thoughts/when-everyone-has-ai#judgment" className="stream" style={{ '--c': 'var(--coral)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
             Where systems act, and where people should.
           </Link>
-          <Link href="#lib-4" className="stream" style={{ '--c': 'var(--light-sage)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
+          <Link href="/blog/how-to-automate-lead-follow-ups-in-gohighlevel-without-missing-leads" className="stream" style={{ '--c': 'var(--light-sage)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
             Why growth breaks between interest and revenue.
           </Link>
-          <Link href="#lib-5" className="stream" style={{ '--c': 'var(--sage)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
+          <Link href="/insights/founders-thoughts/when-everyone-has-ai#changes" className="stream" style={{ '--c': 'var(--sage)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
             The roles that matter more now.
           </Link>
           <Link href="/case-studies" className="stream" style={{ '--c': 'var(--ink)', fontWeight: 500, fontSize: '0.95rem' } as React.CSSProperties}>
