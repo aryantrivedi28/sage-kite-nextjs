@@ -2203,6 +2203,21 @@ Past approval records below describe only what the supplied reports establish.
 - **Not tested:** Safari, Firefox.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D077 — Dead Dubsado specialist links in two blog posts replaced with Dubsado's directory
+
+- **Date:** 9 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** a link check of the live site on 9 November 2026 found two links to Dubsado pages that now return 404: `https://www.dubsado.com/certified-dubsado-specialist` and `https://www.dubsado.com/partner-with-a-certified-specialist`. Dubsado's specialist directory is now `https://specialists.dubsado.com/` (loads; titled "Dubsado Service Partner Directory").
+- **Approval:** the user approved fixes 6 and 7 of the proposal table on 9 November 2026 ("fix 6 and 7"), including the reworded sentence.
+- **Change:**
+  - [dubsado-for-interior-designers/article.tsx](app/blog/dubsado-for-interior-designers/article.tsx): `certifiedSpecialists` → `https://specialists.dubsado.com/`. Text unchanged ("Dubsado maintains a directory of Certified Dubsado Specialists…").
+  - [dubsado-setup-services/article.tsx](app/blog/dubsado-setup-services/article.tsx): `certifiedSpecialist` → `https://specialists.dubsado.com/`. The sentence's price and guarantee claim came from the deleted page and is not on the directory, so: "…rather than Dubsado employees. Dubsado says each sets their own prices and that it doesn't guarantee service outcomes (Dubsado's page on certified specialists)." → "…rather than Dubsado employees, so prices and services vary from one to the next (Dubsado's directory of certified specialists)." Source list: "Dubsado: partner with a certified specialist" → "Dubsado: Certified Specialist Directory".
+  - `updatedAt` not changed on either post (a source link and one clause, not a meaningful edit of the article).
+- **Not changed:** the five homepage Library links that still lead nowhere (`#lib-1` to `#lib-5`).
+- **Files:** the two article.tsx files, decision.md.
+- **Validation (run by Claude):** on the dev server both posts link to `https://specialists.dubsado.com/` (two links each) and no longer contain the old URLs; the new sentence renders; `npx tsc --noEmit`, `npm test` and `npm run build` pass.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

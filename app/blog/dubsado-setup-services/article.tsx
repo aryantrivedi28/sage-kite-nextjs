@@ -18,7 +18,7 @@ function Src({ href, children }: { href: string; children: React.ReactNode }) {
 }
 
 const SRC = {
-  certifiedSpecialist: 'https://www.dubsado.com/partner-with-a-certified-specialist',
+  certifiedSpecialist: 'https://specialists.dubsado.com/',
   writingProcess: 'https://help.dubsado.com/en/articles/2894266-writing-out-your-process-in-2-0',
   setupChecklist: 'https://help.dubsado.com/en/articles/467045-the-dubsado-setup-checklist',
   formTypes: 'https://help.dubsado.com/en/articles/2880341-dubsado-form-types-and-when-to-use-them',
@@ -119,9 +119,9 @@ export default function DubsadoSetupServicesArticle() {
       </table>
       <p>
         One more thing worth knowing. Dubsado runs a Certified Specialist program, and the
-        specialists are independent small-business owners rather than Dubsado employees. Dubsado
-        says each sets their own prices and that it doesn&apos;t guarantee service outcomes (
-        <Src href={SRC.certifiedSpecialist}>Dubsado&apos;s page on certified specialists</Src>).
+        specialists are independent small-business owners rather than Dubsado employees, so prices
+        and services vary from one to the next (
+        <Src href={SRC.certifiedSpecialist}>Dubsado&apos;s directory of certified specialists</Src>).
         Certification is useful evidence that someone knows the platform. It isn&apos;t a promise
         they&apos;ll understand your business.
       </p>
@@ -974,7 +974,7 @@ export default function DubsadoSetupServicesArticle() {
           <Src href={SRC.bulkImport}>bulk import</Src>
         </li>
         <li>
-          <Src href={SRC.certifiedSpecialist}>Dubsado: partner with a certified specialist</Src>
+          <Src href={SRC.certifiedSpecialist}>Dubsado: Certified Specialist Directory</Src>
         </li>
         <li>
           <Src href={SRC.threePointO}>Dubsado 3.0 announcement</Src> and{' '}

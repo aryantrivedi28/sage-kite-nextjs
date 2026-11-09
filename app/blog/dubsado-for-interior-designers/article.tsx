@@ -29,7 +29,7 @@ const SRC = {
   paymentPlans: 'https://help.dubsado.com/en/articles/467089-payment-plans-in-2-0',
   bulkImport: 'https://help.dubsado.com/en/articles/1458403-bulk-import-a-client-list',
   setupChecklist: 'https://help.dubsado.com/en/articles/467045-the-dubsado-setup-checklist',
-  certifiedSpecialists: 'https://www.dubsado.com/certified-dubsado-specialist',
+  certifiedSpecialists: 'https://specialists.dubsado.com/',
   pricing: 'https://www.dubsado.com/pricing',
   threePointO: 'https://www.dubsado.com/blog/introducing-dubsado-three-point-o',
 };
