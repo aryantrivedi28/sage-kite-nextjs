@@ -212,7 +212,7 @@ components/case-studies/  covers.tsx: one original cover illustration per study 
                           `technical` set is drawn by TechnicalCaseStudyPage + TechNav instead: the
                           interactive layout (optional sticky section menu; Croma has none), D057, D058;
                           options `plainHero`, `odometer`, `hero.note`, `resultsSection.band` / `.visual`
-                          for Maruti Suzuki, D069; `dotnav`, `resultsSection.card` for Kaya Clinics, D072),
+                          for Maruti Suzuki, D069; `dotnav`, `resultsSection.card` for Kaya Clinics, D072; `pager` for Pune Times Mirror, D079; `pagerPlain` for Soch, D080),
                           caseStudyStyles.ts (shared CSS), blocks.tsx (reusable content and
                           sketches, RankLadder, Journey, DotGrid, PageGridSketch, BrowserFrame,
                           PurchasePath, Checklist, CountCard, NumberedSteps, LoopSketch, PhoneFrame,
@@ -226,7 +226,9 @@ components/case-studies/  covers.tsx: one original cover illustration per study 
                           NetworkAudit, NapConsistency, LandingPagePreview, ReviewLane, RoadStops,
                           ResultDials (with the shared Car.tsx), and for healthcare SEO PatientSearch,
                           PatientJourney, StepLinks, QueryBuilder, DoctorSchema, DepthSlider, LinkGraph,
-                          GrowthRing; AuditConsole (CSS-only
+                          GrowthRing, and for news SEO LeverFlow, DecayCurve, StoryTriage, OutputDial, FrontColumns,
+                          ReadinessCheck, UsersGrowth, and for ecommerce SEO ShopperSearch, RankRace, KeywordMap,
+                          FestiveLaunch, PageNetwork, ApproachSteps; AuditConsole (CSS-only
                           typed console) and CodeBlock / Tok (code samples, in blocks.tsx).
 content/founders-thoughts.ts
                           Founder's Thoughts essays, newest first. Add a new essay here
@@ -317,7 +319,7 @@ The essentials:
   The same applies to a case study's `page.tsx` (`components/case-studies/CaseStudyPage.tsx`).
 - Publish a case study without its origin, or with figures nobody reported. Results are
   "as reported" unless Sage Kite measured them. The approved exceptions are Croma (decision.md D056),
-  Maruti Suzuki (D069) and Kaya Clinics (D072): the user asked for them to match their sources, which state no origin.
+  Maruti Suzuki (D069), Kaya Clinics (D072), Pune Times Mirror (D079) and Soch (D080): the user asked for them to match their sources, which state no origin.
   Ask before adding another.
 - Use a blog `guide` id that does not match an `id` on a heading in the article.
 - Change a heading or FAQ answer without updating `guide` / `faqs` to match.

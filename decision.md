@@ -2235,6 +2235,40 @@ Past approval records below describe only what the supplied reports establish.
 - **Validation (run by Claude):** on the dev server each link was clicked: 1, 2, 3 and 5 open the right page, and 3 and 5 land on their section just below the header; 4 is a Sanity post in the production dataset, so it is 404 on the local (development dataset) server and 200 on the live site. `npx tsc --noEmit`, `npm test` and `npm run build` pass.
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D079 — Pune Times Mirror & Civic Mirror news SEO case study added (technical layout, section pager, no origin)
+
+- **Date:** 10 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the user asked on 10 November 2026 to make `PuneTimesMirror_Sage-Kite_Interactive-V2.html` a live case study.
+- **Approval:** the user chose "Publish without origin" (the source does not say who did the work) and "Keep the pager" (the source's round section pager) on 10 November 2026. Copy is kept word for word (memory rule for supplied case studies).
+- **Change:**
+  - New [app/case-studies/pune-times-mirror/](app/case-studies/pune-times-mirror/) (`study.tsx`, and `page.tsx` identical to the others), registered first in [content/case-studies/index.ts](content/case-studies/index.ts), so it is the featured card on /case-studies.
+  - Technical layout like Kaya Clinics: plain hero with the kicker, chips and the lever diagram; no breadcrumb (left out as on Croma, Maruti Suzuki and Kaya Clinics). New `technical.pager` option: [TechNav.tsx](components/case-studies/TechNav.tsx) draws the source's pager ("01 / 07 · Overview", previous / next) at the bottom centre.
+  - New demos in components/case-studies, all copy passed as props: LeverFlow (hero), DecayCurve (01 Speed), StoryTriage (02, drag-and-drop or select-then-place, plus the headline checker with the source's keyword rules), OutputDial (03, drag, arrow / Home / End keys, presets), FrontColumns (04), ReadinessCheck (05), UsersGrowth (06, count-up from 200K to 4M, bars, channels). Styles in the "news SEO demos" block of [caseStudyStyles.ts](components/case-studies/caseStudyStyles.ts), Manrope and brand tokens only (the source's Newsreader and monospace fonts and its hex values are not used).
+  - Written by Claude, not in the source: meta title "News SEO Case Study: Pune Times Mirror" (the source's was 81 characters with " | Sage Kite"); description shortened from 209 to 152 characters; the listing summary, keywords, industry, slug `pune-times-mirror`, the `results` entry (200K → 4M monthly users) and the cover (PuneTimesMirrorCover: a newspaper page and a phone feed, ink style of D076).
+  - Links: the source's "/work" ("See more work") → /case-studies; its header, footer and breadcrumb are replaced by the site's.
+  - AGENTS.md: the exceptions line names Pune Times Mirror; the component list and the `pager` option.
+- **Limitations:** no origin is stated, as approved. The demos are illustrative, as labelled in the source.
+- **Validation (run by Claude):** every text segment and aria-label of the source's `<main>` is on the built page except the breadcrumb; every demo exercised in headless Chrome (lever and surface captions, decay presets and slider, sorting incl. a wrong drop and reset, five headline types, dial keys and presets, readiness partial and complete, count-up to 4M, pager next); no horizontal scroll at 375, 768 and 1300 px; two class names that clashed with globals.css (`.u`, `.dot`) renamed. `npx tsc --noEmit`, `npm test` and `npm run build` pass; title, canonical, JSON-LD and sitemap entry checked.
+- **Not tested:** Safari, Firefox, real touch devices for drag-and-drop (select-then-place works by tap), screen readers.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
+## D080 — Soch ecommerce SEO case study added (technical layout, section pager, no origin, the source's own CTA)
+
+- **Date:** 10 November 2026.
+- **Status:** Implemented and checked locally. Not committed, pushed or deployed.
+- **Why:** the user asked on 10 November 2026, after Pune Times Mirror (D079), to make `Soch_Interactive_Case_Study.html` live too.
+- **Approval (10 November 2026):** the source is branded for Sangram Singh, an SEO consultant, not Sage Kite. Asked what the CTA should say, the user chose "Keep Sangram's details"; asked about origin, the user answered "write as written in the file you do not do anything" (the file states no origin, so none is added and nobody is named in the schema); "Keep the pager".
+- **Change:**
+  - New [app/case-studies/soch/](app/case-studies/soch/) (`study.tsx`, and `page.tsx` identical to the others), registered first in content/case-studies/index.ts (newest first), so it is now the featured card on /case-studies and Pune Times Mirror moves into the grid.
+  - Copy word for word, including the CTA: "Contact Sangram Singh for a free consultation on category pages, seasonal demand and internal linking.", with "Book a free consultation" → `mailto:shekhawatsangram96@gmail.com` and "+91 7690088700" → `tel:+917690088700`. The source's header (Sangram Singh wordmark, his section nav and email button) and footer are replaced by the site's, as on every case study; its breadcrumb is left out.
+  - New demos in components/case-studies, copy as props: ShopperSearch (hero), RankRace (01), KeywordMap (02, drag or tap-then-place), FestiveLaunch (03, slider and Play year), PageNetwork (04, link types, reachable products, "Send a shopper" along the shortest path), ApproachSteps (05). UsersGrowth now takes several bar groups (Soch has traffic and a revenue index); Pune Times Mirror updated to the new prop shape, unchanged on screen. New `technical.pagerPlain`: the pager counts "1 / 7" as in this source. Styles in the "ecommerce SEO demos" block of caseStudyStyles.ts; brand fonts and tokens only.
+  - Written by Claude: the meta description (the source has none): "How keyword mapping, stronger category pages, festive landing pages and internal linking grew Soch's organic traffic from 50K to 120K and revenue 180%."; meta title "Ecommerce SEO Case Study: Soch" (source: "Soch Ecommerce SEO: Interactive Case Study | Sangram Singh"); summary, keywords, industry, slug `soch`, the `results` entry (50K → 120K organic traffic), the cover (SochCover: a kurti on a hanger and a category page, ink style).
+- **Effects to note:** sagekite.com now shows an outside person's personal email and phone as the page's call to action, and enquiries from this page go to him, not to Sage Kite's contact form. The Article schema still names Sage Kite as author and publisher (shared template).
+- **Validation (run by Claude):** every text segment of the source's `<main>` is on the page except the breadcrumb; the metrics row's screen-reader label reads "Project highlights" (shared layout) instead of "Highlights". Every demo exercised in headless Chrome (all three hero searches, rank race 0–4 levers incl. the page 1 line, keyword map wrong / right / all / reset, festive slider at Aug, Nov, Dec and Play, network dead end, partial, full and a sent shopper, approach steps, count-up to 120K, pager). Rapid clicks in the rank race and keyword map were dropped in testing; fixed (functional state update, refs). No horizontal scroll at 375 and 1300 px. `npx tsc --noEmit`, `npm test` and `npm run build` pass; title, canonical, JSON-LD and sitemap checked.
+- **Not tested:** Safari, Firefox, real touch drag-and-drop (tap-then-place works), screen readers. The page-network labels are small on phones, as in the source.
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:

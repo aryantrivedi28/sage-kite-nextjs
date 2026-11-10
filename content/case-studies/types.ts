@@ -70,7 +70,7 @@ export interface CaseStudy {
   discipline: string;
   /**
    * Who did the work and on what basis, e.g. "Previous work by a Sage Kite delivery specialist".
-   * Required by default (AGENTS.md); leave it out only when the user has approved a study without one (Croma, D056; Maruti Suzuki, D069; Kaya Clinics, D072).
+   * Required by default (AGENTS.md); leave it out only when the user has approved a study without one (Croma, D056; Maruti Suzuki, D069; Kaya Clinics, D072; Pune Times Mirror, D079; Soch, D080).
    */
   origin?: string;
   /** Original illustration for the /case-studies card (components/case-studies/covers.tsx). Never a photo, screenshot or logo. */
@@ -101,6 +101,10 @@ export interface CaseStudy {
     plainHero?: boolean;
     odometer?: { id: string; label: string }[];
     dotnav?: { id: string; label: string }[];
+    /** The source's round pager at the bottom centre: previous / next section (Pune Times Mirror, D079; same ids as `nav`). */
+    pager?: { id: string; label: string }[];
+    /** The pager counts "1 / 7" instead of "01 / 07" (Soch, as in its source). */
+    pagerPlain?: boolean;
   };
 
   /* ── Page sections ───────────────────────────────────────────────────── */

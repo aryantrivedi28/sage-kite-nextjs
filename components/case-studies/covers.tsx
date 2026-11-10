@@ -548,6 +548,71 @@ export function KayaClinicsCover({ fit }: CoverProps) {
   );
 }
 
+/* ── Pune Times Mirror: a newspaper page and a phone feed of news cards ── */
+export function PuneTimesMirrorCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-butter" cx="575" cy="60" r="105" />
+      <circle className="f-coral" cx="70" cy="315" r="95" />
+      {/* newspaper page: masthead, headline, lead photo and columns */}
+      <rect className="f-white o-ink" x="128" y="58" width="214" height="246" rx="6" />
+      <rect className="f-ink" x="146" y="76" width="178" height="16" rx="3" />
+      <rect className="f-light" x="146" y="104" width="150" height="10" rx="5" />
+      <rect className="f-light" x="146" y="120" width="120" height="10" rx="5" />
+      <rect className="f-sky-soft" x="146" y="142" width="96" height="70" rx="4" />
+      {[150, 164, 178, 192].map((y) => <rect key={y} className="f-light" x="252" y={y} width="72" height="6" rx="3" />)}
+      {[228, 242, 256, 270, 284].map((y) => (
+        <g key={y}>
+          <rect className="f-light" x="146" y={y} width="80" height="6" rx="3" />
+          <rect className="f-light" x="238" y={y} width="86" height="6" rx="3" />
+        </g>
+      ))}
+      {/* phone with a feed of news cards; the top one is new */}
+      <rect className="f-white o-ink" x="370" y="72" width="132" height="232" rx="16" />
+      <path className="s-ink thin" d="M424 86 H448" />
+      <rect className="f-butter-soft o-ink thin" x="384" y="102" width="104" height="70" rx="8" />
+      <rect className="f-white" x="392" y="152" width="66" height="7" rx="3" />
+      <circle className="f-coral" cx="476" cy="114" r="5" />
+      {[186, 234].map((y) => (
+        <g key={y}>
+          <rect className="f-white o-ink thin" x="384" y={y} width="104" height="38" rx="8" />
+          <rect className="f-sky-soft" x="392" y={y + 8} width="22" height="22" rx="4" />
+          <rect className="f-light" x="422" y={y + 10} width="56" height="6" rx="3" />
+          <rect className="f-light" x="422" y={y + 22} width="38" height="6" rx="3" />
+        </g>
+      ))}
+    </CoverFrame>
+  );
+}
+
+/* ── Soch: a kurti on a hanger beside a category page and a festive peak ── */
+export function SochCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-coral" cx="575" cy="65" r="105" />
+      <circle className="f-sky" cx="70" cy="310" r="95" />
+      {/* hanger and kurti */}
+      <path className="s-white" d="M220 78 C220 64 240 64 240 76 C240 86 230 88 230 96" />
+      <path className="s-white" d="M230 96 L168 124 H292 Z" />
+      <path className="f-white o-ink" d="M196 120 L180 128 L156 176 L174 184 L188 158 L182 290 H278 L272 158 L286 184 L304 176 L280 128 L264 120 C258 134 242 140 230 140 C218 140 202 134 196 120 Z" />
+      <path className="f-butter" d="M184 244 H276 L277 262 H183 Z" />
+      {[204, 230, 256].map((x) => <circle key={x} className="f-coral" cx={x} cy="206" r="6" />)}
+      {/* category page: a window of product tiles */}
+      <rect className="f-white o-ink" x="336" y="96" width="186" height="198" rx="10" />
+      <path className="s-ink" d="M336 122 H522" />
+      <circle className="f-sage" cx="352" cy="109" r="4" />
+      <circle className="f-sage" cx="366" cy="109" r="4" />
+      <circle className="f-sage" cx="380" cy="109" r="4" />
+      {[[350, 136], [436, 136], [350, 214], [436, 214]].map(([x, y], i) => (
+        <g key={`${x}-${y}`}>
+          <rect className={i === 1 ? 'f-butter-soft' : 'f-sky-soft'} x={x} y={y} width="72" height="50" rx="5" />
+          <rect className="f-light" x={x} y={y + 56} width="56" height="7" rx="3" />
+        </g>
+      ))}
+    </CoverFrame>
+  );
+}
+
 /* ── Default: for a study without its own cover ────────────────────────── */
 export function DefaultCover({ fit }: CoverProps) {
   return (

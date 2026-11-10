@@ -8,12 +8,16 @@ import { useEffect, useRef, useState } from 'react';
  * with the screen) and highlights the section in view. `odometer` adds the source's floating pill in the
  * bottom-left corner with the name of the section being read and how far down the page the reader is.
  * `dotnav` adds a column of dots on the right edge of wide screens (Kaya Clinics), one per section, with its
- * name on hover or focus and the section in view filled.
+ * name on hover or focus and the section in view filled. `pager` adds the source's round pager at the bottom centre
+ * (Pune Times Mirror): previous / next buttons around "01 / 07 · Overview", the section being read.
  */
 const NO_ITEMS: { id: string; label: string }[] = [];
 
-export function TechNav({ items = NO_ITEMS, odometer = NO_ITEMS, dotnav = NO_ITEMS }: { items?: { id: string; label: string }[]; odometer?: { id: string; label: string }[]; dotnav?: { id: string; label: string }[] }) {
+const pad = (n: number) => String(n).padStart(2, '0');
+
+export function TechNav({ items = NO_ITEMS, odometer = NO_ITEMS, dotnav = NO_ITEMS, pager = NO_ITEMS, pagerPad = true }: { items?: { id: string; label: string }[]; odometer?: { id: string; label: string }[]; dotnav?: { id: string; label: string }[]; pager?: { id: string; label: string }[]; pagerPad?: boolean }) {
   const [active, setActive] = useState(items[0]?.id);
+  const [page, setPage] = useState(0);
   const [dot, setDot] = useState(dotnav[0]?.id);
   const [top, setTop] = useState(96);
   const bar = useRef<HTMLDivElement>(null);
@@ -43,6 +47,15 @@ export function TechNav({ items = NO_ITEMS, odometer = NO_ITEMS, dotnav = NO_ITE
         odoName.current.textContent = cur.label;
         odoPct.current.textContent = `${Math.round(p * 100)}%`;
       }
+      if (pager.length) {
+        // As in the source: the last section whose top is above 45% of the window.
+        let cur = 0;
+        pager.forEach((o, i) => {
+          const sec = document.getElementById(o.id);
+          if (sec && sec.getBoundingClientRect().top < window.innerHeight * 0.45) cur = i;
+        });
+        setPage(cur);
+      }
     };
     onScroll();
     window.addEventListener('resize', measure);
@@ -67,7 +80,13 @@ export function TechNav({ items = NO_ITEMS, odometer = NO_ITEMS, dotnav = NO_ITE
       dots.disconnect();
       document.documentElement.style.removeProperty('--cs-tech-offset');
     };
-  }, [items, odometer, dotnav]);
+  }, [items, odometer, dotnav, pager]);
+
+  const goTo = (i: number) => {
+    const it = pager[Math.max(0, Math.min(pager.length - 1, i))];
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.getElementById(it.id)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+  };
 
   return (
     <>
@@ -80,6 +99,13 @@ export function TechNav({ items = NO_ITEMS, odometer = NO_ITEMS, dotnav = NO_ITE
             </a>
           ))}
         </nav>
+      )}
+      {pager.length > 0 && (
+        <div className="cs-tech-pager" role="group" aria-label="Section pager">
+          <button type="button" aria-label="Previous section" disabled={page === 0} onClick={() => goTo(page - 1)}>‹</button>
+          <span aria-live="polite">{pagerPad ? `${pad(page + 1)} / ${pad(pager.length)} · ${pager[page].label}` : `${page + 1} / ${pager.length} · ${pager[page].label}`}</span>
+          <button type="button" aria-label="Next section" disabled={page === pager.length - 1} onClick={() => goTo(page + 1)}>›</button>
+        </div>
       )}
       {odometer.length > 0 && (
         <div className="cs-tech-odo" aria-hidden="true"><i></i><span ref={odoName}>{odometer[0].label}</span><b ref={odoPct}>0%</b></div>

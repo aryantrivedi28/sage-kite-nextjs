@@ -101,7 +101,7 @@ export function TechnicalCaseStudyPage({ study, jsonLd }: { study: CaseStudy; js
       <main id="main" className="cs cs-tech">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <style dangerouslySetInnerHTML={{ __html: CASE_STUDY_CSS }} />
-        <TechNav items={technical.nav} odometer={technical.odometer} dotnav={technical.dotnav} />
+        <TechNav items={technical.nav} odometer={technical.odometer} dotnav={technical.dotnav} pager={technical.pager} pagerPad={!technical.pagerPlain} />
 
         {/* Overview */}
         <section className={`cs-tech-hero${technical.plainHero ? ' plain' : ''}`} id="overview" aria-labelledby="title">
