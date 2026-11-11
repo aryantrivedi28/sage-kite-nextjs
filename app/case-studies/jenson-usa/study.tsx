@@ -1,34 +1,45 @@
 import type { CaseStudy } from '@/content/case-studies/types';
 import { JensonCover } from '@/components/case-studies/covers';
-import { DuplicateUrlFlow } from '@/components/case-studies/DuplicateUrlFlow';
-import { CategoryFixes } from '@/components/case-studies/CategoryFixes';
-import { Callout, Journey, PageGridSketch, RankLadder } from '@/components/case-studies/blocks';
+import { AuditConsole } from '@/components/case-studies/AuditConsole';
+import { AuditToggle } from '@/components/case-studies/AuditToggle';
+import { RankTracker } from '@/components/case-studies/RankTracker';
+import { CategoryBuilder } from '@/components/case-studies/CategoryBuilder';
+import { UrlConsolidation } from '@/components/case-studies/UrlConsolidation';
+import { StagePipeline } from '@/components/case-studies/StagePipeline';
+import { PositionStrips } from '@/components/case-studies/PositionStrips';
+import { CodeBlock, Tok } from '@/components/case-studies/blocks';
 
 /*
- * Source: Sage-Kite_Jenson-USA_Case-Study.html, supplied by the team.
- * Figures are as reported by the delivery specialist (Sangram Singh); they
- * were not independently verified, and the page says so.
+ * Source: JensonUSA_Sage-Kite_Interactive-Technical.html, supplied by the team (replaces the earlier
+ * Sage-Kite_Jenson-USA_Case-Study.html version). All copy is kept exactly as written in the new file (US spelling
+ * included); only the site's brand colours and font are applied. Rendered in the technical layout like Croma, whose
+ * source used the same template: kicker, chips, the audit console beside them and a progress bar; no section menu or
+ * breadcrumb (D058, D059). The site's header and footer replace the file's; "See more work" links to /case-studies.
  *
- * The source mock showed review stars on the category page's own search
- * listing. Google shows review snippets only for a specific item, not a
- * category or list (developers.google.com/search/docs/appearance/structured-data/review-snippet,
- * checked 2026-10-14), so the illustration puts the stars on product results.
+ * Kept from the live page, though the new file does not have them (D083): the practitioner (Sangram Singh, Article
+ * schema only), and the site's own meta title, description, og title, summary, keywords and cover. No `origin`,
+ * `about` or "as reported" note: the user asked for the "Delivered by Sangram Singh" block, the origin pill and the
+ * note under the metrics to be removed (D083).
+ *
+ * Figures are as reported by the delivery specialist (Sangram Singh); they were not independently verified, and since
+ * D083 the page no longer says so.
  */
 const study: CaseStudy = {
   slug: 'jenson-usa',
   client: 'Jenson USA',
-  title: 'How Jenson USA moved 120+ commercial keywords from the bottom of page one into the top 3',
+  title: 'Moving 120+ commercial keywords from the bottom of page one into the Top 3',
   seoTitle: 'Ecommerce SEO Case Study: Jenson USA',
   ogTitle: 'Jenson USA: moving 120+ commercial keywords into the top 3',
   description: 'How Jenson USA moved 120+ commercial keywords from positions 8–10 into the top 3 with category content, internal linking, URL fixes and review schema.',
   summary: 'How an online cycling retailer moved 120+ commercial keywords from the bottom of page one into the top 3 by strengthening its category pages.',
   keywords: ['ecommerce SEO case study', 'Jenson USA', 'category page optimisation', 'duplicate URL fix', 'product review schema'],
   datePublished: '2026-10-14',
+  dateModified: '2026-11-11',
   industry: 'Online cycling retail',
   discipline: 'SEO',
-  origin: 'Previous work by a Sage Kite delivery specialist',
   cover: <JensonCover />,
   practitioner: { name: 'Sangram Singh', role: 'SEO consultant' },
+  technical: { wideHeadings: true },
   highlights: ['Category page content', 'Internal linking', 'Duplicate URL fixes', 'Review schema'],
   results: [
     {
@@ -42,185 +53,276 @@ const study: CaseStudy = {
   ],
 
   hero: {
-    dek: 'Existing category pages, made strong enough to win.',
-    lede: 'Jenson USA, an online cycling retailer, had valuable category searches such as mountain bikes stuck at positions 8–10: visible, but earning very little traffic. Category page optimisation, internal linking, duplicate URL fixes and review schema moved more than 120 of those keywords into the top 3.',
+    label: 'Technical case study · Ecommerce SEO',
+    dek: 'Visible, but not chosen. Until the category pages got stronger.',
+    lede: 'Jenson USA, an online cycling retailer, had valuable commercial keywords such as mountain bikes stuck at positions 8–10: visible, but earning very little traffic. This page walks through the fixes with interactive demos you can try.',
     visual: (
-      <RankLadder
-        marker="Category page"
-        top="Positions 1–3: where clicks happen"
-        stuck="Positions 8–10: visible, but almost no traffic"
-        caption="Illustration of the shift, not measured data."
-        ariaLabel="Illustration: a category page climbing from positions 8 to 10 on page one up into the top 3"
+      <AuditConsole
+        bar="seo-audit · jenson-usa"
+        command="audit --site jenson-usa --scope category-seo"
+        rows={[
+          { area: 'rankings', detail: '120+ keywords, 8–10 → top 3', status: 'moved' },
+          { area: 'category-pages', detail: 'content + internal links', status: 'optimized' },
+          { area: 'urls', detail: 'duplicate case variants', status: 'consolidated' },
+          { area: 'schema', detail: 'product reviews', status: 'added' },
+        ]}
+        outcomes={['120+ commercial keywords in the top 3', 'strong growth in category traffic']}
+        foot="Illustrative summary of the engagement, not a live tool."
+        ariaLabel="Project summary console"
       />
     ),
     glance: [
       { label: 'Client', value: 'Jenson USA' },
-      { label: 'Industry', value: 'Online cycling retail' },
-      { label: 'Engagement', value: 'Ecommerce SEO' },
-      { label: 'Consultant', value: 'Sangram Singh' },
+      { label: 'Type', value: 'Ecommerce SEO' },
+      { label: 'Focus', value: 'Category pages' },
     ],
   },
 
   metrics: {
     items: [
-      { value: '120+', label: 'Keywords moved into the top 3', tone: 'sky' },
-      { value: '8–10 to top 3', label: 'Ranking positions', tone: 'butter' },
+      { value: '120+', label: 'Keywords moved into the Top 3', tone: 'sky' },
+      { value: '8–10 → Top 3', label: 'Ranking positions', tone: 'butter' },
       { value: 'Category pages', label: 'Primary growth lever', tone: 'coral' },
     ],
-    note: 'Figures are as reported by the delivery specialist for this engagement.',
   },
 
-  startingPoint: {
-    heading: 'Already visible in search, but not where the clicks happen',
-    content: (
-      <>
-        <p>Jenson USA sells bikes and cycling gear online. Its revenue depends heavily on category pages, the pages that answer high-intent searches like &quot;mountain bikes&quot;. These are the searches shoppers use when they are close to buying.</p>
-        <Journey
-          ariaLabel="A category search like mountain bikes comes from a shopper close to buying, and the category page answers it"
-          steps={[
-            { small: 'Shopper searches', text: '"mountain bikes"' },
-            { small: 'Intent', text: 'Close to buying' },
-            { small: 'Page that answers it', text: 'Category page' },
+  sections: [
+    {
+      id: 'diagnostics',
+      label: '01 / DIAGNOSTICS',
+      heading: 'The site was ranking, but not high enough for rankings to matter',
+      intro: 'Jenson USA\'s revenue depends heavily on category pages that answer high-intent searches like "mountain bikes". The opportunity was converting near-miss rankings into the top positions where clicks actually happen.',
+      content: (
+        <AuditToggle
+          title="Site audit: before and after"
+          buttons={{ before: 'Before', after: 'After' }}
+          groupLabel="Audit state"
+          rows={[
+            { title: 'Commercial keywords', before: 'Valuable category searches sat at positions 8–10, where click-through rates are minimal.', after: '120+ commercial keywords moved into the Top 3.', statusBefore: '8–10', statusAfter: 'Top 3' },
+            { title: 'Category content', before: 'Thin pages lacked helpful SEO content, giving search engines little reason to rank them.', after: 'Helpful, search-relevant content added to match shopper intent.', statusBefore: 'Thin', statusAfter: 'Optimized' },
+            { title: 'Category URLs', before: 'Uppercase and lowercase variations created duplicates that split ranking signals.', after: 'Duplicates resolved into a single version of each page.', statusBefore: 'Duplicates', statusAfter: 'Single version' },
+            { title: 'Review visibility', before: 'Review data wasn\'t communicated to search engines through structured markup.', after: 'Review structured data implemented.', statusBefore: 'Not marked up', statusAfter: 'Schema added' },
+            { title: 'Category traffic', before: 'The highest-value category searches were delivering almost no traffic.', after: 'Strong growth in category traffic and organic shopping visibility.', statusBefore: 'Negligible', statusAfter: 'Growing' },
+          ]}
+          note="Status labels summarize the case study findings. They are not tool scores."
+        />
+      ),
+    },
+    {
+      id: 'rankings',
+      band: 'pale',
+      label: '02 / NEAR-MISS RANKINGS',
+      heading: 'Start where the site was closest to winning',
+      intro: 'The work began with keywords already on page one, but at positions 8–10. These were faster, lower-risk wins than chasing entirely new keywords. Toggle the tracker to see the move.',
+      content: (
+        <RankTracker
+          title="Keyword position tracker"
+          buttons={{ before: 'Before', after: 'After' }}
+          groupLabel="Ranking state"
+          ariaLabel="Sample commercial keywords moving from positions 8 to 10 into positions 1 to 3"
+          axisLabel="keyword"
+          keywords={[
+            { name: 'mountain bikes', before: 9, after: 3 },
+            { name: '{{ category keyword 2 }}', before: 8, after: 2 },
+            { name: '{{ category keyword 3 }}', before: 10, after: 1 },
+            { name: '{{ category keyword 4 }}', before: 9, after: 3 },
+            { name: '{{ category keyword 5 }}', before: 8, after: 2 },
+            { name: '{{ category keyword 6 }}', before: 10, after: 1 },
+          ]}
+          stats={{ top: 'Sample keywords in Top 3:', zone: 'Zone:' }}
+          zones={{ before: 'Positions 8–10', after: 'Top 3' }}
+          captions={{
+            before: 'Before: the keywords sit at the very bottom of page one, visible but earning very little traffic.',
+            after: 'After: the same keywords sit in the Top 3, where clicks actually happen.',
+          }}
+          note="Sample keywords and exact positions are illustrative. Only the move from positions 8–10 into the Top 3 comes from the case study."
+        />
+      ),
+    },
+    {
+      id: 'category',
+      label: '03 / CATEGORY PAGE',
+      heading: 'Strengthen the pages: content, internal links, clean URLs and review schema',
+      intro: 'Rather than adding volume, the work made existing category pages stronger. Switch each layer on to build the page and see what it adds.',
+      content: (
+        <CategoryBuilder
+          title="Category page builder"
+          groupLabel="Page layers"
+          layers={[
+            {
+              key: 'content',
+              label: 'Category content',
+              caption: 'Helpful, search-relevant content gives search engines a reason to rank the page above competitors, and matches shopper intent.',
+              codeLabel: 'HTML · representative',
+              code: <><Tok t="c">{'<!-- helpful copy that matches shopper intent -->'}</Tok>{'\n<section class="category-intro">\n  <p>{{ useful, search-relevant content }}</p>\n</section>'}</>,
+            },
+            {
+              key: 'links',
+              label: 'Internal links',
+              caption: 'Internal links point authority toward the priority category pages that matter most.',
+              codeLabel: 'HTML · representative',
+              code: <>{'<nav aria-label="Related categories">\n  <a href="'}<Tok t="s">/priority-category</Tok>{'">{{ anchor }}</a>\n</nav>'}</>,
+            },
+            {
+              key: 'url',
+              label: 'Clean URL',
+              caption: 'Resolving uppercase and lowercase duplicates consolidates ranking signals into a single version of the page.',
+              codeLabel: 'Pseudo-code · representative',
+              code: <><Tok t="c"># one version per category URL</Tok>{'\nif path != path.lower():\n    redirect('}<Tok t="s">301</Tok>{', path.lower())'}</>,
+            },
+            {
+              key: 'schema',
+              label: 'Review schema',
+              caption: 'Review structured data helps search engines understand and surface review information, so listings communicate trust.',
+              codeLabel: 'JSON-LD · placeholders',
+              code: (
+                <>
+                  {'{\n  '}<Tok t="k">&quot;@type&quot;</Tok>{': '}<Tok t="s">&quot;Product&quot;</Tok>{',\n  '}
+                  <Tok t="k">&quot;aggregateRating&quot;</Tok>{': {\n    '}
+                  <Tok t="k">&quot;@type&quot;</Tok>{': '}<Tok t="s">&quot;AggregateRating&quot;</Tok>{',\n    '}
+                  <Tok t="k">&quot;ratingValue&quot;</Tok>{': '}<Tok t="s">{'"{{ reviews.avg }}"'}</Tok>{',\n    '}
+                  <Tok t="k">&quot;reviewCount&quot;</Tok>{': '}<Tok t="s">{'"{{ reviews.count }}"'}</Tok>{'\n  }\n}'}
+                </>
+              ),
+            },
+          ]}
+          wire={{
+            url: { before: 'example.com/Mountain-Bikes', after: 'example.com/mountain-bikes' },
+            badge: { before: 'Duplicate version', after: 'Single version' },
+            contentTag: 'Helpful category content',
+            linksTag: 'Internal links to priority categories',
+            links: ['Related category', 'Related category', 'Buying guide'],
+            stars: '★★★★☆ {{ rating }}',
+            cards: 3,
+          }}
+          applied="Layers applied:"
+          idle={{ caption: 'Select a layer to see what it does.', codeLabel: 'Select a layer', code: <Tok t="c">{'<!-- code appears here -->'}</Tok> }}
+          note="Wireframe and code are representative examples with placeholder values, not Jenson USA's real page or markup."
+        />
+      ),
+    },
+    {
+      id: 'urls',
+      band: 'pale',
+      label: '04 / DUPLICATE URLS',
+      heading: 'Clean the foundation: one version of every category URL',
+      intro: 'Uppercase and lowercase variations of the same category URL created duplicates that split ranking signals across multiple versions of one page. Try a variant.',
+      content: (
+        <UrlConsolidation
+          title="URL consolidation"
+          buttons={{ before: 'Before', after: 'After' }}
+          groupLabel="URL state"
+          inputLabel="URL path"
+          initialPath="/Mountain-Bikes"
+          samples={['/mountain-bikes', '/Mountain-Bikes', '/MOUNTAIN-BIKES', '/Mountain-bikes']}
+          samplesLabel="Sample variants"
+          messages={{
+            empty: 'Enter a path to test.',
+            separate: { title: 'Separate URL version', text: ' is served as its own URL, so it competes with other versions and splits ranking signals.' },
+            single: { title: 'Single version', text: ' is the one authoritative version of this page.' },
+            consolidated: { title: 'Consolidated', text: ' (single version, signals consolidated)' },
+          }}
+          code={(
+            <CodeBlock label="Pseudo-code · representative rule">
+              <Tok t="c"># one version per category URL</Tok>{'\nif path != path.lower():\n    redirect('}<Tok t="s">301</Tok>{', path.lower())'}
+            </CodeBlock>
+          )}
+          signals={{
+            ariaLabel: 'Ranking signal shared across URL versions',
+            rows: [
+              { path: '/mountain-bikes', before: '25%', after: '100%' },
+              { path: '/Mountain-Bikes', before: '25%', after: '0%' },
+              { path: '/MOUNTAIN-BIKES', before: '25%', after: '0%' },
+              { path: '/Mountain-bikes', before: '25%', after: '0%' },
+            ],
+          }}
+          captions={{
+            before: 'Before: each variant is a separate URL, so ranking signals are split.',
+            after: 'After: every variant resolves to one version, so signals consolidate.',
+          }}
+          note="Illustration with example paths and an equal-split value to show the concept, not measured data. The rule shown is representative."
+        />
+      ),
+    },
+    {
+      id: 'pipeline',
+      band: 'sky',
+      label: '05 / EXECUTION APPROACH',
+      heading: 'Small structural and content improvements, applied where they count',
+      headingBreak: 'Small structural and content',
+      intro: 'Targeting keywords already close to the top made the effort efficient: small structural and content improvements were enough to move rankings meaningfully. Select a stage, or press play.',
+      content: (
+        <StagePipeline
+          title="Fix sequence"
+          play={{ play: 'Play', pause: 'Pause' }}
+          groupLabel="Fix stage"
+          boxes={['Problem', 'Fix applied', 'Benefit']}
+          stages={[
+            { small: 'Stage 1', title: 'Locate near-miss rankings', problem: 'Valuable category searches sat at positions 8–10, where traffic impact is negligible.', fix: 'Identified high-value commercial keywords sitting just below the positions that drive traffic.', benefit: 'Faster, lower-risk wins than chasing entirely new keywords.' },
+            { small: 'Stage 2', title: 'Clean the foundation', problem: 'Uppercase and lowercase category URL variations split ranking signals.', fix: 'Fixed duplicate category URLs first.', benefit: 'Ranking signals consolidated rather than split.' },
+            { small: 'Stage 3', title: 'Strengthen the pages', problem: 'Thin category pages gave search engines little reason to rank them.', fix: 'Added category content and internal links.', benefit: 'Authority built on the pages that matter most.' },
+            { small: 'Stage 4', title: 'Enhance search presentation', problem: 'Review data wasn\'t communicated to search engines.', fix: 'Added review schema.', benefit: 'Listings communicate trust and relevance.' },
           ]}
         />
-        <p>The business already had search visibility and a broad product catalogue. The opportunity was not building presence from zero, but converting near-miss rankings into the top positions where clicks actually happen.</p>
-        <Callout title="Near-misses, not a blank page.">The work was about turning rankings that already existed into rankings that earn clicks.</Callout>
-      </>
-    ),
-  },
-
-  problem: {
-    heading: 'The site was ranking, but not high enough for rankings to matter',
-    items: [
-      { title: 'Valuable keywords stuck at positions 8–10', text: 'Category-level searches with real commercial value sat at the very bottom of page one, where click-through rates are minimal and traffic impact is negligible.' },
-      { title: 'Thin category pages', text: 'Category pages lacked helpful SEO content, giving search engines little reason to rank them above competitors for competitive terms.' },
-      { title: 'Duplicate category URLs', text: 'Uppercase and lowercase variations of the same category URLs created duplicates that split ranking signals across multiple versions of one page.' },
-      { title: 'Limited review visibility in search', text: 'Product review data wasn\'t being communicated to search engines through structured markup.' },
-    ],
-    visual: (
-      <DuplicateUrlFlow
-        title="What duplicate URLs do to ranking signals"
-        urls={[
-          { url: '/Mountain-Bikes', note: 'Uppercase version of the category URL' },
-          { url: '/mountain-bikes', note: 'Lowercase version of the same page' },
-        ]}
-        target="Ranking signals"
-        states={{ before: 'Split across two versions', after: 'Consolidated into one version' }}
-        captions={{
-          before: 'Before: uppercase and lowercase versions of the same category URL each held part of the page\'s ranking signals, so neither could compete as strongly as one page.',
-          after: 'After: the duplicates are resolved and every signal points to a single version of the category page.',
-        }}
-        ariaLabel="Diagram: two URL versions of one category page either split ranking signals between them, or consolidate them into one version. Use the Before and After buttons to switch."
-      />
-    ),
-    pullQuote: 'The site was doing enough to appear, but not enough to be chosen, and the highest-value category searches were delivering almost no traffic.',
-  },
-
-  approach: {
-    label: 'Execution approach',
-    heading: 'Start where the site was closest to winning',
-    intro: 'The engagement began by identifying where the site was closest to winning: keywords already ranking on page one, but at positions 8–10. These were faster, lower-risk wins than chasing entirely new keywords. Rather than adding volume, the work focused on making existing category pages stronger and removing the structural issues holding them back.',
-    steps: [
-      { title: 'Locate near-miss rankings', text: 'Identify high-value commercial keywords sitting just below the positions that drive traffic.' },
-      { title: 'Clean the foundation', text: 'Fix duplicate category URLs first, so ranking signals are consolidated rather than split.' },
-      { title: 'Strengthen the pages', text: 'Add category content and internal links to build authority on the pages that matter most.' },
-      { title: 'Enhance search presentation', text: 'Add review schema so listings communicate trust and relevance.' },
-    ],
-    note: 'Targeting keywords already close to the top made the effort efficient: small structural and content improvements were enough to move rankings meaningfully.',
-  },
-
-  delivered: {
-    label: 'Solution delivered',
-    heading: 'Four fixes to one category page',
-    intro: 'Switch each fix on to see what it changed on a category page and in how it appears in search.',
-    content: (
-      <CategoryFixes
-        pageTitle="Mountain bikes"
-        urls={{ duplicate: '/Mountain-Bikes', kept: '/mountain-bikes' }}
-        domain="example.com"
-        fixes={{
-          content: {
-            title: 'Category page optimisation',
-            text: 'Added helpful, search-relevant content to category pages so they better matched shopper intent.',
-            message: 'Helpful category content added, so the page better matches what shoppers are looking for.',
-          },
-          links: {
-            title: 'Internal linking for category authority',
-            text: 'Implemented internal linking to strengthen the authority of priority category pages.',
-            message: 'Internal links added, passing authority to this priority category page and guiding shoppers onward.',
-          },
-          url: {
-            title: 'Duplicate URL fix',
-            text: 'Resolved the duplicate category URLs caused by uppercase and lowercase variations, consolidating ranking signals into a single version.',
-            message: 'Duplicate URL resolved: one version of the page now holds all the ranking signals.',
-          },
-          review: {
-            title: 'Product review schema',
-            text: 'Implemented review structured data to help search engines understand and surface review information.',
-            message: 'Review markup added to the products, so search engines can read their review information and show it on product results.',
-          },
-        }}
-        messages={{
-          initial: 'Nothing switched on yet. This is a thin category page with two URL versions and no review markup.',
-          all: 'All four fixes on: richer content, internal links, one clean URL and review markup.',
-          removed: 'Removed. The page goes back to how it was before this fix.',
-        }}
-        note="Illustration with placeholder content, not Jenson USA's actual pages."
-      />
-    ),
-  },
+      ),
+    },
+  ],
 
   resultsSection: {
-    label: 'Key outcomes and impact',
-    heading: 'From the bottom of page one to where clicks happen',
+    label: '06 / RESULTS',
+    heading: '120+ commercial keywords moved into the Top 3',
+    card: (
+      <PositionStrips
+        value="120+"
+        strips={[
+          { title: 'Before: positions 8–10', ariaLabel: 'Ranking positions before: 8 to 10 highlighted out of 10', on: [8, 9, 10] },
+          { title: 'After: Top 3', ariaLabel: 'Ranking positions after: 1 to 3 highlighted out of 10', on: [1, 2, 3], after: true },
+        ]}
+        note="Illustration of the first ten search positions. Highlighted positions show where the keywords ranked before and after."
+      />
+    ),
     points: [
+      { title: '120+ keywords in the Top 3', text: 'Commercial keywords moved up from positions 8–10.' },
       { title: 'Strong growth in category traffic', text: 'High-value category searches began delivering meaningful clicks.' },
       { title: 'Improved organic shopping visibility', text: 'Supported by cleaner URL signals and review markup.' },
     ],
   },
 
   changes: {
-    label: 'How this made life easier',
-    heading: 'Wins built on pages the site already had',
+    label: '07 / IMPACT',
+    heading: 'Wins built on assets the site already had',
     items: [
-      { icon: 'lift', title: 'Wins built on existing assets', text: 'The improvement came from strengthening pages the site already had, rather than requiring a large new content programme.' },
-      { icon: 'merge', title: 'Consolidated ranking signals', text: 'Fixing duplicate URLs meant every category page had one clear, authoritative version, removing an ongoing source of diluted performance.' },
-      { icon: 'grid', title: 'A repeatable model for other categories', text: 'The same approach of content, internal links, clean URLs and schema can be applied to additional categories as the catalogue grows.' },
-      { icon: 'target', title: 'Clear focus on what drives revenue', text: 'Prioritising commercial category keywords kept effort aligned with searches that sit closest to purchase.' },
+      { icon: 'lift', title: 'Wins built on existing assets', text: 'The improvement came from strengthening pages the site already had, rather than a large new content program.' },
+      { icon: 'merge', title: 'Consolidated ranking signals', text: 'Every category page now has one clear, authoritative version, removing an ongoing source of diluted performance.' },
+      { icon: 'grid', title: 'A repeatable model for other categories', text: 'The same approach of content, internal links, clean URLs and schema can be applied to more categories as the catalog grows.' },
+      { icon: 'target', title: 'Clear focus on what drives revenue', text: 'Prioritizing commercial category keywords kept effort aligned with searches closest to purchase.' },
     ],
   },
 
   methods: {
-    label: 'Tools and tech used',
-    heading: 'The methods behind the climb',
+    label: '08 / STACK',
+    heading: 'Tools and tech used',
     items: [
-      { title: 'Keyword ranking analysis', text: 'Identifying positions 8–10 opportunities' },
-      { title: 'Category page SEO content optimisation', text: 'Helpful content matched to shopper intent' },
-      { title: 'Internal linking strategy', text: 'Authority built on priority category pages' },
-      { title: 'Canonical and duplicate URL management', text: 'One clear version of every category page' },
-      { title: 'Product review schema markup', text: 'Review data communicated through structured markup' },
+      { title: 'Keyword ranking analysis (identifying positions 8–10 opportunities)' },
+      { title: 'Category page SEO content optimization' },
+      { title: 'Internal linking strategy' },
+      { title: 'Canonical and duplicate URL management' },
+      { title: 'Product review schema markup' },
     ],
   },
 
   takeaway: {
-    heading: 'Ecommerce growth doesn\'t always require new pages. Sometimes it requires making existing category pages strong enough to win.',
-    versus: {
-      before: { title: 'More pages', text: 'Every new page starts from the bottom and has to earn its position.', visual: <PageGridSketch variant="more" /> },
-      after: { title: 'Stronger existing pages', text: 'Pages that already rank near the top need a push, not a rebuild.', visual: <PageGridSketch variant="stronger" /> },
-    },
-    body: 'This project shows that ecommerce growth can come from making the category pages a store already has strong enough to win. For any retailer with keywords ranking just below the traffic threshold, this is a high-leverage, practical approach.',
-    fit: ['Ecommerce retailers', 'Keywords ranking just below the traffic threshold', 'Category-led catalogues'],
-  },
-
-  about: {
-    heading: 'Delivered by Sangram Singh, SEO consultant',
-    text: 'Previous work by Sangram Singh, SEO consultant at Sage Kite. Sangram led this engagement for Jenson USA, from finding the near-miss keywords through the category content, internal linking, URL clean-up and review schema described above. It shows how Sage Kite’s consultants approach ecommerce search: find where a site is closest to winning, fix the foundation, and strengthen the pages that matter most. Results are as reported by Sangram for this engagement.',
+    label: 'Key takeaway',
+    heading: 'Ecommerce growth doesn\'t always require new pages',
+    body: 'Sometimes it requires making existing category pages strong enough to win. For any retailer with keywords ranking just below the traffic threshold, this is a high-leverage, practical approach.',
+    link: { label: 'See more work', href: '/case-studies' },
   },
 
   cta: {
-    heading: 'Ranking on page one but not getting the clicks?',
-    text: 'Book a discovery call and we\'ll look at which of your pages are closest to winning, and what is holding them back.',
-    secondary: { label: 'See our SEO and marketing services', href: '/services/marketing' },
+    heading: 'Are your best keywords stuck on the edge of page one?',
+    text: 'Contact Sage Kite and book a free consultation. We\'ll look at where your category pages can win more in search.',
+    primary: { label: 'Book a free consultation', href: '/contact' },
+    secondary: { label: 'Contact Sage Kite', href: '/contact' },
   },
 };
 

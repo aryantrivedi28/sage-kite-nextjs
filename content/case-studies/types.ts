@@ -70,7 +70,7 @@ export interface CaseStudy {
   discipline: string;
   /**
    * Who did the work and on what basis, e.g. "Previous work by a Sage Kite delivery specialist".
-   * Required by default (AGENTS.md); leave it out only when the user has approved a study without one (Croma, D056; Maruti Suzuki, D069; Kaya Clinics, D072; Pune Times Mirror, D079; Soch, D080).
+   * Required by default (AGENTS.md); leave it out only when the user has approved a study without one (Croma, D056; Maruti Suzuki, D069; Kaya Clinics, D072; Pune Times Mirror, D079; Soch, D080; Industrybuying, D082; Jenson USA, D083).
    */
   origin?: string;
   /** Original illustration for the /case-studies card (components/case-studies/covers.tsx). Never a photo, screenshot or logo. */
@@ -105,6 +105,13 @@ export interface CaseStudy {
     pager?: { id: string; label: string }[];
     /** The pager counts "1 / 7" instead of "01 / 07" (Soch, as in its source). */
     pagerPlain?: boolean;
+    /**
+     * Results in a plain band of their own, impact and stack in a pale band after them, and the takeaway and CTA on a
+     * plain band (Industrybuying, as in its source). Without it, see `resultsSection.band`.
+     */
+    impactBand?: 'pale';
+    /** Section headings may use the full content width instead of 820px, so they fit on one line on desktop (Industrybuying). */
+    wideHeadings?: boolean;
   };
 
   /* ── Page sections ───────────────────────────────────────────────────── */
@@ -159,6 +166,10 @@ export interface CaseStudy {
     label: string;
     heading: string;
     intro?: string;
+    /** Technical layout only: on screens 760px and wider, start a new line in the heading after this text (Jenson USA 05, as in its source). */
+    headingBreak?: string;
+    /** Technical layout only: a boxed line under the intro, shown as "<label> <text>" (Industrybuying's "In plain words:"). */
+    plain?: { label: string; text: string };
     content: ReactNode;
     /** Background in the technical layout. Defaults to none. (The standard layout alternates pale bands.) */
     band?: 'pale' | 'sky';
@@ -207,7 +218,13 @@ export interface CaseStudy {
     items: { icon: ChangeIconKind; title: string; text: string }[];
   };
   /** `text` is optional: leave it out for a plain list of tools. */
-  methods?: { label?: string; heading: string; items: { title: string; text?: string }[] };
+  methods?: {
+    label?: string;
+    heading: string;
+    items: { title: string; text?: string }[];
+    /** Technical layout only: start a new row of chips after this many items on wide screens (Industrybuying: 3, as in its source). */
+    breakAfter?: number;
+  };
   takeaway?: {
     /** Eyebrow above the heading. Defaults to "Takeaway". */
     label?: string;

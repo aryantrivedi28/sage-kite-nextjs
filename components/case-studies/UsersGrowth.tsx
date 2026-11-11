@@ -7,10 +7,11 @@ const cssVars = (v: Record<string, string>) => v as React.CSSProperties;
 const fmt = (v: number) => (v >= 1e6 ? `${(v / 1e6).toFixed(1)}M` : `${Math.round(v / 1e3)}K`);
 
 export interface UsersGrowthProps {
-  from: number;
-  to: number;
+  /** Leave both out to show `toLabel` without counting (Industrybuying's "+40%"). */
+  from?: number;
+  to?: number;
   /** Text shown at the start and at the end of the count, e.g. "200K" and "4M". */
-  fromLabel: string;
+  fromLabel?: string;
   toLabel: string;
   /** One or more bar groups, each with its title (e.g. "Monthly users") and before/after bars. */
   groups: { title: string; ariaLabel: string; bars: { label: string; value: string; width: number; after?: boolean }[] }[];
@@ -25,7 +26,8 @@ export interface UsersGrowthProps {
 export function UsersGrowth({ from, to, fromLabel, toLabel, groups, channels, note }: UsersGrowthProps) {
   const box = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
-  const [shown, setShown] = useState(fromLabel);
+  const counts = from !== undefined && to !== undefined;
+  const [shown, setShown] = useState(counts ? fromLabel ?? toLabel : toLabel);
 
   useEffect(() => {
     const el = box.current;
@@ -36,6 +38,7 @@ export function UsersGrowth({ from, to, fromLabel, toLabel, groups, channels, no
       if (!es.some((e) => e.isIntersecting)) return;
       io.disconnect();
       setInView(true);
+      if (from === undefined || to === undefined) return;
       let start: number | null = null;
       const step = (t: number) => {
         if (start === null) start = t;

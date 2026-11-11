@@ -27,6 +27,7 @@
  * ─────────────────────────────────────────────────────────────────────────
  */
 import type { CaseStudy } from './types';
+import industrybuying from '@/app/case-studies/industrybuying/study';
 import soch from '@/app/case-studies/soch/study';
 import puneTimesMirror from '@/app/case-studies/pune-times-mirror/study';
 import kayaClinics from '@/app/case-studies/kaya-clinics/study';
@@ -45,7 +46,7 @@ import jivaAyurveda from '@/app/case-studies/jiva-ayurveda/study';
 export * from './types';
 
 /** Newest first. */
-export const caseStudies: CaseStudy[] = [soch, puneTimesMirror, kayaClinics, marutiSuzuki, croma, hemlockReserve, lumenGrowth, santaBarbaraTrapeze, labTheory, getDaily, sampleSale260, esma, jensonUsa, jivaAyurveda];
+export const caseStudies: CaseStudy[] = [industrybuying, soch, puneTimesMirror, kayaClinics, marutiSuzuki, croma, hemlockReserve, lumenGrowth, santaBarbaraTrapeze, labTheory, getDaily, sampleSale260, esma, jensonUsa, jivaAyurveda];
 
 export const CASE_STUDIES_PATH = '/case-studies';
 export const caseStudyPath = (slug: string) => `${CASE_STUDIES_PATH}/${slug}`;

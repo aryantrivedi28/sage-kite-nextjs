@@ -1,4 +1,5 @@
 import type React from 'react';
+import { Fragment } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -12,12 +13,15 @@ function Ribbon() {
   return <span className="cs-tech-ribbon" aria-hidden="true"><i></i><i></i><i></i></span>;
 }
 
-function Head({ id, label, heading, intro }: { id?: string; label: string; heading: string; intro?: string }) {
+function Head({ id, label, heading, intro, plain, breakAfter }: { id?: string; label: string; heading: string; intro?: string; plain?: { label: string; text: string }; breakAfter?: string }) {
+  const at = breakAfter ? heading.indexOf(breakAfter) : -1;
+  const cut = at < 0 ? -1 : at + breakAfter!.length;
   return (
     <div className="cs-tech-head">
       <p className="cs-tech-sec">{label}</p>
-      <h2 id={id}>{heading}</h2>
+      <h2 id={id}>{cut < 0 ? heading : <>{heading.slice(0, cut).trimEnd()}<br className="cs-tech-br" /> {heading.slice(cut).trimStart()}</>}</h2>
       {intro && <p className="cs-tech-lede">{intro}</p>}
+      {plain && <p className="cs-tech-pw"><b>{plain.label}</b> {plain.text}</p>}
     </div>
   );
 }
@@ -40,8 +44,13 @@ function Methods({ methods }: { methods: NonNullable<CaseStudy['methods']> }) {
   return (
     <div className="cs-tech-more">
       <Head label={methods.label ?? 'Tools and methods'} heading={methods.heading} />
-      <ul className="cs-tech-tools">
-        {methods.items.map((m) => <li key={m.title}>{m.title}{m.text && <span> · {m.text}</span>}</li>)}
+      <ul className={`cs-tech-tools${methods.breakAfter ? ' has-br' : ''}`}>
+        {methods.items.map((m, i) => (
+          <Fragment key={m.title}>
+            <li>{m.title}{m.text && <span> · {m.text}</span>}</li>
+            {methods.breakAfter === i + 1 && i + 1 < methods.items.length && <li className="cs-tech-tools-br" aria-hidden="true"></li>}
+          </Fragment>
+        ))}
       </ul>
     </div>
   );
@@ -98,7 +107,7 @@ export function TechnicalCaseStudyPage({ study, jsonLd }: { study: CaseStudy; js
   return (
     <>
       <Header />
-      <main id="main" className="cs cs-tech">
+      <main id="main" className={`cs cs-tech${technical.wideHeadings ? ' cs-tech-wide' : ''}`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <style dangerouslySetInnerHTML={{ __html: CASE_STUDY_CSS }} />
         <TechNav items={technical.nav} odometer={technical.odometer} dotnav={technical.dotnav} pager={technical.pager} pagerPad={!technical.pagerPlain} />
@@ -151,20 +160,20 @@ export function TechnicalCaseStudyPage({ study, jsonLd }: { study: CaseStudy; js
         {sections?.map((sec) => (
           <section key={sec.id} id={sec.id} className={`cs-tech-band${sec.band ? ` ${sec.band}` : ''}`} aria-labelledby={`${sec.id}-title`}>
             <div className="wrap">
-              <Head id={`${sec.id}-title`} label={sec.label} heading={sec.heading} intro={sec.intro} />
+              <Head id={`${sec.id}-title`} label={sec.label} heading={sec.heading} intro={sec.intro} plain={sec.plain} breakAfter={sec.headingBreak} />
               {sec.content}
             </div>
           </section>
         ))}
 
         {/* Results, impact and stack: one plain band (Croma), or results in a band of their own (resultsSection.band) */}
-        {resultsSection?.band ? (
+        {resultsSection?.band || technical.impactBand ? (
           <>
-            <section className={`cs-tech-band ${resultsSection.band}`} id="results" aria-labelledby="results-title">
+            <section className={`cs-tech-band${resultsSection?.band ? ` ${resultsSection.band}` : ''}`} id="results" aria-labelledby="results-title">
               <div className="wrap">{results}</div>
             </section>
             {(changes || methods) && (
-              <section className="cs-tech-band" aria-labelledby={changes ? 'impact-title' : undefined}>
+              <section className={`cs-tech-band${technical.impactBand ? ` ${technical.impactBand}` : ''}`} aria-labelledby={changes ? 'impact-title' : undefined}>
                 <div className="wrap">
                   {changes && <Changes changes={changes} first />}
                   {methods && <Methods methods={methods} />}
@@ -183,7 +192,7 @@ export function TechnicalCaseStudyPage({ study, jsonLd }: { study: CaseStudy; js
         )}
 
         {/* Takeaway, origin and CTA */}
-        <section className="cs-tech-band pale" aria-labelledby={takeaway ? 'takeaway-title' : 'cta-title'}>
+        <section className={`cs-tech-band${technical.impactBand ? '' : ' pale'}`} aria-labelledby={takeaway ? 'takeaway-title' : 'cta-title'}>
           <div className="wrap">
             {takeaway && (
               <div className="cs-tech-panel">

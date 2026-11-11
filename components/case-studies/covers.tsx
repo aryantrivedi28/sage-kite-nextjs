@@ -614,6 +614,36 @@ export function SochCover({ fit }: CoverProps) {
 }
 
 /* ── Default: for a study without its own cover ────────────────────────── */
+/** Industrybuying: duplicate addresses merging into one product page (a crate), with its sitemaps below. */
+export function IndustrybuyingCover({ fit }: CoverProps) {
+  const pills = [104, 148, 192, 236];
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-butter" cx="572" cy="68" r="105" />
+      <circle className="f-coral" cx="72" cy="308" r="95" />
+      {/* duplicate addresses, each on a dashed line into the page */}
+      {pills.map((y) => (
+        <g key={y}>
+          <path className="s-white dash" d={`M232 ${y + 13} L300 186`} />
+          <rect className="f-coral-soft" x="128" y={y} width="104" height="26" rx="13" />
+          <rect className="f-white" x="142" y={y + 10} width="56" height="6" rx="3" />
+        </g>
+      ))}
+      {/* the one product page: a crate */}
+      <Window x={300} y={100} w={190} h={172} />
+      <rect className="f-butter-soft o-ink thin" x="350" y="156" width="90" height="78" rx="4" />
+      <path className="s-ink thin" d="M350 176 H440" />
+      <rect className="f-butter o-ink thin" x="386" y="156" width="18" height="20" />
+      <circle className="f-sky" cx="490" cy="100" r="22" />
+      <path className="s-white" d="M480 100 L488 108 L501 92" />
+      {/* sitemaps by page type */}
+      {[['f-sky-soft', 300], ['f-butter-soft', 370], ['f-coral-soft', 440]].map(([c, x]) => (
+        <rect key={c} className={String(c)} x={x} y="288" width="50" height="22" rx="4" />
+      ))}
+    </CoverFrame>
+  );
+}
+
 export function DefaultCover({ fit }: CoverProps) {
   return (
     <CoverFrame fit={fit}>
