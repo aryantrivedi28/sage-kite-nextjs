@@ -189,7 +189,7 @@ export interface CaseStudy {
     label?: string;
     heading: string;
     points?: { title: string; text: string }[];
-    /** Technical layout only: a graphic above the points (e.g. <ResultDials />), used when there is no before/after figure. */
+    /** Technical layout only: a graphic above the points (e.g. <ResultGauges />), used when there is no before/after figure. */
     visual?: ReactNode;
     /** Technical layout only: drawn in the results card beside the points instead of the before/after bars (e.g. <GrowthRing />). */
     card?: ReactNode;

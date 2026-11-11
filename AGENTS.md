@@ -212,7 +212,7 @@ components/case-studies/  covers.tsx: one original cover illustration per study 
                           `technical` set is drawn by TechnicalCaseStudyPage + TechNav instead: the
                           interactive layout (optional sticky section menu; Croma has none), D057, D058;
                           options `plainHero`, `odometer`, `hero.note`, `resultsSection.band` / `.visual`
-                          for Maruti Suzuki, D069; `dotnav`, `resultsSection.card` for Kaya Clinics, D072; `pager` for Pune Times Mirror, D079; `pagerPlain` for Soch, D080),
+                          first made for Maruti Suzuki, D069 (`odometer` and `hero.note` unused since D081); `dotnav`, `resultsSection.card` for Kaya Clinics, D072; `pager` for Pune Times Mirror, D079; `pagerPlain` for Soch, D080),
                           caseStudyStyles.ts (shared CSS), blocks.tsx (reusable content and
                           sketches, RankLadder, Journey, DotGrid, PageGridSketch, BrowserFrame,
                           PurchasePath, Checklist, CountCard, NumberedSteps, LoopSketch, PhoneFrame,
@@ -222,9 +222,9 @@ components/case-studies/  covers.tsx: one original cover illustration per study 
                           CategoryFixes, MigrationFlow, ScreenshotTabs, DashboardToggle,
                           CheckoutFixFlow, LayerStack, EmailToggle, PdpToggle, RtoFlow,
                           SmartCollections, Countdown, PricingDemo, AuditToggle, LcpWaterfall,
-                          LcpSlider, SchemaToggle, RobotsTester, StagePipeline, and for local SEO ShowroomMap,
-                          NetworkAudit, NapConsistency, LandingPagePreview, ReviewLane, RoadStops,
-                          ResultDials (with the shared Car.tsx), and for healthcare SEO PatientSearch,
+                          LcpSlider, SchemaToggle, RobotsTester, StagePipeline, and for local SEO NetworkMap and
+                          NetworkHeatmap (DealerNetwork.tsx, one shared state), NapListings, LocalPageBuilder,
+                          ReviewWhatIf, RoadDrive, ResultGauges (with HalfGauge), and for healthcare SEO PatientSearch,
                           PatientJourney, StepLinks, QueryBuilder, DoctorSchema, DepthSlider, LinkGraph,
                           GrowthRing, and for news SEO LeverFlow, DecayCurve, StoryTriage, OutputDial, FrontColumns,
                           ReadinessCheck, UsersGrowth, and for ecommerce SEO ShopperSearch, RankRace, KeywordMap,
@@ -321,6 +321,8 @@ The essentials:
   "as reported" unless Sage Kite measured them. The approved exceptions are Croma (decision.md D056),
   Maruti Suzuki (D069), Kaya Clinics (D072), Pune Times Mirror (D079) and Soch (D080): the user asked for them to match their sources, which state no origin.
   Ask before adding another.
+- Port a supplied HTML's styles from only the last rule for a selector. Earlier rules for the same selector still
+  apply where the later one is silent (Maruti's NAP rows lost their box, D081): compare computed styles in the browser.
 - Use a blog `guide` id that does not match an `id` on a heading in the article.
 - Change a heading or FAQ answer without updating `guide` / `faqs` to match.
 - Add Tailwind, CSS frameworks or component libraries. (Tiptap in the blog studio is the one approved exception, D049.)

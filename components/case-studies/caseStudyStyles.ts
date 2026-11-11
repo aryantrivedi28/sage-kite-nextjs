@@ -906,11 +906,7 @@ export const CASE_STUDY_CSS = `
           .cs-tech-odo i{display:block;width:8px;height:8px;border-radius:50%;background:var(--coral)}
           .cs-tech-odo b{color:var(--butter);font-variant-numeric:tabular-nums}
 
-          /* local SEO demos (Maruti Suzuki: ShowroomMap, NetworkAudit, NapConsistency, LandingPagePreview, ReviewLane, RoadStops, ResultDials) */
-          .cs-car .body{fill:var(--coral);stroke:var(--ink);stroke-width:1.4;stroke-linejoin:round}
-          .cs-car .win{fill:var(--sky-soft)}
-          .cs-car .wheel{fill:var(--ink)}
-          .cs-car .hub{fill:var(--warm-white)}
+          /* shared demo controls (first written for Maruti Suzuki; .cs-lp-side and .cs-why are used by DepthSlider and QueryBuilder) */
           .cs-ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
           .cs-ctl .btn{min-height:44px;padding:10px 20px;font-size:.92rem}
           .cs-ctl .btn:disabled{opacity:.5;cursor:default;transform:none}
@@ -919,94 +915,9 @@ export const CASE_STUDY_CSS = `
           .cs-stats b{font-size:1rem;font-variant-numeric:tabular-nums}
           .cs-chips-on button[aria-pressed="true"]{background:var(--ink);color:var(--warm-white);border-color:var(--ink)}
 
-          .cs-map{background:var(--pale-sage);border:1.5px solid var(--ink);border-radius:14px;overflow:hidden;box-shadow:8px 8px 0 var(--butter-soft);margin-right:8px}
-          .cs-map svg{display:block;width:100%;height:auto}
-          .cs-map .bg{fill:var(--pale-sage)}
-          .cs-map .blk{fill:var(--warm-white);opacity:.7}
-          .cs-map .rd{fill:none;stroke:var(--warm-white);stroke-width:18;stroke-linecap:round}
-          .cs-map .you{fill:var(--sky);stroke:var(--ink);stroke-width:2}
-          .cs-pin{cursor:pointer;outline:none}
-          .cs-pin .o{fill:var(--coral);stroke:var(--ink);stroke-width:2;transition:fill 250ms}
-          .cs-pin.on .o{fill:var(--butter)}
-          .cs-pin:focus-visible .o{stroke-width:4}
-          .cs-pin .hole{fill:var(--warm-white)}
-          .cs-pin text{font:700 10px var(--sans);fill:var(--ink);text-anchor:middle;pointer-events:none}
-          .cs-map-ui{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--warm-white);border-top:1.5px solid var(--ink)}
-          .cs-map-info{flex:1 1 200px;font-size:.84rem;font-weight:600;color:var(--ink)}
-
-          .cs-net{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-          .cs-dl{font:inherit;text-align:left;padding:12px;border-radius:8px;border:1.5px solid var(--light-sage);background:var(--warm-white);cursor:pointer;display:grid;gap:8px;color:var(--ink);transition:border-color var(--t) var(--ease),background 300ms,transform var(--t) var(--ease)}
-          .cs-dl b{font-size:.86rem}
-          .cs-dl.scan{border-color:var(--ink);transform:translateY(-3px)}
-          .cs-dl.fixed{background:color-mix(in srgb,var(--sky-soft) 45%,var(--warm-white));border-color:var(--sky)}
-          .cs-dl-tags{display:flex;flex-wrap:wrap;gap:5px}
-          .cs-dl-tags span{font-size:.66rem;font-weight:700;padding:4px 6px;border-radius:4px;background:var(--pale-sage);color:var(--sage);transition:background 250ms}
-          .cs-dl-tags span.bad{background:var(--coral-soft);color:var(--ink)}
-          .cs-dl-tags span.ok{background:var(--sky-soft);color:var(--ink)}
-
-          .cs-nap-split{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:20px;align-items:start}
-          .cs-nap,.cs-nap-rows{display:grid;gap:10px}
-          .cs-nap-head,.cs-nap-row{display:grid;grid-template-columns:150px minmax(0,1fr) minmax(0,1.5fr) minmax(0,1fr);gap:8px;align-items:center}
-          .cs-nap-head{padding:0 14px;font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--sage)}
-          .cs-nap-row{padding:14px;border:1px solid var(--light-sage);border-radius:8px;background:color-mix(in srgb,var(--pale-sage) 40%,var(--warm-white))}
-          .cs-nap-row > b{font-size:.8rem;color:var(--ink)}
-          .cs-cell{font:600 .88rem var(--sans);padding:10px 12px;border-radius:6px;text-align:left;color:var(--ink);border:1.5px solid transparent;min-height:42px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;transition:background 300ms}
-          .cs-cell.ok{background:var(--sky-soft)}
-          .cs-cell.bad{background:var(--coral-soft);border:1.5px dashed var(--ink);cursor:pointer}
-          .cs-cell small{margin-left:auto;font-size:.68rem;font-weight:700;text-transform:uppercase}
-          .cs-gauge-wrap{display:grid;gap:10px;justify-items:center;text-align:center}
-          .cs-gauge{width:min(260px,100%);height:auto}
-          .cs-gauge .tr{fill:none;stroke:var(--pale-sage);stroke-width:16;stroke-linecap:round}
-          .cs-gauge .fg{fill:none;stroke:var(--sky);stroke-width:16;stroke-linecap:round;stroke-dasharray:251.3;transition:stroke-dashoffset 700ms var(--ease)}
-          .cs-gauge text{font:700 22px var(--sans);fill:var(--ink);text-anchor:middle}
-          .cs-gauge .hub,.cs-dial .hub{fill:var(--ink)}
-          .cs-needle{stroke:var(--ink);stroke-width:4;stroke-linecap:round;transform-origin:100px 100px;transform:rotate(var(--a,-90deg));transition:transform 700ms var(--ease)}
-          .cs-gauge-lab{font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:color-mix(in srgb,var(--sky) 65%,var(--ink))}
-          .cs-gauge-wrap .cs-sim-caption{min-height:4em}
-
-          .cs-lp{border:1.5px solid var(--ink);border-radius:10px;background:color-mix(in srgb,var(--pale-sage) 40%,var(--warm-white));overflow:hidden;min-width:0}
-          .cs-lp-bar{padding:9px 12px;background:var(--pale-sage);border-bottom:1px solid var(--light-sage);font-size:.78rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-          .cs-lp-body{padding:16px;display:grid;gap:12px}
-          .cs-lp-body h3{font-size:1.35rem;line-height:1.15}
-          .cs-lp-map{height:92px;border-radius:8px;background:linear-gradient(90deg,transparent 48%,var(--warm-white) 48% 52%,transparent 52%),linear-gradient(transparent 55%,var(--warm-white) 55% 61%,transparent 61%),var(--pale-sage);position:relative}
-          .cs-lp-map::after{content:"";position:absolute;left:46%;top:30%;width:18px;height:18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--coral);border:2px solid var(--ink)}
-          .cs-lp-nap{font-size:.86rem;font-weight:600;line-height:1.6;color:var(--ink)}
-          .cs-lp-loc{border:1.5px dashed var(--sage);border-radius:8px;padding:12px;background:color-mix(in srgb,var(--sky-soft) 45%,var(--warm-white));font-size:.9rem;color:var(--sage)}
           .cs-lp-side{display:grid;gap:14px;align-content:start}
           .cs-why{display:grid;gap:8px;padding-left:1.1em;list-style:disc;color:var(--sage);font-size:.95rem}
           .cs-why li::marker{color:var(--coral)}
-
-          .cs-lane{position:relative;height:56px;border-radius:8px;background:var(--pale-sage);overflow:hidden}
-          .cs-lane::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:3px dashed var(--warm-white)}
-          .cs-lane-car{position:absolute;top:12px;left:0;width:56px;height:28px}
-          .cs-rsteps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-          .cs-rsteps span{font-size:.7rem;font-weight:700;line-height:1.3;letter-spacing:.03em;text-transform:uppercase;text-align:center;padding:10px 6px;border-radius:6px;background:var(--pale-sage);color:var(--sage);transition:background 250ms,color 250ms}
-          .cs-rsteps span.on{background:var(--ink);color:var(--warm-white)}
-
-          .cs-road{position:relative;padding-left:64px}
-          .cs-road-line{position:absolute;left:22px;top:0;bottom:0;border-left:4px dashed var(--ink)}
-          .cs-road-car{position:absolute;left:2px;top:1px;width:44px;height:22px;transform:rotate(90deg);z-index:2}
-          .cs-stop{position:relative;padding:18px 20px;border-radius:8px;background:var(--warm-white);border:1.5px solid var(--light-sage);margin-bottom:18px;opacity:.5;display:grid;gap:4px;transition:opacity 300ms,border-color 300ms}
-          .cs-stop::before{content:"";position:absolute;left:-52px;top:22px;width:20px;height:20px;border-radius:50%;background:var(--warm-white);border:3px solid var(--ink);transition:background 300ms}
-          .cs-stop.arrived{opacity:1;border-color:var(--ink)}
-          .cs-stop.arrived::before{background:var(--coral)}
-          .cs-stop small{font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:color-mix(in srgb,var(--sky) 65%,var(--ink))}
-          .cs-stop b{font-size:1.2rem;line-height:1.25;color:var(--ink)}
-          .cs-stop span{font-size:.95rem;color:var(--sage)}
-
-          .cs-dials{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-          .cs-dial{background:var(--warm-white);border:1px solid var(--light-sage);border-radius:10px;padding:18px;display:grid;gap:6px;justify-items:center;text-align:center}
-          .cs-dial svg{width:100%;max-width:220px;height:auto}
-          .cs-dial .z{fill:none;stroke-width:16}
-          .cs-dial .z1{stroke:var(--coral-soft)}
-          .cs-dial .z2{stroke:var(--butter-soft)}
-          .cs-dial .z3{stroke:var(--sky-soft)}
-          .cs-dial h3{font-size:1.15rem;line-height:1.25}
-          .cs-dial p{font-size:.76rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:color-mix(in srgb,var(--sky) 65%,var(--ink))}
-          .cs-dial .cs-needle{--a:-72deg;transition:transform 1500ms var(--ease)}
-          .cs-dials.in .cs-needle{--a:55deg}
-          .cs-dials-wrap{margin-bottom:28px}
-          .cs-dials-wrap > .note{margin-top:12px}
 
           /* healthcare SEO demos (Kaya Clinics: PatientSearch, PatientJourney, StepLinks, QueryBuilder, DoctorSchema, DepthSlider, LinkGraph, GrowthRing) */
           .cs-tech-dotnav{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:45;display:flex;flex-direction:column;gap:10px}
@@ -1261,6 +1172,94 @@ export const CASE_STUDY_CSS = `
           .cs-nw-gsvg .shopper{fill:var(--coral)}
           .cs-pbox.one{grid-template-columns:1fr}
           .cs-sim button.btn{border:0;cursor:pointer}
+
+          /* multi-location local SEO demos (Maruti Suzuki: NetworkMap, NetworkHeatmap, NapListings, LocalPageBuilder, ReviewWhatIf, RoadDrive, ResultGauges, HalfGauge) */
+          .cs-ms-map{width:100%;height:auto;display:block}
+          .cs-ms-map .bg{fill:var(--pale-sage)}
+          .cs-ms-map .rd{fill:none;stroke:var(--warm-white);stroke-width:12}
+          .cs-ms-map .car .body{fill:var(--ink)}
+          .cs-ms-map .car .wheel{fill:var(--butter)}
+          .cs-ms-map .pin{cursor:pointer;outline:none}
+          .cs-ms-map .pin .b{transition:fill 400ms;stroke:var(--ink);stroke-width:2}
+          .cs-ms-map .pin text{font:700 11px var(--sans);fill:var(--ink);pointer-events:none}
+          .cs-ms-map .pin .ring{fill:none;stroke:var(--ink);stroke-width:2;opacity:0}
+          .cs-ms-map .pin.sel .ring,.cs-ms-map .pin:focus-visible .ring{opacity:1}
+          .cs-ms-card{display:grid;gap:8px;padding:12px 14px;border:1px solid var(--light-sage);border-radius:8px;background:color-mix(in srgb,var(--pale-sage) 40%,var(--warm-white))}
+          .cs-ms-card h3{font-size:.95rem}
+          .cs-ms-card .cs-nw-layers button{font-size:.82rem}
+          .cs-ms-hm{display:grid;grid-template-columns:minmax(78px,1.3fr) repeat(4,minmax(0,1fr));gap:6px;align-items:stretch}
+          .cs-ms-hm .h{font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--sage);padding:4px}
+          .cs-ms-hm .n{font-size:.8rem;font-weight:700;color:var(--ink);display:flex;align-items:center}
+          .cs-ms-hm button{min-height:42px;border-radius:6px;border:1.5px solid var(--light-sage);background:var(--pale-sage);cursor:pointer;font:700 .9rem var(--sans);color:var(--sage);transition:background 250ms}
+          .cs-ms-hm button.ok{background:var(--sky-soft);color:var(--ink)}
+          .cs-ms-hm button.no{background:var(--coral-soft);color:var(--ink)}
+          .cs-ms-hm button.scan{outline:3px solid var(--butter)}
+          .cs-ms-desc{border:1.5px dashed var(--ink);border-radius:8px;padding:16px 18px;display:grid;gap:6px;background:var(--warm-white)}
+          .cs-ms-desc .lab{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:color-mix(in srgb,var(--sky) 65%,var(--ink))}
+          .cs-ms-desc p{font-size:.95rem;margin:0}
+          .cs-ms-nap{display:grid;gap:12px}
+          .cs-ms-nrow{display:grid;gap:6px;grid-template-columns:150px repeat(3,minmax(0,1fr));align-items:stretch;padding:14px;border:1px solid var(--light-sage);border-radius:8px;background:color-mix(in srgb,var(--pale-sage) 40%,var(--warm-white))}
+          .cs-ms-nrow > b{font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);display:flex;align-items:center}
+          .cs-ms-nrow button{text-align:left;min-height:52px;padding:8px 12px;border-radius:8px;border:1.5px solid var(--light-sage);background:var(--warm-white);font:600 .84rem/1.3 var(--sans);color:var(--ink);cursor:pointer}
+          .cs-ms-nrow button.fx{background:var(--sky-soft);border-color:var(--ink)}
+          .cs-ms-nrow button.sh{animation:cs-nw-shake 400ms}
+          .cs-ms-meterw{display:grid;gap:6px}
+          .cs-ms-meterlab{display:flex;justify-content:space-between;font-size:.78rem;font-weight:700;color:var(--ink)}
+          .cs-ms-meter{height:16px;border-radius:8px;background:var(--pale-sage);overflow:hidden}
+          .cs-ms-meter i{display:block;height:100%;transition:width 600ms,background 300ms}
+          .cs-ms-gz{width:100%;max-width:340px;height:auto;margin-inline:auto;display:block}
+          .cs-ms-gz text{font:700 11px var(--sans);fill:var(--sage)}
+          .cs-ms-gz .v{font:800 30px var(--sans);fill:var(--ink)}
+          .cs-ms-gz .tr,.cs-ms-gz .fg{fill:none;stroke-width:16;stroke-linecap:round}
+          .cs-ms-gz .tr{stroke:var(--pale-sage)}
+          .cs-ms-gz .fg{transition:stroke-dashoffset 900ms cubic-bezier(.2,.7,.2,1),stroke 300ms}
+          .cs-ms-gz .nd{transform-origin:100px 100px;transition:transform 900ms cubic-bezier(.2,.7,.2,1)}
+          .cs-ms-gz .nd line{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+          .cs-ms-gz .hub{fill:var(--ink)}
+          .cs-ms-build{display:grid;gap:12px}
+          .cs-ms-gcap{text-align:center;min-height:2.6em;max-width:none}
+          .cs-ms-pvw{display:grid;gap:8px;align-content:start;min-height:120px;padding:12px;border:1.5px dashed var(--ink);border-radius:8px}
+          .cs-ms-pvw .pvb{padding:10px 12px;border-radius:6px;background:color-mix(in srgb,var(--sky-soft) 45%,var(--warm-white));border:1px solid var(--light-sage);font-size:.8rem;font-weight:600;color:var(--ink);animation:cs-ms-pop 400ms both}
+          @keyframes cs-ms-pop{from{transform:scale(.3);opacity:0}}
+          .cs-ms-what{display:grid;gap:18px;align-content:start}
+          .cs-ms-sl{display:grid;gap:6px}
+          .cs-ms-sl label{font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--sage)}
+          .cs-ms-sl b{color:var(--ink)}
+          /* The review counter as the file draws it (D081): a pill fixed to the bottom-left of the screen, each digit
+             wheel 8px wide with a coral dot that rolls away with its zero (the file's two .odo rules combined). */
+          .cs-ms-odo{position:fixed;left:14px;bottom:14px;z-index:55;display:flex;gap:4px;align-items:center;padding:9px 14px;border-radius:999px;background:var(--ink);color:var(--warm-white);box-shadow:4px 4px 0 var(--butter)}
+          .cs-ms-odo div{width:32px;height:46px;overflow:hidden;background:var(--ink);border-radius:5px}
+          .cs-ms-odo i{display:block;width:8px;height:8px;border-radius:50%;background:var(--coral);transition:transform 800ms cubic-bezier(.2,.7,.2,1)}
+          .cs-ms-odo span{display:block;height:46px;font:700 1.7rem/46px var(--sans);text-align:center;color:var(--warm-white);font-variant-numeric:tabular-nums}
+          .cs-ms-odo .cs-ms-sr,.cs-ms-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+          .cs-nw-cvs .axis{stroke:var(--light-sage)}
+          .cs-nw-cvs .adhoc,.cs-nw-cvs .mine{fill:none;stroke-width:3}
+          .cs-nw-cvs .adhoc{stroke:var(--sky)}
+          .cs-nw-cvs .mine{stroke:var(--coral)}
+          .cs-ms-tags{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.74rem;font-weight:600;color:var(--sage)}
+          .cs-ms-tags span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+          .cs-ms-tags .a::before{background:var(--sky)}
+          .cs-ms-tags .c::before{background:var(--coral)}
+          .cs-ms-road{width:100%;height:auto;display:block}
+          .cs-ms-road .bed{fill:none;stroke:var(--pale-sage);stroke-width:26;stroke-linecap:round}
+          .cs-ms-road .dash{fill:none;stroke:var(--warm-white);stroke-width:3;stroke-dasharray:10 10}
+          .cs-ms-road text{font:700 11px var(--sans);fill:var(--ink)}
+          .cs-ms-road .st{cursor:pointer;outline:none}
+          .cs-ms-road .st circle{fill:var(--warm-white);stroke:var(--ink);stroke-width:2.5;transition:fill 300ms}
+          .cs-ms-road .st.on circle{fill:var(--coral)}
+          .cs-ms-road .st:focus-visible circle{stroke-width:4}
+          .cs-ms-road .car .body{fill:var(--coral)}
+          .cs-ms-road .car .wheel{fill:var(--ink)}
+          .cs-ms-g3{display:grid;gap:16px;grid-template-columns:repeat(3,minmax(0,1fr))}
+          .cs-ms-g3 h3{text-align:center;font-size:.95rem;margin-top:-6px}
+          .cs-ms-results + .cs-tech-results{margin-top:18px}
+          @media (max-width:760px){
+            .cs-ms-nrow,.cs-ms-g3{grid-template-columns:1fr}
+          }
+          /* Below about 640px the pill would cover the centred section pager (50px tall, 14px up), so it sits above it. */
+          @media (max-width:640px){
+            .cs-ms-odo{bottom:76px}
+          }
           @media (max-width:900px){
             .cs-nw-front{grid-template-columns:1fr}
             .cs-nw-col{border-right:0;border-bottom:1.5px solid var(--ink)}
@@ -1277,9 +1276,6 @@ export const CASE_STUDY_CSS = `
           @media (max-width:1179px){
             .cs-tech-dotnav{display:none}
           }
-          @media (max-width:1000px){
-            .cs-net{grid-template-columns:repeat(3,minmax(0,1fr))}
-          }
           @media (max-width:760px){
             .cs-jr-panel,.cs-steps4{grid-template-columns:1fr}
             .cs-jn i{width:40px;height:40px}
@@ -1287,17 +1283,6 @@ export const CASE_STUDY_CSS = `
           }
           @media (max-width:900px){
             .cs-tech-hero-grid,.cs-tech-results{grid-template-columns:1fr}
-            .cs-nap-split{grid-template-columns:1fr}
-          }
-          @media (max-width:860px){
-            .cs-nap-head{display:none}
-            .cs-nap-row{grid-template-columns:1fr}
-          }
-          @media (max-width:760px){
-            .cs-dials{grid-template-columns:1fr}
-          }
-          @media (max-width:700px){
-            .cs-net{grid-template-columns:repeat(2,minmax(0,1fr))}
           }
           @media (max-width:760px){
             .cs-tech-metrics{grid-template-columns:1fr}

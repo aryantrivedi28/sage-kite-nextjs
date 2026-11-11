@@ -1,27 +1,39 @@
 import type { CaseStudy } from '@/content/case-studies/types';
 import { MarutiSuzukiCover } from '@/components/case-studies/covers';
-import { ShowroomMap } from '@/components/case-studies/ShowroomMap';
-import { NetworkAudit } from '@/components/case-studies/NetworkAudit';
-import { NapConsistency } from '@/components/case-studies/NapConsistency';
-import { LandingPagePreview } from '@/components/case-studies/LandingPagePreview';
-import { ReviewLane } from '@/components/case-studies/ReviewLane';
-import { RoadStops } from '@/components/case-studies/RoadStops';
-import { ResultDials } from '@/components/case-studies/ResultDials';
+import { NetworkMap, NetworkHeatmap } from '@/components/case-studies/DealerNetwork';
+import { NapListings } from '@/components/case-studies/NapListings';
+import { LocalPageBuilder } from '@/components/case-studies/LocalPageBuilder';
+import { ReviewWhatIf } from '@/components/case-studies/ReviewWhatIf';
+import { RoadDrive } from '@/components/case-studies/RoadDrive';
+import { ResultGauges } from '@/components/case-studies/ResultGauges';
 
 /*
- * Source: MarutiSuzuki_Sage-Kite_Interactive-Technical.html, supplied by the team.
- * All copy is kept exactly as written in the source file (US spelling included); only the
- * site's brand colours and font are applied. The meta title and description are shortened
- * to fit the length limits. Rendered in the technical layout like Croma, matched to the source:
- * plain hero (no grid paper), kicker, chips, the map beside them, a progress bar and the floating
- * section pill (odometer); no breadcrumb or section menu, as for Croma (D058, D059). Manrope and
- * the brand tokens only. The site's header and footer replace the source's; "See more work"
- * links to /case-studies. Every demo is labelled illustrative in the source and here.
+ * Source: "Maruti Suzuki Multi-location Local SEO_ Interactive Case Study.html", supplied by the team on
+ * 10 November 2026. It replaces the earlier MarutiSuzuki_Sage-Kite_Interactive-Technical.html (D069): the user asked
+ * for the page to match the new file (D081). All copy is kept exactly as written in the source file (US spelling
+ * included), including the closing call to action, which names Sangram Singh with his email and phone, as on Soch
+ * (D080). Only the site's brand colours and font are applied. The meta title and description are the site's own,
+ * kept from D069. Rendered in the technical layout like Soch: plain hero, kicker, chips, the network map beside them,
+ * a progress bar and the round section pager ("1 / 7 · Overview"); no breadcrumb. The site's header and footer
+ * replace the source's. Every demo is labelled illustrative in the source and here.
  *
- * No `origin` or `about`: the source does not state who did the work, and the user approved
- * publishing it without them, as for Croma (decision.md D069). No `results` figures either: the
- * source reports improvements without numbers, so the dials show direction only.
+ * No `origin` or `about`: the source does not state who did the work (D069, D081). No `results` figures either: the
+ * source reports improvements without numbers, so the gauges show direction only.
  */
+const PAGER = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'audit', label: 'Audit' },
+  { id: 'nap', label: 'NAP' },
+  { id: 'local', label: 'Landing page' },
+  { id: 'reviews', label: 'Reviews' },
+  { id: 'approach', label: 'Approach' },
+  { id: 'results', label: 'Results' },
+];
+
+/** The placeholder network shared by the hero map and the audit grid: one row per showroom (profile, NAP, landing page, reviews). */
+const NETWORK = [[0, 0, 0, 1], [1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0], [1, 0, 1, 0], [0, 1, 1, 1]];
+const STANDARDS = ['Profile', 'NAP', 'Landing page', 'Reviews'];
+
 const study: CaseStudy = {
   slug: 'maruti-suzuki',
   client: 'Maruti Suzuki India Limited',
@@ -31,43 +43,38 @@ const study: CaseStudy = {
   summary: 'How a multi-location dealership network standardized its Google Business Profiles, NAP details, local landing pages and review process.',
   keywords: ['multi-location local SEO case study', 'Maruti Suzuki', 'Google Business Profile audit', 'NAP consistency', 'local landing pages', 'review generation'],
   datePublished: '2026-11-04',
+  dateModified: '2026-11-10',
   industry: 'Automotive dealerships',
   discipline: 'Local SEO',
   cover: <MarutiSuzukiCover />,
   technical: {
     plainHero: true,
-    odometer: [
-      { id: 'overview', label: 'Overview' },
-      { id: 'network', label: 'Dealership audit' },
-      { id: 'nap', label: 'NAP consistency' },
-      { id: 'pages', label: 'Local landing pages' },
-      { id: 'reviews', label: 'Review process' },
-      { id: 'approach', label: 'Execution approach' },
-      { id: 'results', label: 'Results' },
-    ],
+    pager: PAGER,
+    pagerPlain: true,
   },
   highlights: ['Google Business Profile audit', 'NAP consistency', 'Local landing pages', 'Review generation'],
   results: [],
 
   hero: {
     label: 'Case study · Multi-location local SEO',
-    dek: 'Customers searching for a nearby showroom should reliably find the right dealership.',
-    lede: 'Maruti Suzuki India Limited\'s dealership network had inconsistent visibility in Google Maps and local search. Google Business Profiles weren\'t standardized, business information varied across the web and many dealer pages lacked local SEO strength. Try the map: find the nearest showroom.',
+    dek: 'Customers searching for a nearby showroom couldn\'t reliably find the right dealership.',
+    lede: 'Maruti Suzuki\'s dealerships appeared unevenly in Google Maps. Tap a pin on the network map, apply the standard to a location, or standardize the whole network at once.',
     visual: (
-      <ShowroomMap
-        ariaLabel="Illustrative map of dealership locations"
-        idle="Select a showroom pin, or find the nearest one."
-        driving="Driving to Dealership {n}…"
-        arrived="Arrived at Dealership {n}: visible in Google Maps. The customer can call or get directions."
-        pinLabel="Go to Dealership {n}"
-        pinText="D{n}"
-        button="Find nearest showroom"
+      <NetworkMap
+        initial={NETWORK}
+        standards={STANDARDS}
+        ariaLabel="Dealership network map"
+        pinLabel="Showroom {n}"
+        cardTitle="Showroom {n} · {pct}% of the standard"
+        stat="Network standard met:"
+        buttons={{ standardize: 'Standardize network', reset: 'Reset' }}
+        note="Illustrative map and placeholder locations, not real dealership data."
       />
     ),
-    note: 'Illustrative map with placeholder locations, not real dealership data.',
     glance: [
       { label: 'Client', value: 'Maruti Suzuki India Limited' },
-      { label: 'Type', value: 'Multi-location local SEO' },
+      { label: 'Type', value: 'Multi-location Local SEO' },
+      { label: 'Result', value: 'Better Maps visibility, more calls and directions' },
     ],
   },
 
@@ -75,142 +82,155 @@ const study: CaseStudy = {
     items: [
       { value: 'Multi-location', label: 'Dealership network', tone: 'sky' },
       { value: 'Google Maps', label: 'Visibility improved', tone: 'butter' },
-      { value: 'Calls & Directions', label: 'Local engagement increased', tone: 'coral' },
+      { value: 'Calls & directions', label: 'Local engagement increased', tone: 'coral' },
     ],
   },
 
   sections: [
     {
-      id: 'network',
-      label: '01 / Profile audit',
-      heading: 'Each location was performing differently, with no consistent standard',
-      intro: 'The engagement began with an audit across dealership profiles to see how far locations varied and where the biggest gaps were. Run an audit on the network, then standardize it.',
+      id: 'audit',
+      label: '01 / AUDIT FIRST',
+      heading: 'Each location performed differently, with no consistent standard',
+      intro: 'The engagement began with an audit across dealership profiles to see how far locations varied. Run the audit, then tap any cell for the issue and its fix.',
       content: (
-        <NetworkAudit
-          buttons={{ audit: 'Run network audit', fixAll: 'Standardize all', reset: 'Reset' }}
-          stats={{ audited: 'Audited:', gaps: 'Gaps found:', standardized: 'Standardized:' }}
-          dealer="Dealership {n}"
-          tags={['GBP', 'NAP', 'PAGE', 'REV']}
-          captions={{
-            idle: 'Select a dealership to audit it, or run the audit across the whole network.',
-            progress: 'Audit in progress.',
-            complete: 'Audit complete. Gaps and inconsistencies identified. Standardize each location, or all at once.',
-            done: 'Every dealership now follows one consistent standard, while keeping its own location details.',
-          }}
-          note="Illustrative network of 12 placeholder dealerships. GBP = Google Business Profile, NAP = name, address, phone, PAGE = landing page, REV = review process."
+        <NetworkHeatmap
+          initial={NETWORK}
+          standards={STANDARDS}
+          rowLabel="Showroom {n}"
+          run="Run audit"
+          stat="Locations audited:"
+          detail={{ label: 'Cell detail', idle: 'Run the audit, then pick a cell.', first: 'Run the audit first.', meets: 'Meets the standard.', fix: 'Apply fix' }}
+          issues={[
+            'Google Business Profile isn’t standardized: categories, hours and attributes vary.',
+            'NAP details differ across directories and website assets.',
+            'Dealer landing page lacks the local SEO strength to rank for showroom searches.',
+            'No consistent review collection process.',
+          ]}
+          fixes={['Profile aligned to the network standard.', 'NAP aligned everywhere.', 'Optimized local landing page built.', 'Review generation process in place.']}
+          note="Placeholder locations and results for illustration."
         />
       ),
     },
     {
       id: 'nap',
       band: 'pale',
-      label: '02 / NAP consistency',
-      heading: 'Align name, address and phone everywhere a dealership appears',
-      intro: 'Details that weren\'t consistent across directories and website assets can reduce search engines\' confidence in a location\'s information. Select each mismatched detail to correct it and watch the consistency gauge.',
+      label: '02 / NAP CONSISTENCY',
+      heading: 'One name, address and phone number, everywhere',
+      intro: 'Inconsistent details can reduce search engines\' confidence in a location. Tap every listing detail that doesn\'t match the profile to correct it, or fix them all.',
       content: (
-        <NapConsistency
-          headings={['Source', 'Name', 'Address', 'Phone']}
-          correct={['Dealer Name', '12 Main Road, City A', '+91 00000 00000']}
+        <NapListings
+          canonical={['Sample Motors Pvt Ltd', 'Plot 12, MG Road, Sample City 400001', '+91 98000 00000']}
           sources={[
-            { source: 'Google Business Profile', values: ['Dealer Name', '12 Main Road, City A', '+91 00000 00000'] },
-            { source: 'Directory A', values: ['Dealer Nm', '12 Main Road, City A', '00000 00000'] },
-            { source: 'Directory B', values: ['Dealer Name Pvt. Ltd.', '12 Main Rd, City A', '+91 00000 00000'] },
-            { source: 'Website', values: ['Dealer Name', '12 Main Road, City A', '(0000) 000000'] },
+            { name: 'Business Profile', cells: [{ text: 'Sample Motors Pvt Ltd', ok: true }, { text: 'Plot 12, MG Road, Sample City 400001', ok: true }, { text: '+91 98000 00000', ok: true }] },
+            { name: 'Website footer', cells: [{ text: 'Sample Motors', ok: false }, { text: 'Plot 12, MG Road, Sample City 400001', ok: true }, { text: '+91 98000 00000', ok: true }] },
+            { name: 'Directory A', cells: [{ text: 'Sample Motor Pvt. Ltd.', ok: false }, { text: '12 M.G. Rd, Sample City', ok: false }, { text: '098000 00000', ok: false }] },
+            { name: 'Directory B', cells: [{ text: 'Sample Motors Pvt Ltd', ok: true }, { text: 'Plot 12, MG Road, Sample City 400010', ok: false }, { text: '+91 98000 00001', ok: false }] },
           ]}
-          fixLabel="fix"
+          label="Consistency"
           buttons={{ fixAll: 'Fix all', reset: 'Reset' }}
-          gaugeLabel="NAP consistency"
-          gaugeAriaLabel="NAP consistency gauge"
           captions={{
-            mismatch: 'Mismatched details can reduce search engines\' confidence in a location\'s information.',
-            consistent: 'Consistent NAP details make it easier for customers and search engines to trust the listing.',
+            idle: 'Compare each listing with the Google Business Profile.',
+            matches: 'That one already matches the profile.',
+            done: 'Every listing now matches: clearer, more trustworthy information.',
+            progress: '{n} of {total} mismatches corrected.',
           }}
-          note="Placeholder business details. The mismatches shown are typical examples, not real listings."
+          note="Fictional dealer details for illustration."
         />
       ),
     },
     {
-      id: 'pages',
-      label: '03 / Local landing pages',
-      heading: 'SEO-optimized pages for each showroom, built on one standard',
-      intro: 'Many dealer pages lacked the local SEO strength needed to rank for showroom searches. Pick a location: the structure stays the same while the details change. Then tap Call and Directions to see how visibility turns into action.',
+      id: 'local',
+      label: '03 / LOCAL LANDING PAGES',
+      heading: 'Build a page that can rank for “showroom near me”',
+      intro: 'Location-specific pages were built to rank for local showroom searches. Add the elements and watch the local relevance gauge.',
       content: (
-        <LandingPagePreview
-          cities={['City A', 'City B', 'City C']}
-          groupLabel="Location"
-          url="example.com › showrooms › {slug}"
-          heading="Car showroom in {city}"
-          nap={['Dealer Name, {city}', 'Address line, {city}', '+91 00000 00000']}
-          local="Local content: {{ nearby areas, landmarks and showroom details for {city} }}"
-          buttons={{ call: 'Call showroom', directions: 'Get directions' }}
-          stats={{ calls: 'Calls:', directions: 'Direction requests:' }}
-          caption="Calls and direction requests give a practical view of how local visibility turns into customer action."
-          points={[
-            'Location-specific page, designed to rank for local showroom searches.',
-            'Local business content reinforces local relevance.',
-            'The same pattern can be repeated for every dealership.',
+        <LocalPageBuilder
+          elements={[
+            { label: 'City + showroom in the page title', weight: 20 },
+            { label: 'Embedded map', weight: 10 },
+            { label: 'NAP matching the profile', weight: 15 },
+            { label: 'Book a test drive button', weight: 15 },
+            { label: 'Nearby-area local content', weight: 15 },
+            { label: 'Customer reviews on the page', weight: 10 },
+            { label: 'LocalBusiness schema markup', weight: 15 },
           ]}
-          note="Placeholder page content and counters for demonstration, not real dealership data."
+          ariaLabel="Local relevance gauge"
+          captions={{
+            low: 'Not yet competitive for “showroom near me”.',
+            mid: 'Getting there: more local signals will help.',
+            high: 'A strong, location-specific landing page.',
+          }}
+          empty="Add elements to build the page."
+          note="Illustrative scoring weights, not a real ranking formula."
         />
       ),
     },
     {
       id: 'reviews',
-      band: 'pale',
-      label: '04 / Review generation',
-      heading: 'A repeatable review process that builds credibility on an ongoing basis',
-      intro: 'Strengthening how dealerships collect customer reviews reinforces local credibility. Send a customer down the lane and watch the process run.',
+      band: 'sky',
+      label: '04 / REVIEW GENERATION',
+      heading: 'A repeatable review process builds credibility every month',
+      intro: 'Structured review generation helps locations build credibility on an ongoing basis. Try a what-if for a single showroom.',
       content: (
-        <ReviewLane
-          steps={['Customer visit', 'Review request sent', 'Review posted', 'Profile builds credibility']}
-          button="Simulate a customer visit"
-          stat="Reviews collected:"
-          note="Illustrative simulation of the process, not real review data."
+        <ReviewWhatIf
+          delivered={{ label: 'Cars delivered per month:', min: 10, max: 200, step: 5, value: 60 }}
+          asked={{ label: 'Customers asked for a review:', min: 5, max: 100, step: 5, value: 50 }}
+          reviewRate={0.25}
+          adhocRate={0.05}
+          total="New reviews in 12 months"
+          chartLabel="Cumulative reviews over 12 months, ad-hoc versus structured process"
+          axis={{ start: 'month 0', end: 'month 12' }}
+          legend={{ adhoc: 'Ad-hoc asking (5%)', mine: 'Your setting' }}
+          note="What-if calculator with assumed numbers: 25% of people asked leave a review. These are not Maruti Suzuki results."
         />
       ),
     },
     {
       id: 'approach',
-      label: '05 / Execution approach',
-      heading: 'Standardized processes that apply across many locations, not one-off fixes',
-      intro: 'Because the challenge was scale and consistency, each dealership could benefit from the same best practices while still presenting its own location-specific information. Keep scrolling to drive down the road.',
+      label: '05 / EXECUTION APPROACH',
+      heading: 'Standardized processes that apply across many locations',
+      intro: 'Because the challenge was scale and consistency, the work focused on repeatable processes rather than one-off fixes. Take the drive.',
       content: (
-        <RoadStops
-          stops={[
-            { small: 'Stop 1', title: 'Audit first', text: 'Assess Google Business Profiles across locations to identify inconsistencies.' },
-            { small: 'Stop 2', title: 'Standardize the data', text: 'Make NAP details consistent everywhere the dealerships appear.' },
-            { small: 'Stop 3', title: 'Build local relevance', text: 'Create optimized landing pages and location-specific content.' },
-            { small: 'Stop 4', title: 'Strengthen trust signals', text: 'Improve review generation to reinforce local credibility.' },
+        <RoadDrive
+          ariaLabel="Road with four milestones"
+          stations={[
+            { title: 'Audit first', text: 'Assess Google Business Profiles across locations to identify inconsistencies.' },
+            { title: 'Standardize the data', text: 'Make NAP details consistent everywhere the dealerships appear.' },
+            { title: 'Build local relevance', text: 'Create optimized landing pages and location-specific content.' },
+            { title: 'Strengthen trust signals', text: 'Improve review generation to reinforce local credibility.' },
           ]}
+          button="Start the drive"
+          stepLabel="Step {n} · {title}"
+          idle={{ label: 'Step', text: 'Select a station or start the drive.' }}
         />
       ),
     },
   ],
 
   resultsSection: {
-    label: '06 / Results',
-    heading: 'More visible dealerships, and more calls and direction requests',
-    band: 'sky',
+    label: '06 / RESULTS',
+    heading: 'More visible on the map, more action from customers',
+    band: 'pale',
     visual: (
-      <ResultDials
-        dials={[
-          { title: 'Google Maps visibility', value: 'Improved', ariaLabel: 'Google Maps visibility improved' },
-          { title: 'Local calls', value: 'Increased', ariaLabel: 'Local calls increased' },
-          { title: 'Direction requests', value: 'Increased', ariaLabel: 'Direction requests increased' },
+      <ResultGauges
+        gauges={[
+          { title: 'Google Maps visibility', value: 82 },
+          { title: 'Local calls', value: 76 },
+          { title: 'Direction requests', value: 79 },
         ]}
-        note="Dials show direction of change only. The case study reports improvements without specific figures."
+        note="Direction of change only. The case study doesn't publish figures, so these gauges aren't measured values."
       />
     ),
     points: [
-      { title: 'Improved dealership visibility in Google Maps', text: 'More consistent presence across the network.' },
-      { title: 'Increased local calls and direction requests', text: 'Reflecting stronger local engagement.' },
-      { title: 'Stronger search presence for multi-location showroom queries', text: 'Customers can more reliably find the right dealership.' },
+      { title: 'Improved visibility in Google Maps', text: 'Dealerships appeared more consistently for local searches.' },
+      { title: 'Increased calls and direction requests', text: 'Stronger local engagement from people searching nearby.' },
+      { title: 'Stronger presence for multi-location showroom queries', text: 'One standard applied across the network.' },
     ],
   },
 
   changes: {
-    label: '07 / Impact',
-    heading: 'One consistent standard across locations',
+    label: '07 / IMPACT',
+    heading: 'How this made life easier',
     items: [
       { icon: 'grid', title: 'One consistent standard across locations', text: 'Standardized profiles and business information reduce location-by-location guesswork.' },
       { icon: 'shield', title: 'Clearer, more trustworthy local listings', text: 'Consistent NAP details make it easier for customers and search engines to trust each dealership\'s information.' },
@@ -220,12 +240,12 @@ const study: CaseStudy = {
   },
 
   methods: {
-    label: '08 / Stack',
+    label: '08 / STACK',
     heading: 'Tools and tech used',
     items: [
       { title: 'Google Business Profile management and auditing' },
-      { title: 'NAP consistency auditing across directories' },
-      { title: 'Local landing page SEO optimization' },
+      { title: 'NAP consistency auditing' },
+      { title: 'Local landing page SEO' },
       { title: 'Review generation processes' },
       { title: 'Local business content optimization' },
     ],
@@ -233,16 +253,15 @@ const study: CaseStudy = {
 
   takeaway: {
     label: 'Key takeaway',
-    heading: 'Turn an inconsistent local presence into a consistent, scalable lead channel',
+    heading: 'Turn an inconsistent local presence into a scalable lead channel',
     body: 'For any business with many branches, showrooms or clinics, standardizing local SEO delivers value across every location at once.',
-    link: { label: 'See more work', href: '/case-studies' },
   },
 
   cta: {
-    heading: 'Running a multi-location business?',
-    text: 'Contact Sage Kite and book a free consultation. We\'ll look at how your locations show up in Google Maps and local search.',
-    primary: { label: 'Book a free consultation', href: '/contact' },
-    secondary: { label: 'Contact Sage Kite', href: '/contact' },
+    heading: 'Many locations, one standard?',
+    text: 'Contact Sangram Singh for a free consultation on multi-location local SEO.',
+    primary: { label: 'Book a free consultation', href: 'mailto:shekhawatsangram96@gmail.com' },
+    secondary: { label: '+91 7690088700', href: 'tel:+917690088700' },
   },
 };
 
