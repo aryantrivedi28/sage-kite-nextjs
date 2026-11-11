@@ -51,10 +51,11 @@ import dubsadoSetupServices from '@/app/blog/dubsado-setup-services/post';
 import dubsadoForInteriorDesigners from '@/app/blog/dubsado-for-interior-designers/post';
 import automateServiceBusinessHoneyBook from '@/app/blog/automate-service-business-honeybook/post';
 import bestCrmForCoachesAndConsultants from '@/app/blog/best-crm-for-coaches-and-consultants/post';
+import doINeedAConsultantToImplementMindbody from '@/app/blog/do-i-need-a-consultant-to-implement-mindbody/post';
 
 export * from './types';
 
-export const posts: BlogPost[] = [whatIsDubsado, whatIsHoneyBook, dubsadoVsHoneyBook, aiMarketingAutomationMistakes, dubsadoSetupServices, dubsadoForInteriorDesigners, automateServiceBusinessHoneyBook, bestCrmForCoachesAndConsultants];
+export const posts: BlogPost[] = [whatIsDubsado, whatIsHoneyBook, dubsadoVsHoneyBook, aiMarketingAutomationMistakes, dubsadoSetupServices, dubsadoForInteriorDesigners, automateServiceBusinessHoneyBook, bestCrmForCoachesAndConsultants, doINeedAConsultantToImplementMindbody];
 
 /* ─────────────────────────── Selectors ───────────────────────────────────
  * The listing, sitemap and related posts also show posts published from the

@@ -271,9 +271,9 @@ test('post shape: bad types, unknown category, platform, status and oversized co
 
 /* ── publishing correctness ─────────────────────────────────────────────── */
 
-test('publishing is refused for a slug used by any of the eight code posts, but another Sanity post is checked too', async () => {
+test('publishing is refused for a slug used by any of the nine code posts, but another Sanity post is checked too', async () => {
   const { posts } = await import('@/content/blog');
-  assert.equal(posts.length, 8, 'the eight existing articles');
+  assert.equal(posts.length, 9, 'the nine existing articles');
   for (const { slug } of posts) {
     const r = await actions.saveStudioPostAction(validPost({ status: 'published', slug }) as never);
     assert.equal(r.ok, false, slug);
