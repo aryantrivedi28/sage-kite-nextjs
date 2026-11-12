@@ -15,8 +15,8 @@ const post: BlogPost = {
   publishedAt: '2026-11-11',
   updatedAt: '2026-11-11',
   readingTime: '15 min read',
-  featuredImage: '/images/blog/mindbody-studio-booking-calendar-2.jpg',
-  imageAlt: "Fitness studio owner at a yoga studio's front desk, reviewing a colour-coded class booking calendar on a laptop",
+  featuredImage: '/images/blog/mindbody-consultant-cover.jpg',
+  imageAlt: "Cover image reading 'Do I Need a Consultant to Implement Mindbody?' beside a laptop showing a class booking calendar in a yoga studio",
   // The DOCX's primary and secondary keywords.
   tags: [
     'Do I need a consultant to implement Mindbody?',

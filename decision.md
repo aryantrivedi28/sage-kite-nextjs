@@ -2407,6 +2407,22 @@ Past approval records below describe only what the supplied reports establish.
 - **Validation (run by Claude, 11 November 2026):** `npx tsc --noEmit` passes; `npm test` 246/246; `npm run build` passes, the post prerendered (static).
 - **Delivery:** Not committed, pushed or deployed. The user commits manually.
 
+## D088 — Mindbody post's featured image replaced with a branded cover
+
+- **Date:** 12 November 2026.
+- **Status:** Approved, implemented and checked locally. Not committed, pushed or deployed. Supersedes D087's image (D087's file stays in place, unused).
+- **Why:** the user wanted the Mindbody post to have a branded cover like the GoHighLevel and Dubsado posts' featured images (title on the image, Sage Kite logo, brand colours) instead of a plain photo. Claude drew a draft; the user shared it with the team lead, who approved it.
+- **Change:**
+  - New file [public/images/blog/mindbody-consultant-cover.jpg](public/images/blog/mindbody-consultant-cover.jpg): 2400 × 1350 (16:9) progressive JPEG, 323 KB. Rendered by Claude from an HTML canvas (1200 × 675 at device scale 2) using brand tokens copied from `app/brand.css` (warm-white background with soft coral and butter glows, ink and coral text, sage and coral icon chips) and Manrope. Left: the Sage Kite logo (`public/sage-kite-logo-transparent.png`), the title "Do I Need a Consultant to Implement Mindbody?" (with "Consultant to Implement Mindbody" in coral) and two chips, "Included onboarding" or "Independent consultant". Right: the D087 studio photo (`mindbody-studio-booking-calendar-2.jpg`), faded in from the left. No Mindbody logo, interface or trademark artwork (Sage Kite is not a Mindbody partner).
+  - [app/blog/do-i-need-a-consultant-to-implement-mindbody/post.tsx](app/blog/do-i-need-a-consultant-to-implement-mindbody/post.tsx): `featuredImage` `/images/blog/mindbody-studio-booking-calendar-2.jpg` → `/images/blog/mindbody-consultant-cover.jpg`; `imageAlt` "Fitness studio owner at a yoga studio's front desk, reviewing a colour-coded class booking calendar on a laptop" → "Cover image reading 'Do I Need a Consultant to Implement Mindbody?' beside a laptop showing a class booking calendar in a yoga studio".
+  - No change to the article copy, slug or styling.
+- **Image source and rights:** the photo is the user's ChatGPT image (D087; OpenAI's terms assign the output to the user); the logo, text and layout are Sage Kite's own.
+- **Approval:** the user shared the draft (`mindbody-cover-draft.jpg`, with /blog card and mobile hero previews) with the team lead and reported on 12 November 2026: "ma'am approved, use the new cover". The file name and alt text are the ones Claude proposed with the draft.
+- **Observed effects (Claude, 12 November 2026, dev server, DPR 2):** article hero at 1440 px: 998 × 561 CSS px, served 2048 × 1152 (`w=2048`, now a real downscale, no enlargement); hero at 375 px: 333 × 186, served 750 × 422. /blog card: 339 × 190 at 1440 px served 1080 × 608; 333 × 186 at 375 px served 750. 16:9 file in 16:9 frames, so no crop. No page-level horizontal scroll at 375 px; no console errors. Rendered HTML: `og:image` = `https://www.sagekite.com/images/blog/mindbody-consultant-cover.jpg`, `og:image:alt` = the new alt, and the Article JSON-LD `image` names the new file.
+- **Limitations:** at the 333 px card and mobile hero the chip labels are very small (about 6 px tall); the title stays readable. The cover repeats the H1 as image text, which is why the alt says what it reads. `mindbody-studio-booking-calendar.jpg` (D086), `mindbody-studio-booking-calendar-2.jpg` (D087) and `sales-pipeline-laptop.jpg` (D085) are left in place, unused.
+- **Validation (run by Claude, 12 November 2026):** `npx tsc --noEmit` passes; `npm test` 246/246; `npm run build` passes, the post prerendered (static).
+- **Delivery:** Not committed, pushed or deployed. The user commits manually.
+
 ## Template for the next decision
 
 Copy this block for a new entry and replace every placeholder:
