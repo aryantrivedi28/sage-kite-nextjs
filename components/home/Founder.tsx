@@ -1,0 +1,50 @@
+import Image from 'next/image';
+import Link from 'next/link';
+import { FOUNDER_ESSAYS, FOUNDERS_THOUGHTS_PATH, essayPath } from '@/content/founders-thoughts';
+import founderPhoto from '@/public/aryan_t.jpeg';
+import { coverSizes } from '@/components/coverSizes';
+
+export function Founder() {
+  const latest = FOUNDER_ESSAYS[0];
+  return (
+    <section id="founders-thoughts" className="founder" style={{ borderTop: '1px solid var(--light-sage)' }}>
+      <div className="wrap reveal">
+        <div className="founder-grid">
+          
+          <div className="founder-photo" style={{ padding: 0, border: 'none', overflow: 'hidden' }}>
+            {/* .founder-photo is a 4:5 frame, 240px wide (220px at 680px and below). Below the fold, so lazy. */}
+            <Image
+              src={founderPhoto}
+              alt="Aryan - Founder of Sage Kite" title="Aryan - Founder of Sage Kite"
+              sizes={coverSizes(founderPhoto, 4 / 5, [['(max-width: 680px)', '220px'], [null, '240px']])}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </div>
+
+          <div>
+            <p className="label">From the founder</p>
+            <h2>Founder’s Thoughts</h2>
+            
+            <p className="founder-intro">
+              Occasional essays by Aryan, Sage Kite’s founder, on growth, systems and how selling is changing.
+            </p>
+            
+            <p className="sub" style={{ color: 'var(--dark-sage)', maxWidth: '52ch' }}>
+              Written from the work: why growth breaks between interest and revenue, where automation and AI genuinely help, and how teams should be built now.
+            </p>
+            
+            <div className="founder-latest">
+              <span style={{ fontSize: '0.8125rem', color: 'var(--sage)', marginRight: '12px', fontWeight: 600 }}>Latest essay</span>
+              <Link href={essayPath(latest.slug)} style={{ fontFamily: 'var(--sans)', fontSize: '1.1rem', color: 'var(--ink)', textDecoration: 'underline', textDecorationColor: 'var(--butter)', textDecorationThickness: '2px', textUnderlineOffset: '4px' }}>
+                {latest.title}
+              </Link>
+            </div>
+            
+            <Link href={FOUNDERS_THOUGHTS_PATH} className="text-link">Read Founder’s Thoughts</Link>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}

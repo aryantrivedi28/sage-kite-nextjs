@@ -1,0 +1,656 @@
+import type { ReactNode } from 'react';
+
+/*
+ * Cover illustrations for the /case-studies listing cards (decision.md D050).
+ *
+ * Every cover is drawn here from scratch: no photos, stock images, client screenshots, logos,
+ * brand or product names, text, numbers or faces, so there is no copyright question. They are
+ * decorative (aria-hidden): the card's heading already names the study.
+ *
+ * Colours come only from classes defined in the case studies page's <style> block, scoped
+ * under .cs-cover and mapped to the brand tokens (f-* fills, s-* strokes with no fill, o-*
+ * outlines for filled shapes, thin = 2px). Never a hex value or a fill attribute.
+ *
+ * Every cover has an --ink background (option A, decision.md D073 and D076). The big circles use the full accents
+ * (f-butter, f-sky, f-coral), and anything drawn straight on the background (not on a white panel) uses s-white /
+ * f-white / the light tints, because ink lines would disappear.
+ *
+ * The viewBox is 16:9 like the card media. With `slice`, a wider or taller box crops the
+ * edges, so the main subject stays inside x 120–520, y 40–320.
+ *
+ * Adding a study: write a cover below (taking CoverProps and passing `fit` to CoverFrame), then set
+ * `cover: <YourCover />` in its study.tsx.
+ */
+
+export interface CoverProps {
+  /**
+   * `slice` (default) fills a 16:9 card. `meet` shows the whole drawing in a box of another shape, such as the
+   * featured card's media, which stretches to the text beside it: the background and the soft shapes that run off
+   * the edge carry on into the box (same colour as the media background), so nothing is cut off.
+   */
+  fit?: 'slice' | 'meet';
+}
+
+function CoverFrame({ children, fit = 'slice' }: { children: ReactNode; fit?: CoverProps['fit'] }) {
+  return (
+    <svg
+      className="cs-cover"
+      viewBox="0 0 640 360"
+      preserveAspectRatio={`xMidYMid ${fit}`}
+      overflow={fit === 'meet' ? 'visible' : 'hidden'}
+      aria-hidden="true"
+      focusable="false"
+    >
+      <rect className="bg" x="-640" y="-360" width="1920" height="1080" />
+      {children}
+    </svg>
+  );
+}
+
+/** A browser window: frame, top bar and three dots. */
+function Window({ x, y, w, h, body = 'f-white' }: { x: number; y: number; w: number; h: number; body?: string }) {
+  return (
+    <g>
+      <rect className={`${body} o-ink`} x={x} y={y} width={w} height={h} rx="10" />
+      <path className="s-ink" d={`M${x} ${y + 26} H${x + w}`} />
+      <circle className="f-sage" cx={x + 16} cy={y + 13} r="4" />
+      <circle className="f-sage" cx={x + 30} cy={y + 13} r="4" />
+      <circle className="f-sage" cx={x + 44} cy={y + 13} r="4" />
+    </g>
+  );
+}
+
+/** A pine tree: two stacked triangles on a trunk, standing on (x, base). */
+function Pine({ x, base, size = 1 }: { x: number; base: number; size?: number }) {
+  const s = size;
+  return (
+    <g>
+      <rect className="f-ink" x={x - 2 * s} y={base - 10 * s} width={4 * s} height={10 * s} />
+      <path className="f-sage" d={`M${x - 16 * s} ${base - 10 * s} L${x} ${base - 34 * s} L${x + 16 * s} ${base - 10 * s} Z`} />
+      <path className="f-sage" d={`M${x - 12 * s} ${base - 26 * s} L${x} ${base - 46 * s} L${x + 12 * s} ${base - 26 * s} Z`} />
+    </g>
+  );
+}
+
+/** An A-frame cabin standing on (cx, base). */
+function Cabin({ cx, base }: { cx: number; base: number }) {
+  return (
+    <g>
+      <path className="f-white o-ink thin" d={`M${cx - 34} ${base} L${cx} ${base - 60} L${cx + 34} ${base} Z`} />
+      <path className="s-ink thin" d={`M${cx - 40} ${base - 2} L${cx} ${base - 70} L${cx + 40} ${base - 2}`} />
+      <rect className="f-ink" x={cx - 8} y={base - 22} width="16" height="22" rx="2" />
+      <circle className="f-butter o-ink thin" cx={cx} cy={base - 38} r="6" />
+    </g>
+  );
+}
+
+/** One coffee bean, centred on (cx, cy). */
+function Bean({ cx, cy, angle, tone }: { cx: number; cy: number; angle: number; tone: string }) {
+  return (
+    <g transform={`rotate(${angle} ${cx} ${cy})`}>
+      <ellipse className={tone} cx={cx} cy={cy} rx="15" ry="10" />
+      <path className="s-white thin" d={`M${cx - 10} ${cy} C${cx - 3} ${cy - 5} ${cx + 3} ${cy + 5} ${cx + 10} ${cy}`} />
+    </g>
+  );
+}
+
+/** A five-pointed star centred on (cx, cy). */
+function Star({ cx, cy, r, className }: { cx: number; cy: number; r: number; className: string }) {
+  const points = Array.from({ length: 10 }, (_, i) => {
+    const radius = i % 2 === 0 ? r : r * 0.45;
+    const angle = (Math.PI / 5) * i - Math.PI / 2;
+    return `${(cx + radius * Math.cos(angle)).toFixed(1)},${(cy + radius * Math.sin(angle)).toFixed(1)}`;
+  }).join(' ');
+  return <polygon className={className} points={points} />;
+}
+
+/** A leaf pointing right from (0, 0); place it with a transform. */
+const LEAF = 'M0 0 C8 -11 24 -11 32 0 C24 11 8 11 0 0 Z';
+
+/* ── Hemlock Reserve: direct booking website for luxury cabins ─────────── */
+export function HemlockCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-butter" cx="560" cy="60" r="90" />
+      <Window x={110} y={56} w={330} h={236} />
+      {/* two cabin cards */}
+      {[130, 286].map((x) => (
+        <g key={x}>
+          <rect className="f-white o-light" x={x} y={100} width="140" height="172" rx="8" />
+          <rect className="f-butter-soft" x={x + 8} y={108} width="124" height="96" rx="6" />
+          <Cabin cx={x + 52} base={198} />
+          <Pine x={x + 104} base={198} />
+          <Pine x={x + 122} base={198} size={0.7} />
+          <rect className="f-light" x={x + 10} y={218} width="96" height="9" rx="4" />
+          <rect className="f-light" x={x + 10} y={236} width="64" height="9" rx="4" />
+        </g>
+      ))}
+      {/* booking calendar */}
+      <g>
+        <rect className="f-white o-ink" x="380" y="140" width="140" height="162" rx="10" />
+        <path className="f-sage" d="M380 150 a10 10 0 0 1 10 -10 h120 a10 10 0 0 1 10 10 v16 h-140 Z" />
+        {Array.from({ length: 4 }, (_, row) =>
+          Array.from({ length: 5 }, (_, col) => {
+            const booked = row === 1 && col >= 1 && col <= 3;
+            return (
+              <rect
+                key={`${row}-${col}`}
+                className={booked ? 'f-butter' : 'f-light'}
+                x={394 + col * 23}
+                y={178 + row * 22}
+                width="16"
+                height="16"
+                rx="3"
+              />
+            );
+          }),
+        )}
+        <rect className="f-coral" x="410" y="272" width="80" height="18" rx="9" />
+      </g>
+    </CoverFrame>
+  );
+}
+
+/* ── LumenGrowth: AI receptionist SaaS, multi-currency pricing and checkout ── */
+export function LumenGrowthCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-sky" cx="70" cy="300" r="100" />
+      <Window x={110} y={52} w={300} h={256} />
+      {/* currency switch: five options, one chosen */}
+      <rect className="f-white o-ink thin" x="140" y="96" width="132" height="26" rx="13" />
+      {[158, 182, 206, 230, 254].map((cx, i) => (
+        <circle key={cx} className={i === 0 ? 'f-sky' : 'f-light'} cx={cx} cy="109" r="7" />
+      ))}
+      {/* monthly / yearly toggle */}
+      <rect className="f-light" x="300" y="98" width="52" height="22" rx="11" />
+      <circle className="f-ink" cx="341" cy="109" r="8" />
+      {/* three plans, the middle one highlighted */}
+      {[
+        { x: 134, y: 152, w: 74, h: 130, tone: 'f-white o-ink thin', line: 'f-light' },
+        { x: 220, y: 138, w: 80, h: 156, tone: 'f-sky o-ink', line: 'f-white' },
+        { x: 312, y: 152, w: 74, h: 130, tone: 'f-white o-ink thin', line: 'f-light' },
+      ].map((p) => (
+        <g key={p.x}>
+          <rect className={p.tone} x={p.x} y={p.y} width={p.w} height={p.h} rx="8" />
+          <rect className={p.line} x={p.x + 12} y={p.y + 16} width={p.w - 32} height="8" rx="4" />
+          <rect className={p.line} x={p.x + 12} y={p.y + 34} width={p.w - 24} height="14" rx="5" />
+          <rect className={p.line} x={p.x + 12} y={p.y + 60} width={p.w - 28} height="6" rx="3" />
+          <rect className={p.line} x={p.x + 12} y={p.y + 74} width={p.w - 36} height="6" rx="3" />
+          <rect className={p.line} x={p.x + 12} y={p.y + p.h - 30} width={p.w - 24} height="16" rx="8" />
+        </g>
+      ))}
+      {/* phone: a chat with the receptionist and its voice */}
+      <rect className="f-white o-ink" x="420" y="78" width="100" height="204" rx="16" />
+      <path className="s-ink thin" d="M458 92 H482" />
+      <rect className="f-sky-soft" x="430" y="110" width="66" height="28" rx="12" />
+      <rect className="f-white o-ink thin" x="444" y="148" width="66" height="28" rx="12" />
+      {[
+        { x: 444, h: 16 },
+        { x: 456, h: 34 },
+        { x: 468, h: 24 },
+        { x: 480, h: 12 },
+      ].map((b) => (
+        <rect key={b.x} className="f-sky" x={b.x} y={226 - b.h / 2} width="8" height={b.h} rx="4" />
+      ))}
+    </CoverFrame>
+  );
+}
+
+/* ── Santa Barbara Trapeze: Shopify store, smart collections, countdowns ── */
+export function SantaBarbaraTrapezeCover({ fit }: CoverProps) {
+  const tiles = [
+    { x: 171, y: 150, tag: true },
+    { x: 275, y: 150, tag: false },
+    { x: 379, y: 150, tag: true },
+    { x: 171, y: 234, tag: false },
+    { x: 275, y: 234, tag: true },
+    { x: 379, y: 234, tag: false },
+  ];
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-coral" cx="590" cy="320" r="110" />
+      {/* the trapeze, mid-swing */}
+      <g transform="rotate(8 320 0)">
+        <path className="s-white" d="M272 -6 V106 M368 -6 V106" />
+        <rect className="f-coral o-ink" x="258" y="100" width="124" height="14" rx="7" />
+      </g>
+      {/* store grid; the tagged tiles form one smart collection */}
+      {tiles.map((t) => (
+        <g key={`${t.x}-${t.y}`}>
+          <rect className="f-white o-ink thin" x={t.x} y={t.y} width="90" height="70" rx="8" />
+          <circle className="f-light" cx={t.x + 45} cy={t.y + 30} r="16" />
+          <rect className="f-light" x={t.x + 22} y={t.y + 54} width="46" height="6" rx="3" />
+          {t.tag && <path className="f-coral" d={`M${t.x + 62} ${t.y} H${t.x + 82} a8 8 0 0 1 8 8 V${t.y + 28} Z`} />}
+        </g>
+      ))}
+      {/* countdown: a clock and three empty time blocks */}
+      <rect className="f-white o-ink" x="388" y="282" width="132" height="34" rx="17" />
+      <circle className="f-white o-ink thin" cx="408" cy="299" r="10" />
+      <path className="s-ink thin" d="M408 299 V292 M408 299 L413 302" />
+      {[428, 456, 484].map((x) => (
+        <rect key={x} className="f-coral-soft" x={x} y="289" width="22" height="20" rx="5" />
+      ))}
+      {[453, 481].map((x) => (
+        <g key={x}>
+          <circle className="f-ink" cx={x} cy="295" r="1.8" />
+          <circle className="f-ink" cx={x} cy="303" r="1.8" />
+        </g>
+      ))}
+    </CoverFrame>
+  );
+}
+
+/* ── LabTheory: men's skincare product page redesign and CRO ───────────── */
+export function LabTheoryCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-coral" cx="60" cy="70" r="90" />
+      <Window x={120} y={52} w={400} h={256} />
+      {/* product photo tile with a plain tube */}
+      <rect className="f-coral-soft" x="144" y="96" width="150" height="190" rx="10" />
+      <rect className="f-white o-ink" x="196" y="122" width="46" height="120" rx="12" />
+      <path className="s-ink thin" d="M198 134 H240" />
+      <rect className="f-light" x="205" y="168" width="28" height="7" rx="3" />
+      <rect className="f-light" x="205" y="184" width="20" height="7" rx="3" />
+      <rect className="f-ink" x="204" y="242" width="30" height="24" rx="4" />
+      {/* product details, options and the buy button */}
+      <rect className="f-light" x="318" y="104" width="150" height="14" rx="7" />
+      <rect className="f-light" x="318" y="128" width="178" height="8" rx="4" />
+      <rect className="f-light" x="318" y="144" width="130" height="8" rx="4" />
+      <rect className="f-ink" x="318" y="170" width="42" height="24" rx="12" />
+      <rect className="f-white o-ink thin" x="368" y="170" width="42" height="24" rx="12" />
+      <rect className="f-white o-ink thin" x="418" y="170" width="42" height="24" rx="12" />
+      <rect className="f-coral" x="318" y="212" width="170" height="36" rx="8" />
+      <rect className="f-white" x="372" y="227" width="62" height="6" rx="3" />
+      {/* more orders: a rising line with an arrow */}
+      <path className="s-sky" d="M322 288 L364 272 L400 278 L450 256" />
+      <path className="s-sky" d="M436 252 L452 255 L446 270" />
+    </CoverFrame>
+  );
+}
+
+/* ── Get Daily: fitness coffee D2C site, pre-orders, waiting list, rewards ── */
+export function GetDailyCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-butter" cx="80" cy="300" r="110" />
+      {/* a plain drinks can */}
+      <rect className="f-light o-ink" x="178" y="78" width="80" height="18" rx="7" />
+      <rect className="f-sky-soft o-ink" x="170" y="90" width="96" height="198" rx="18" />
+      <rect className="f-butter" x="172" y="172" width="92" height="42" />
+      <path className="s-ink" d="M171 172 H265 M171 214 H265" />
+      <rect className="f-white" x="186" y="108" width="10" height="52" rx="5" />
+      {/* coffee beans */}
+      <Bean cx={292} cy={268} angle={-20} tone="f-sage" />
+      <Bean cx={318} cy={290} angle={15} tone="f-light" />
+      <Bean cx={286} cy={296} angle={40} tone="f-sage" />
+      {/* phone with the waiting-list form */}
+      <rect className="f-white o-ink" x="348" y="72" width="120" height="228" rx="18" />
+      <path className="s-ink thin" d="M394 86 H422" />
+      <rect className="f-butter-soft" x="366" y="100" width="84" height="44" rx="6" />
+      <rect className="f-light" x="366" y="156" width="70" height="8" rx="4" />
+      <rect className="f-white o-ink thin" x="366" y="174" width="84" height="26" rx="6" />
+      <rect className="f-butter o-ink thin" x="366" y="212" width="84" height="28" rx="14" />
+      <rect className="f-light" x="374" y="254" width="68" height="6" rx="3" />
+      {/* rewards badge */}
+      <circle className="f-butter-soft o-ink" cx="474" cy="96" r="26" />
+      <Star cx={474} cy={97} r={15} className="f-butter o-ink thin" />
+    </CoverFrame>
+  );
+}
+
+/* ── 260 Sample Sale: Shopify maintenance, checkout, loyalty and emails ── */
+export function SampleSaleCover({ fit }: CoverProps) {
+  const rows = [118, 152, 186, 220, 254];
+  const widths = [110, 88, 120, 96, 104];
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-butter" cx="600" cy="300" r="120" />
+      {/* shopping bag behind the list */}
+      <path className="s-white" d="M178 132 C178 92 250 92 250 132" />
+      <path className="f-light o-ink" d="M140 132 H290 L302 300 H128 Z" />
+      {/* the fixes checklist */}
+      <rect className="f-white o-ink" x="204" y="92" width="190" height="212" rx="10" />
+      {rows.map((y, i) => (
+        <g key={y}>
+          <rect className="f-sky-soft o-ink thin" x="222" y={y} width="22" height="22" rx="5" />
+          <path className="s-sky" d={`M227 ${y + 11} L232 ${y + 16} L240 ${y + 6}`} />
+          <rect className="f-light" x="256" y={y + 7} width={widths[i]} height="8" rx="4" />
+        </g>
+      ))}
+      {/* email and loyalty card */}
+      <rect className="f-white o-ink" x="412" y="100" width="104" height="72" rx="8" />
+      <path className="s-ink" d="M414 106 L464 144 L514 106" />
+      <rect className="f-sky o-ink" x="414" y="198" width="104" height="66" rx="8" />
+      <Star cx={442} cy={231} r={14} className="f-white" />
+      <rect className="f-white" x="464" y="222" width="40" height="6" rx="3" />
+      <rect className="f-white" x="464" y="236" width="28" height="6" rx="3" />
+    </CoverFrame>
+  );
+}
+
+/* ── Esma: WooCommerce to Shopify migration for a jewellery brand ──────── */
+export function EsmaCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-butter" cx="570" cy="330" r="100" />
+      {/* the old site: plain */}
+      <Window x={120} y={100} w={150} h={170} body="f-light" />
+      <rect className="f-white" x="136" y="144" width="118" height="44" rx="4" />
+      <rect className="f-white" x="136" y="200" width="88" height="8" rx="4" />
+      <rect className="f-white" x="136" y="216" width="104" height="8" rx="4" />
+      <rect className="f-white" x="136" y="232" width="70" height="8" rx="4" />
+      {/* the move: customers, products and orders */}
+      <path className="s-white dash" d="M278 186 H350" />
+      <path className="s-white" d="M340 176 L352 186 L340 196" />
+      <circle className="f-white o-ink thin" cx="290" cy="186" r="12" />
+      <circle className="f-sage" cx="290" cy="182" r="4" />
+      <path className="f-sage" d="M282 193 a8 6 0 0 1 16 0 Z" />
+      <circle className="f-white o-ink thin" cx="316" cy="186" r="12" />
+      <rect className="f-butter" x="310" y="180" width="12" height="12" rx="2" />
+      <circle className="f-white o-ink thin" cx="342" cy="186" r="12" />
+      <path className="f-light o-ink thin" d="M337 178 H347 V194 L344.5 191.5 L342 194 L339.5 191.5 L337 194 Z" />
+      {/* the new storefront */}
+      <Window x={360} y={70} w={160} h={220} />
+      {[
+        { x: 376, y: 110 },
+        { x: 448, y: 110 },
+        { x: 376, y: 186 },
+        { x: 448, y: 186 },
+      ].map((t, i) => (
+        <g key={`${t.x}-${t.y}`}>
+          <rect className="f-butter-soft" x={t.x} y={t.y} width="60" height="64" rx="6" />
+          {i === 0 ? (
+            <>
+              <path className="s-ink thin" d={`M${t.x + 12} ${t.y + 10} Q${t.x + 30} ${t.y + 44} ${t.x + 48} ${t.y + 10}`} />
+              <path className="f-butter o-ink thin" d={`M${t.x + 30} ${t.y + 34} C${t.x + 36} ${t.y + 42} ${t.x + 36} ${t.y + 50} ${t.x + 30} ${t.y + 52} C${t.x + 24} ${t.y + 50} ${t.x + 24} ${t.y + 42} ${t.x + 30} ${t.y + 34} Z`} />
+            </>
+          ) : (
+            <circle className="f-sage" cx={t.x + 30} cy={t.y + 30} r={i === 3 ? 10 : 13} />
+          )}
+        </g>
+      ))}
+      <rect className="f-light" x="376" y="264" width="90" height="8" rx="4" />
+    </CoverFrame>
+  );
+}
+
+/* ── Jenson USA: cycling retailer, category pages into the top three ───── */
+export function JensonCover({ fit }: CoverProps) {
+  const rows = [124, 156, 188, 220, 252];
+  const widths = [104, 92, 110, 86, 98];
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-sky" cx="80" cy="70" r="100" />
+      {/* bicycle */}
+      <circle className="s-white" cx="160" cy="232" r="40" />
+      <circle className="s-white" cx="272" cy="232" r="40" />
+      <path className="s-butter" d="M160 232 L212 234 L200 170 Z M200 170 L258 172 L212 234 M258 172 L272 232" />
+      <path className="s-white" d="M190 160 H212 M258 172 L262 154 L280 150" />
+      <circle className="f-white o-ink thin" cx="212" cy="234" r="8" />
+      <circle className="f-white" cx="160" cy="232" r="4" />
+      <circle className="f-white" cx="272" cy="232" r="4" />
+      {/* search results */}
+      <rect className="f-white o-ink" x="330" y="60" width="190" height="240" rx="10" />
+      <rect className="f-white o-ink thin" x="346" y="76" width="158" height="28" rx="14" />
+      <circle className="s-ink thin" cx="362" cy="89" r="6" />
+      <path className="s-ink thin" d="M366.5 93.5 L372 99" />
+      {rows.map((y, i) => (
+        <g key={y}>
+          <circle className={i < 3 ? 'f-sky' : 'f-light'} cx="354" cy={y + 8} r="6" />
+          <rect className="f-light" x="368" y={y} width={widths[i]} height="10" rx="5" />
+          <rect className="f-light" x="368" y={y + 15} width={widths[i] - 34} height="6" rx="3" />
+        </g>
+      ))}
+      {/* a page moving up from the lower results into the top three */}
+      <path className="s-sky" d="M492 262 C516 236 516 178 494 150" />
+      <path className="s-sky" d="M488 164 L494 150 L508 156" />
+    </CoverFrame>
+  );
+}
+
+/* ── Jiva Ayurveda: organic growth beyond branded search ───────────────── */
+export function JivaCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-butter" cx="580" cy="300" r="110" />
+      {/* growth: a rising line with three points, no axis or numbers */}
+      <path className="s-sky-soft" d="M130 296 C220 290 260 240 320 210 S440 120 510 74" />
+      {[
+        [130, 296],
+        [320, 210],
+        [510, 74],
+      ].map(([cx, cy]) => (
+        <circle key={cx} className="f-sky-soft" cx={cx} cy={cy} r="7" />
+      ))}
+      {/* sprigs */}
+      <path className="s-light" d="M236 216 C220 184 200 162 168 142" />
+      <path className="s-light" d="M366 216 C384 182 410 162 444 146" />
+      {[
+        { x: 214, y: 182, a: 215 },
+        { x: 196, y: 162, a: 200 },
+        { x: 222, y: 196, a: 150 },
+        { x: 390, y: 180, a: -35 },
+        { x: 412, y: 162, a: -20 },
+        { x: 382, y: 196, a: 30 },
+      ].map((l) => (
+        <path key={`${l.x}-${l.y}`} className="f-light" d={LEAF} transform={`translate(${l.x} ${l.y}) rotate(${l.a})`} />
+      ))}
+      {/* mortar and pestle */}
+      <g transform="rotate(28 330 170)">
+        <rect className="f-butter o-ink" x="317" y="104" width="26" height="118" rx="13" />
+      </g>
+      <path className="f-sage o-ink" d="M222 222 H378 C378 280 340 300 300 300 C260 300 222 280 222 222 Z" />
+      <rect className="f-light o-ink" x="210" y="208" width="180" height="18" rx="9" />
+      <rect className="f-sage" x="272" y="298" width="56" height="12" rx="4" />
+    </CoverFrame>
+  );
+}
+
+/* ── Croma: a retail store and a page-speed gauge in the good band ───── */
+export function CromaCover({ fit }: CoverProps) {
+  const stripes = [120, 164, 208, 252, 296];
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-sky" cx="560" cy="70" r="110" />
+      <circle className="f-butter" cx="90" cy="320" r="90" />
+      {/* store front with a striped awning */}
+      <rect className="f-white o-ink" x="130" y="146" width="200" height="154" rx="4" />
+      {stripes.map((x, i) => (
+        <path key={x} className={`${i % 2 === 0 ? 'f-coral' : 'f-white'} o-ink thin`} d={`M${x} 116 H${x + 44} V146 A22 14 0 0 1 ${x} 146 Z`} />
+      ))}
+      <rect className="f-sky-soft o-ink thin" x="150" y="180" width="94" height="72" rx="3" />
+      <rect className="f-white o-ink thin" x="170" y="192" width="24" height="52" rx="3" />
+      <path className="s-ink thin" d="M170 210 H194 M189 198 V204 M189 216 V226" />
+      <rect className="f-light o-ink thin" x="204" y="214" width="30" height="30" rx="3" />
+      <rect className="f-ink" x="262" y="192" width="48" height="108" rx="3" />
+      <circle className="f-butter" cx="300" cy="248" r="4" />
+      {/* speed gauge: three bands, needle in the first */}
+      <path className="f-sky-soft o-ink thin" d="M364 236 A86 86 0 0 1 427.7 152.9 L434 176.1 A62 62 0 0 0 388 236 Z" />
+      <path className="f-butter-soft o-ink thin" d="M427.7 152.9 A86 86 0 0 1 493 161.5 L481 182.3 A62 62 0 0 0 434 176.1 Z" />
+      <path className="f-coral-soft o-ink thin" d="M493 161.5 A86 86 0 0 1 536 236 L512 236 A62 62 0 0 0 481 182.3 Z" />
+      <path className="s-white" d="M450 236 L398 192" />
+      <circle className="f-white" cx="450" cy="236" r="8" />
+      {/* ground */}
+      <path className="s-white" d="M110 300 H540" />
+      <path className="s-sky-soft" d="M372 280 C410 276 440 262 470 266 S514 258 532 248" />
+    </CoverFrame>
+  );
+}
+
+/* ── Maruti Suzuki: a street map with showroom pins and a car on its way ─── */
+export function MarutiSuzukiCover({ fit }: CoverProps) {
+  const pin = (x: number, y: number, tone: string) => (
+    <g key={`${x}-${y}`}>
+      <path className={`${tone} o-ink thin`} d={`M${x} ${y} C${x - 22} ${y - 20} ${x - 20} ${y - 44} ${x} ${y - 44} C${x + 20} ${y - 44} ${x + 22} ${y - 20} ${x} ${y}Z`} />
+      <circle className="f-white" cx={x} cy={y - 27} r="7" />
+    </g>
+  );
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-butter" cx="570" cy="60" r="110" />
+      <circle className="f-sky" cx="70" cy="320" r="95" />
+      {/* map */}
+      <rect className="f-white o-ink" x="140" y="56" width="360" height="248" rx="14" />
+      <rect className="f-light" x="142" y="138" width="356" height="18" />
+      <rect className="f-light" x="142" y="226" width="356" height="18" />
+      <rect className="f-light" x="244" y="58" width="18" height="244" />
+      <rect className="f-light" x="384" y="58" width="18" height="244" />
+      <rect className="f-sky-soft" x="160" y="74" width="66" height="48" rx="6" />
+      <rect className="f-butter-soft" x="420" y="172" width="60" height="38" rx="6" />
+      <rect className="f-coral-soft" x="280" y="260" width="86" height="30" rx="6" />
+      {/* route from the car to a pin */}
+      <path className="s-sky" strokeDasharray="8 8" d="M300 235 H393 V160" />
+      {pin(253, 147, 'f-coral')}
+      {pin(393, 147, 'f-butter')}
+      {pin(253, 235, 'f-coral')}
+      {/* car */}
+      <g transform="translate(262 214) scale(1.9)">
+        <path className="f-coral o-ink thin" vectorEffect="non-scaling-stroke" d="M2 13 L5 8 Q6 6 9 6 H24 Q27 6 29 9 L34 11 Q38 12 38 14 V16 H2 Z" />
+        <path className="f-sky-soft" d="M10.5 7.4 H23 Q25 7.4 26.4 9.6 H9.2 Z" />
+        <circle className="f-ink" cx="10" cy="16" r="3.3" />
+        <circle className="f-ink" cx="29" cy="16" r="3.3" />
+        <circle className="f-white" cx="10" cy="16" r="1.2" />
+        <circle className="f-white" cx="29" cy="16" r="1.2" />
+      </g>
+    </CoverFrame>
+  );
+}
+
+/* ── Kaya Clinics: a search, three result cards and a clinic with a pin ── */
+export function KayaClinicsCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-coral" cx="575" cy="70" r="105" />
+      <circle className="f-sky" cx="70" cy="310" r="95" />
+      {/* search bar */}
+      <rect className="f-white o-ink" x="130" y="52" width="250" height="44" rx="22" />
+      <circle className="s-ink" cx="158" cy="72" r="9" />
+      <path className="s-ink" d="M165 79 L174 88" />
+      <path className="s-light" d="M190 74 H320" />
+      {/* result cards: learn, compare, choose */}
+      <rect className="f-sky-soft o-ink thin" x="130" y="116" width="250" height="52" rx="8" />
+      <rect className="f-butter-soft o-ink thin" x="130" y="182" width="250" height="52" rx="8" />
+      <rect className="f-coral-soft o-ink thin" x="130" y="248" width="250" height="52" rx="8" />
+      <path className="s-ink" d="M150 136 H260 M150 202 H240 M150 268 H280" />
+      <path className="s-sage" d="M150 152 H330 M150 218 H310 M150 284 H340" />
+      {/* clinic building with a cross, and a pin above it */}
+      <rect className="f-white o-ink" x="410" y="178" width="110" height="122" rx="4" />
+      <path className="f-light o-ink thin" d="M402 182 L465 140 L528 182 Z" />
+      <rect className="f-coral" x="457" y="196" width="16" height="44" rx="2" />
+      <rect className="f-coral" x="443" y="210" width="44" height="16" rx="2" />
+      <rect className="f-sky-soft o-ink thin" x="448" y="256" width="34" height="44" rx="3" />
+      <path className="f-coral o-ink thin" d="M465 128 C443 108 445 84 465 84 C485 84 487 108 465 128Z" />
+      <circle className="f-white" cx="465" cy="101" r="7" />
+      <path className="s-white" d="M390 300 H540" />
+    </CoverFrame>
+  );
+}
+
+/* ── Pune Times Mirror: a newspaper page and a phone feed of news cards ── */
+export function PuneTimesMirrorCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-butter" cx="575" cy="60" r="105" />
+      <circle className="f-coral" cx="70" cy="315" r="95" />
+      {/* newspaper page: masthead, headline, lead photo and columns */}
+      <rect className="f-white o-ink" x="128" y="58" width="214" height="246" rx="6" />
+      <rect className="f-ink" x="146" y="76" width="178" height="16" rx="3" />
+      <rect className="f-light" x="146" y="104" width="150" height="10" rx="5" />
+      <rect className="f-light" x="146" y="120" width="120" height="10" rx="5" />
+      <rect className="f-sky-soft" x="146" y="142" width="96" height="70" rx="4" />
+      {[150, 164, 178, 192].map((y) => <rect key={y} className="f-light" x="252" y={y} width="72" height="6" rx="3" />)}
+      {[228, 242, 256, 270, 284].map((y) => (
+        <g key={y}>
+          <rect className="f-light" x="146" y={y} width="80" height="6" rx="3" />
+          <rect className="f-light" x="238" y={y} width="86" height="6" rx="3" />
+        </g>
+      ))}
+      {/* phone with a feed of news cards; the top one is new */}
+      <rect className="f-white o-ink" x="370" y="72" width="132" height="232" rx="16" />
+      <path className="s-ink thin" d="M424 86 H448" />
+      <rect className="f-butter-soft o-ink thin" x="384" y="102" width="104" height="70" rx="8" />
+      <rect className="f-white" x="392" y="152" width="66" height="7" rx="3" />
+      <circle className="f-coral" cx="476" cy="114" r="5" />
+      {[186, 234].map((y) => (
+        <g key={y}>
+          <rect className="f-white o-ink thin" x="384" y={y} width="104" height="38" rx="8" />
+          <rect className="f-sky-soft" x="392" y={y + 8} width="22" height="22" rx="4" />
+          <rect className="f-light" x="422" y={y + 10} width="56" height="6" rx="3" />
+          <rect className="f-light" x="422" y={y + 22} width="38" height="6" rx="3" />
+        </g>
+      ))}
+    </CoverFrame>
+  );
+}
+
+/* ── Soch: a kurti on a hanger beside a category page and a festive peak ── */
+export function SochCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-coral" cx="575" cy="65" r="105" />
+      <circle className="f-sky" cx="70" cy="310" r="95" />
+      {/* hanger and kurti */}
+      <path className="s-white" d="M220 78 C220 64 240 64 240 76 C240 86 230 88 230 96" />
+      <path className="s-white" d="M230 96 L168 124 H292 Z" />
+      <path className="f-white o-ink" d="M196 120 L180 128 L156 176 L174 184 L188 158 L182 290 H278 L272 158 L286 184 L304 176 L280 128 L264 120 C258 134 242 140 230 140 C218 140 202 134 196 120 Z" />
+      <path className="f-butter" d="M184 244 H276 L277 262 H183 Z" />
+      {[204, 230, 256].map((x) => <circle key={x} className="f-coral" cx={x} cy="206" r="6" />)}
+      {/* category page: a window of product tiles */}
+      <rect className="f-white o-ink" x="336" y="96" width="186" height="198" rx="10" />
+      <path className="s-ink" d="M336 122 H522" />
+      <circle className="f-sage" cx="352" cy="109" r="4" />
+      <circle className="f-sage" cx="366" cy="109" r="4" />
+      <circle className="f-sage" cx="380" cy="109" r="4" />
+      {[[350, 136], [436, 136], [350, 214], [436, 214]].map(([x, y], i) => (
+        <g key={`${x}-${y}`}>
+          <rect className={i === 1 ? 'f-butter-soft' : 'f-sky-soft'} x={x} y={y} width="72" height="50" rx="5" />
+          <rect className="f-light" x={x} y={y + 56} width="56" height="7" rx="3" />
+        </g>
+      ))}
+    </CoverFrame>
+  );
+}
+
+/* ── Default: for a study without its own cover ────────────────────────── */
+/** Industrybuying: duplicate addresses merging into one product page (a crate), with its sitemaps below. */
+export function IndustrybuyingCover({ fit }: CoverProps) {
+  const pills = [104, 148, 192, 236];
+  return (
+    <CoverFrame fit={fit}>
+      <circle className="f-butter" cx="572" cy="68" r="105" />
+      <circle className="f-coral" cx="72" cy="308" r="95" />
+      {/* duplicate addresses, each on a dashed line into the page */}
+      {pills.map((y) => (
+        <g key={y}>
+          <path className="s-white dash" d={`M232 ${y + 13} L300 186`} />
+          <rect className="f-coral-soft" x="128" y={y} width="104" height="26" rx="13" />
+          <rect className="f-white" x="142" y={y + 10} width="56" height="6" rx="3" />
+        </g>
+      ))}
+      {/* the one product page: a crate */}
+      <Window x={300} y={100} w={190} h={172} />
+      <rect className="f-butter-soft o-ink thin" x="350" y="156" width="90" height="78" rx="4" />
+      <path className="s-ink thin" d="M350 176 H440" />
+      <rect className="f-butter o-ink thin" x="386" y="156" width="18" height="20" />
+      <circle className="f-sky" cx="490" cy="100" r="22" />
+      <path className="s-white" d="M480 100 L488 108 L501 92" />
+      {/* sitemaps by page type */}
+      {[['f-sky-soft', 300], ['f-butter-soft', 370], ['f-coral-soft', 440]].map(([c, x]) => (
+        <rect key={c} className={String(c)} x={x} y="288" width="50" height="22" rx="4" />
+      ))}
+    </CoverFrame>
+  );
+}
+
+export function DefaultCover({ fit }: CoverProps) {
+  return (
+    <CoverFrame fit={fit}>
+      <path className="f-coral-soft o-ink thin" d="M250 80 L330 180 L250 280 L170 180 Z" />
+      <path className="f-butter-soft o-ink thin" d="M320 70 L410 180 L320 290 L230 180 Z" />
+      <path className="f-sky-soft o-ink thin" d="M390 90 L470 180 L390 270 L310 180 Z" />
+      <path className="s-white thin" d="M390 270 C400 300 380 312 396 330" />
+    </CoverFrame>
+  );
+}
