@@ -14,7 +14,7 @@ import { ReadingProgress } from '@/components/founders-thoughts/ReadingProgress'
 const SITE_URL = 'https://www.sagekite.com';
 const SLUG = 'where-should-we-draw-the-line';
 const PAGE_URL = `${SITE_URL}/founders-thoughts/${SLUG}`;
-const IMAGE_URL = `${SITE_URL}/images/founders-thoughts/where-should-we-draw-the-line.png`;
+const IMAGE_URL = `${SITE_URL}/images/founders-thoughts/where-should-we-draw-the-line.webp`;
 
 export const metadata: Metadata = {
   title: 'Clients keep asking us to automate all their marketing. Where should we draw the line? | Sage Kite',
@@ -203,7 +203,7 @@ export default function WhereShouldWeDrawTheLinePage() {
               </div>
               <figure className="hero-art">
                 <Image
-                  src="/images/founders-thoughts/where-should-we-draw-the-line.png"
+                  src="/images/founders-thoughts/where-should-we-draw-the-line.webp"
                   alt="Illustration of a woman swinging on a trapeze above a notebook"
                   width={1448}
                   height={1086}
