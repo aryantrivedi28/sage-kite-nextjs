@@ -96,10 +96,11 @@ import bestCrmForCoachesAndConsultants from '@/app/blog/best-crm-for-coaches-and
 import doINeedAConsultantToImplementMindbody from '@/app/blog/do-i-need-a-consultant-to-implement-mindbody/post';
 import canBloomerangTrackRecurringDonations from '@/app/blog/can-bloomerang-track-recurring-donations/post';
 import bestBloomerangSetupServiceProviders from '@/app/blog/best-bloomerang-setup-service-providers/post';
+import bloomerangSetupGuideSmallNonprofits from '@/app/blog/bloomerang-setup-guide-small-nonprofits/post';
 
 export * from './types';
 
-export const posts: BlogPost[] = [whatIsDubsado, whatIsHoneyBook, dubsadoVsHoneyBook, aiMarketingAutomationMistakes, dubsadoSetupServices, dubsadoForInteriorDesigners, automateServiceBusinessHoneyBook, bestCrmForCoachesAndConsultants, doINeedAConsultantToImplementMindbody, canBloomerangTrackRecurringDonations,  bestBloomerangSetupServiceProviders];
+export const posts: BlogPost[] = [whatIsDubsado, whatIsHoneyBook, dubsadoVsHoneyBook, aiMarketingAutomationMistakes, dubsadoSetupServices, dubsadoForInteriorDesigners, automateServiceBusinessHoneyBook, bestCrmForCoachesAndConsultants, doINeedAConsultantToImplementMindbody, canBloomerangTrackRecurringDonations, bestBloomerangSetupServiceProviders, bloomerangSetupGuideSmallNonprofits];
 
 /* ─────────────────────────── Selectors ───────────────────────────────────
  * The listing, sitemap and related posts also show posts published from the
