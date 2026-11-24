@@ -25,6 +25,18 @@ export interface FounderEssay {
 
 export const FOUNDER_ESSAYS: FounderEssay[] = [
   {
+    slug: 'where-should-we-draw-the-line',
+    title: 'Clients keep asking us to automate all their marketing. Where should we draw the line?',
+    dek: 'A trapeze school wanted a year of social posts and emails on autopilot. Its owner still pays us. What he pays us to do has changed.',
+    summary: 'A trapeze school planned a year of social posts and emails with Claude. Aryan Trivedi on what to automate, what to check and who should hit send.',
+    datePublished: '2026-11-01',
+    dateLabel: 'November 2026',
+    readTime: '7 min read',
+    topic: 'AI & marketing automation',
+    image: '/images/founders-thoughts/where-should-we-draw-the-line.webp',
+    imageAlt: 'Illustration of a woman swinging on a trapeze above a notebook',
+  },
+  {
     slug: 'when-everyone-has-ai',
     title: 'When everyone has AI, what are businesses actually paying for?',
     dek: 'The tools got smarter. So did the expectations.',
