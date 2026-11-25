@@ -97,10 +97,11 @@ import doINeedAConsultantToImplementMindbody from '@/app/blog/do-i-need-a-consul
 import canBloomerangTrackRecurringDonations from '@/app/blog/can-bloomerang-track-recurring-donations/post';
 import bestBloomerangSetupServiceProviders from '@/app/blog/best-bloomerang-setup-service-providers/post';
 import bloomerangSetupGuideSmallNonprofits from '@/app/blog/bloomerang-setup-guide-small-nonprofits/post';
+import bloomerangImplementationTimeline from '@/app/blog/bloomerang-implementation-timeline/post';
 
 export * from './types';
 
-export const posts: BlogPost[] = [whatIsDubsado, whatIsHoneyBook, dubsadoVsHoneyBook, aiMarketingAutomationMistakes, dubsadoSetupServices, dubsadoForInteriorDesigners, automateServiceBusinessHoneyBook, bestCrmForCoachesAndConsultants, doINeedAConsultantToImplementMindbody, canBloomerangTrackRecurringDonations, bestBloomerangSetupServiceProviders, bloomerangSetupGuideSmallNonprofits];
+export const posts: BlogPost[] = [whatIsDubsado, whatIsHoneyBook, dubsadoVsHoneyBook, aiMarketingAutomationMistakes, dubsadoSetupServices, dubsadoForInteriorDesigners, automateServiceBusinessHoneyBook, bestCrmForCoachesAndConsultants, doINeedAConsultantToImplementMindbody, canBloomerangTrackRecurringDonations, bestBloomerangSetupServiceProviders, bloomerangSetupGuideSmallNonprofits, bloomerangImplementationTimeline];
 
 /* ─────────────────────────── Selectors ───────────────────────────────────
  * The listing, sitemap and related posts also show posts published from the
